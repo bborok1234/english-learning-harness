@@ -1,0 +1,120 @@
+# Project Status
+
+Last updated: 2026-05-27
+
+## Current State
+
+The project is in **Phase 1 hardening required / first usable version not yet proven** state.
+
+What is complete:
+- Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
+- Implementation-readiness claims were corrected: design is not "fully implementation-ready" until Phase 0 spike passes.
+- MVP metrics are synchronized to D83: only five metrics are updated every session.
+- `progress.json` is synchronized to D100: v2 is canonical; v1 is deprecated.
+- Persona gate is synchronized to D84: four target personas are blocking validation; 재훈 is non-target-adjacent redirect/smoke only.
+- Plugin install/scaffold claims are synchronized to current evidence: `.codex-plugin/plugin.json` is the manifest shape, and exact install/distribution commands remain Phase 0 verification items.
+- N001 is complete: Phase 0 now has a concrete spike plan, evidence rules, pass/fail criteria, and execution order in `docs/PHASE-0-SPIKE.md`.
+- P0-3 is complete: current Codex CLI plugin installation was reproduced through a local marketplace root.
+- P0-2 is complete: Codex hook surfaces are available, but plugin-scoped hook auto-execution was not proven; MVP should use setup-owned/native hook registration.
+- P0-4 is complete: local-first learner persistence passed with progress v2, D83 five MVP metrics, journal, and artifact reference path. Automated CLI image generation remains deferred with an accepted fallback.
+- P0-1 is complete: current Codex CLI does not expose a stable realtime voice path; MVP should default to text-first or transcription-first conversation.
+- PH1-1 is complete: plugin manifest, skill skeletons, setup-owned/native hook registration path, progress schema validator, and local marketplace install smoke are in place.
+- PH1-2 is partially complete: first-run onboarding, text-first session persistence, mini mirror, journal/artifact persistence, and `progress.json` shape validation work in direct script smoke.
+- README setup guidance exists, but it is still developer-oriented and does not yet provide a safe one-command native hook install/merge path.
+- Product ambition has been reset from "local smoke tool" to a research-backed daily language-learning engine in `docs/LEARNING-ENGINE.md`.
+- Execution roadmap has been expanded in `docs/PRODUCT-ROADMAP.md`.
+- Startup-grade Ralplan draft now includes `docs/STARTUP-GRADE-PLAN.md`, `docs/TUTOR-POLICY.md`, `docs/PERSONA-FIXTURE-SPEC.md`, and `docs/DATA-CONTRACTS.md`.
+- Startup-grade Ralplan consensus passed: Architect APPROVE and Critic OKAY are recorded in `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md`.
+- Multimodal GenAI usage is now explicit in `docs/MULTIMODAL-GENAI-PLAN.md`: modalities are tied to an Interaction Event Graph, not treated as media features.
+
+What is not started:
+- PH1 self-review fixes from `docs/phase-1-evidence/PH1-review-gap-audit.md`.
+- Real user validation.
+- Phase 1 non-developer wrapper.
+- Realtime voice path.
+- Public Git-backed marketplace install.
+
+What failed review:
+- Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
+- PH1-FIX-1 improved hook install/merge logic, but Codex hook trust-state still prevents a completed runtime proof.
+- `new_vocabulary_count` overcounts repeated words across sessions.
+- Daily session behavior is still a deterministic transcript processor, not yet a convincing Codex conversation surface.
+- Stop hook writes a timestamp only; session finalization happens in the CLI command, not the hook.
+
+Strategic reset:
+- This is now treated as a language-learning product/engine, not a small plugin script.
+- "First usable" requires setup UX, hook proof or honest fallback, vocabulary history, scenario-based daily loop, persona fixtures, and evidence-backed progress semantics.
+
+## Completed Execution Goals
+
+| ID | Status | Result |
+|---|---|---|
+| G001 | Complete | Readiness/completion wording now requires Phase 0 spike and doc sync. |
+| G002 | Complete | North star aligned to AI partner English conversation comfort. |
+| G003 | Complete | Metrics/schema aligned to MVP five metrics and monthly optional metrics. |
+| G004 | Complete | Persona gate aligned to four target personas. |
+| G005 | Complete | Plugin scaffold/install claims corrected and downgraded to verification items. |
+| G006 | Complete | Static audit, ai-slop-cleaner pass, and review gate passed. |
+
+## Verification Evidence
+
+- Static audit found no active blockers for obsolete implementation-ready claims, `progress.json` v1 canonical schema, `.agents/skills`, `codex /plugins install`, five-persona gate, or D83 metric drift.
+- JSON code blocks in `design/07-background-data.md` and `design/17-measurement.md` parse successfully.
+- Local CLI evidence: `codex-cli 0.133.0`; plugin install surface is `codex plugin add <plugin>@<marketplace>`.
+- Realtime evidence: `realtime_conversation` is `under development` and disabled; no stable CLI realtime/voice command is exposed.
+- Scaffold evidence: `node scripts/phase1-scaffold-smoke.mjs` passes and isolated `codex plugin list` shows `english-learning-harness@phase1-scaffold installed, enabled 0.1.0`.
+- Runtime evidence: `node scripts/phase1-full-flow-smoke.mjs` passes and proves profile, session, mini mirror, journal, artifact, metrics, and hook context.
+- Review evidence: `docs/phase-1-evidence/PH1-review-gap-audit.md` identifies P1/P2 gaps that invalidate the broad "first usable complete" claim.
+- Research/planning evidence: `docs/LEARNING-ENGINE.md` and `docs/PRODUCT-ROADMAP.md` define the learning model, roadmap gates, and validation criteria.
+- Ralplan evidence: `docs/STARTUP-GRADE-PLAN.md` records options, ADR, architecture, execution stages, and critic-gate revisions.
+- Ralplan consensus evidence: `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md` records the durable Architect -> Critic approval handoff.
+- Multimodal evidence: `docs/MULTIMODAL-GENAI-PLAN.md` records voice, image, and video usage boundaries with SLA, conversation analysis, multimodal learning, and official OpenAI API references.
+- Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
+- Final review recommendation: APPROVE.
+- Architectural status: CLEAR.
+
+## Next Work
+
+### Phase 0 Spike
+
+Purpose: verify technical assumptions before claiming implementation readiness.
+
+- [x] N001: Design the Phase 0 spike plan.
+- [x] P0-3: Verify plugin distribution/install path.
+- [x] P0-2: Verify hook availability and registration path.
+- [x] P0-4: Verify image generation and local disk persistence.
+- [x] P0-1: Verify Codex realtime conversational mode.
+- [x] Verify `~/english-learning/`/`ENGLISH_LEARNING_HOME` data creation and update flow during Phase 1 runtime smoke.
+
+Phase 0 result: implementation may proceed only with these constraints:
+
+- Install path: local marketplace first; public Git-backed handoff remains unverified.
+- Hooks: setup-owned/native hook registration first; plugin-scoped hook auto-execution remains unproven.
+- Persistence: local-first `progress.json` v2 and journal/artifact references are verified.
+- Conversation: text/transcription-first daily session first; realtime voice is not a Phase 1 dependency.
+
+### Phase 1 Scaffold
+
+Start from the verified/fallback Phase 0 constraints.
+
+- [x] PH1-1: Create plugin manifest, skill skeletons, native hook path, validator, and scaffold smoke.
+- [~] PH1-2: Implement daily-session command/update path. Direct script flow works; conversation surface needs hardening.
+- [~] PH1-3: Implement runtime metrics update path with journal append behavior. Shape works; vocabulary metric semantics are wrong across sessions.
+- [~] PH1-4: Add user-facing setup guidance in README. Basic guidance exists; safe native hook install path is incomplete.
+- [~] PH1-FIX-1: Implement supported explicit command-wrapper fallback and keep setup-owned/native hook installation optional until Codex trust-state is proven.
+- [ ] PH1-FIX-2: Fix vocabulary history and `new_vocabulary_count`.
+- [ ] PH1-FIX-3: Strengthen daily-session UX beyond deterministic transcript processing.
+- [ ] PH1-FIX-4: Align Stop hook behavior with documentation.
+- [ ] PH1-5: Run real user validation against the four target personas.
+
+## SSOT Structure
+
+- `DESIGN.md` — product/design/UX source of truth.
+- `docs/project-state.json` — structured execution/status state for generated dashboards.
+- `docs/PHASE-0-SPIKE.md` — Phase 0 execution plan and pass/fail criteria.
+- `docs/phase-0-evidence/` — Phase 0 spike evidence notes.
+- `docs/phase-1-evidence/` — Phase 1 scaffold and implementation evidence notes.
+- `docs/STATUS.md` — human-readable execution status and next-step summary.
+- `docs/dashboard.html` — generated shared visual dashboard for human/Codex review. Do not edit this file directly; run `node scripts/generate-dashboard.mjs`.
+- `design/` — detailed design library and historical decision records.
+- `.omx/` — workflow logs and generated runtime artifacts only; not SSOT.

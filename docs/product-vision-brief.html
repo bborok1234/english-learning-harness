@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>English Learning Harness · Final Product Brief</title>
+    <style>
+      :root {
+        --ink: #111827;
+        --muted: #5b6472;
+        --soft: #eef2f6;
+        --line: #d9e1e8;
+        --paper: #fbfcfd;
+        --green: #047857;
+        --green-soft: #dff5ea;
+        --coral: #f2554b;
+        --coral-soft: #ffe8e4;
+        --blue: #2563eb;
+        --blue-soft: #e6efff;
+        --gold: #b7791f;
+        --gold-soft: #fff3d8;
+        --shadow: 0 18px 44px rgba(17, 24, 39, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        width: min(1180px, calc(100vw - 40px));
+        margin: 0 auto;
+        padding: 44px 0 64px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1.15fr);
+        gap: 34px;
+        align-items: center;
+        min-height: 520px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 760px;
+        font-size: clamp(44px, 6vw, 82px);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .lead {
+        margin: 24px 0 0;
+        max-width: 620px;
+        color: var(--muted);
+        font-size: 20px;
+      }
+
+      .answer {
+        margin-top: 30px;
+        padding-left: 18px;
+        border-left: 5px solid var(--green);
+        font-size: 25px;
+        font-weight: 760;
+        line-height: 1.35;
+      }
+
+      .harness-wall {
+        display: grid;
+        gap: 14px;
+      }
+
+      .workspace {
+        overflow: hidden;
+        border: 1px solid #cfd9e3;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .workspace-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        background: #f7f9fb;
+        font-size: 12px;
+        font-weight: 760;
+        color: #677282;
+      }
+
+      .dots {
+        display: flex;
+        gap: 7px;
+      }
+
+      .dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #d5dde6;
+      }
+
+      .workspace-grid {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        min-height: 380px;
+      }
+
+      .sidebar {
+        border-right: 1px solid var(--line);
+        background: #fbfcfd;
+        padding: 16px;
+      }
+
+      .sidebar h2,
+      .codex-pane h2 {
+        margin: 0 0 12px;
+        font-size: 15px;
+        line-height: 1.2;
+      }
+
+      .file {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 9px 0;
+        border-bottom: 1px solid #edf1f5;
+        color: var(--muted);
+        font-size: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .codex-pane {
+        padding: 18px;
+      }
+
+      .terminal {
+        border-radius: 8px;
+        background: #111827;
+        color: #d1fae5;
+        padding: 16px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .prompt {
+        color: #86efac;
+      }
+
+      .system-line {
+        color: #93c5fd;
+      }
+
+      .codex-output {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .mini {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .module {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 13px;
+        background: #fff;
+        margin-top: 10px;
+      }
+
+      .meter {
+        height: 8px;
+        border-radius: 999px;
+        background: var(--soft);
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .meter span {
+        display: block;
+        height: 100%;
+        background: var(--green);
+        border-radius: inherit;
+      }
+
+      .surface-strip {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .surface-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 16px;
+      }
+
+      .surface-card strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .section {
+        padding: 56px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section h2 {
+        margin: 0 0 16px;
+        font-size: clamp(28px, 4vw, 44px);
+        line-height: 1.05;
+      }
+
+      .section-intro {
+        max-width: 760px;
+        margin: 0 0 32px;
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .step,
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 20px;
+      }
+
+      .num {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--green);
+        color: #fff;
+        font-weight: 800;
+      }
+
+      .step:nth-child(2) .num,
+      .step:nth-child(5) .num {
+        background: var(--coral);
+      }
+
+      .step:nth-child(4) .num {
+        background: var(--blue);
+      }
+
+      .step h3,
+      .card h3 {
+        margin: 18px 0 8px;
+        font-size: 18px;
+      }
+
+      .step p,
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+
+      .experience {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .rail {
+        border-left: 4px solid var(--green);
+        padding-left: 20px;
+      }
+
+      .rail h3 {
+        margin: 0 0 12px;
+        font-size: 24px;
+      }
+
+      .persona-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .modality-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .tag {
+        display: inline-flex;
+        width: fit-content;
+        border-radius: 999px;
+        padding: 5px 10px;
+        background: var(--soft);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 760;
+      }
+
+      .tag.green {
+        background: var(--green-soft);
+        color: var(--green);
+      }
+
+      .tag.coral {
+        background: var(--coral-soft);
+        color: #b8322a;
+      }
+
+      .tag.blue {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+
+      .tag.gold {
+        background: var(--gold-soft);
+        color: var(--gold);
+      }
+
+      .architecture {
+        display: grid;
+        gap: 14px;
+      }
+
+      .layer {
+        display: grid;
+        grid-template-columns: 220px 1fr 160px;
+        gap: 18px;
+        align-items: center;
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 8px;
+        padding: 18px;
+      }
+
+      .layer strong {
+        font-size: 18px;
+      }
+
+      .layer p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .final {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .outcome {
+        padding: 28px;
+        border-radius: 8px;
+        background: var(--ink);
+        color: #fff;
+      }
+
+      .outcome h2 {
+        margin: 0 0 18px;
+        color: #fff;
+        font-size: 38px;
+        line-height: 1.05;
+      }
+
+      .outcome p {
+        color: #d5dde7;
+      }
+
+      .checklist {
+        display: grid;
+        gap: 10px;
+      }
+
+      .check {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 12px;
+        align-items: start;
+        color: #d5dde7;
+      }
+
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--green);
+        color: #fff;
+        font-weight: 900;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      @media (max-width: 980px) {
+        main {
+          width: min(100vw - 28px, 760px);
+          padding-top: 28px;
+        }
+
+        .hero,
+        .split,
+        .experience,
+        .final {
+          grid-template-columns: 1fr;
+        }
+
+        .workspace-grid,
+        .surface-strip {
+          grid-template-columns: 1fr;
+        }
+
+        .flow,
+        .persona-grid,
+        .modality-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .layer {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div>
+          <h1>영어 회화 학습을 매일의 운영체제로 만든다.</h1>
+          <p class="lead">
+            English Learning Harness의 최종형은 모바일 앱이 아니라, Codex 위에서 돌아가는 목적형
+            학습 하네스다. 대화는 Codex 세션 안에서 이루어지고, HTML은 진행상황·학습기록·다음
+            행동을 사람이 보기 쉽게 보여주는 보조 표면이다.
+          </p>
+          <div class="answer">
+            최종 제품 한 문장: GitHub로 내려받아 Codex에 장착하면, 매일 영어 말하기 세션을
+            실행하고 로컬 학습 기억·표현 저장소·검증 대시보드를 함께 굴리는 local-first Codex
+            learning harness.
+          </div>
+        </div>
+
+        <div class="harness-wall" aria-label="Codex 하네스 표면 미리보기">
+          <section class="workspace">
+            <div class="workspace-top">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <span>Codex · english-learning-harness</span>
+            </div>
+            <div class="workspace-grid">
+              <aside class="sidebar">
+                <h2>repo-local SSOT</h2>
+                <div class="file">skills/daily-session</div>
+                <div class="file">scripts/english-learning</div>
+                <div class="file">docs/dashboard.html</div>
+                <div class="file">~/english-learning/</div>
+                <div class="file">vocabulary.json</div>
+                <div class="file">review-queue.json</div>
+              </aside>
+              <section class="codex-pane">
+                <h2>Daily Session in Codex</h2>
+                <div class="terminal">
+                  <div><span class="prompt">$</span> english-learning today --mode easy</div>
+                  <div class="system-line">scenario: meeting follow-up · skill: clarification</div>
+                  <div>Tutor: Say one simple sentence first.</div>
+                  <div>Learner: I think we can start with a smaller launch.</div>
+                  <div>Tutor: Good. Try again with “start with”.</div>
+                  <div class="system-line">saved: phrase vault · journal · review queue</div>
+                </div>
+                <div class="codex-output">
+                  <div class="module">
+                    <strong>Mini mirror</strong>
+                    <p class="mini">오늘 전달한 것, 자연스러운 recast, 내 표현으로 저장할 한 문장.</p>
+                  </div>
+                  <div class="module">
+                    <strong>Next action</strong>
+                    <p class="mini">내일은 같은 표현을 다른 상황에서 다시 말한다.</p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <div class="surface-strip">
+            <article class="surface-card">
+              <strong>Codex command surface</strong>
+              <p class="mini">학습 실행, tutor policy, profile context injection.</p>
+            </article>
+            <article class="surface-card">
+              <strong>Local learner store</strong>
+              <p class="mini">profile, journal, artifacts, vocabulary, review queue.</p>
+            </article>
+            <article class="surface-card">
+              <strong>Generated HTML surfaces</strong>
+              <p class="mini">dashboard, weekly mirror, briefing, evidence board.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>완성 하네스의 핵심 루프</h2>
+        <p class="section-intro">
+          사용자가 매일 돌아오는 이유는 새 기능 때문이 아니라, 어제 말한 것이 오늘의 학습으로
+          돌아오기 때문이다.
+        </p>
+        <div class="flow">
+          <article class="step">
+            <div class="num">1</div>
+            <h3>Command</h3>
+            <p>Codex에서 오늘의 학습 명령을 실행하고 learner context를 불러온다.</p>
+          </article>
+          <article class="step">
+            <div class="num">2</div>
+            <h3>Session</h3>
+            <p>Codex 대화 안에서 실제 상황 기반 3-6턴 speaking task를 진행한다.</p>
+          </article>
+          <article class="step">
+            <div class="num">3</div>
+            <h3>Repair</h3>
+            <p>막히면 rescue phrase와 prompt-first repair로 다시 말하게 만든다.</p>
+          </article>
+          <article class="step">
+            <div class="num">4</div>
+            <h3>Store</h3>
+            <p>내 삶에서 나온 문장을 로컬 파일에 저장하고 review queue에 넣는다.</p>
+          </article>
+          <article class="step">
+            <div class="num">5</div>
+            <h3>Dashboard</h3>
+            <p>HTML 표면에서 오늘의 증거, 다음 액션, 누적 여정을 확인한다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>사용자가 체감하는 최종 경험</h2>
+        <div class="split">
+          <article class="card">
+            <span class="tag green">매일 들어가고 싶어지는 이유</span>
+            <h3>부담 없는 7분, 하지만 어제와 이어지는 7분</h3>
+            <p>
+              결석을 벌하지 않고, 돌아온 날을 쉽게 다시 시작한다. Codex 세션은 “오늘 뭐 하지?”가
+              아니라 “어제의 learner state에서 오늘 어디로 이어지는가”를 불러온다.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag coral">실제 회화 능력의 정의</span>
+            <h3>유창함보다 먼저, 멈추지 않는 능력</h3>
+            <p>
+              완성 제품은 원어민처럼 말한다고 과장하지 않는다. 대신 clarification, repair,
+              follow-up, turn-taking을 실제 상황에서 반복하게 만든다.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>GenAI는 어디에 쓰이는가?</h2>
+        <p class="section-intro">
+          생성형 AI는 장식이나 아바타 쇼가 아니라 회화 사건을 만드는 엔진이다. 핵심은 미디어가
+          아니라 intention, first attempt, trouble source, scaffold, retry, transfer를 남기는
+          Interaction Event Graph다.
+        </p>
+        <div class="modality-grid">
+          <article class="card">
+            <span class="tag green">Voice first</span>
+            <h3>목소리는 점수가 아니라 repair 데이터</h3>
+            <p>
+              transcript, pause, retry를 묶어 “처음엔 막혔지만 다시 말한 순간”을 저장한다.
+              realtime은 나중에 turn-taking, interruption, backchannel 훈련으로 확장한다.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag blue">Image input</span>
+            <h3>이미지는 정보격차를 만든다</h3>
+            <p>
+              사용자의 실제 사진을 “AI가 다시 그릴 수 있게 설명하기”, “빠진 정보를 묻기”,
+              “모르는 단어를 우회하기” 과제로 바꾼다.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag coral">Image gen</span>
+            <h3>이미지 생성은 scenario compiler</h3>
+            <p>
+              추상적인 커리큘럼을 구체적인 social situation으로 컴파일한다. 카드에는 일부러
+              모호함이나 follow-up 압력을 넣어 clarification을 유도한다.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag gold">Video later</span>
+            <h3>영상은 turn-taking simulator</h3>
+            <p>
+              짧은 장면을 멈춘 뒤 즉시 반응하게 한다. 영상의 목적은 볼거리 제공이 아니라
+              listening-to-speaking 전환과 사회적 타이밍 훈련이다.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>네 명의 핵심 학습자를 통과해야 한다</h2>
+        <p class="section-intro">
+          좋은 아이디어가 아니라 검증 가능한 제품이 되려면, 각 페르소나 fixture가 반복 실행되어야 한다.
+        </p>
+        <div class="persona-grid">
+          <article class="card">
+            <span class="tag green">지은</span>
+            <h3>얼어붙는 학습자</h3>
+            <p>따뜻한 시작, shame 없는 recast, “Let me think” 같은 rescue phrase가 필요하다.</p>
+          </article>
+          <article class="card">
+            <span class="tag coral">민호</span>
+            <h3>교정 트라우마</h3>
+            <p>대화 중에는 흐름을 유지하고, 끝난 뒤 하나만 고쳐주는 계약이 필요하다.</p>
+          </article>
+          <article class="card">
+            <span class="tag blue">수진</span>
+            <h3>표현 욕구가 큰 학습자</h3>
+            <p>교과서 문장이 아니라 자기 취향과 세계관을 영어로 말할 수 있어야 한다.</p>
+          </article>
+          <article class="card">
+            <span class="tag gold">혜원</span>
+            <h3>잃어버린 실력의 회복</h3>
+            <p>과거와 비교해 부끄럽게 만들지 않고, 조금 더 세련된 표현 선택지를 준다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>제품 구조</h2>
+        <p class="section-intro">
+          최종형은 앱이 아니라 Codex-native learning runtime이다. HTML은 제품 그 자체가 아니라,
+          Codex가 만든 학습 상태와 검증 증거를 사람이 읽기 쉽게 보여주는 관찰 표면이다.
+        </p>
+        <div class="architecture">
+          <div class="layer">
+            <strong>Codex Harness</strong>
+            <p>GitHub clone, one-command setup, skills, commands, hook/fallback path, Codex session context.</p>
+            <span class="tag blue">실행 표면</span>
+          </div>
+          <div class="layer">
+            <strong>Tutor Policy</strong>
+            <p>prompt-first repair, Korean re-entry, no correction dump, one-pattern mini mirror.</p>
+            <span class="tag coral">대화 품질</span>
+          </div>
+          <div class="layer">
+            <strong>Learning Engine</strong>
+            <p>scenario planner, phrase vault, review queue, learner model, weekly mirror.</p>
+            <span class="tag green">학습 핵심</span>
+          </div>
+          <div class="layer">
+            <strong>Evaluation</strong>
+            <p>persona fixtures, seven-day simulation, rubric checks, honest dashboard evidence.</p>
+            <span class="tag gold">검증 장치</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section final">
+        <article class="outcome">
+          <h2>최종 제품은 무엇인가?</h2>
+          <p>
+            영어를 “공부했다”가 아니라 “Codex에서 오늘도 말했고, 내 표현이 로컬 기억에 쌓였고,
+            다음 세션에서 다시 쓸 수 있다”로 바꾸는 개인 회화 훈련 하네스다.
+          </p>
+          <div class="checklist">
+            <div class="check"><span class="mark">✓</span><span>로컬 데이터와 투명한 학습 기록</span></div>
+            <div class="check"><span class="mark">✓</span><span>상황 기반 말하기와 repair 훈련</span></div>
+            <div class="check"><span class="mark">✓</span><span>내 삶에서 나온 표현의 저장과 재사용</span></div>
+            <div class="check"><span class="mark">✓</span><span>불안한 학습자를 계속 말하게 하는 튜터 정책</span></div>
+            <div class="check"><span class="mark">✓</span><span>과장 없는 검증 게이트와 성장 대시보드</span></div>
+          </div>
+        </article>
+        <article class="card">
+          <span class="tag green">다음 구현 초점</span>
+          <h3>먼저 “친구가 clone해서 오늘 바로 쓰는 길”을 만든다</h3>
+          <p>
+            첫 번째 실행 목표는 화려한 앱이 아니다. Codex hook에 의존하지 않는 explicit
+            command-wrapper fallback, 올바른 vocabulary history, scenario loop, persona fixture
+            harness를 만들어 “매일 쓰는 학습 엔진”을 먼저 증명한다.
+          </p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
