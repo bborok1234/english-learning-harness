@@ -65,6 +65,13 @@ const commands = state.commands.map((item) => `
               <code>${escapeHtml(item.command)}</code>
             </div>`).join("");
 
+const gates = (state.gates ?? []).map((item) => `
+            <tr>
+              <td><strong>${escapeHtml(item.id)}</strong><span>${escapeHtml(item.label)}</span></td>
+              <td><strong>${escapeHtml(item.status)}</strong><span>${escapeHtml(item.evidence)}</span></td>
+              <td>${escapeHtml(item.claim)}</td>
+            </tr>`).join("");
+
 const html = `<!doctype html>
 <html lang="ko">
 <head>
@@ -383,6 +390,9 @@ const html = `<!doctype html>
       font-size: 13px;
     }
 
+    .gates td:first-child { width: 24%; }
+    .gates td:nth-child(2) { width: 32%; }
+
     .commands {
       display: grid;
       gap: 10px;
@@ -473,6 +483,16 @@ ${metrics}
     <main class="board" aria-label="Project canvas board">
 ${columns}
     </main>
+
+    ${gates ? `<section class="panel gates" style="margin-top: 18px;">
+      <h2>First-Usable Gate</h2>
+      <p>이 표가 first-usable claim의 기준이다. Dashboard는 증거 표면이지 그 자체가 제품 검증은 아니다.</p>
+      <table>
+        <tbody>
+${gates}
+        </tbody>
+      </table>
+    </section>` : ""}
 
     <section class="below">
       <article class="panel">

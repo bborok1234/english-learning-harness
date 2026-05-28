@@ -46,10 +46,10 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 #11 is complete but was closed by direct commit `204dbec`, not by PR. That is now treated as a process gap.
 
-Start #16 after #15 merges:
+Start #17 after #16 merges:
 
 ```bash
-git switch -c issue-16-dashboard-first-usable-evidence
+git switch -c issue-17-clean-clone-first-usable-smoke
 ```
 
 From #12 onward, implementation issues close through linked PRs.
