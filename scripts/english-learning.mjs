@@ -10,6 +10,7 @@ import {
   readProfile,
   writeProfile,
 } from "./lib/english-learning-store.mjs";
+import { chooseScenario } from "./lib/scenario-engine.mjs";
 
 function parseArgs(argv) {
   const command = argv[2] || "help";
@@ -40,6 +41,9 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--transcript") {
       options.transcript = argv[index + 1];
+      index += 1;
+    } else if (arg === "--scenario") {
+      options.scenario = argv[index + 1];
       index += 1;
     } else if (arg === "--json") {
       options.json = true;
@@ -89,7 +93,7 @@ function run() {
       [
         "Usage:",
         "  node scripts/english-learning.mjs init [--learner-root DIR] [--name NAME] [--motivation TEXT]",
-        "  node scripts/english-learning.mjs session [--learner-root DIR] [--input TEXT ...] [--transcript FILE] [--json]",
+        "  node scripts/english-learning.mjs session [--learner-root DIR] [--input TEXT ...] [--transcript FILE] [--scenario ID] [--json]",
         "  node scripts/english-learning.mjs context [--learner-root DIR]",
         "  node scripts/english-learning.mjs status [--learner-root DIR] [--json]",
       ].join("\n"),
@@ -108,14 +112,20 @@ function run() {
   }
 
   if (command === "session") {
-    ensureLearnerStore(options.learnerRoot);
-    const session = buildSession(transcriptInputs(options));
+    const paths = ensureLearnerStore(options.learnerRoot);
+    const session = buildSession(transcriptInputs(options), {
+      scenario: chooseScenario({
+        profileText: readProfile(paths.profile),
+        preferredId: options.scenario,
+      }),
+    });
     const persisted = persistSession(options.learnerRoot, session);
     output({
       status: "pass",
       learnerRoot: persisted.learnerRoot,
       sessionId: session.id,
       mode: session.mode,
+      scenario: session.scenario,
       sessionMetrics: session.session_metrics,
       mirror: session.mirror,
       journalPath: persisted.journalPath,

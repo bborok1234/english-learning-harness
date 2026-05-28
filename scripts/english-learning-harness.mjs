@@ -10,6 +10,7 @@ import {
   readProfile,
   writeProfile,
 } from "./lib/english-learning-store.mjs";
+import { chooseScenario } from "./lib/scenario-engine.mjs";
 
 function parseArgs(argv) {
   const command = argv[2] || "help";
@@ -40,6 +41,9 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--transcript") {
       options.transcript = argv[index + 1];
+      index += 1;
+    } else if (arg === "--scenario") {
+      options.scenario = argv[index + 1];
       index += 1;
     } else if (arg === "--json") {
       options.json = true;
@@ -82,7 +86,7 @@ function helpText() {
     "",
     "Usage:",
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR]",
-    "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs context [--learner-root DIR]",
@@ -109,10 +113,15 @@ function setup(options) {
 }
 
 function today(options) {
-  ensureLearnerStore(options.learnerRoot);
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const scenario = chooseScenario({
+    profileText: readProfile(paths.profile),
+    preferredId: options.scenario,
+  });
   const session = buildSession(transcriptInputs(options), {
     opening:
       "Let's keep this low pressure. Say one useful sentence, then we will repair it once.",
+    scenario,
   });
   const persisted = persistSession(options.learnerRoot, session);
   return {
@@ -121,6 +130,7 @@ function today(options) {
     learnerRoot: persisted.learnerRoot,
     sessionId: session.id,
     mode: session.mode,
+    scenario: session.scenario,
     sessionMetrics: session.session_metrics,
     mirror: session.mirror,
     journalPath: persisted.journalPath,
@@ -200,4 +210,3 @@ try {
   console.error(JSON.stringify({ status: "fail", error: error.message }, null, 2));
   process.exit(1);
 }
-

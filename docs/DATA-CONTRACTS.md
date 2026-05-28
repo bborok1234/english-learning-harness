@@ -103,10 +103,13 @@ Required fields:
 {
   "id": "session-id",
   "date": "YYYY-MM-DD",
-  "mode": "easy|normal|stretch",
+  "mode": "text-first",
   "scenario": {
     "id": "scenario-id",
+    "mode": "easy|normal|stretch",
     "goal": "...",
+    "role_context": "...",
+    "rescue_phrase": "...",
     "cefr_skill": "clarification|repair|turn-taking|..."
   },
   "turns": [],
@@ -114,8 +117,8 @@ Required fields:
     "communicated": "...",
     "recast": "...",
     "pattern": "...",
-    "review_phrase": "...",
-    "retry_prompt": "..."
+    "reviewPhrase": "...",
+    "retryPrompt": "..."
   },
   "session_metrics": {},
   "vocabulary_evidence": {

@@ -8,6 +8,7 @@ import {
 import { homedir } from "node:os";
 import { relative, resolve } from "node:path";
 import { mvpSessionMetricKeys, validateProgress } from "../validate-progress.mjs";
+import { defaultScenario, scenarioFollowUp, scenarioOpening } from "./scenario-engine.mjs";
 
 export const defaultLearnerRoot = () =>
   resolve(process.env.ENGLISH_LEARNING_HOME || `${homedir()}/english-learning`);
@@ -221,13 +222,17 @@ function addMetricTotals(current, sessionMetrics) {
   };
 }
 
-export function buildMiniMirror(learnerTurns) {
+export function buildMiniMirror(learnerTurns, scenario = defaultScenario()) {
   const firstTurn = learnerTurns[0] || "I want to practice English.";
   const lastTurn = learnerTurns.at(-1) || firstTurn;
+  const recast = recastUtterance(lastTurn);
   return {
     communicated: `You communicated a real daily idea: "${firstTurn}"`,
-    recast: recastUtterance(lastTurn),
-    nextPhrase: "I want to say it a little more naturally.",
+    recast,
+    pattern: scenario.pattern,
+    reviewPhrase: recast,
+    retryPrompt: scenario.retry_prompt,
+    nextPhrase: recast,
   };
 }
 
@@ -246,34 +251,50 @@ export function recastUtterance(text) {
 }
 
 export function buildSession(learnerTurns, options = {}) {
+  const scenario = options.scenario || defaultScenario();
+  const opening = options.opening
+    ? `${options.opening}\n\n${scenarioOpening(scenario)}`
+    : scenarioOpening(scenario);
   const turns = [];
   turns.push({
     role: "assistant",
-    text: options.opening || "Let's keep it easy. What is one small thing from your day?",
+    text: opening,
   });
 
   for (const learnerText of learnerTurns) {
+    const recast = recastUtterance(learnerText);
     turns.push({ role: "learner", text: learnerText });
     turns.push({
       role: "assistant",
-      text: `${recastUtterance(learnerText)} One gentle follow-up: can you add one more detail?`,
+      text: scenarioFollowUp(scenario, recast),
     });
   }
 
-  const mirror = buildMiniMirror(learnerTurns);
+  const mirror = buildMiniMirror(learnerTurns, scenario);
   turns.push({
     role: "assistant",
     text: [
       "Mini mirror:",
       `오늘 전달한 것: ${mirror.communicated}`,
       `자연스럽게 바꾸면: ${mirror.recast}`,
-      `다음에 써볼 한 문장: ${mirror.nextPhrase}`,
+      `오늘의 패턴: ${mirror.pattern}`,
+      `내 문장으로 저장: ${mirror.reviewPhrase}`,
+      `작게 다시 말해보기: ${mirror.retryPrompt}`,
     ].join("\n"),
   });
 
   return {
     id: options.sessionId || `${todayStamp()}-${Date.now()}`,
     mode: "text-first",
+    scenario: {
+      id: scenario.id,
+      title: scenario.title,
+      mode: scenario.mode,
+      goal: scenario.goal,
+      role_context: scenario.role_context,
+      cefr_skill: scenario.cefr_skill,
+      rescue_phrase: scenario.rescue_phrase,
+    },
     learner_turns: learnerTurns,
     turns,
     mirror,
@@ -301,7 +322,7 @@ function updateVocabulary(vocabulary, session) {
   const knownBefore = knownVocabularyTokenSet(vocabulary);
   const newTokens = tokens.filter((token) => !knownBefore.has(token));
   const repeatedTokens = tokens.filter((token) => knownBefore.has(token));
-  const reviewPhrase = session.mirror.recast;
+  const reviewPhrase = session.mirror.reviewPhrase || session.mirror.recast;
 
   return {
     vocabulary: {
@@ -401,13 +422,20 @@ export function persistSession(learnerRoot, session, date = new Date()) {
     `Mode: ${session.mode}`,
     `Artifact: ${relativeArtifactPath}`,
     "",
+    "### Scenario",
+    `- Goal: ${session.scenario.goal}`,
+    `- Context: ${session.scenario.role_context}`,
+    `- Rescue phrase: ${session.scenario.rescue_phrase}`,
+    "",
     "### Learner turns",
     ...session.learner_turns.map((turn) => `- ${turn}`),
     "",
     "### Mini mirror",
     `- 오늘 전달한 것: ${session.mirror.communicated}`,
     `- 자연스럽게 바꾸면: ${session.mirror.recast}`,
-    `- 다음에 써볼 한 문장: ${session.mirror.nextPhrase}`,
+    `- 오늘의 패턴: ${session.mirror.pattern}`,
+    `- 내 문장으로 저장: ${session.mirror.reviewPhrase}`,
+    `- 작게 다시 말해보기: ${session.mirror.retryPrompt}`,
     "",
   ].join("\n");
 

@@ -1,6 +1,6 @@
 # Persona Fixture Spec
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 Status: Active planning contract
 
 ## Purpose
@@ -8,6 +8,12 @@ Status: Active planning contract
 Persona fixtures are executable product-quality tests for the learning experience.
 
 They are not marketing personas. They are scenario files that prove the tutor policy, local persistence, metrics, and claim boundaries behave correctly for the four target learners.
+
+Current executable fixture entry point:
+
+```bash
+node scripts/phase1-persona-fixture-smoke.mjs
+```
 
 ## Fixture Shape
 
