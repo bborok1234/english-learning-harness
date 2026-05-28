@@ -44,5 +44,12 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 ## Next Execution
 
-Start with #11 because native hook trust-state cannot block daily use.
+#11 is complete but was closed by direct commit `204dbec`, not by PR. That is now treated as a process gap.
 
+Start #12 with a branch and PR:
+
+```bash
+git switch -c issue-12-vocabulary-history-review-queue
+```
+
+From #12 onward, implementation issues close through linked PRs.

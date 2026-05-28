@@ -379,7 +379,7 @@
     "stage": "Phase 1 hardening required / first usable version not yet proven",
     "status": "Next: PH1-FIX-2 vocabulary history and review queue",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다. #11은 direct commit으로 닫힌 process gap이므로 #12부터는 PR-first로 닫는다."
   },
   "ssot": [
     {
@@ -738,6 +738,17 @@
           ]
         },
         {
+          "id": "PR-CONTRACT",
+          "title": "Implementation issue는 PR로 닫도록 규칙화함",
+          "why": "#11이 direct commit으로 닫히면서 리뷰와 merge trail이 GitHub PR에 남지 않았다.",
+          "done": "`docs/ADAPTIVE-EXECUTION-PLAN.md`에 PR-first execution contract를 추가했고 #12 시작 branch 명령을 issue index에 명시했다.",
+          "verification": "#12부터는 branch, linked PR, verification body, merge trail이 없으면 implementation issue를 닫지 않는다.",
+          "files": [
+            "docs/ADAPTIVE-EXECUTION-PLAN.md",
+            "docs/ISSUE-INDEX.md"
+          ]
+        },
+        {
           "id": "PH1-FIX-1",
           "title": "Explicit command-wrapper fallback을 구현함",
           "why": "Codex native hook trust-state가 막혀도 학습자가 하루 세션을 시작하고 저장할 수 있는 신뢰 가능한 실행 경로가 필요했다.",
@@ -942,7 +953,7 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다.</p>
+        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다. #11은 direct commit으로 닫힌 process gap이므로 #12부터는 PR-first로 닫는다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
@@ -998,7 +1009,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>21</span>
+            <span>22</span>
           </header>
           <div class="column-cards">
             
@@ -1201,6 +1212,16 @@
               <div class="card-row"><b>왜</b><p>이 제품은 고정 태스크 리스트가 아니라 구현 증거에 따라 계속/분할/피벗/중단/리서치를 판단하는 운영 체계가 필요했다.</p></div>
               <div class="card-row"><b>완료</b><p>labels, M1-M6 milestones, epics #1-#10, M1 execution issues #11-#17을 만들고 repo-local issue index에 기록했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue list --json number,title,state,labels,milestone`로 생성 상태를 확인했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>PR-CONTRACT</strong>
+                <span>docs/ADAPTIVE-EXECUTION-PLAN.md, docs/ISSUE-INDEX.md</span>
+              </div>
+              <h3>Implementation issue는 PR로 닫도록 규칙화함</h3>
+              <div class="card-row"><b>왜</b><p>#11이 direct commit으로 닫히면서 리뷰와 merge trail이 GitHub PR에 남지 않았다.</p></div>
+              <div class="card-row"><b>완료</b><p>`docs/ADAPTIVE-EXECUTION-PLAN.md`에 PR-first execution contract를 추가했고 #12 시작 branch 명령을 issue index에 명시했다.</p></div>
+              <div class="card-row"><b>검증</b><p>#12부터는 branch, linked PR, verification body, merge trail이 없으면 implementation issue를 닫지 않는다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">

@@ -55,6 +55,7 @@ Every issue must end with one of these decisions:
 
 Required issue closeout:
 
+- linked pull request for implementation work,
 - implementation summary,
 - verification commands and outputs,
 - changed files,
@@ -234,6 +235,27 @@ Kill requires:
 
 ## GitHub Issue Model
 
+### Pull Request Contract
+
+Implementation issues must close through a pull request, not a direct `main` commit.
+
+Default flow:
+
+1. Create a branch named `issue-<number>-<short-slug>`.
+2. Commit implementation, evidence, and dashboard/SSOT updates on that branch.
+3. Open a PR linked to the issue.
+4. Put verification commands, claim boundary, and backlog decision in the PR body.
+5. Merge the PR only after verification evidence is present.
+6. Close the issue from the PR merge or a final issue comment that links the PR.
+
+Allowed direct commits:
+
+- emergency repository repair,
+- generated dashboard sync after an already-reviewed PR merge,
+- documentation typo fixes that do not close an implementation issue.
+
+If a direct commit is used, the issue must stay open until a follow-up PR records the missing review trail or the issue comment explicitly explains why a PR would be empty.
+
 Every issue should include:
 
 ```markdown
@@ -368,7 +390,7 @@ Before autonomous implementation begins:
 4. Create M1 executable issues.
 5. Add issue templates or reusable issue body snippets.
 6. Create a `docs/ISSUE-INDEX.md` mapping epics to milestones.
-7. Require every implementation PR or direct commit to update `docs/project-state.json` and regenerate `docs/dashboard.html`.
+7. Require every implementation PR to update `docs/project-state.json` and regenerate `docs/dashboard.html`.
 
 ## Stop Conditions
 

@@ -6,7 +6,7 @@
     "stage": "Phase 1 hardening required / first usable version not yet proven",
     "status": "Next: PH1-FIX-2 vocabulary history and review queue",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다. #11은 direct commit으로 닫힌 process gap이므로 #12부터는 PR-first로 닫는다."
   },
   "ssot": [
     {
@@ -279,6 +279,14 @@
           "done": "labels, M1-M6 milestones, epics #1-#10, M1 execution issues #11-#17을 만들고 repo-local issue index에 기록했다.",
           "verification": "`gh issue list --json number,title,state,labels,milestone`로 생성 상태를 확인했다.",
           "files": ["docs/ISSUE-INDEX.md", "docs/ADAPTIVE-EXECUTION-PLAN.md"]
+        },
+        {
+          "id": "PR-CONTRACT",
+          "title": "Implementation issue는 PR로 닫도록 규칙화함",
+          "why": "#11이 direct commit으로 닫히면서 리뷰와 merge trail이 GitHub PR에 남지 않았다.",
+          "done": "`docs/ADAPTIVE-EXECUTION-PLAN.md`에 PR-first execution contract를 추가했고 #12 시작 branch 명령을 issue index에 명시했다.",
+          "verification": "#12부터는 branch, linked PR, verification body, merge trail이 없으면 implementation issue를 닫지 않는다.",
+          "files": ["docs/ADAPTIVE-EXECUTION-PLAN.md", "docs/ISSUE-INDEX.md"]
         },
         {
           "id": "PH1-FIX-1",
