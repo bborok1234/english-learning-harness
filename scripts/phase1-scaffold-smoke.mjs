@@ -28,9 +28,13 @@ const requiredFiles = [
   "scripts/english-learning-harness.mjs",
   "scripts/english-learning.mjs",
   "scripts/lib/english-learning-store.mjs",
+  "scripts/lib/scenario-engine.mjs",
+  "scripts/lib/persona-fixtures.mjs",
   "scripts/package-local-marketplace.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
   "scripts/phase1-vocabulary-history-smoke.mjs",
+  "scripts/phase1-scenario-loop-smoke.mjs",
+  "scripts/phase1-persona-fixture-smoke.mjs",
 ];
 
 function readJson(path) {

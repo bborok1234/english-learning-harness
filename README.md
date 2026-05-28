@@ -154,6 +154,13 @@ Run the vocabulary history smoke:
 node scripts/phase1-vocabulary-history-smoke.mjs
 ```
 
+Run the scenario loop and persona fixture smoke:
+
+```bash
+node scripts/phase1-scenario-loop-smoke.mjs
+node scripts/phase1-persona-fixture-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

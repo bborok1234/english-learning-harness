@@ -377,9 +377,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-3 scenario-based daily loop and fixture harness",
+    "status": "Next: PH1-FIX-4 Stop/finalization contract alignment",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 explicit command-wrapper fallback과 #12 vocabulary history/review queue가 smoke 검증을 통과했다. 다음은 #13 scenario-based daily loop와 fixture harness다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop/fixture harness가 smoke 검증을 통과했다. 다음은 #14 Stop/finalization contract alignment다."
   },
   "ssot": [
     {
@@ -470,8 +470,8 @@
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-3",
-      "detail": "scenario-based daily loop and fixture harness",
+      "value": "PH1-FIX-4",
+      "detail": "Stop/finalization contract alignment",
       "tone": "red"
     },
     {
@@ -773,6 +773,20 @@
             "docs/phase-1-evidence/PH1-FIX-2-vocabulary-history.md",
             "docs/DATA-CONTRACTS.md"
           ]
+        },
+        {
+          "id": "PH1-FIX-3",
+          "title": "Scenario-based daily loop와 fixture harness를 구현함",
+          "why": "daily session이 단순 transcript processor이면 회화 목표, repair, retry, transfer가 약하다.",
+          "done": "scenario engine, scenario-aware session opening/follow-up, mini mirror pattern/review/retry, four-persona fixture smoke를 추가했다.",
+          "verification": "`node scripts/phase1-scenario-loop-smoke.mjs`와 `node scripts/phase1-persona-fixture-smoke.mjs`가 통과했다.",
+          "files": [
+            "scripts/lib/scenario-engine.mjs",
+            "scripts/lib/persona-fixtures.mjs",
+            "scripts/phase1-scenario-loop-smoke.mjs",
+            "scripts/phase1-persona-fixture-smoke.mjs",
+            "docs/phase-1-evidence/PH1-FIX-3-scenario-loop-fixtures.md"
+          ]
         }
       ]
     },
@@ -782,15 +796,14 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-3",
-          "title": "Scenario-based daily loop와 fixture harness 구현",
-          "why": "현재 daily session은 transcript processor에 가깝고 실제 회화 연습처럼 목표, 상황, follow-up, repair가 이어지는 구조가 약하다.",
-          "done": "일상 scenario goal, tutor turn policy, learner retry prompt, persona fixture를 command-wrapper daily flow에 연결한다.",
-          "verification": "네 target persona fixture에서 session artifact가 scenario goal, learner retry, repair/recast, mini mirror를 포함해야 한다.",
+          "id": "PH1-FIX-4",
+          "title": "Stop/finalization contract 정렬",
+          "why": "현재 Stop hook은 timestamp/context만 남기고, 실제 세션 finalization은 CLI command에서 일어나 문서와 런타임 책임이 어긋난다.",
+          "done": "Stop hook이 무엇을 보장하는지와 command-wrapper가 무엇을 보장하는지 분리하고, finalization evidence를 명확히 한다.",
+          "verification": "Stop hook smoke와 command-wrapper session smoke가 서로 다른 claim boundary를 명확히 보여야 한다.",
           "files": [
-            "scripts/lib/english-learning-store.mjs",
+            "hooks/english-learning-hook.mjs",
             "scripts/english-learning-harness.mjs",
-            "docs/PERSONA-FIXTURE-SPEC.md",
             "docs/phase-1-evidence/"
           ]
         }
@@ -915,6 +928,11 @@
       "name": "PH1-FIX-2",
       "status": "Pass",
       "detail": "historical vocabulary, review queue, repeated-session smoke, and v2 migration smoke pass"
+    },
+    {
+      "name": "PH1-FIX-3",
+      "status": "Pass",
+      "detail": "scenario loop smoke and four-persona fixture harness smoke pass"
     }
   ],
   "commands": [
@@ -933,6 +951,14 @@
     {
       "label": "Run vocabulary history smoke",
       "command": "node scripts/phase1-vocabulary-history-smoke.mjs"
+    },
+    {
+      "label": "Run scenario loop smoke",
+      "command": "node scripts/phase1-scenario-loop-smoke.mjs"
+    },
+    {
+      "label": "Run persona fixture smoke",
+      "command": "node scripts/phase1-persona-fixture-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",
@@ -969,12 +995,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 explicit command-wrapper fallback과 #12 vocabulary history/review queue가 smoke 검증을 통과했다. 다음은 #13 scenario-based daily loop와 fixture harness다.</p>
+        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop/fixture harness가 smoke 검증을 통과했다. 다음은 #14 Stop/finalization contract alignment다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
         Phase 1 hardening required / first usable version not yet proven<br>
-        Next: PH1-FIX-3 scenario-based daily loop and fixture harness
+        Next: PH1-FIX-4 Stop/finalization contract alignment
       </div>
     </header>
 
@@ -992,8 +1018,8 @@
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">PH1-FIX-3</div>
-          <p>scenario-based daily loop and fixture harness</p>
+          <div class="metric-value">PH1-FIX-4</div>
+          <p>Stop/finalization contract alignment</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1025,7 +1051,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>23</span>
+            <span>24</span>
           </header>
           <div class="column-cards">
             
@@ -1259,6 +1285,16 @@
               <div class="card-row"><b>완료</b><p>`vocabulary.json`과 `review-queue.json`을 learner store에 추가하고, session persist 시 historical vocabulary와 비교해 새 단어/반복 단어/복습 문장을 분리한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase1-vocabulary-history-smoke.mjs`에서 첫 `I like coffee.`는 새 단어 3개, 두 번째 동일 문장은 새 단어 0개, 누적 progress는 3개로 유지됐다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>PH1-FIX-3</strong>
+                <span>scripts/lib/scenario-engine.mjs, scripts/lib/persona-fixtures.mjs, scripts/phase1-scenario-loop-smoke.mjs, scripts/phase1-persona-fixture-smoke.mjs, docs/phase-1-evidence/PH1-FIX-3-scenario-loop-fixtures.md</span>
+              </div>
+              <h3>Scenario-based daily loop와 fixture harness를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>daily session이 단순 transcript processor이면 회화 목표, repair, retry, transfer가 약하다.</p></div>
+              <div class="card-row"><b>완료</b><p>scenario engine, scenario-aware session opening/follow-up, mini mirror pattern/review/retry, four-persona fixture smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase1-scenario-loop-smoke.mjs`와 `node scripts/phase1-persona-fixture-smoke.mjs`가 통과했다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1270,13 +1306,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>PH1-FIX-3</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, docs/PERSONA-FIXTURE-SPEC.md, docs/phase-1-evidence/</span>
+                <strong>PH1-FIX-4</strong>
+                <span>hooks/english-learning-hook.mjs, scripts/english-learning-harness.mjs, docs/phase-1-evidence/</span>
               </div>
-              <h3>Scenario-based daily loop와 fixture harness 구현</h3>
-              <div class="card-row"><b>왜</b><p>현재 daily session은 transcript processor에 가깝고 실제 회화 연습처럼 목표, 상황, follow-up, repair가 이어지는 구조가 약하다.</p></div>
-              <div class="card-row"><b>완료</b><p>일상 scenario goal, tutor turn policy, learner retry prompt, persona fixture를 command-wrapper daily flow에 연결한다.</p></div>
-              <div class="card-row"><b>검증</b><p>네 target persona fixture에서 session artifact가 scenario goal, learner retry, repair/recast, mini mirror를 포함해야 한다.</p></div>
+              <h3>Stop/finalization contract 정렬</h3>
+              <div class="card-row"><b>왜</b><p>현재 Stop hook은 timestamp/context만 남기고, 실제 세션 finalization은 CLI command에서 일어나 문서와 런타임 책임이 어긋난다.</p></div>
+              <div class="card-row"><b>완료</b><p>Stop hook이 무엇을 보장하는지와 command-wrapper가 무엇을 보장하는지 분리하고, finalization evidence를 명확히 한다.</p></div>
+              <div class="card-row"><b>검증</b><p>Stop hook smoke와 command-wrapper session smoke가 서로 다른 claim boundary를 명확히 보여야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1466,6 +1502,10 @@
               <td>PH1-FIX-2</td>
               <td><strong>Pass</strong><span>historical vocabulary, review queue, repeated-session smoke, and v2 migration smoke pass</span></td>
             </tr>
+            <tr>
+              <td>PH1-FIX-3</td>
+              <td><strong>Pass</strong><span>scenario loop smoke and four-persona fixture harness smoke pass</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
@@ -1485,6 +1525,14 @@
             <div class="command">
               <span>Run vocabulary history smoke</span>
               <code>node scripts/phase1-vocabulary-history-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run scenario loop smoke</span>
+              <code>node scripts/phase1-scenario-loop-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run persona fixture smoke</span>
+              <code>node scripts/phase1-persona-fixture-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
