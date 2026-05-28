@@ -39,9 +39,10 @@ What is complete:
 - M2 executable issues #25-#29 are created under the Pedagogical Learning Engine milestone.
 - M2-1 is implemented on the PR branch: `learner-model.json` baseline, setup migration, session skill-memory updates, artifact evidence, context summary, and setup repair support are in place.
 - M2-2 is implemented on the PR branch: due review listing, success/fail review updates, 1/3/7/14 interval progression, and phrase vault inspection are in place.
+- M2-3 is implemented on the PR branch: scenario planning now uses due review phrases, learner model state, mode selection, avoided topics, and artifact selection reasons.
 
 What is not started:
-- M2-3 memory-aware scenario planner.
+- M2-4 tutor policy rubric enforcement.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -91,6 +92,7 @@ Strategic reset:
 - M2 planning evidence: `docs/ISSUE-INDEX.md` records M2 executable issues #25-#29.
 - Learner model evidence: `docs/phase-2-evidence/M2-1-learner-model.md` records learner model setup, migration, session update, context summary, and regression smoke verification.
 - Review/vault evidence: `docs/phase-2-evidence/M2-2-review-vault.md` records due review listing, success/fail updates, interval behavior, phrase vault output, and regression smoke verification.
+- Scenario planner evidence: `docs/phase-2-evidence/M2-3-scenario-planner.md` records due phrase planning, avoided topic handling, mode choice, selection reason artifacts, and persona regression verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -137,7 +139,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 - [x] M2-1: Implement learner model baseline and skill memory.
 - [x] M2-2: Add due review queue command and phrase vault.
-- [ ] M2-3: Make scenario planner use memory and review needs.
+- [x] M2-3: Make scenario planner use memory and review needs.
 - [ ] M2-4: Enforce tutor policy with rubric smoke tests.
 - [ ] M2-5: Generate weekly mirror from local evidence.
 

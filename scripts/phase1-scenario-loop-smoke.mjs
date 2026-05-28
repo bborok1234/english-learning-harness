@@ -54,6 +54,7 @@ function main() {
 
   assert(session.status === "pass", "scenario session failed");
   assert(session.scenario.id === "creative-opinion", "preferred scenario was not selected");
+  assert(session.scenario.selection_reason.source === "preferred", "scenario selection reason missing");
   assert(session.scenario.goal, "session missing scenario goal");
   assert(session.mirror.pattern, "mini mirror missing pattern");
   assert(session.mirror.reviewPhrase, "mini mirror missing review phrase");
@@ -63,6 +64,7 @@ function main() {
 
   const artifact = readJson(session.artifactPath);
   assert(artifact.scenario.goal.includes("personal taste"), "artifact scenario goal mismatch");
+  assert(artifact.scenario.selection_reason.source === "preferred", "artifact missing selection reason");
   assert(artifact.turns[0].text.includes("Goal:"), "opening turn missing task goal");
   assert(artifact.turns[0].text.includes("Rescue phrase:"), "opening turn missing rescue phrase");
   assert(artifact.turns.some((turn) => turn.text.includes("Small repair")), "turns missing repair prompt");

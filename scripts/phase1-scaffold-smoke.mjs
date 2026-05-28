@@ -40,6 +40,7 @@ const requiredFiles = [
   "scripts/phase1-clean-clone-smoke.mjs",
   "scripts/phase2-learner-model-smoke.mjs",
   "scripts/phase2-review-vault-smoke.mjs",
+  "scripts/phase2-scenario-planner-smoke.mjs",
 ];
 
 function readJson(path) {

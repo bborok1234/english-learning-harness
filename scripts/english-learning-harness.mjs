@@ -17,13 +17,14 @@ import {
   readLearnerModel,
   readProgress,
   readProfile,
+  readVocabulary,
   writeLearnerModel,
   writeProgress,
   writeReviewQueue,
   writeVocabulary,
   writeProfile,
 } from "./lib/english-learning-store.mjs";
-import { chooseScenario } from "./lib/scenario-engine.mjs";
+import { planScenario } from "./lib/scenario-engine.mjs";
 
 function parseArgs(argv) {
   const command = argv[2] || "help";
@@ -206,14 +207,19 @@ function setup(options) {
 
 function today(options) {
   const paths = ensureLearnerStore(options.learnerRoot);
-  const scenario = chooseScenario({
-    profileText: readProfile(paths.profile),
+  const profileText = readProfile(paths.profile);
+  const scenarioPlan = planScenario({
+    profileText,
     preferredId: options.scenario,
+    learnerModel: readLearnerModel(paths.learnerModel),
+    vocabulary: readVocabulary(paths.vocabulary),
+    dueReviewItems: listDueReviewItems(paths.root),
   });
   const session = buildSession(transcriptInputs(options), {
     opening:
       "Let's keep this low pressure. Say one useful sentence, then we will repair it once.",
-    scenario,
+    scenario: scenarioPlan.scenario,
+    selectionReason: scenarioPlan.selectionReason,
   });
   const persisted = persistSession(options.learnerRoot, session);
   return {
@@ -223,6 +229,7 @@ function today(options) {
     sessionId: session.id,
     mode: session.mode,
     scenario: session.scenario,
+    scenarioSelection: session.scenario.selection_reason,
     sessionMetrics: session.session_metrics,
     learnerModelEvidence: session.learner_model_evidence,
     mirror: session.mirror,

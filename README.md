@@ -226,6 +226,12 @@ Run the review queue and phrase vault smoke:
 node scripts/phase2-review-vault-smoke.mjs
 ```
 
+Run the memory-aware scenario planner smoke:
+
+```bash
+node scripts/phase2-scenario-planner-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

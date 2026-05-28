@@ -53,33 +53,198 @@ export function defaultScenario() {
   return scenarios[0];
 }
 
-export function chooseScenario({ profileText = "", preferredId = "" } = {}) {
-  if (preferredId) {
-    const exact = scenarios.find((scenario) => scenario.id === preferredId);
-    if (exact) return exact;
-  }
+function profileValue(profileText, key) {
+  const line = profileText
+    .split(/\r?\n/)
+    .find((entry) => entry.toLowerCase().startsWith(`- ${key}:`));
+  return line ? line.slice(line.indexOf(":") + 1).trim() : "";
+}
 
-  const lowerProfile = profileText.toLowerCase();
-  if (lowerProfile.includes("stuck") || lowerProfile.includes("frozen") || lowerProfile.includes("anxiety")) {
-    return scenarios.find((scenario) => scenario.id === "stuck-repair");
-  }
-  if (lowerProfile.includes("creative") || lowerProfile.includes("identity") || lowerProfile.includes("expressive")) {
-    return scenarios.find((scenario) => scenario.id === "creative-opinion");
-  }
-  if (lowerProfile.includes("english major") || lowerProfile.includes("lost ability") || lowerProfile.includes("reactivate")) {
-    return scenarios.find((scenario) => scenario.id === "reactivation-check-in");
-  }
+function avoidedTopics(profileText) {
+  return profileValue(profileText, "topics_to_avoid")
+    .split(/[,;]/)
+    .map((topic) => topic.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function selectionAvoidedTopics(profileText) {
+  return [
+    ...new Set(
+      avoidedTopics(profileText).map((topic) =>
+        /^[a-z0-9-]+$/.test(topic) ? topic : "sensitive-profile-topic",
+      ),
+    ),
+  ];
+}
+
+function scenarioText(scenario) {
+  return [
+    scenario.id,
+    scenario.title,
+    scenario.goal,
+    scenario.role_context,
+    scenario.rescue_phrase,
+    scenario.pattern,
+    scenario.retry_prompt,
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function scenarioHasAvoidedTopic(scenario, topics) {
+  const text = scenarioText(scenario);
+  return topics.some((topic) => text.includes(topic));
+}
+
+function firstAllowedScenario(candidates, topics) {
+  return candidates.find((scenario) => !scenarioHasAvoidedTopic(scenario, topics));
+}
+
+function scenarioForSkill(skill) {
+  if (skill === "repair") return scenarios.find((scenario) => scenario.id === "stuck-repair");
+  if (skill === "clarification") return scenarios.find((scenario) => scenario.id === "reactivation-check-in");
+  if (skill === "follow_ups") return scenarios.find((scenario) => scenario.id === "coffee-small-talk");
+  if (skill === "soft_disagreement") return scenarios.find((scenario) => scenario.id === "creative-opinion");
   return defaultScenario();
 }
 
+function weakestSkill(learnerModel) {
+  const skills = learnerModel?.interaction_skills ?? {};
+  return ["repair", "clarification", "follow_ups", "soft_disagreement", "starts"]
+    .map((skill) => ({ skill, count: skills[skill]?.evidence_count ?? 0 }))
+    .sort((a, b) => a.count - b.count)[0].skill;
+}
+
+function modeFromLearnerState(learnerModel) {
+  const averageWords = learnerModel?.baseline?.average_utterance_words ?? 0;
+  const starts = learnerModel?.interaction_skills?.starts?.evidence_count ?? 0;
+  if (averageWords >= 12 && starts >= 5) return "stretch";
+  if (averageWords >= 7 && starts >= 2) return "normal";
+  return "easy";
+}
+
+function withMode(scenario, mode) {
+  return {
+    ...scenario,
+    mode,
+  };
+}
+
+function withDueReview(scenario, dueItem) {
+  return {
+    ...scenario,
+    goal: `Reuse a saved phrase in a tiny real-life context: "${dueItem.text}"`,
+    role_context: `${scenario.role_context} Your continuity phrase for today is "${dueItem.text}".`,
+    follow_up_prompt: `Use the saved phrase, then add one specific detail. ${scenario.follow_up_prompt}`,
+    retry_prompt: `Use "${dueItem.text}" and add one detail.`,
+    due_review: {
+      id: dueItem.id,
+      text: dueItem.text,
+      due_at: dueItem.due_at,
+    },
+  };
+}
+
+export function chooseScenario({ profileText = "", preferredId = "" } = {}) {
+  const topics = avoidedTopics(profileText);
+  if (preferredId) {
+    const exact = scenarios.find((scenario) => scenario.id === preferredId);
+    if (exact && !scenarioHasAvoidedTopic(exact, topics)) return exact;
+  }
+
+  const lowerProfile = profileText.toLowerCase();
+  const profileCandidates = [];
+  if (lowerProfile.includes("stuck") || lowerProfile.includes("frozen") || lowerProfile.includes("anxiety")) {
+    profileCandidates.push(scenarios.find((scenario) => scenario.id === "stuck-repair"));
+  }
+  if (lowerProfile.includes("creative") || lowerProfile.includes("identity") || lowerProfile.includes("expressive")) {
+    profileCandidates.push(scenarios.find((scenario) => scenario.id === "creative-opinion"));
+  }
+  if (lowerProfile.includes("english major") || lowerProfile.includes("lost ability") || lowerProfile.includes("reactivate")) {
+    profileCandidates.push(scenarios.find((scenario) => scenario.id === "reactivation-check-in"));
+  }
+  profileCandidates.push(defaultScenario(), ...scenarios);
+  return firstAllowedScenario(profileCandidates.filter(Boolean), topics) || defaultScenario();
+}
+
+export function planScenario({
+  profileText = "",
+  preferredId = "",
+  learnerModel,
+  dueReviewItems = [],
+} = {}) {
+  const topics = avoidedTopics(profileText);
+  const selectionTopics = selectionAvoidedTopics(profileText);
+  const mode = modeFromLearnerState(learnerModel);
+  const weakSkill = weakestSkill(learnerModel);
+  const dueItem = dueReviewItems.find((item) =>
+    !scenarioHasAvoidedTopic(
+      {
+        id: "",
+        title: "",
+        goal: item.text,
+        role_context: "",
+        rescue_phrase: "",
+        pattern: "",
+        retry_prompt: "",
+      },
+      topics,
+    ),
+  );
+
+  if (preferredId) {
+    const preferred = chooseScenario({ profileText, preferredId });
+    return {
+      scenario: withMode(preferred, mode),
+      selectionReason: {
+        source: "preferred",
+        preferred_id: preferredId,
+        mode,
+        avoided_topics: selectionTopics,
+      },
+    };
+  }
+
+  if (dueItem) {
+    const skillScenario = scenarioForSkill(weakSkill);
+    const allowedSkillScenario = firstAllowedScenario([skillScenario, ...scenarios], topics) || defaultScenario();
+    return {
+      scenario: withDueReview(withMode(allowedSkillScenario, mode), dueItem),
+      selectionReason: {
+        source: "due-review",
+        due_review_id: dueItem.id,
+        due_review_phrase: dueItem.text,
+        weak_skill: weakSkill,
+        mode,
+        avoided_topics: selectionTopics,
+      },
+    };
+  }
+
+  const profileScenario = chooseScenario({ profileText });
+  return {
+    scenario: withMode(profileScenario, mode),
+    selectionReason: {
+      source: "profile-memory",
+      weak_skill: weakSkill,
+      mode,
+      avoided_topics: selectionTopics,
+    },
+  };
+}
+
 export function scenarioOpening(scenario) {
-  return [
+  const lines = [
     `Scenario: ${scenario.title}`,
     `Goal: ${scenario.goal}`,
     `Context: ${scenario.role_context}`,
     `Rescue phrase: "${scenario.rescue_phrase}"`,
-    "Start with one useful sentence. We will repair only one thing.",
-  ].join("\n");
+  ];
+  if (scenario.due_review?.text) {
+    lines.push(`Saved phrase: "${scenario.due_review.text}"`);
+  }
+  lines.push("Start with one useful sentence. We will repair only one thing.");
+  return lines.join("\n");
 }
 
 export function scenarioFollowUp(scenario, recast) {
