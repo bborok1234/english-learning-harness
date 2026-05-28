@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M1 local command-wrapper first-usable proven",
-    "status": "Next: M2 Pedagogical Learning Engine issue breakdown",
+    "status": "Next: #25 learner model baseline and skill memory",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. 사용자는 GitHub clone 후 setup, today, health로 학습을 시작할 수 있다. 다음은 M2 Pedagogical Learning Engine을 실행 이슈로 쪼개고 학습 효과를 키우는 단계다."
+    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2 Pedagogical Learning Engine 실행 이슈 #25-#29도 생성됐다. 다음 구현은 #25 learner model baseline and skill memory다."
   },
   "ssot": [
     {
@@ -98,7 +98,7 @@
     {
       "label": "Next block",
       "value": "M2",
-      "detail": "learner memory, tutor policy, fixture quality",
+      "detail": "#25 learner model baseline and skill memory",
       "tone": "red"
     },
     {
@@ -387,6 +387,14 @@
           "done": "`origin`에서 fresh clone을 만들고 setup, today, health, progress validation, dashboard generation을 실행했다.",
           "verification": "`node scripts/phase1-clean-clone-smoke.mjs`가 pass했고 runtime tmp files가 git status에 나타나지 않았다.",
           "files": ["scripts/phase1-clean-clone-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-7-clean-clone-smoke.md", "README.md"]
+        },
+        {
+          "id": "M2-ISSUES",
+          "title": "M2 Pedagogical Learning Engine 실행 이슈를 생성함",
+          "why": "M1은 사용 가능한 하네스 기반이고, M2는 실제 회화 향상을 강화하는 learner memory, tutor policy, fixture quality를 다룬다.",
+          "done": "GitHub issues #25-#29를 만들고 learner model, review command, memory-aware planner, tutor policy rubric, weekly mirror로 분해했다.",
+          "verification": "`docs/ISSUE-INDEX.md`가 #25-#29를 기록하고 dashboard next work가 #25를 가리킨다.",
+          "files": ["docs/ISSUE-INDEX.md", "docs/project-state.json", "docs/STATUS.md"]
         }
       ]
     },
@@ -396,12 +404,12 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M2-ISSUES",
-          "title": "M2 Pedagogical Learning Engine 실행 이슈 분해",
-          "why": "M1은 사용 가능한 하네스 기반이고, M2는 실제 회화 향상을 강화하는 learner memory, tutor policy, fixture quality를 다룬다.",
-          "done": "기존 epics #2-#5 아래에 M2 실행 이슈를 만들고, 각 이슈에 학습 효과/검증/claim boundary를 붙인다.",
-          "verification": "GitHub M2 issues가 생성되고 dashboard가 M2 next work를 보여야 한다.",
-          "files": ["docs/ISSUE-INDEX.md", "docs/project-state.json", "docs/PRODUCT-ROADMAP.md"]
+          "id": "M2-1",
+          "title": "#25 Learner model baseline and skill memory",
+          "why": "실제 회화 향상 하네스가 되려면 단순 progress counter가 아니라 starts/follow-ups/clarification/repair/affect를 기억해야 한다.",
+          "done": "`learner-model.json` 생성, migration, session update, context summary를 구현한다.",
+          "verification": "learner model smoke에서 setup 생성과 session 후 skill evidence update가 통과해야 한다.",
+          "files": ["scripts/lib/english-learning-store.mjs", "scripts/english-learning-harness.mjs", "docs/DATA-CONTRACTS.md"]
         }
       ]
     },

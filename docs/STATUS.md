@@ -36,9 +36,10 @@ What is complete:
 - PH1-FIX-5 is implemented on the PR branch: setup is idempotent, health reports recovery commands, and `setup --repair` backs up corrupt local JSON files.
 - PH1-FIX-6 is complete: the generated dashboard now has an explicit First-Usable Gate.
 - PH1-FIX-7 is implemented on the PR branch: a fresh clone from `origin` can run setup, today, health, progress validation, and dashboard generation.
+- M2 executable issues #25-#29 are created under the Pedagogical Learning Engine milestone.
 
 What is not started:
-- M2 executable issue breakdown for the Pedagogical Learning Engine.
+- M2-1 learner model baseline and skill memory implementation.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -85,6 +86,7 @@ Strategic reset:
 - Setup recovery evidence: `docs/phase-1-evidence/PH1-FIX-5-setup-recovery.md` records idempotent setup and repair smoke verification.
 - Dashboard evidence: `docs/project-state.json` now includes a First-Usable Gate rendered into `docs/dashboard.html`.
 - Clean clone evidence: `docs/phase-1-evidence/PH1-FIX-7-clean-clone-smoke.md` records fresh clone setup/today/health/dashboard smoke verification.
+- M2 planning evidence: `docs/ISSUE-INDEX.md` records M2 executable issues #25-#29.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
