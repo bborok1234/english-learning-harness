@@ -48,11 +48,20 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 M1 execution issues #11-#17 are complete after #17 merges.
 
-Next: create executable M2 issues under these existing epics:
+## M2 Pedagogical Learning Engine
 
-- #2 E2 Learner memory and data contracts
-- #3 E3 Scenario-based daily session
-- #4 E4 Tutor policy enforcement
-- #5 E5 Persona fixture evaluation
+| Issue | Work | Default Decision |
+|---|---|---|
+| #25 | M2-1: Implement learner model baseline and skill memory | continue |
+| #26 | M2-2: Add due review queue command and phrase vault | continue |
+| #27 | M2-3: Make scenario planner use memory and review needs | continue |
+| #28 | M2-4: Enforce tutor policy with rubric smoke tests | continue |
+| #29 | M2-5: Generate weekly mirror from local evidence | continue |
+
+Next start:
+
+```bash
+git switch -c issue-25-learner-model-skill-memory
+```
 
 From #12 onward, implementation issues close through linked PRs.
