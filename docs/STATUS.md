@@ -32,9 +32,10 @@ What is complete:
 - PR-first execution is now required for implementation issues after the #11 direct-commit closeout exposed a missing review trail.
 - PH1-FIX-2 is implemented on the PR branch: `vocabulary.json`, `review-queue.json`, historical `new_vocabulary_count`, and migration smoke are in place.
 - PH1-FIX-3 is implemented on the PR branch: scenario engine, tutor repair prompts, and four-persona fixture smoke are in place.
+- PH1-FIX-4 is implemented on the PR branch: command-wrapper owns session finalization and Stop hook is marker-only with smoke coverage.
 
 What is not started:
-- PH1-FIX-4 through PH1-FIX-7 from GitHub issues #14-#17.
+- PH1-FIX-5 through PH1-FIX-7 from GitHub issues #15-#17.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -42,7 +43,7 @@ What is not started:
 What failed review:
 - Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
 - PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
-- Stop hook writes a timestamp only; session finalization happens in the CLI command, not the hook.
+- Setup UX is still not one-command/recoverable enough for a non-developer clone-to-learn path.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.
@@ -77,6 +78,7 @@ Strategic reset:
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
 - Vocabulary evidence: `docs/phase-1-evidence/PH1-FIX-2-vocabulary-history.md` records repeated-session and migration smoke verification.
 - Scenario evidence: `docs/phase-1-evidence/PH1-FIX-3-scenario-loop-fixtures.md` records scenario-loop and persona fixture smoke verification.
+- Stop contract evidence: `docs/phase-1-evidence/PH1-FIX-4-stop-finalization-contract.md` records explicit finalization and marker-only Stop hook smoke verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -113,7 +115,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] PH1-FIX-1: Implement supported explicit command-wrapper fallback and keep setup-owned/native hook installation optional until Codex trust-state is proven.
 - [x] PH1-FIX-2: Fix vocabulary history and `new_vocabulary_count`.
 - [x] PH1-FIX-3: Strengthen daily-session UX beyond deterministic transcript processing.
-- [ ] PH1-FIX-4: Align Stop hook behavior with documentation.
+- [x] PH1-FIX-4: Align Stop hook behavior with documentation.
 - [ ] PH1-FIX-5: Make setup UX one-command and recoverable.
 - [ ] PH1-FIX-6: Sync dashboard evidence for the first-usable gate.
 - [ ] PH1-FIX-7: Run clean clone first-usable smoke.

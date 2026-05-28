@@ -377,9 +377,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-4 Stop/finalization contract alignment",
+    "status": "Next: PH1-FIX-5 one-command recoverable setup UX",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop/fixture harness가 smoke 검증을 통과했다. 다음은 #14 Stop/finalization contract alignment다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop, #14 Stop/finalization contract가 smoke 검증을 통과했다. 다음은 #15 one-command recoverable setup UX다."
   },
   "ssot": [
     {
@@ -470,8 +470,8 @@
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-4",
-      "detail": "Stop/finalization contract alignment",
+      "value": "PH1-FIX-5",
+      "detail": "one-command recoverable setup UX",
       "tone": "red"
     },
     {
@@ -787,6 +787,19 @@
             "scripts/phase1-persona-fixture-smoke.mjs",
             "docs/phase-1-evidence/PH1-FIX-3-scenario-loop-fixtures.md"
           ]
+        },
+        {
+          "id": "PH1-FIX-4",
+          "title": "Stop/finalization contract를 정렬함",
+          "why": "Stop hook이 session finalization을 담당하는 것처럼 보이면 native hook trust-state를 first-use dependency로 오해하게 된다.",
+          "done": "`today` command는 `finalizesSession: true`, Stop hook은 `finalizesSession: false`와 `last_stop_contract: marker-only`를 명시한다.",
+          "verification": "`node scripts/phase1-stop-finalization-smoke.mjs`에서 Stop hook이 추가 artifact/session을 만들지 않고 marker만 남기는 것을 확인했다.",
+          "files": [
+            "hooks/english-learning-hook.mjs",
+            "scripts/phase1-stop-finalization-smoke.mjs",
+            "docs/phase-1-evidence/PH1-FIX-4-stop-finalization-contract.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -796,14 +809,14 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-4",
-          "title": "Stop/finalization contract 정렬",
-          "why": "현재 Stop hook은 timestamp/context만 남기고, 실제 세션 finalization은 CLI command에서 일어나 문서와 런타임 책임이 어긋난다.",
-          "done": "Stop hook이 무엇을 보장하는지와 command-wrapper가 무엇을 보장하는지 분리하고, finalization evidence를 명확히 한다.",
-          "verification": "Stop hook smoke와 command-wrapper session smoke가 서로 다른 claim boundary를 명확히 보여야 한다.",
+          "id": "PH1-FIX-5",
+          "title": "One-command recoverable setup UX 구현",
+          "why": "README의 setup guidance는 아직 개발자 지향이고, 처음 쓰는 사람이 한 번에 상태를 진단/복구하기 어렵다.",
+          "done": "setup command가 learner store, health, next action, recovery guidance를 한 번에 제공하게 만든다.",
+          "verification": "clean learner root에서 setup을 반복 실행해도 안전하고, health가 missing/corrupt 상태를 설명해야 한다.",
           "files": [
-            "hooks/english-learning-hook.mjs",
             "scripts/english-learning-harness.mjs",
+            "README.md",
             "docs/phase-1-evidence/"
           ]
         }
@@ -933,6 +946,11 @@
       "name": "PH1-FIX-3",
       "status": "Pass",
       "detail": "scenario loop smoke and four-persona fixture harness smoke pass"
+    },
+    {
+      "name": "PH1-FIX-4",
+      "status": "Pass",
+      "detail": "explicit command finalization and marker-only Stop hook contract smoke pass"
     }
   ],
   "commands": [
@@ -959,6 +977,10 @@
     {
       "label": "Run persona fixture smoke",
       "command": "node scripts/phase1-persona-fixture-smoke.mjs"
+    },
+    {
+      "label": "Run Stop finalization smoke",
+      "command": "node scripts/phase1-stop-finalization-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",
@@ -995,12 +1017,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop/fixture harness가 smoke 검증을 통과했다. 다음은 #14 Stop/finalization contract alignment다.</p>
+        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop, #14 Stop/finalization contract가 smoke 검증을 통과했다. 다음은 #15 one-command recoverable setup UX다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
         Phase 1 hardening required / first usable version not yet proven<br>
-        Next: PH1-FIX-4 Stop/finalization contract alignment
+        Next: PH1-FIX-5 one-command recoverable setup UX
       </div>
     </header>
 
@@ -1018,8 +1040,8 @@
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">PH1-FIX-4</div>
-          <p>Stop/finalization contract alignment</p>
+          <div class="metric-value">PH1-FIX-5</div>
+          <p>one-command recoverable setup UX</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1051,7 +1073,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>24</span>
+            <span>25</span>
           </header>
           <div class="column-cards">
             
@@ -1295,6 +1317,16 @@
               <div class="card-row"><b>완료</b><p>scenario engine, scenario-aware session opening/follow-up, mini mirror pattern/review/retry, four-persona fixture smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase1-scenario-loop-smoke.mjs`와 `node scripts/phase1-persona-fixture-smoke.mjs`가 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>PH1-FIX-4</strong>
+                <span>hooks/english-learning-hook.mjs, scripts/phase1-stop-finalization-smoke.mjs, docs/phase-1-evidence/PH1-FIX-4-stop-finalization-contract.md, README.md</span>
+              </div>
+              <h3>Stop/finalization contract를 정렬함</h3>
+              <div class="card-row"><b>왜</b><p>Stop hook이 session finalization을 담당하는 것처럼 보이면 native hook trust-state를 first-use dependency로 오해하게 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>`today` command는 `finalizesSession: true`, Stop hook은 `finalizesSession: false`와 `last_stop_contract: marker-only`를 명시한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase1-stop-finalization-smoke.mjs`에서 Stop hook이 추가 artifact/session을 만들지 않고 marker만 남기는 것을 확인했다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1306,13 +1338,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>PH1-FIX-4</strong>
-                <span>hooks/english-learning-hook.mjs, scripts/english-learning-harness.mjs, docs/phase-1-evidence/</span>
+                <strong>PH1-FIX-5</strong>
+                <span>scripts/english-learning-harness.mjs, README.md, docs/phase-1-evidence/</span>
               </div>
-              <h3>Stop/finalization contract 정렬</h3>
-              <div class="card-row"><b>왜</b><p>현재 Stop hook은 timestamp/context만 남기고, 실제 세션 finalization은 CLI command에서 일어나 문서와 런타임 책임이 어긋난다.</p></div>
-              <div class="card-row"><b>완료</b><p>Stop hook이 무엇을 보장하는지와 command-wrapper가 무엇을 보장하는지 분리하고, finalization evidence를 명확히 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>Stop hook smoke와 command-wrapper session smoke가 서로 다른 claim boundary를 명확히 보여야 한다.</p></div>
+              <h3>One-command recoverable setup UX 구현</h3>
+              <div class="card-row"><b>왜</b><p>README의 setup guidance는 아직 개발자 지향이고, 처음 쓰는 사람이 한 번에 상태를 진단/복구하기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>setup command가 learner store, health, next action, recovery guidance를 한 번에 제공하게 만든다.</p></div>
+              <div class="card-row"><b>검증</b><p>clean learner root에서 setup을 반복 실행해도 안전하고, health가 missing/corrupt 상태를 설명해야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1506,6 +1538,10 @@
               <td>PH1-FIX-3</td>
               <td><strong>Pass</strong><span>scenario loop smoke and four-persona fixture harness smoke pass</span></td>
             </tr>
+            <tr>
+              <td>PH1-FIX-4</td>
+              <td><strong>Pass</strong><span>explicit command finalization and marker-only Stop hook contract smoke pass</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
@@ -1533,6 +1569,10 @@
             <div class="command">
               <span>Run persona fixture smoke</span>
               <code>node scripts/phase1-persona-fixture-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run Stop finalization smoke</span>
+              <code>node scripts/phase1-stop-finalization-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

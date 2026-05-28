@@ -46,10 +46,10 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 #11 is complete but was closed by direct commit `204dbec`, not by PR. That is now treated as a process gap.
 
-Start #14 after #13 merges:
+Start #15 after #14 merges:
 
 ```bash
-git switch -c issue-14-stop-finalization-contract
+git switch -c issue-15-one-command-recoverable-setup
 ```
 
 From #12 onward, implementation issues close through linked PRs.

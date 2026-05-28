@@ -35,6 +35,7 @@ const requiredFiles = [
   "scripts/phase1-vocabulary-history-smoke.mjs",
   "scripts/phase1-scenario-loop-smoke.mjs",
   "scripts/phase1-persona-fixture-smoke.mjs",
+  "scripts/phase1-stop-finalization-smoke.mjs",
 ];
 
 function readJson(path) {

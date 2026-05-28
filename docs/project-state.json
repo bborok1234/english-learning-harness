@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-4 Stop/finalization contract alignment",
+    "status": "Next: PH1-FIX-5 one-command recoverable setup UX",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop/fixture harness가 smoke 검증을 통과했다. 다음은 #14 Stop/finalization contract alignment다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop, #14 Stop/finalization contract가 smoke 검증을 통과했다. 다음은 #15 one-command recoverable setup UX다."
   },
   "ssot": [
     {
@@ -97,8 +97,8 @@
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-4",
-      "detail": "Stop/finalization contract alignment",
+      "value": "PH1-FIX-5",
+      "detail": "one-command recoverable setup UX",
       "tone": "red"
     },
     {
@@ -311,6 +311,14 @@
           "done": "scenario engine, scenario-aware session opening/follow-up, mini mirror pattern/review/retry, four-persona fixture smoke를 추가했다.",
           "verification": "`node scripts/phase1-scenario-loop-smoke.mjs`와 `node scripts/phase1-persona-fixture-smoke.mjs`가 통과했다.",
           "files": ["scripts/lib/scenario-engine.mjs", "scripts/lib/persona-fixtures.mjs", "scripts/phase1-scenario-loop-smoke.mjs", "scripts/phase1-persona-fixture-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-3-scenario-loop-fixtures.md"]
+        },
+        {
+          "id": "PH1-FIX-4",
+          "title": "Stop/finalization contract를 정렬함",
+          "why": "Stop hook이 session finalization을 담당하는 것처럼 보이면 native hook trust-state를 first-use dependency로 오해하게 된다.",
+          "done": "`today` command는 `finalizesSession: true`, Stop hook은 `finalizesSession: false`와 `last_stop_contract: marker-only`를 명시한다.",
+          "verification": "`node scripts/phase1-stop-finalization-smoke.mjs`에서 Stop hook이 추가 artifact/session을 만들지 않고 marker만 남기는 것을 확인했다.",
+          "files": ["hooks/english-learning-hook.mjs", "scripts/phase1-stop-finalization-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-4-stop-finalization-contract.md", "README.md"]
         }
       ]
     },
@@ -320,12 +328,12 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-4",
-          "title": "Stop/finalization contract 정렬",
-          "why": "현재 Stop hook은 timestamp/context만 남기고, 실제 세션 finalization은 CLI command에서 일어나 문서와 런타임 책임이 어긋난다.",
-          "done": "Stop hook이 무엇을 보장하는지와 command-wrapper가 무엇을 보장하는지 분리하고, finalization evidence를 명확히 한다.",
-          "verification": "Stop hook smoke와 command-wrapper session smoke가 서로 다른 claim boundary를 명확히 보여야 한다.",
-          "files": ["hooks/english-learning-hook.mjs", "scripts/english-learning-harness.mjs", "docs/phase-1-evidence/"]
+          "id": "PH1-FIX-5",
+          "title": "One-command recoverable setup UX 구현",
+          "why": "README의 setup guidance는 아직 개발자 지향이고, 처음 쓰는 사람이 한 번에 상태를 진단/복구하기 어렵다.",
+          "done": "setup command가 learner store, health, next action, recovery guidance를 한 번에 제공하게 만든다.",
+          "verification": "clean learner root에서 setup을 반복 실행해도 안전하고, health가 missing/corrupt 상태를 설명해야 한다.",
+          "files": ["scripts/english-learning-harness.mjs", "README.md", "docs/phase-1-evidence/"]
         }
       ]
     },
@@ -453,6 +461,11 @@
       "name": "PH1-FIX-3",
       "status": "Pass",
       "detail": "scenario loop smoke and four-persona fixture harness smoke pass"
+    },
+    {
+      "name": "PH1-FIX-4",
+      "status": "Pass",
+      "detail": "explicit command finalization and marker-only Stop hook contract smoke pass"
     }
   ],
   "commands": [
@@ -479,6 +492,10 @@
     {
       "label": "Run persona fixture smoke",
       "command": "node scripts/phase1-persona-fixture-smoke.mjs"
+    },
+    {
+      "label": "Run Stop finalization smoke",
+      "command": "node scripts/phase1-stop-finalization-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",
