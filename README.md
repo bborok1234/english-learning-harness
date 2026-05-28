@@ -87,6 +87,12 @@ Open the phrase vault:
 node scripts/english-learning-harness.mjs vault --json
 ```
 
+Generate a weekly mirror from local evidence:
+
+```bash
+node scripts/english-learning-harness.mjs weekly --json
+```
+
 Check health:
 
 ```bash
@@ -236,6 +242,12 @@ Run the tutor policy rubric smoke:
 
 ```bash
 node scripts/phase2-tutor-policy-smoke.mjs
+```
+
+Run the weekly mirror smoke:
+
+```bash
+node scripts/phase2-weekly-mirror-smoke.mjs
 ```
 
 Run the full first-run smoke:

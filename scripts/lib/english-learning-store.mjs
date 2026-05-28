@@ -29,6 +29,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     reviewQueue: resolve(root, "review-queue.json"),
     journalDir: resolve(root, "journal"),
     artifactDir: resolve(root, "artifacts/sessions"),
+    weeklyMirrorDir: resolve(root, "artifacts/weekly"),
   };
 }
 
@@ -81,6 +82,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   const paths = learnerPaths(learnerRoot);
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
+  mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
   if (!existsSync(paths.profile)) {
     writeFileSync(
@@ -725,6 +727,93 @@ export function latestJournalPath(learnerRoot = defaultLearnerRoot()) {
     .filter((entry) => entry.endsWith(".md"))
     .sort();
   return entries.length ? resolve(paths.journalDir, entries.at(-1)) : "";
+}
+
+function readSessionArtifacts(paths, progress) {
+  const sessions = Array.isArray(progress.sessions) ? progress.sessions : [];
+  return sessions
+    .map((session) => {
+      const artifactPath = resolve(paths.root, session.artifact ?? "");
+      if (!existsSync(artifactPath)) return null;
+      return JSON.parse(readFileSync(artifactPath, "utf8"));
+    })
+    .filter(Boolean);
+}
+
+function weakestLearnerSkill(learnerModel) {
+  return learnerSkillKeys
+    .map((skill) => ({
+      skill,
+      count: learnerModel.interaction_skills[skill]?.evidence_count ?? 0,
+    }))
+    .sort((a, b) => a.count - b.count)[0];
+}
+
+function uniqueRecent(values, limit = 5) {
+  return [...new Set(values.filter(Boolean))].slice(-limit);
+}
+
+export function buildWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const progress = readProgress(paths.progress);
+  const learnerModel = readLearnerModel(paths.learnerModel);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const artifacts = readSessionArtifacts(paths, progress).slice(-7);
+  const dueItems = listDueReviewItems(paths.root, date);
+  const weakSkill = weakestLearnerSkill(learnerModel);
+  const communicatedThemes = uniqueRecent(
+    artifacts.map((artifact) => artifact.mirror?.communicated?.replace(/^You communicated a real daily idea: /, "")),
+  );
+  const savedPhrases = uniqueRecent(vocabulary.personal_phrases, 7);
+  const reusedPhrases = reviewQueue.items
+    .filter((item) => (item.success_count ?? 0) > 0 || item.last_result === "success")
+    .map((item) => item.text);
+  const repairAttempts = artifacts
+    .filter((artifact) => artifact.learner_model_evidence?.updated_skills?.includes("repair"))
+    .map((artifact) => ({
+      session_id: artifact.id,
+      phrase: artifact.mirror?.reviewPhrase ?? artifact.mirror?.recast ?? "",
+    }));
+
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    window: {
+      session_count: artifacts.length,
+      from: artifacts[0]?.date ?? "",
+      to: artifacts.at(-1)?.date ?? "",
+    },
+    communicated_themes: communicatedThemes,
+    saved_phrases: savedPhrases,
+    reused_phrases: uniqueRecent(reusedPhrases, 5),
+    repair_attempts: repairAttempts,
+    skill_evidence: Object.fromEntries(
+      learnerSkillKeys.map((skill) => [skill, learnerModel.interaction_skills[skill].evidence_count]),
+    ),
+    next_focus: {
+      skill: weakSkill.skill,
+      reason: `Lowest local evidence count (${weakSkill.count}).`,
+      suggested_phrase: dueItems[0]?.text || savedPhrases.at(-1) || "I want to practice a little today.",
+      prompt: dueItems[0]
+        ? `Reuse due phrase in a tiny real-life context: "${dueItems[0].text}"`
+        : "Start one small conversation and save one phrase.",
+    },
+    claim_boundary:
+      "This mirror summarizes local practice evidence only. It does not rank level or guarantee real-world fluency.",
+  };
+}
+
+export function writeWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const mirror = buildWeeklyMirror(paths.root, date);
+  const mirrorPath = resolve(paths.weeklyMirrorDir, `weekly-mirror-${todayStamp(date)}.json`);
+  writeFileSync(mirrorPath, `${JSON.stringify(mirror, null, 2)}\n`);
+  return {
+    mirrorPath,
+    mirror,
+  };
 }
 
 export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
