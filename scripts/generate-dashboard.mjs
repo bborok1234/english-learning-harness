@@ -18,6 +18,21 @@ const escapeHtml = (value) =>
 
 const jsonScript = JSON.stringify(state, null, 2).replaceAll("<", "\\u003c");
 const toneClass = (tone = "blue") => `tone-${escapeHtml(tone)}`;
+const boardColumn = (id) => state.board.find((column) => column.id === id) ?? { cards: [] };
+
+function renderCard(card) {
+  const files = card.files ? `<span>${escapeHtml(card.files.join(", "))}</span>` : "";
+  return `
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>${escapeHtml(card.id)}</strong>${files ? `\n                ${files}` : ""}
+              </div>
+              <h3>${escapeHtml(card.title)}</h3>
+              ${card.why ? `<div class="card-row"><b>왜</b><p>${escapeHtml(card.why)}</p></div>` : ""}
+              ${card.done ? `<div class="card-row"><b>완료</b><p>${escapeHtml(card.done)}</p></div>` : ""}
+              ${card.verification ? `<div class="card-row"><b>검증</b><p>${escapeHtml(card.verification)}</p></div>` : ""}
+            </article>`;
+}
 
 const metrics = state.metrics.map((item) => `
         <article class="metric-card ${toneClass(item.tone)}">
@@ -26,26 +41,17 @@ const metrics = state.metrics.map((item) => `
           <p>${escapeHtml(item.detail)}</p>
         </article>`).join("");
 
-const columns = state.board.map((column) => `
-        <section class="board-column ${toneClass(column.tone)}">
-          <header class="column-head">
-            <h2>${escapeHtml(column.title)}</h2>
-            <span>${column.cards.length}</span>
-          </header>
-          <div class="column-cards">
-            ${column.cards.map((card) => `
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>${escapeHtml(card.id)}</strong>
-                ${card.files ? `<span>${escapeHtml(card.files.join(", "))}</span>` : ""}
-              </div>
-              <h3>${escapeHtml(card.title)}</h3>
-              ${card.why ? `<div class="card-row"><b>왜</b><p>${escapeHtml(card.why)}</p></div>` : ""}
-              ${card.done ? `<div class="card-row"><b>완료</b><p>${escapeHtml(card.done)}</p></div>` : ""}
-              ${card.verification ? `<div class="card-row"><b>검증</b><p>${escapeHtml(card.verification)}</p></div>` : ""}
-            </article>`).join("")}
-          </div>
-        </section>`).join("");
+const doneCards = boardColumn("done").cards;
+const recentDoneCards = doneCards.slice(-6);
+const archivedDoneCards = doneCards.slice(0, -6);
+const nowCards = boardColumn("now").cards;
+const nextCards = boardColumn("next").cards;
+const riskCards = boardColumn("risks").cards;
+
+const focusCards = [...nowCards, ...nextCards].map(renderCard).join("");
+const recentDone = recentDoneCards.map(renderCard).join("");
+const topRisks = riskCards.slice(0, 3).map(renderCard).join("");
+const archivedDone = archivedDoneCards.map(renderCard).join("");
 
 const ssot = state.ssot.map((item) => `
             <a class="link-card ${escapeHtml(item.kind)}" href="${escapeHtml(item.path)}">
@@ -58,6 +64,23 @@ const verification = state.verification.map((item) => `
               <td>${escapeHtml(item.name)}</td>
               <td><strong>${escapeHtml(item.status)}</strong><span>${escapeHtml(item.detail)}</span></td>
             </tr>`).join("");
+
+const visibleVerification = state.verification.slice(-8).map((item) => `
+            <tr>
+              <td>${escapeHtml(item.name)}</td>
+              <td><strong>${escapeHtml(item.status)}</strong><span>${escapeHtml(item.detail)}</span></td>
+            </tr>`).join("");
+
+const visibleCommands = state.commands
+  .filter((item) =>
+    /generate-dashboard|clean-clone|phase2-|ISSUE-INDEX|dashboard/.test(item.command),
+  )
+  .slice(-8)
+  .map((item) => `
+            <div class="command">
+              <span>${escapeHtml(item.label)}</span>
+              <code>${escapeHtml(item.command)}</code>
+            </div>`).join("");
 
 const commands = state.commands.map((item) => `
             <div class="command">
@@ -230,9 +253,9 @@ const html = `<!doctype html>
       font-weight: 760;
     }
 
-    .board {
+    .focus-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(260px, 1fr));
+      grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 1fr) minmax(280px, 0.9fr);
       gap: 14px;
       margin-top: 18px;
       align-items: start;
@@ -242,6 +265,10 @@ const html = `<!doctype html>
       min-height: 340px;
       padding: 12px;
       min-width: 0;
+    }
+
+    .board-column.compact {
+      min-height: 0;
     }
 
     .column-head {
@@ -343,6 +370,28 @@ const html = `<!doctype html>
       margin-top: 18px;
     }
 
+    .archive {
+      margin-top: 18px;
+    }
+
+    details.archive-block {
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+    }
+
+    details.archive-block > summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 760;
+      color: var(--ink);
+    }
+
+    .archive-body {
+      padding: 0 12px 12px;
+    }
+
     .links {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -432,12 +481,12 @@ const html = `<!doctype html>
     }
 
     @media (max-width: 1120px) {
-      .board { grid-template-columns: repeat(2, minmax(260px, 1fr)); }
+      .focus-grid { grid-template-columns: 1fr; }
       .north-star, .below { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 780px) {
-      .top, .metrics, .board, .links { grid-template-columns: 1fr; }
+      .top, .metrics, .focus-grid, .links { grid-template-columns: 1fr; }
       .stamp { text-align: left; }
       .page { width: min(100% - 22px, 1440px); padding-top: 18px; }
       .work-meta { display: grid; }
@@ -480,8 +529,34 @@ ${metrics}
       </article>
     </section>
 
-    <main class="board" aria-label="Project canvas board">
-${columns}
+    <main class="focus-grid" aria-label="Project monitoring board">
+      <section class="board-column compact tone-blue">
+        <header class="column-head">
+          <h2>Now / 결정할 것</h2>
+          <span>${nowCards.length + nextCards.length}</span>
+        </header>
+        <div class="column-cards">
+${focusCards || `<p>현재 진행 중인 카드가 없다.</p>`}
+        </div>
+      </section>
+      <section class="board-column compact tone-green">
+        <header class="column-head">
+          <h2>최근 완료</h2>
+          <span>${recentDoneCards.length}</span>
+        </header>
+        <div class="column-cards">
+${recentDone}
+        </div>
+      </section>
+      <section class="board-column compact tone-red">
+        <header class="column-head">
+          <h2>주요 리스크</h2>
+          <span>${riskCards.length}</span>
+        </header>
+        <div class="column-cards">
+${topRisks}
+        </div>
+      </section>
     </main>
 
     ${gates ? `<section class="panel gates" style="margin-top: 18px;">
@@ -502,16 +577,43 @@ ${ssot}
         </div>
       </article>
       <aside class="panel">
-        <h2>검증과 명령</h2>
+        <h2>최근 검증과 실행 명령</h2>
         <table>
           <tbody>
-${verification}
+${visibleVerification}
           </tbody>
         </table>
         <div class="commands">
-${commands}
+${visibleCommands}
         </div>
       </aside>
+    </section>
+
+    <section class="panel archive">
+      <h2>Archive</h2>
+      <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
+      <details class="archive-block">
+        <summary>완료 이력 ${archivedDoneCards.length}개 보기</summary>
+        <div class="archive-body column-cards">
+${archivedDone}
+        </div>
+      </details>
+      <details class="archive-block">
+        <summary>전체 검증 ${state.verification.length}개 보기</summary>
+        <div class="archive-body">
+          <table>
+            <tbody>
+${verification}
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details class="archive-block">
+        <summary>전체 명령 ${state.commands.length}개 보기</summary>
+        <div class="archive-body commands">
+${commands}
+        </div>
+      </details>
     </section>
 
     <p class="generated-note">Generated from <code>docs/project-state.json</code>. Do not edit this HTML directly.</p>
