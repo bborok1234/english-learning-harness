@@ -37,6 +37,7 @@ const requiredFiles = [
   "scripts/phase1-persona-fixture-smoke.mjs",
   "scripts/phase1-stop-finalization-smoke.mjs",
   "scripts/phase1-setup-recovery-smoke.mjs",
+  "scripts/phase1-clean-clone-smoke.mjs",
 ];
 
 function readJson(path) {

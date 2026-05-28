@@ -46,10 +46,13 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 #11 is complete but was closed by direct commit `204dbec`, not by PR. That is now treated as a process gap.
 
-Start #17 after #16 merges:
+M1 execution issues #11-#17 are complete after #17 merges.
 
-```bash
-git switch -c issue-17-clean-clone-first-usable-smoke
-```
+Next: create executable M2 issues under these existing epics:
+
+- #2 E2 Learner memory and data contracts
+- #3 E3 Scenario-based daily session
+- #4 E4 Tutor policy enforcement
+- #5 E5 Persona fixture evaluation
 
 From #12 onward, implementation issues close through linked PRs.
