@@ -63,6 +63,7 @@ function main() {
     "--json",
   ]);
   assert(today.status === "pass", "today failed");
+  assert(today.finalizesSession === true, "today should finalize the explicit command session");
   assert(today.nativeHooksRequired === false, "today should not require native hooks");
   assert(existsSync(today.journalPath), "journal missing after today");
   assert(existsSync(today.artifactPath), "artifact missing after today");
@@ -97,6 +98,7 @@ function main() {
           sessionId: today.sessionId,
           journalPath: today.journalPath,
           artifactPath: today.artifactPath,
+          finalizesSession: today.finalizesSession,
         },
         health: {
           sessionCount: healthAfter.sessionCount,
@@ -110,4 +112,3 @@ function main() {
 }
 
 main();
-

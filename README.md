@@ -90,6 +90,12 @@ node scripts/english-learning-harness.mjs health
 
 Use native hooks only after accepting that hook trust-state may require manual intervention in the local Codex environment.
 
+Stop hook contract: the Stop hook records a marker and emits context only. Session finalization, journal writes, artifacts, metrics, vocabulary, and review queue updates are owned by:
+
+```bash
+node scripts/english-learning-harness.mjs today
+```
+
 Print the hook config:
 
 ```bash
@@ -159,6 +165,12 @@ Run the scenario loop and persona fixture smoke:
 ```bash
 node scripts/phase1-scenario-loop-smoke.mjs
 node scripts/phase1-persona-fixture-smoke.mjs
+```
+
+Run the Stop/finalization contract smoke:
+
+```bash
+node scripts/phase1-stop-finalization-smoke.mjs
 ```
 
 Run the full first-run smoke:

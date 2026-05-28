@@ -66,10 +66,17 @@ function handleStop() {
   const paths = ensureLearnerStore(learnerRoot);
   const progress = readProgress(paths.progress);
   progress.last_stop_at = new Date().toISOString();
+  progress.last_stop_contract = "marker-only";
   writeProgress(paths.progress, progress);
   writeHookOutput({
     hookSpecificOutput: {
-      additionalContext: `English Learning Harness saved stop marker under ${learnerRoot}.`,
+      additionalContext:
+        `English Learning Harness saved a Stop marker under ${learnerRoot}. ` +
+        "Session finalization belongs to the explicit command-wrapper `today` path.",
+      finalizesSession: false,
+      supportedFinalizationPath: "node scripts/english-learning-harness.mjs today",
+      claimBoundary:
+        "Stop hook records a marker and context only; it does not create or finalize session artifacts.",
     },
   });
 }

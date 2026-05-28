@@ -93,7 +93,9 @@ function main() {
     env: { ...process.env, ENGLISH_LEARNING_HOME: learnerRoot },
     encoding: "utf8",
   });
-  assert(JSON.parse(stop).hookSpecificOutput.additionalContext, "Stop hook did not emit context");
+  const stopJson = JSON.parse(stop);
+  assert(stopJson.hookSpecificOutput.additionalContext, "Stop hook did not emit context");
+  assert(stopJson.hookSpecificOutput.finalizesSession === false, "Stop hook must not claim session finalization");
 
   console.log(
     JSON.stringify(

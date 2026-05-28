@@ -136,9 +136,10 @@ function today(options) {
     journalPath: persisted.journalPath,
     artifactPath: persisted.artifactPath,
     relativeArtifactPath: persisted.relativeArtifactPath,
+    finalizesSession: true,
     nativeHooksRequired: false,
     claimBoundary:
-      "This proves the supported explicit command-wrapper session path, not native hook runtime.",
+      "This proves the supported explicit command-wrapper session finalization path, not native hook runtime.",
   };
 }
 
