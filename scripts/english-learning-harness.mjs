@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync } from "node:fs";
 import {
   buildAdditionalContext,
   buildSession,
+  emptyLearnerModel,
   defaultLearnerRoot,
   emptyMetrics,
   emptyReviewQueue,
@@ -10,8 +11,10 @@ import {
   ensureLearnerStore,
   learnerPaths,
   persistSession,
+  readLearnerModel,
   readProgress,
   readProfile,
+  writeLearnerModel,
   writeProgress,
   writeReviewQueue,
   writeVocabulary,
@@ -124,6 +127,7 @@ function repairLearnerStore(learnerRoot) {
 
   const backups = [
     backupIfExists(paths.progress, stamp),
+    backupIfExists(paths.learnerModel, stamp),
     backupIfExists(paths.vocabulary, stamp),
     backupIfExists(paths.reviewQueue, stamp),
   ].filter(Boolean);
@@ -134,6 +138,7 @@ function repairLearnerStore(learnerRoot) {
     monthly_optional_metrics: {},
     sessions: [],
   });
+  writeLearnerModel(paths.learnerModel, emptyLearnerModel());
   writeVocabulary(paths.vocabulary, emptyVocabulary());
   writeReviewQueue(paths.reviewQueue, emptyReviewQueue());
   return backups;
@@ -172,6 +177,7 @@ function setup(options) {
     learnerRoot: paths.root,
     profilePath,
     progressPath: paths.progress,
+    learnerModelPath: paths.learnerModel,
     repairPerformed: options.repair,
     repairBackups,
     health: {
@@ -207,6 +213,7 @@ function today(options) {
     mode: session.mode,
     scenario: session.scenario,
     sessionMetrics: session.session_metrics,
+    learnerModelEvidence: session.learner_model_evidence,
     mirror: session.mirror,
     journalPath: persisted.journalPath,
     artifactPath: persisted.artifactPath,
@@ -240,6 +247,7 @@ function health(options) {
     checks: [
       { name: "profile", status: profile.includes("preferred_name") ? "pass" : "warn" },
       { name: "progress", status: "pass" },
+      { name: "learnerModel", status: existsSync(paths.learnerModel) ? "pass" : "fail" },
       { name: "vocabulary", status: existsSync(paths.vocabulary) ? "pass" : "fail" },
       { name: "reviewQueue", status: existsSync(paths.reviewQueue) ? "pass" : "fail" },
     ],
@@ -258,6 +266,7 @@ function status(options) {
     learnerRoot: paths.root,
     profile: readProfile(paths.profile),
     progress: readProgress(paths.progress),
+    learnerModel: readLearnerModel(paths.learnerModel),
   };
 }
 

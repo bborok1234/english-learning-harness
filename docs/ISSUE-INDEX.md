@@ -58,10 +58,16 @@ M1 execution issues #11-#17 are complete after #17 merges.
 | #28 | M2-4: Enforce tutor policy with rubric smoke tests | continue |
 | #29 | M2-5: Generate weekly mirror from local evidence | continue |
 
-Next start:
+Current branch:
 
 ```bash
-git switch -c issue-25-learner-model-skill-memory
+git switch issue-25-learner-model-skill-memory
+```
+
+Next after #25:
+
+```bash
+git switch -c issue-26-review-queue-phrase-vault
 ```
 
 From #12 onward, implementation issues close through linked PRs.
