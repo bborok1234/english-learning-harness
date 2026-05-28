@@ -377,9 +377,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-1 explicit command-wrapper fallback",
+    "status": "Next: PH1-FIX-2 vocabulary history and review queue",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. Startup-grade Ralplan consensus와 adaptive execution governance가 생겼고, 다음은 GitHub issue/milestone 운영 구조와 PH1-FIX-1 fallback 구현이다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다."
   },
   "ssot": [
     {
@@ -437,6 +437,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/ISSUE-INDEX.md",
+      "path": "./ISSUE-INDEX.md",
+      "role": "GitHub 에픽/마일스톤/이슈 색인",
+      "kind": "source"
+    },
+    {
       "label": "docs/dashboard.html",
       "path": "./dashboard.html",
       "role": "생성된 공유 대시보드",
@@ -464,9 +470,15 @@
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-1",
-      "detail": "explicit command-wrapper fallback",
+      "value": "PH1-FIX-2",
+      "detail": "vocabulary history and review queue",
       "tone": "red"
+    },
+    {
+      "label": "GitHub plan",
+      "value": "17 issues",
+      "detail": "10 epics + 7 M1 execution issues",
+      "tone": "green"
     },
     {
       "label": "Review",
@@ -713,6 +725,30 @@
             "docs/STATUS.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "ISSUE-SYSTEM",
+          "title": "GitHub 실행 시스템을 생성함",
+          "why": "이 제품은 고정 태스크 리스트가 아니라 구현 증거에 따라 계속/분할/피벗/중단/리서치를 판단하는 운영 체계가 필요했다.",
+          "done": "labels, M1-M6 milestones, epics #1-#10, M1 execution issues #11-#17을 만들고 repo-local issue index에 기록했다.",
+          "verification": "`gh issue list --json number,title,state,labels,milestone`로 생성 상태를 확인했다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/ADAPTIVE-EXECUTION-PLAN.md"
+          ]
+        },
+        {
+          "id": "PH1-FIX-1",
+          "title": "Explicit command-wrapper fallback을 구현함",
+          "why": "Codex native hook trust-state가 막혀도 학습자가 하루 세션을 시작하고 저장할 수 있는 신뢰 가능한 실행 경로가 필요했다.",
+          "done": "`scripts/english-learning-harness.mjs`에 setup/today/health/status/context 명령을 추가하고 README의 기본 사용 경로를 wrapper 중심으로 바꿨다.",
+          "verification": "`node scripts/phase1-command-wrapper-smoke.mjs`가 setup, health, today persistence, post-session health를 통과했다. native hook runtime은 여전히 claim boundary 밖이다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase1-command-wrapper-smoke.mjs",
+            "README.md",
+            "docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md"
+          ]
         }
       ]
     },
@@ -722,16 +758,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-1",
-          "title": "Explicit command-wrapper fallback 구현",
-          "why": "Codex native hook trust-state가 막혀도 학습자가 하루 세션을 시작하고 저장할 수 있는 신뢰 가능한 실행 경로가 필요하다.",
-          "done": "safe hook installer/merger와 hook chain runner는 있으나, 지원 경로는 explicit setup/session command wrapper로 전환해야 한다.",
-          "verification": "merge/uninstall smoke는 통과했다. 실제 Codex exec hook proof는 실패했으므로 fallback 구현과 README 한 경로 검증이 다음 완료 기준이다.",
+          "id": "PH1-FIX-2",
+          "title": "Vocabulary history와 review queue 구현",
+          "why": "현재 `new_vocabulary_count`는 같은 단어가 다음 세션에 반복돼도 다시 새 단어로 세어 학습 진전을 과장한다.",
+          "done": "학습자별 vocabulary history와 review queue를 추가하고, 새 단어/복습 단어/반복 단어가 분리되도록 progress semantics를 고친다.",
+          "verification": "같은 문장을 두 번 실행하는 adversarial smoke에서 두 번째 세션의 repeated vocabulary가 new vocabulary로 증가하지 않아야 한다.",
           "files": [
-            "scripts/install-native-hooks.mjs",
-            "hooks/hook-chain-runner.mjs",
-            "hooks/english-learning-hook.mjs",
-            "docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md"
+            "scripts/lib/english-learning-store.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-1-evidence/"
           ]
         }
       ]
@@ -849,9 +884,14 @@
       "detail": "Architect APPROVE, Critic OKAY, durable handoff recorded"
     },
     {
+      "name": "GitHub issue system",
+      "status": "Created",
+      "detail": "labels, milestones M1-M6, epics #1-#10, and M1 issues #11-#17 exist"
+    },
+    {
       "name": "PH1-FIX-1",
-      "status": "Partial",
-      "detail": "installer merge fixed; next is explicit command-wrapper fallback"
+      "status": "Pass",
+      "detail": "explicit command-wrapper setup/today/health/status/context path implemented and smoke-tested"
     }
   ],
   "commands": [
@@ -862,6 +902,10 @@
     {
       "label": "Run scaffold smoke",
       "command": "node scripts/phase1-scaffold-smoke.mjs"
+    },
+    {
+      "label": "Run command-wrapper smoke",
+      "command": "node scripts/phase1-command-wrapper-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",
@@ -884,6 +928,10 @@
       "command": "open docs/ADAPTIVE-EXECUTION-PLAN.md"
     },
     {
+      "label": "Read issue index",
+      "command": "open docs/ISSUE-INDEX.md"
+    },
+    {
       "label": "Open dashboard",
       "command": "open docs/dashboard.html"
     }
@@ -894,12 +942,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. Startup-grade Ralplan consensus와 adaptive execution governance가 생겼고, 다음은 GitHub issue/milestone 운영 구조와 PH1-FIX-1 fallback 구현이다.</p>
+        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
         Phase 1 hardening required / first usable version not yet proven<br>
-        Next: PH1-FIX-1 explicit command-wrapper fallback
+        Next: PH1-FIX-2 vocabulary history and review queue
       </div>
     </header>
 
@@ -917,8 +965,13 @@
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">PH1-FIX-1</div>
-          <p>explicit command-wrapper fallback</p>
+          <div class="metric-value">PH1-FIX-2</div>
+          <p>vocabulary history and review queue</p>
+        </article>
+        <article class="metric-card tone-green">
+          <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
+          <div class="metric-value">17 issues</div>
+          <p>10 epics + 7 M1 execution issues</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -945,7 +998,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>19</span>
+            <span>21</span>
           </header>
           <div class="column-cards">
             
@@ -1139,6 +1192,26 @@
               <div class="card-row"><b>완료</b><p>`docs/ADAPTIVE-EXECUTION-PLAN.md`에 review lanes, research triggers, backlog mutation rules, milestone direction reviews, stop conditions를 정의했다.</p></div>
               <div class="card-row"><b>검증</b><p>Scrum inspect/adapt, backlog refinement, retrospective, Lean validated learning, DORA delivery health를 이 제품의 GitHub issue 운영 구조에 맞게 재구성했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>ISSUE-SYSTEM</strong>
+                <span>docs/ISSUE-INDEX.md, docs/ADAPTIVE-EXECUTION-PLAN.md</span>
+              </div>
+              <h3>GitHub 실행 시스템을 생성함</h3>
+              <div class="card-row"><b>왜</b><p>이 제품은 고정 태스크 리스트가 아니라 구현 증거에 따라 계속/분할/피벗/중단/리서치를 판단하는 운영 체계가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>labels, M1-M6 milestones, epics #1-#10, M1 execution issues #11-#17을 만들고 repo-local issue index에 기록했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh issue list --json number,title,state,labels,milestone`로 생성 상태를 확인했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>PH1-FIX-1</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase1-command-wrapper-smoke.mjs, README.md, docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md</span>
+              </div>
+              <h3>Explicit command-wrapper fallback을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>Codex native hook trust-state가 막혀도 학습자가 하루 세션을 시작하고 저장할 수 있는 신뢰 가능한 실행 경로가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>`scripts/english-learning-harness.mjs`에 setup/today/health/status/context 명령을 추가하고 README의 기본 사용 경로를 wrapper 중심으로 바꿨다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase1-command-wrapper-smoke.mjs`가 setup, health, today persistence, post-session health를 통과했다. native hook runtime은 여전히 claim boundary 밖이다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1150,13 +1223,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>PH1-FIX-1</strong>
-                <span>scripts/install-native-hooks.mjs, hooks/hook-chain-runner.mjs, hooks/english-learning-hook.mjs, docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md</span>
+                <strong>PH1-FIX-2</strong>
+                <span>scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md, docs/phase-1-evidence/</span>
               </div>
-              <h3>Explicit command-wrapper fallback 구현</h3>
-              <div class="card-row"><b>왜</b><p>Codex native hook trust-state가 막혀도 학습자가 하루 세션을 시작하고 저장할 수 있는 신뢰 가능한 실행 경로가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>safe hook installer/merger와 hook chain runner는 있으나, 지원 경로는 explicit setup/session command wrapper로 전환해야 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>merge/uninstall smoke는 통과했다. 실제 Codex exec hook proof는 실패했으므로 fallback 구현과 README 한 경로 검증이 다음 완료 기준이다.</p></div>
+              <h3>Vocabulary history와 review queue 구현</h3>
+              <div class="card-row"><b>왜</b><p>현재 `new_vocabulary_count`는 같은 단어가 다음 세션에 반복돼도 다시 새 단어로 세어 학습 진전을 과장한다.</p></div>
+              <div class="card-row"><b>완료</b><p>학습자별 vocabulary history와 review queue를 추가하고, 새 단어/복습 단어/반복 단어가 분리되도록 progress semantics를 고친다.</p></div>
+              <div class="card-row"><b>검증</b><p>같은 문장을 두 번 실행하는 adversarial smoke에서 두 번째 세션의 repeated vocabulary가 new vocabulary로 증가하지 않아야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1281,6 +1354,10 @@
               <strong>docs/ADAPTIVE-EXECUTION-PLAN.md</strong>
               <span>이슈/마일스톤 적응형 실행 거버넌스</span>
             </a>
+            <a class="link-card source" href="./ISSUE-INDEX.md">
+              <strong>docs/ISSUE-INDEX.md</strong>
+              <span>GitHub 에픽/마일스톤/이슈 색인</span>
+            </a>
             <a class="link-card generated" href="./dashboard.html">
               <strong>docs/dashboard.html</strong>
               <span>생성된 공유 대시보드</span>
@@ -1341,8 +1418,12 @@
               <td><strong>APPROVE / OKAY</strong><span>Architect APPROVE, Critic OKAY, durable handoff recorded</span></td>
             </tr>
             <tr>
+              <td>GitHub issue system</td>
+              <td><strong>Created</strong><span>labels, milestones M1-M6, epics #1-#10, and M1 issues #11-#17 exist</span></td>
+            </tr>
+            <tr>
               <td>PH1-FIX-1</td>
-              <td><strong>Partial</strong><span>installer merge fixed; next is explicit command-wrapper fallback</span></td>
+              <td><strong>Pass</strong><span>explicit command-wrapper setup/today/health/status/context path implemented and smoke-tested</span></td>
             </tr>
           </tbody>
         </table>
@@ -1355,6 +1436,10 @@
             <div class="command">
               <span>Run scaffold smoke</span>
               <code>node scripts/phase1-scaffold-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run command-wrapper smoke</span>
+              <code>node scripts/phase1-command-wrapper-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
@@ -1375,6 +1460,10 @@
             <div class="command">
               <span>Read adaptive execution plan</span>
               <code>open docs/ADAPTIVE-EXECUTION-PLAN.md</code>
+            </div>
+            <div class="command">
+              <span>Read issue index</span>
+              <code>open docs/ISSUE-INDEX.md</code>
             </div>
             <div class="command">
               <span>Open dashboard</span>

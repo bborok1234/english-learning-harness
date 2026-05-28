@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 
 ## Current State
 
@@ -27,17 +27,18 @@ What is complete:
 - Startup-grade Ralplan consensus passed: Architect APPROVE and Critic OKAY are recorded in `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md`.
 - Multimodal GenAI usage is now explicit in `docs/MULTIMODAL-GENAI-PLAN.md`: modalities are tied to an Interaction Event Graph, not treated as media features.
 - Adaptive execution governance is defined in `docs/ADAPTIVE-EXECUTION-PLAN.md`: issues are treated as hypotheses and may continue, split, pivot, die, or trigger research based on evidence.
+- GitHub execution structure is created: labels, milestones M1-M6, epics #1-#10, and M1 issues #11-#17.
+- PH1-FIX-1 is complete for the supported fallback path: `scripts/english-learning-harness.mjs` provides setup/today/health/status/context without native hooks.
 
 What is not started:
-- PH1 self-review fixes from `docs/phase-1-evidence/PH1-review-gap-audit.md`.
+- PH1-FIX-2 through PH1-FIX-7 from GitHub issues #12-#17.
 - Real user validation.
-- Phase 1 non-developer wrapper.
 - Realtime voice path.
 - Public Git-backed marketplace install.
 
 What failed review:
 - Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
-- PH1-FIX-1 improved hook install/merge logic, but Codex hook trust-state still prevents a completed runtime proof.
+- PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
 - `new_vocabulary_count` overcounts repeated words across sessions.
 - Daily session behavior is still a deterministic transcript processor, not yet a convincing Codex conversation surface.
 - Stop hook writes a timestamp only; session finalization happens in the CLI command, not the hook.
@@ -72,6 +73,8 @@ Strategic reset:
 - Multimodal evidence: `docs/MULTIMODAL-GENAI-PLAN.md` records voice, image, and video usage boundaries with SLA, conversation analysis, multimodal learning, and official OpenAI API references.
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
+- Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
+- Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Final review recommendation: APPROVE.
 - Architectural status: CLEAR.
 
@@ -103,10 +106,13 @@ Start from the verified/fallback Phase 0 constraints.
 - [~] PH1-2: Implement daily-session command/update path. Direct script flow works; conversation surface needs hardening.
 - [~] PH1-3: Implement runtime metrics update path with journal append behavior. Shape works; vocabulary metric semantics are wrong across sessions.
 - [~] PH1-4: Add user-facing setup guidance in README. Basic guidance exists; safe native hook install path is incomplete.
-- [~] PH1-FIX-1: Implement supported explicit command-wrapper fallback and keep setup-owned/native hook installation optional until Codex trust-state is proven.
+- [x] PH1-FIX-1: Implement supported explicit command-wrapper fallback and keep setup-owned/native hook installation optional until Codex trust-state is proven.
 - [ ] PH1-FIX-2: Fix vocabulary history and `new_vocabulary_count`.
 - [ ] PH1-FIX-3: Strengthen daily-session UX beyond deterministic transcript processing.
 - [ ] PH1-FIX-4: Align Stop hook behavior with documentation.
+- [ ] PH1-FIX-5: Make setup UX one-command and recoverable.
+- [ ] PH1-FIX-6: Sync dashboard evidence for the first-usable gate.
+- [ ] PH1-FIX-7: Run clean clone first-usable smoke.
 - [ ] PH1-5: Run real user validation against the four target personas.
 
 ## SSOT Structure
@@ -114,6 +120,7 @@ Start from the verified/fallback Phase 0 constraints.
 - `DESIGN.md` — product/design/UX source of truth.
 - `docs/project-state.json` — structured execution/status state for generated dashboards.
 - `docs/PHASE-0-SPIKE.md` — Phase 0 execution plan and pass/fail criteria.
+- `docs/ISSUE-INDEX.md` — GitHub epics, milestones, and first-usable issue index.
 - `docs/phase-0-evidence/` — Phase 0 spike evidence notes.
 - `docs/phase-1-evidence/` — Phase 1 scaffold and implementation evidence notes.
 - `docs/STATUS.md` — human-readable execution status and next-step summary.

@@ -25,9 +25,11 @@ const requiredFiles = [
   "hooks/hooks.json",
   "scripts/validate-progress.mjs",
   "scripts/install-native-hooks.mjs",
+  "scripts/english-learning-harness.mjs",
   "scripts/english-learning.mjs",
   "scripts/lib/english-learning-store.mjs",
   "scripts/package-local-marketplace.mjs",
+  "scripts/phase1-command-wrapper-smoke.mjs",
 ];
 
 function readJson(path) {

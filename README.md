@@ -9,11 +9,12 @@ This first usable version is text/transcription-first. Realtime voice is not a d
 ## What Works
 
 - Onboarding/profile setup under a local learner directory.
+- Supported command-wrapper path for setup, daily session, health, status, and context.
 - Daily English session runner with text input or transcript file input.
 - Mini mirror after each session.
 - `progress.json` v2 updates for the five MVP session metrics.
 - Journal and session artifact persistence.
-- Setup-owned/native hook config generation.
+- Optional setup-owned/native hook config generation.
 - Local marketplace packaging and install smoke.
 
 ## Learner Data
@@ -32,33 +33,41 @@ For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learne
 
 ## Quick Start
 
-Initialize a profile:
+The supported first-use path is the explicit command wrapper. It does not require native Codex hooks.
+
+Set up a learner profile:
 
 ```bash
-node scripts/english-learning.mjs init \
+node scripts/english-learning-harness.mjs setup \
   --name "Jieun" \
   --motivation "I want to feel less frozen when speaking English." \
   --correction-style "gentle recast first"
 ```
 
-Run a text-first daily session:
+Run today's text-first daily session:
 
 ```bash
-node scripts/english-learning.mjs session \
-  --input "I like coffee." \
-  --input "Today morning coffee."
+node scripts/english-learning-harness.mjs today \
+  --say "I like coffee." \
+  --say "Today morning coffee."
 ```
 
 Run from a transcript file:
 
 ```bash
-node scripts/english-learning.mjs session --transcript path/to/transcript.txt
+node scripts/english-learning-harness.mjs today --transcript path/to/transcript.txt
 ```
 
-Inspect status:
+Check health:
 
 ```bash
-node scripts/english-learning.mjs status --json
+node scripts/english-learning-harness.mjs health --json
+```
+
+Inspect detailed status:
+
+```bash
+node scripts/english-learning-harness.mjs status --json
 ```
 
 Validate progress:
@@ -69,7 +78,17 @@ node scripts/validate-progress.mjs ~/english-learning/progress.json
 
 ## Native Hook Setup
 
-P0-2 did not prove automatic plugin-scoped hook execution for this plugin, so the reliable MVP path is setup-owned/native hook registration.
+Native hooks are optional.
+
+P0-2 did not prove automatic plugin-scoped hook execution for this plugin, and PH1-FIX-1 found Codex hook trust-state limitations. The reliable first-usable path is:
+
+```bash
+node scripts/english-learning-harness.mjs setup
+node scripts/english-learning-harness.mjs today --say "I want to practice today."
+node scripts/english-learning-harness.mjs health
+```
+
+Use native hooks only after accepting that hook trust-state may require manual intervention in the local Codex environment.
 
 Print the hook config:
 
@@ -122,6 +141,12 @@ CODEX_HOME="$PWD/tmp/codex-home" codex plugin list
 Public Git-backed install remains unverified and should not be documented as the default install path yet.
 
 ## Verification
+
+Run the supported wrapper smoke:
+
+```bash
+node scripts/phase1-command-wrapper-smoke.mjs
+```
 
 Run the full first-run smoke:
 

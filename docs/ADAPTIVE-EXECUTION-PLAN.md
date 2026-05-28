@@ -47,7 +47,7 @@ The source of truth is:
 
 Every issue must end with one of these decisions:
 
-- `ship`: acceptance criteria passed and evidence supports the claim.
+- `continue`: acceptance criteria passed and evidence supports the claim.
 - `split`: implementation revealed multiple separate problems.
 - `pivot`: original approach is wrong; create replacement issue and close/park the old one.
 - `kill`: issue should not be done because it no longer supports the north star.
@@ -380,4 +380,3 @@ Autonomous execution must stop or re-plan when:
 - security/privacy risk appears;
 - an issue cannot produce reproducible evidence;
 - more than two consecutive issues end in `pivot` or `research`, indicating the roadmap needs a Ralplan refresh.
-
