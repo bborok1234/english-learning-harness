@@ -105,3 +105,26 @@ For each scenario, the tutor must preserve:
 - **False claim**: implies guaranteed real-person transfer.
 - **Korean dead-end**: accepts Korean but does not bridge back to English.
 - **Metric theater**: reports noisy numbers as proof of learning.
+
+## Executable Rubric
+
+The local deterministic rubric lives in:
+
+```text
+scripts/lib/tutor-policy-rubric.mjs
+```
+
+It is exercised by:
+
+```bash
+node scripts/phase2-tutor-policy-smoke.mjs
+node scripts/phase1-persona-fixture-smoke.mjs
+```
+
+The rubric must name violations with stable codes, including:
+
+- `prohibited_claim`
+- `mini_mirror_missing_field`
+- `korean_dead_end`
+- `correction_ladder_order`
+- `overcorrection`

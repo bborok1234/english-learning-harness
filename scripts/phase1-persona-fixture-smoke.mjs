@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { personaFixtures, prohibitedFixtureClaims } from "./lib/persona-fixtures.mjs";
+import { assertTutorPolicy } from "./lib/tutor-policy-rubric.mjs";
 import { validateProgress } from "./validate-progress.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -84,6 +85,7 @@ function runFixture(fixture) {
   assert(artifact.mirror.retryPrompt, `${fixture.id}: missing retry prompt`);
   assert(journal.includes("### Scenario"), `${fixture.id}: journal missing scenario`);
   assertNoProhibitedClaims(allText, fixture.id);
+  assertTutorPolicy(artifact, fixture.id);
 
   return {
     fixture: fixture.id,

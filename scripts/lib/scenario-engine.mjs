@@ -248,9 +248,16 @@ export function scenarioOpening(scenario) {
 }
 
 export function scenarioFollowUp(scenario, recast) {
+  if (/[가-힣]/.test(recast)) {
+    return [
+      "I understand. Let's bridge it back to one small English phrase.",
+      `Use: "${scenario.rescue_phrase}"`,
+      "Try one easy word after it.",
+    ].join(" ");
+  }
   return [
-    `I understand. A natural version is: "${recast}"`,
     `Small repair: try the pattern "${scenario.pattern}".`,
+    `A natural version is: "${recast}"`,
     scenario.follow_up_prompt,
   ].join(" ");
 }
