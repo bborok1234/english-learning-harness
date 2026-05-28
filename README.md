@@ -67,6 +67,26 @@ Run from a transcript file:
 node scripts/english-learning-harness.mjs today --transcript path/to/transcript.txt
 ```
 
+Review due personal phrases:
+
+```bash
+node scripts/english-learning-harness.mjs review --json
+```
+
+Mark a reviewed phrase:
+
+```bash
+node scripts/english-learning-harness.mjs review \
+  --review-id phrase-i-like-drinking-coffee \
+  --result success
+```
+
+Open the phrase vault:
+
+```bash
+node scripts/english-learning-harness.mjs vault --json
+```
+
 Check health:
 
 ```bash
@@ -198,6 +218,12 @@ Run the learner model and skill memory smoke:
 
 ```bash
 node scripts/phase2-learner-model-smoke.mjs
+```
+
+Run the review queue and phrase vault smoke:
+
+```bash
+node scripts/phase2-review-vault-smoke.mjs
 ```
 
 Run the full first-run smoke:

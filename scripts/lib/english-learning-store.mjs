@@ -16,6 +16,7 @@ export const defaultLearnerRoot = () =>
 export const todayStamp = (date = new Date()) => date.toISOString().slice(0, 10);
 
 const learnerSkillKeys = ["starts", "follow_ups", "clarification", "repair", "soft_disagreement"];
+const reviewIntervals = [1, 3, 7, 14];
 
 export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
   const root = resolve(learnerRoot);
@@ -421,6 +422,12 @@ function nextDayIso(date) {
   return due.toISOString();
 }
 
+function addDaysIso(date, days) {
+  const due = new Date(date.getTime());
+  due.setUTCDate(due.getUTCDate() + days);
+  return due.toISOString();
+}
+
 function updateVocabulary(vocabulary, session) {
   const tokens = uniqueSorted(extractEnglishTokens(session.learner_turns));
   const knownBefore = knownVocabularyTokenSet(vocabulary);
@@ -471,6 +478,77 @@ function updateReviewQueue(reviewQueue, session, reviewPhrase, date) {
     scheduledReviewId: item.id,
     scheduled: true,
   };
+}
+
+function reviewPrompt(item) {
+  return `Use this phrase in one tiny real-life context: "${item.text}"`;
+}
+
+function reviewIntervalAfterSuccess(successCount) {
+  return reviewIntervals[Math.min(successCount, reviewIntervals.length - 1)];
+}
+
+function decorateReviewItem(item) {
+  return {
+    ...item,
+    prompt: reviewPrompt(item),
+  };
+}
+
+export function listDueReviewItems(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const now = date.getTime();
+  return reviewQueue.items
+    .filter((item) => Number.isFinite(Date.parse(item.due_at)) && Date.parse(item.due_at) <= now)
+    .sort((a, b) => Date.parse(a.due_at) - Date.parse(b.due_at))
+    .map(decorateReviewItem);
+}
+
+export function markReviewItem(learnerRoot, reviewId, result, date = new Date()) {
+  if (!["success", "fail"].includes(result)) {
+    throw new Error("review result must be success or fail");
+  }
+
+  const paths = ensureLearnerStore(learnerRoot);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const item = reviewQueue.items.find((entry) => entry.id === reviewId);
+  if (!item) {
+    throw new Error(`review item not found: ${reviewId}`);
+  }
+
+  const nextSuccessCount = result === "success" ? (item.success_count ?? 0) + 1 : 0;
+  const nextIntervalDays = result === "success" ? reviewIntervalAfterSuccess(nextSuccessCount) : 1;
+  const nextItem = {
+    ...item,
+    interval_days: nextIntervalDays,
+    success_count: nextSuccessCount,
+    due_at: addDaysIso(date, nextIntervalDays),
+    last_reviewed_at: date.toISOString(),
+    last_result: result,
+  };
+  writeReviewQueue(paths.reviewQueue, {
+    schema_version: 1,
+    items: reviewQueue.items.map((entry) => (entry.id === reviewId ? nextItem : entry)),
+  });
+
+  return decorateReviewItem(nextItem);
+}
+
+export function phraseVault(learnerRoot = defaultLearnerRoot()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const reviewByText = new Map(reviewQueue.items.map((item) => [item.text, item]));
+  return uniqueSorted(vocabulary.personal_phrases).map((text) => {
+    const review = reviewByText.get(text);
+    return {
+      text,
+      review_id: review?.id ?? "",
+      due_at: review?.due_at ?? "",
+      prompt: review ? reviewPrompt(review) : `Use this phrase in one tiny real-life context: "${text}"`,
+    };
+  });
 }
 
 function learnerText(session) {
@@ -652,8 +730,7 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
   const latestJournal = latestJournalPath(paths.root);
   const learnerModel = readLearnerModel(paths.learnerModel);
   const vocabulary = readVocabulary(paths.vocabulary);
-  const reviewQueue = readReviewQueue(paths.reviewQueue);
-  const dueReviewCount = reviewQueue.items.filter((item) => item.success_count === 0).length;
+  const dueReviewCount = listDueReviewItems(paths.root).length;
   const skillSummary = learnerSkillKeys
     .map((skill) => `${skill}=${learnerModel.interaction_skills[skill].evidence_count}`)
     .join(", ");

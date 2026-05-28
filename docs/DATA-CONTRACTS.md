@@ -84,7 +84,9 @@ Required fields:
       "source_session_id": "session-id",
       "due_at": "ISO-8601",
       "interval_days": 1,
-      "success_count": 0
+      "success_count": 0,
+      "last_reviewed_at": "ISO-8601 optional after first review",
+      "last_result": "success|fail optional after first review"
     }
   ]
 }
@@ -92,10 +94,13 @@ Required fields:
 
 Default intervals:
 
-- first review: next day,
-- second review: 3 days,
-- third review: 7 days,
-- fourth review: 14 days.
+- new phrase: next day,
+- after first successful review: 3 days,
+- after second successful review: 7 days,
+- after third and later successful reviews: 14 days,
+- failed review: reset to next day with `success_count: 0`.
+
+Review prompts must ask the learner to use the phrase in a tiny real-life context, not only recall the phrase as a flashcard.
 
 ## Session Artifact
 

@@ -38,9 +38,10 @@ What is complete:
 - PH1-FIX-7 is implemented on the PR branch: a fresh clone from `origin` can run setup, today, health, progress validation, and dashboard generation.
 - M2 executable issues #25-#29 are created under the Pedagogical Learning Engine milestone.
 - M2-1 is implemented on the PR branch: `learner-model.json` baseline, setup migration, session skill-memory updates, artifact evidence, context summary, and setup repair support are in place.
+- M2-2 is implemented on the PR branch: due review listing, success/fail review updates, 1/3/7/14 interval progression, and phrase vault inspection are in place.
 
 What is not started:
-- M2-2 due review queue command and phrase vault.
+- M2-3 memory-aware scenario planner.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -89,6 +90,7 @@ Strategic reset:
 - Clean clone evidence: `docs/phase-1-evidence/PH1-FIX-7-clean-clone-smoke.md` records fresh clone setup/today/health/dashboard smoke verification.
 - M2 planning evidence: `docs/ISSUE-INDEX.md` records M2 executable issues #25-#29.
 - Learner model evidence: `docs/phase-2-evidence/M2-1-learner-model.md` records learner model setup, migration, session update, context summary, and regression smoke verification.
+- Review/vault evidence: `docs/phase-2-evidence/M2-2-review-vault.md` records due review listing, success/fail updates, interval behavior, phrase vault output, and regression smoke verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -134,7 +136,7 @@ Start from the verified/fallback Phase 0 constraints.
 ### Phase 2 Pedagogical Learning Engine
 
 - [x] M2-1: Implement learner model baseline and skill memory.
-- [ ] M2-2: Add due review queue command and phrase vault.
+- [x] M2-2: Add due review queue command and phrase vault.
 - [ ] M2-3: Make scenario planner use memory and review needs.
 - [ ] M2-4: Enforce tutor policy with rubric smoke tests.
 - [ ] M2-5: Generate weekly mirror from local evidence.
