@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-28",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-6 dashboard evidence sync for first-usable gate",
+    "stage": "Phase 1 first-usable gate pending clean-clone proof",
+    "status": "Next: PH1-FIX-7 clean clone first-usable smoke",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11-#15 first-use hardening이 smoke 검증을 통과했다. 다음은 #16 dashboard evidence sync for first-usable gate다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11-#16 first-use hardening evidence가 대시보드에 정렬됐다. first-usable claim은 #17 clean-clone smoke 전까지 보류한다."
   },
   "ssot": [
     {
@@ -85,20 +85,20 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "6 / 6",
-      "detail": "정합화 목표 전체 완료",
-      "tone": "green"
+      "value": "M1",
+      "detail": "first-usable gate 진행 중",
+      "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "Hardening",
-      "detail": "self-review P1/P2 gaps 발견",
+      "value": "Gate pending",
+      "detail": "#17 clean clone smoke 전까지 완료 claim 보류",
       "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-6",
-      "detail": "dashboard evidence sync for first-usable gate",
+      "value": "PH1-FIX-7",
+      "detail": "clean clone first-usable smoke",
       "tone": "red"
     },
     {
@@ -112,6 +112,50 @@
       "value": "Ralplan OKAY",
       "detail": "Architect APPROVE / Critic OKAY",
       "tone": "green"
+    }
+  ],
+  "gates": [
+    {
+      "id": "GATE-1",
+      "label": "Explicit command-wrapper path",
+      "status": "Pass",
+      "evidence": "#11, #15, phase1-command-wrapper-smoke",
+      "claim": "setup/today/health works without native hooks"
+    },
+    {
+      "id": "GATE-2",
+      "label": "Vocabulary and review semantics",
+      "status": "Pass",
+      "evidence": "#12, phase1-vocabulary-history-smoke",
+      "claim": "repeated words do not inflate new_vocabulary_count"
+    },
+    {
+      "id": "GATE-3",
+      "label": "Scenario daily loop",
+      "status": "Pass",
+      "evidence": "#13, scenario loop and persona fixture smoke",
+      "claim": "session has goal, rescue phrase, repair prompt, mirror, retry"
+    },
+    {
+      "id": "GATE-4",
+      "label": "Finalization ownership",
+      "status": "Pass",
+      "evidence": "#14, phase1-stop-finalization-smoke",
+      "claim": "today finalizes sessions; Stop hook is marker-only"
+    },
+    {
+      "id": "GATE-5",
+      "label": "Evidence dashboard",
+      "status": "Pass",
+      "evidence": "#16, project-state gates and generated dashboard",
+      "claim": "dashboard separates evidence from first-usable claim"
+    },
+    {
+      "id": "GATE-6",
+      "label": "Clean clone first-use",
+      "status": "Pending",
+      "evidence": "#17 not run yet",
+      "claim": "no first-usable claim until this passes"
     }
   ],
   "board": [
@@ -327,6 +371,14 @@
           "done": "`setup`은 health/next command를 반환하고, `health`는 실패 시 recovery command를 제시하며, `setup --repair`는 broken JSON을 백업 후 기본 store를 복구한다.",
           "verification": "`node scripts/phase1-setup-recovery-smoke.mjs`에서 idempotent setup, broken health recovery, repair backup, repaired progress validation이 통과했다.",
           "files": ["scripts/english-learning-harness.mjs", "scripts/phase1-setup-recovery-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-5-setup-recovery.md", "README.md"]
+        },
+        {
+          "id": "PH1-FIX-6",
+          "title": "First-usable gate evidence를 대시보드에 정렬함",
+          "why": "대시보드는 진행상황을 보여주되, clean-clone proof 전까지 first-usable claim을 만들면 안 된다.",
+          "done": "`docs/project-state.json`에 First-Usable Gate를 추가하고, generated dashboard가 gate별 status/evidence/claim boundary를 렌더링하게 했다.",
+          "verification": "`node scripts/generate-dashboard.mjs`와 `rg 'First-Usable Gate|GATE-6|clean clone' docs/dashboard.html`로 생성 결과를 확인한다.",
+          "files": ["docs/project-state.json", "scripts/generate-dashboard.mjs", "docs/dashboard.html"]
         }
       ]
     },
@@ -336,12 +388,12 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-6",
-          "title": "Dashboard evidence sync for first-usable gate",
-          "why": "대시보드가 구현된 evidence와 남은 gate를 사람 눈에 즉시 보이게 해야 first-usable claim을 과장하지 않는다.",
-          "done": "M1 evidence, remaining blocker, smoke command, issue/PR trail을 generated dashboard에 정렬한다.",
-          "verification": "dashboard generated from `docs/project-state.json` and mentions #11-#15 evidence plus remaining #17 clean-clone gate.",
-          "files": ["docs/project-state.json", "docs/dashboard.html", "docs/STATUS.md"]
+          "id": "PH1-FIX-7",
+          "title": "Clean clone first-usable smoke",
+          "why": "지금까지의 smoke는 같은 작업 디렉터리 안에서 실행됐다. 실제 clone-to-learn claim은 깨끗한 checkout에서 검증해야 한다.",
+          "done": "새 tmp clone에서 setup, today, health, dashboard/evidence commands를 실행하고 GitHub 주소만 보고 시작 가능한지 확인한다.",
+          "verification": "clean clone smoke가 pass해야 first-usable claim을 열 수 있다.",
+          "files": ["scripts/phase1-clean-clone-smoke.mjs", "README.md", "docs/phase-1-evidence/"]
         }
       ]
     },
@@ -479,6 +531,11 @@
       "name": "PH1-FIX-5",
       "status": "Pass",
       "detail": "idempotent setup, health recovery guidance, and setup --repair smoke pass"
+    },
+    {
+      "name": "PH1-FIX-6",
+      "status": "Pass",
+      "detail": "First-Usable Gate rendered from structured state with #17 pending"
     }
   ],
   "commands": [
