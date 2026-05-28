@@ -30,6 +30,7 @@ const requiredFiles = [
   "scripts/lib/english-learning-store.mjs",
   "scripts/package-local-marketplace.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
+  "scripts/phase1-vocabulary-history-smoke.mjs",
 ];
 
 function readJson(path) {

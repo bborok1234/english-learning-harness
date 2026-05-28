@@ -30,9 +30,10 @@ What is complete:
 - GitHub execution structure is created: labels, milestones M1-M6, epics #1-#10, and M1 issues #11-#17.
 - PH1-FIX-1 is complete for the supported fallback path: `scripts/english-learning-harness.mjs` provides setup/today/health/status/context without native hooks.
 - PR-first execution is now required for implementation issues after the #11 direct-commit closeout exposed a missing review trail.
+- PH1-FIX-2 is implemented on the PR branch: `vocabulary.json`, `review-queue.json`, historical `new_vocabulary_count`, and migration smoke are in place.
 
 What is not started:
-- PH1-FIX-2 through PH1-FIX-7 from GitHub issues #12-#17.
+- PH1-FIX-3 through PH1-FIX-7 from GitHub issues #13-#17.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -40,8 +41,7 @@ What is not started:
 What failed review:
 - Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
 - PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
-- `new_vocabulary_count` overcounts repeated words across sessions.
-- Daily session behavior is still a deterministic transcript processor, not yet a convincing Codex conversation surface.
+- Daily session behavior is still too deterministic; scenario-based interaction and fixture proof are next.
 - Stop hook writes a timestamp only; session finalization happens in the CLI command, not the hook.
 
 Strategic reset:
@@ -75,6 +75,7 @@ Strategic reset:
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
+- Vocabulary evidence: `docs/phase-1-evidence/PH1-FIX-2-vocabulary-history.md` records repeated-session and migration smoke verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -109,7 +110,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [~] PH1-3: Implement runtime metrics update path with journal append behavior. Shape works; vocabulary metric semantics are wrong across sessions.
 - [~] PH1-4: Add user-facing setup guidance in README. Basic guidance exists; safe native hook install path is incomplete.
 - [x] PH1-FIX-1: Implement supported explicit command-wrapper fallback and keep setup-owned/native hook installation optional until Codex trust-state is proven.
-- [ ] PH1-FIX-2: Fix vocabulary history and `new_vocabulary_count`.
+- [x] PH1-FIX-2: Fix vocabulary history and `new_vocabulary_count`.
 - [ ] PH1-FIX-3: Strengthen daily-session UX beyond deterministic transcript processing.
 - [ ] PH1-FIX-4: Align Stop hook behavior with documentation.
 - [ ] PH1-FIX-5: Make setup UX one-command and recoverable.

@@ -148,6 +148,12 @@ Run the supported wrapper smoke:
 node scripts/phase1-command-wrapper-smoke.mjs
 ```
 
+Run the vocabulary history smoke:
+
+```bash
+node scripts/phase1-vocabulary-history-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

@@ -46,10 +46,10 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 #11 is complete but was closed by direct commit `204dbec`, not by PR. That is now treated as a process gap.
 
-Start #12 with a branch and PR:
+Start #13 after #12 merges:
 
 ```bash
-git switch -c issue-12-vocabulary-history-review-queue
+git switch -c issue-13-scenario-daily-loop-fixtures
 ```
 
 From #12 onward, implementation issues close through linked PRs.
