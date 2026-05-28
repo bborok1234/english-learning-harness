@@ -1,13 +1,20 @@
 #!/usr/bin/env node
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync } from "node:fs";
 import {
   buildAdditionalContext,
   buildSession,
   defaultLearnerRoot,
+  emptyMetrics,
+  emptyReviewQueue,
+  emptyVocabulary,
   ensureLearnerStore,
+  learnerPaths,
   persistSession,
   readProgress,
   readProfile,
+  writeProgress,
+  writeReviewQueue,
+  writeVocabulary,
   writeProfile,
 } from "./lib/english-learning-store.mjs";
 import { chooseScenario } from "./lib/scenario-engine.mjs";
@@ -47,6 +54,8 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--json") {
       options.json = true;
+    } else if (arg === "--repair") {
+      options.repair = true;
     } else {
       throw new Error(`Unknown argument: ${arg}`);
     }
@@ -85,7 +94,7 @@ function helpText() {
     "English Learning Harness supported command-wrapper path",
     "",
     "Usage:",
-    "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
@@ -95,15 +104,81 @@ function helpText() {
   ].join("\n");
 }
 
+function recoveryCommand(command, options) {
+  return `node scripts/english-learning-harness.mjs ${command} --learner-root ${JSON.stringify(options.learnerRoot)}`;
+}
+
+function backupIfExists(path, stamp) {
+  if (!existsSync(path)) return "";
+  const backupPath = `${path}.broken-${stamp}`;
+  renameSync(path, backupPath);
+  return backupPath;
+}
+
+function repairLearnerStore(learnerRoot) {
+  const paths = learnerPaths(learnerRoot);
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  mkdirSync(paths.root, { recursive: true });
+  mkdirSync(paths.journalDir, { recursive: true });
+  mkdirSync(paths.artifactDir, { recursive: true });
+
+  const backups = [
+    backupIfExists(paths.progress, stamp),
+    backupIfExists(paths.vocabulary, stamp),
+    backupIfExists(paths.reviewQueue, stamp),
+  ].filter(Boolean);
+
+  writeProgress(paths.progress, {
+    version: 2,
+    mvp_session_metrics: emptyMetrics(),
+    monthly_optional_metrics: {},
+    sessions: [],
+  });
+  writeVocabulary(paths.vocabulary, emptyVocabulary());
+  writeReviewQueue(paths.reviewQueue, emptyReviewQueue());
+  return backups;
+}
+
+function recoverableFailure(error, options) {
+  return {
+    status: "fail",
+    path: "explicit-command-wrapper",
+    learnerRoot: options.learnerRoot,
+    error: error.message,
+    recovery: [
+      `${recoveryCommand("setup", options)} --repair`,
+      recoveryCommand("health", options),
+    ],
+    claimBoundary:
+      "This reports local setup health and recovery guidance; it does not modify files unless --repair is used.",
+  };
+}
+
 function setup(options) {
-  const profilePath = writeProfile(options.learnerRoot, options);
+  let repairBackups = [];
+  let profilePath;
+  try {
+    profilePath = writeProfile(options.learnerRoot, options);
+  } catch (error) {
+    if (!options.repair) return recoverableFailure(error, options);
+    repairBackups = repairLearnerStore(options.learnerRoot);
+    profilePath = writeProfile(options.learnerRoot, options);
+  }
   const paths = ensureLearnerStore(options.learnerRoot);
+  const healthResult = health({ ...options, repair: false });
   return {
     status: "pass",
     path: "explicit-command-wrapper",
     learnerRoot: paths.root,
     profilePath,
     progressPath: paths.progress,
+    repairPerformed: options.repair,
+    repairBackups,
+    health: {
+      profileReady: healthResult.profileReady,
+      sessionCount: healthResult.sessionCount,
+      checks: healthResult.checks,
+    },
     nativeHooksRequired: false,
     next: [
       `node scripts/english-learning-harness.mjs today --learner-root ${JSON.stringify(paths.root)} --say "I want to practice today."`,
@@ -144,7 +219,12 @@ function today(options) {
 }
 
 function health(options) {
-  const paths = ensureLearnerStore(options.learnerRoot);
+  let paths;
+  try {
+    paths = ensureLearnerStore(options.learnerRoot);
+  } catch (error) {
+    return recoverableFailure(error, options);
+  }
   const progress = readProgress(paths.progress);
   const profile = readProfile(paths.profile);
   return {
@@ -157,6 +237,13 @@ function health(options) {
     artifactDir: paths.artifactDir,
     profileReady: profile.includes("preferred_name"),
     sessionCount: Array.isArray(progress.sessions) ? progress.sessions.length : 0,
+    checks: [
+      { name: "profile", status: profile.includes("preferred_name") ? "pass" : "warn" },
+      { name: "progress", status: "pass" },
+      { name: "vocabulary", status: existsSync(paths.vocabulary) ? "pass" : "fail" },
+      { name: "reviewQueue", status: existsSync(paths.reviewQueue) ? "pass" : "fail" },
+    ],
+    recovery: [],
     nativeHooksRequired: false,
     nativeHooksStatus: "optional",
     claimBoundary:
