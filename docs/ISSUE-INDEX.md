@@ -61,13 +61,13 @@ M1 execution issues #11-#17 are complete after #17 merges.
 Current branch:
 
 ```bash
-git switch issue-28-tutor-policy-rubric
+git switch issue-29-weekly-mirror
 ```
 
-Next after #28:
+Next after #29:
 
 ```bash
-git switch -c issue-29-weekly-mirror
+gh issue list --milestone "M3 Multimodal Interaction Event Graph"
 ```
 
 From #12 onward, implementation issues close through linked PRs.

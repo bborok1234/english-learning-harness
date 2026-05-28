@@ -18,6 +18,7 @@ import {
   readProgress,
   readProfile,
   readVocabulary,
+  writeWeeklyMirror,
   writeLearnerModel,
   writeProgress,
   writeReviewQueue,
@@ -114,6 +115,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs context [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs review [--review-id ID --result success|fail] [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs vault [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs weekly [--learner-root DIR]",
     "",
     "Native hooks are optional. This wrapper is the reliable first-usable path.",
   ].join("\n");
@@ -136,6 +138,7 @@ function repairLearnerStore(learnerRoot) {
   mkdirSync(paths.root, { recursive: true });
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
+  mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
   const backups = [
     backupIfExists(paths.progress, stamp),
@@ -326,6 +329,17 @@ function vault(options) {
   };
 }
 
+function weekly(options) {
+  const result = writeWeeklyMirror(options.learnerRoot);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    mirrorPath: result.mirrorPath,
+    mirror: result.mirror,
+    claimBoundary: result.mirror.claim_boundary,
+  };
+}
+
 function run() {
   const { command, options } = parseArgs(process.argv);
 
@@ -359,6 +373,10 @@ function run() {
   }
   if (command === "vault") {
     output(vault(options), options.json);
+    return;
+  }
+  if (command === "weekly") {
+    output(weekly(options), options.json);
     return;
   }
 

@@ -19,6 +19,8 @@ This file defines the minimum data contracts needed before implementation can sc
 ├── scenarios/
 ├── journal/
 └── artifacts/
+    ├── sessions/
+    └── weekly/
 ```
 
 ## `learner-model.json`
@@ -156,6 +158,42 @@ Required fields:
   }
 }
 ```
+
+## Weekly Mirror Artifact
+
+Required fields:
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "ISO-8601",
+  "window": {
+    "session_count": 3,
+    "from": "YYYY-MM-DD",
+    "to": "YYYY-MM-DD"
+  },
+  "communicated_themes": [],
+  "saved_phrases": [],
+  "reused_phrases": [],
+  "repair_attempts": [],
+  "skill_evidence": {
+    "starts": 0,
+    "follow_ups": 0,
+    "clarification": 0,
+    "repair": 0,
+    "soft_disagreement": 0
+  },
+  "next_focus": {
+    "skill": "repair",
+    "reason": "Lowest local evidence count (0).",
+    "suggested_phrase": "I like drinking coffee.",
+    "prompt": "Reuse due phrase in a tiny real-life context: \"I like drinking coffee.\""
+  },
+  "claim_boundary": "This mirror summarizes local practice evidence only. It does not rank level or guarantee real-world fluency."
+}
+```
+
+Weekly mirrors may only summarize local artifacts, progress, learner model, vocabulary, and review queue data. They may not report level ranking, native-speaker comparisons, or guaranteed transfer to real-world confidence.
 
 ## Contract Rule
 

@@ -379,10 +379,10 @@
   "updatedAt": "2026-05-28",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M2 Pedagogical Learning Engine in progress",
-    "status": "Next: #29 weekly mirror from local evidence",
+    "stage": "M2 Pedagogical Learning Engine implemented on PR branch",
+    "status": "Next: create/execute M3 multimodal interaction event graph issues",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 planner, M2-4 tutor rubric은 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #29 weekly mirror from local evidence다."
+    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1~M2-5는 PR 브랜치에서 구현/검증됐고, 다음 작업은 M3 multimodal interaction event graph 실행 이슈화와 구현이다."
   },
   "ssot": [
     {
@@ -467,20 +467,20 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M1",
-      "detail": "local command-wrapper first-usable proven",
+      "value": "M2",
+      "detail": "pedagogical learning engine implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M2 active",
-      "detail": "#25 learner model, #26 review/vault, #27 planner, #28 rubric implemented; #29 next",
+      "detail": "#25-#29 implemented on PR branches",
       "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "M2",
-      "detail": "#29 weekly mirror from local evidence",
+      "value": "M3",
+      "detail": "multimodal interaction event graph issues",
       "tone": "red"
     },
     {
@@ -954,6 +954,19 @@
             "scripts/phase2-tutor-policy-smoke.mjs",
             "docs/phase-2-evidence/M2-4-tutor-policy-rubric.md"
           ]
+        },
+        {
+          "id": "M2-5",
+          "title": "#29 Weekly mirror from local evidence",
+          "why": "매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.",
+          "done": "`weekly` command와 `artifacts/weekly/weekly-mirror-YYYY-MM-DD.json` 생성을 구현하고 local evidence 기반 요약만 남기게 했다.",
+          "verification": "`node scripts/phase2-weekly-mirror-smoke.mjs`가 세션 3개에서 themes, saved/reused phrases, repair attempts, next focus를 생성했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase2-weekly-mirror-smoke.mjs",
+            "docs/phase-2-evidence/M2-5-weekly-mirror.md"
+          ]
         }
       ]
     },
@@ -963,15 +976,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M2-5",
-          "title": "#29 Weekly mirror from local evidence",
-          "why": "매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.",
-          "done": "local artifacts/progress/learner model/review queue에서 주간 mirror를 생성하는 command를 구현한다.",
-          "verification": "weekly mirror smoke에서 최근 세션 요약, skill evidence, saved phrases, next focus가 생성되어야 한다.",
+          "id": "M3-PLAN",
+          "title": "M3 multimodal interaction event graph 실행 이슈화",
+          "why": "M2는 텍스트/로컬 evidence 기반 학습 엔진이다. 다음은 voice/image/video를 이벤트 그래프에 연결할 준비가 필요하다.",
+          "done": "M3 scope를 GitHub issues로 쪼개고 stable CLI/API 경로, local artifact schema, multimodal smoke 기준을 확정한다.",
+          "verification": "M3 issues와 test-spec가 dashboard/ISSUE-INDEX에 기록되어야 한다.",
           "files": [
-            "scripts/english-learning-harness.mjs",
-            "scripts/lib/english-learning-store.mjs",
-            "docs/DATA-CONTRACTS.md"
+            "docs/MULTIMODAL-GENAI-PLAN.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
           ]
         }
       ]
@@ -1140,6 +1153,11 @@
       "name": "M2-4",
       "status": "Pass",
       "detail": "tutor policy rubric and negative violation smoke pass"
+    },
+    {
+      "name": "M2-5",
+      "status": "Pass",
+      "detail": "weekly mirror local evidence smoke and M2 regression smokes pass"
     }
   ],
   "commands": [
@@ -1196,6 +1214,10 @@
       "command": "node scripts/phase2-tutor-policy-smoke.mjs"
     },
     {
+      "label": "Run weekly mirror smoke",
+      "command": "node scripts/phase2-weekly-mirror-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1230,12 +1252,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 planner, M2-4 tutor rubric은 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #29 weekly mirror from local evidence다.</p>
+        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1~M2-5는 PR 브랜치에서 구현/검증됐고, 다음 작업은 M3 multimodal interaction event graph 실행 이슈화와 구현이다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
-        M2 Pedagogical Learning Engine in progress<br>
-        Next: #29 weekly mirror from local evidence
+        M2 Pedagogical Learning Engine implemented on PR branch<br>
+        Next: create/execute M3 multimodal interaction event graph issues
       </div>
     </header>
 
@@ -1243,18 +1265,18 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M1</div>
-          <p>local command-wrapper first-usable proven</p>
+          <div class="metric-value">M2</div>
+          <p>pedagogical learning engine implemented</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M2 active</div>
-          <p>#25 learner model, #26 review/vault, #27 planner, #28 rubric implemented; #29 next</p>
+          <p>#25-#29 implemented on PR branches</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">M2</div>
-          <p>#29 weekly mirror from local evidence</p>
+          <div class="metric-value">M3</div>
+          <p>multimodal interaction event graph issues</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1286,7 +1308,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>33</span>
+            <span>34</span>
           </header>
           <div class="column-cards">
             
@@ -1620,6 +1642,16 @@
               <div class="card-row"><b>완료</b><p>실행 가능한 tutor policy rubric, negative fixtures, Korean bridge behavior, persona fixture integration을 구현했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-tutor-policy-smoke.mjs`가 prohibited claim, mini mirror, Korean dead-end, correction ladder, overcorrection violation을 모두 잡았다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-5</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-weekly-mirror-smoke.mjs, docs/phase-2-evidence/M2-5-weekly-mirror.md</span>
+              </div>
+              <h3>#29 Weekly mirror from local evidence</h3>
+              <div class="card-row"><b>왜</b><p>매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>`weekly` command와 `artifacts/weekly/weekly-mirror-YYYY-MM-DD.json` 생성을 구현하고 local evidence 기반 요약만 남기게 했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-weekly-mirror-smoke.mjs`가 세션 3개에서 themes, saved/reused phrases, repair attempts, next focus를 생성했다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1631,13 +1663,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>M2-5</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md</span>
+                <strong>M3-PLAN</strong>
+                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>#29 Weekly mirror from local evidence</h3>
-              <div class="card-row"><b>왜</b><p>매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.</p></div>
-              <div class="card-row"><b>완료</b><p>local artifacts/progress/learner model/review queue에서 주간 mirror를 생성하는 command를 구현한다.</p></div>
-              <div class="card-row"><b>검증</b><p>weekly mirror smoke에서 최근 세션 요약, skill evidence, saved phrases, next focus가 생성되어야 한다.</p></div>
+              <h3>M3 multimodal interaction event graph 실행 이슈화</h3>
+              <div class="card-row"><b>왜</b><p>M2는 텍스트/로컬 evidence 기반 학습 엔진이다. 다음은 voice/image/video를 이벤트 그래프에 연결할 준비가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>M3 scope를 GitHub issues로 쪼개고 stable CLI/API 경로, local artifact schema, multimodal smoke 기준을 확정한다.</p></div>
+              <div class="card-row"><b>검증</b><p>M3 issues와 test-spec가 dashboard/ISSUE-INDEX에 기록되어야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1907,6 +1939,10 @@
               <td>M2-4</td>
               <td><strong>Pass</strong><span>tutor policy rubric and negative violation smoke pass</span></td>
             </tr>
+            <tr>
+              <td>M2-5</td>
+              <td><strong>Pass</strong><span>weekly mirror local evidence smoke and M2 regression smokes pass</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
@@ -1962,6 +1998,10 @@
             <div class="command">
               <span>Run tutor policy smoke</span>
               <code>node scripts/phase2-tutor-policy-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run weekly mirror smoke</span>
+              <code>node scripts/phase2-weekly-mirror-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

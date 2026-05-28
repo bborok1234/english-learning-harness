@@ -206,6 +206,13 @@ Responsibilities:
 - progress schema validation,
 - review scheduling.
 
+Weekly mirror behavior:
+
+- read only local session artifacts, progress, learner model, vocabulary, and review queue,
+- summarize communicated themes, saved phrases, reused phrases, and repair attempts,
+- choose one next focus from the lowest local skill evidence or due review phrase,
+- avoid level ranking, native-speaker comparison, and guaranteed real-world transfer claims.
+
 ### Layer 2: Learning Agent
 
 Responsibilities:
