@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-2 vocabulary history and review queue",
+    "status": "Next: PH1-FIX-3 scenario-based daily loop and fixture harness",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. GitHub에는 6개 마일스톤, 10개 에픽, M1 이슈 #11-#17이 생성됐고, #11 explicit command-wrapper fallback은 구현과 smoke 검증을 통과했다. #11은 direct commit으로 닫힌 process gap이므로 #12부터는 PR-first로 닫는다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 explicit command-wrapper fallback과 #12 vocabulary history/review queue가 smoke 검증을 통과했다. 다음은 #13 scenario-based daily loop와 fixture harness다."
   },
   "ssot": [
     {
@@ -97,8 +97,8 @@
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-2",
-      "detail": "vocabulary history and review queue",
+      "value": "PH1-FIX-3",
+      "detail": "scenario-based daily loop and fixture harness",
       "tone": "red"
     },
     {
@@ -295,6 +295,14 @@
           "done": "`scripts/english-learning-harness.mjs`에 setup/today/health/status/context 명령을 추가하고 README의 기본 사용 경로를 wrapper 중심으로 바꿨다.",
           "verification": "`node scripts/phase1-command-wrapper-smoke.mjs`가 setup, health, today persistence, post-session health를 통과했다. native hook runtime은 여전히 claim boundary 밖이다.",
           "files": ["scripts/english-learning-harness.mjs", "scripts/phase1-command-wrapper-smoke.mjs", "README.md", "docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md"]
+        },
+        {
+          "id": "PH1-FIX-2",
+          "title": "Vocabulary history와 review queue를 구현함",
+          "why": "`new_vocabulary_count`가 세션 안 unique token만 세면 반복 학습을 새 학습처럼 과장한다.",
+          "done": "`vocabulary.json`과 `review-queue.json`을 learner store에 추가하고, session persist 시 historical vocabulary와 비교해 새 단어/반복 단어/복습 문장을 분리한다.",
+          "verification": "`node scripts/phase1-vocabulary-history-smoke.mjs`에서 첫 `I like coffee.`는 새 단어 3개, 두 번째 동일 문장은 새 단어 0개, 누적 progress는 3개로 유지됐다.",
+          "files": ["scripts/lib/english-learning-store.mjs", "scripts/phase1-vocabulary-history-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-2-vocabulary-history.md", "docs/DATA-CONTRACTS.md"]
         }
       ]
     },
@@ -304,12 +312,12 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-2",
-          "title": "Vocabulary history와 review queue 구현",
-          "why": "현재 `new_vocabulary_count`는 같은 단어가 다음 세션에 반복돼도 다시 새 단어로 세어 학습 진전을 과장한다.",
-          "done": "학습자별 vocabulary history와 review queue를 추가하고, 새 단어/복습 단어/반복 단어가 분리되도록 progress semantics를 고친다.",
-          "verification": "같은 문장을 두 번 실행하는 adversarial smoke에서 두 번째 세션의 repeated vocabulary가 new vocabulary로 증가하지 않아야 한다.",
-          "files": ["scripts/lib/english-learning-store.mjs", "docs/DATA-CONTRACTS.md", "docs/phase-1-evidence/"]
+          "id": "PH1-FIX-3",
+          "title": "Scenario-based daily loop와 fixture harness 구현",
+          "why": "현재 daily session은 transcript processor에 가깝고 실제 회화 연습처럼 목표, 상황, follow-up, repair가 이어지는 구조가 약하다.",
+          "done": "일상 scenario goal, tutor turn policy, learner retry prompt, persona fixture를 command-wrapper daily flow에 연결한다.",
+          "verification": "네 target persona fixture에서 session artifact가 scenario goal, learner retry, repair/recast, mini mirror를 포함해야 한다.",
+          "files": ["scripts/lib/english-learning-store.mjs", "scripts/english-learning-harness.mjs", "docs/PERSONA-FIXTURE-SPEC.md", "docs/phase-1-evidence/"]
         }
       ]
     },
@@ -358,13 +366,6 @@
           "why": "full-flow smoke가 persistence mechanics만 증명했고, native hook end-to-end와 실제 conversation UX를 증명하지 못했다.",
           "done": "완료 상태를 hardening required로 낮추고 PH1-FIX 작업을 추가했다.",
           "verification": "gap audit에 P1/P2 finding과 재현 명령을 기록했다."
-        },
-        {
-          "id": "R006",
-          "title": "Vocabulary metric semantics 오류",
-          "why": "같은 문장을 두 번 실행하면 같은 단어가 다시 new vocabulary로 카운트된다.",
-          "done": "PH1-FIX-2에서 vocabulary history를 도입해야 한다.",
-          "verification": "`tmp/review-multisession` adversarial check에서 `new_vocabulary_count`가 6으로 증가했다."
         }
       ]
     }
@@ -413,7 +414,7 @@
     {
       "name": "Self review",
       "status": "Needs work",
-      "detail": "P1 hook proof, P1 vocabulary semantics, P2 UX gaps"
+      "detail": "P1 hook proof remains outside first-use path; P2 scenario UX gaps remain"
     },
     {
       "name": "Learning engine plan",
@@ -434,6 +435,11 @@
       "name": "PH1-FIX-1",
       "status": "Pass",
       "detail": "explicit command-wrapper setup/today/health/status/context path implemented and smoke-tested"
+    },
+    {
+      "name": "PH1-FIX-2",
+      "status": "Pass",
+      "detail": "historical vocabulary, review queue, repeated-session smoke, and v2 migration smoke pass"
     }
   ],
   "commands": [
@@ -448,6 +454,10 @@
     {
       "label": "Run command-wrapper smoke",
       "command": "node scripts/phase1-command-wrapper-smoke.mjs"
+    },
+    {
+      "label": "Run vocabulary history smoke",
+      "command": "node scripts/phase1-vocabulary-history-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

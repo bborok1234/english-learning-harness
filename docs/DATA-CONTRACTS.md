@@ -1,6 +1,6 @@
 # Data Contracts
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 Status: Active planning contract
 
 ## Purpose
@@ -65,6 +65,8 @@ Required fields:
 
 `new_vocabulary_count` must count only tokens not previously present in `known_tokens` or `emerging_tokens`.
 
+Migration rule: if an existing learner store has `progress.json` v2 but no `vocabulary.json`, setup/health/session commands create the default schema without changing existing progress totals.
+
 ## `review-queue.json`
 
 Required fields:
@@ -115,7 +117,15 @@ Required fields:
     "review_phrase": "...",
     "retry_prompt": "..."
   },
-  "session_metrics": {}
+  "session_metrics": {},
+  "vocabulary_evidence": {
+    "tokens": ["coffee"],
+    "new_tokens": ["coffee"],
+    "repeated_tokens": [],
+    "review_phrase": "I like drinking coffee.",
+    "scheduled_review_id": "phrase-i-like-drinking-coffee",
+    "scheduled_review_created": true
+  }
 }
 ```
 

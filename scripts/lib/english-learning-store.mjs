@@ -20,6 +20,8 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     root,
     profile: resolve(root, "profile.md"),
     progress: resolve(root, "progress.json"),
+    vocabulary: resolve(root, "vocabulary.json"),
+    reviewQueue: resolve(root, "review-queue.json"),
     journalDir: resolve(root, "journal"),
     artifactDir: resolve(root, "artifacts/sessions"),
   };
@@ -27,6 +29,23 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
 
 export function emptyMetrics() {
   return Object.fromEntries(mvpSessionMetricKeys.map((key) => [key, 0]));
+}
+
+export function emptyVocabulary() {
+  return {
+    schema_version: 1,
+    known_tokens: [],
+    known_phrases: [],
+    emerging_tokens: [],
+    personal_phrases: [],
+  };
+}
+
+export function emptyReviewQueue() {
+  return {
+    schema_version: 1,
+    items: [],
+  };
 }
 
 export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
@@ -60,11 +79,22 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
     });
   }
 
+  if (!existsSync(paths.vocabulary)) {
+    writeVocabulary(paths.vocabulary, emptyVocabulary());
+  }
+
+  if (!existsSync(paths.reviewQueue)) {
+    writeReviewQueue(paths.reviewQueue, emptyReviewQueue());
+  }
+
   const progress = readProgress(paths.progress);
   const errors = validateProgress(progress, paths.progress);
   if (errors.length) {
     throw new Error(errors.join("; "));
   }
+
+  readVocabulary(paths.vocabulary);
+  readReviewQueue(paths.reviewQueue);
 
   return paths;
 }
@@ -79,6 +109,50 @@ export function writeProgress(progressPath, progress) {
     throw new Error(errors.join("; "));
   }
   writeFileSync(progressPath, `${JSON.stringify(progress, null, 2)}\n`);
+}
+
+export function readVocabulary(vocabularyPath) {
+  const vocabulary = JSON.parse(readFileSync(vocabularyPath, "utf8"));
+  const arrays = ["known_tokens", "known_phrases", "emerging_tokens", "personal_phrases"];
+  if (vocabulary.schema_version !== 1) {
+    throw new Error(`${vocabularyPath}: schema_version must be 1`);
+  }
+  for (const key of arrays) {
+    if (!Array.isArray(vocabulary[key])) {
+      throw new Error(`${vocabularyPath}: ${key} must be an array`);
+    }
+  }
+  return vocabulary;
+}
+
+export function writeVocabulary(vocabularyPath, vocabulary) {
+  const normalized = {
+    ...emptyVocabulary(),
+    ...vocabulary,
+    known_tokens: uniqueSorted(vocabulary.known_tokens ?? []),
+    known_phrases: uniqueSorted(vocabulary.known_phrases ?? []),
+    emerging_tokens: uniqueSorted(vocabulary.emerging_tokens ?? []),
+    personal_phrases: uniqueSorted(vocabulary.personal_phrases ?? []),
+  };
+  writeFileSync(vocabularyPath, `${JSON.stringify(normalized, null, 2)}\n`);
+}
+
+export function readReviewQueue(reviewQueuePath) {
+  const reviewQueue = JSON.parse(readFileSync(reviewQueuePath, "utf8"));
+  if (reviewQueue.schema_version !== 1) {
+    throw new Error(`${reviewQueuePath}: schema_version must be 1`);
+  }
+  if (!Array.isArray(reviewQueue.items)) {
+    throw new Error(`${reviewQueuePath}: items must be an array`);
+  }
+  return reviewQueue;
+}
+
+export function writeReviewQueue(reviewQueuePath, reviewQueue) {
+  writeFileSync(
+    reviewQueuePath,
+    `${JSON.stringify({ schema_version: 1, items: reviewQueue.items ?? [] }, null, 2)}\n`,
+  );
 }
 
 export function readProfile(profilePath) {
@@ -102,18 +176,35 @@ export function writeProfile(learnerRoot, profile) {
   return paths.profile;
 }
 
-export function estimateSessionMetrics(learnerTurns) {
+export function extractEnglishTokens(learnerTurns) {
   const utteranceText = learnerTurns.join(" ").trim();
   const tokens = utteranceText ? utteranceText.split(/\s+/).filter(Boolean) : [];
-  const englishTokens = tokens.filter((token) => /[A-Za-z]/.test(token));
-  const uniqueEnglish = new Set(
-    englishTokens.map((token) => token.toLowerCase().replace(/[^a-z']/g, "")).filter(Boolean),
-  );
+  return tokens
+    .filter((token) => /[A-Za-z]/.test(token))
+    .map((token) => token.toLowerCase().replace(/[^a-z']/g, ""))
+    .filter(Boolean);
+}
+
+function uniqueSorted(values) {
+  return [...new Set(values.filter(Boolean))].sort();
+}
+
+function knownVocabularyTokenSet(vocabulary = emptyVocabulary()) {
+  return new Set([...(vocabulary.known_tokens ?? []), ...(vocabulary.emerging_tokens ?? [])]);
+}
+
+export function estimateSessionMetrics(learnerTurns, options = {}) {
+  const utteranceText = learnerTurns.join(" ").trim();
+  const tokens = utteranceText ? utteranceText.split(/\s+/).filter(Boolean) : [];
+  const englishTokens = extractEnglishTokens(learnerTurns);
+  const uniqueEnglish = new Set(englishTokens);
+  const knownTokens = knownVocabularyTokenSet(options.vocabulary);
+  const newEnglish = [...uniqueEnglish].filter((token) => !knownTokens.has(token));
 
   return {
     attendance: learnerTurns.length > 0 ? 1 : 0,
     english_word_ratio: tokens.length ? Number((englishTokens.length / tokens.length).toFixed(3)) : 0,
-    new_vocabulary_count: Math.min(uniqueEnglish.size, 5),
+    new_vocabulary_count: Math.min(newEnglish.length, 5),
     utterance_word_count: englishTokens.length,
     voluntary_speaking_seconds: englishTokens.length ? Math.max(5, Math.round(englishTokens.length * 0.45)) : 0,
   };
@@ -190,6 +281,73 @@ export function buildSession(learnerTurns, options = {}) {
   };
 }
 
+function reviewItemId(text) {
+  const slug = text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48);
+  return `phrase-${slug || "review"}`;
+}
+
+function nextDayIso(date) {
+  const due = new Date(date.getTime());
+  due.setUTCDate(due.getUTCDate() + 1);
+  return due.toISOString();
+}
+
+function updateVocabulary(vocabulary, session) {
+  const tokens = uniqueSorted(extractEnglishTokens(session.learner_turns));
+  const knownBefore = knownVocabularyTokenSet(vocabulary);
+  const newTokens = tokens.filter((token) => !knownBefore.has(token));
+  const repeatedTokens = tokens.filter((token) => knownBefore.has(token));
+  const reviewPhrase = session.mirror.recast;
+
+  return {
+    vocabulary: {
+      ...vocabulary,
+      emerging_tokens: uniqueSorted([...(vocabulary.emerging_tokens ?? []), ...newTokens]),
+      personal_phrases: uniqueSorted([...(vocabulary.personal_phrases ?? []), reviewPhrase]),
+    },
+    evidence: {
+      tokens,
+      new_tokens: newTokens,
+      repeated_tokens: repeatedTokens,
+      review_phrase: reviewPhrase,
+    },
+  };
+}
+
+function updateReviewQueue(reviewQueue, session, reviewPhrase, date) {
+  const existing = reviewQueue.items.find((item) => item.text === reviewPhrase);
+  if (existing) {
+    return {
+      reviewQueue,
+      scheduledReviewId: existing.id,
+      scheduled: false,
+    };
+  }
+
+  const item = {
+    id: reviewItemId(reviewPhrase),
+    type: "phrase",
+    text: reviewPhrase,
+    source_session_id: session.id,
+    due_at: nextDayIso(date),
+    interval_days: 1,
+    success_count: 0,
+  };
+
+  return {
+    reviewQueue: {
+      schema_version: 1,
+      items: [...reviewQueue.items, item],
+    },
+    scheduledReviewId: item.id,
+    scheduled: true,
+  };
+}
+
 export function persistSession(learnerRoot, session, date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const stamp = todayStamp(date);
@@ -197,6 +355,28 @@ export function persistSession(learnerRoot, session, date = new Date()) {
   const journalPath = resolve(paths.journalDir, `${stamp}.md`);
   const relativeArtifactPath = relative(paths.root, artifactPath);
 
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const vocabularyUpdate = updateVocabulary(vocabulary, session);
+  const reviewQueueUpdate = updateReviewQueue(
+    reviewQueue,
+    session,
+    vocabularyUpdate.evidence.review_phrase,
+    date,
+  );
+
+  session.date = stamp;
+  session.session_metrics = estimateSessionMetrics(session.learner_turns, {
+    vocabulary,
+  });
+  session.vocabulary_evidence = {
+    ...vocabularyUpdate.evidence,
+    scheduled_review_id: reviewQueueUpdate.scheduledReviewId,
+    scheduled_review_created: reviewQueueUpdate.scheduled,
+  };
+
+  writeVocabulary(paths.vocabulary, vocabularyUpdate.vocabulary);
+  writeReviewQueue(paths.reviewQueue, reviewQueueUpdate.reviewQueue);
   writeFileSync(artifactPath, `${JSON.stringify(session, null, 2)}\n`);
 
   const progress = readProgress(paths.progress);
@@ -259,6 +439,9 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
   const progress = readProgress(paths.progress);
   const metrics = progress.mvp_session_metrics ?? emptyMetrics();
   const latestJournal = latestJournalPath(paths.root);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const dueReviewCount = reviewQueue.items.filter((item) => item.success_count === 0).length;
 
   return [
     "English Learning Harness context:",
@@ -266,6 +449,8 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
     "- North star: AI 파트너와 편안하게 영어로 대화하는 능력.",
     `- Learner root: ${paths.root}`,
     `- MVP metrics: ${mvpSessionMetricKeys.map((key) => `${key}=${metrics[key] ?? 0}`).join(", ")}`,
+    `- Vocabulary: ${vocabulary.emerging_tokens.length} emerging tokens, ${vocabulary.personal_phrases.length} personal phrases`,
+    `- Review queue: ${dueReviewCount} open items`,
     latestJournal ? `- Latest journal: ${relative(paths.root, latestJournal)}` : "- Latest journal: none",
     "",
     "Profile:",
