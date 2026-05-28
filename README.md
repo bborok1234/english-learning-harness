@@ -25,6 +25,9 @@ By default learner-owned files live here:
 ~/english-learning/
 ├── profile.md
 ├── progress.json
+├── learner-model.json
+├── vocabulary.json
+├── review-queue.json
 ├── journal/
 └── artifacts/sessions/
 ```
@@ -189,6 +192,12 @@ Run the clean clone first-use smoke:
 
 ```bash
 node scripts/phase1-clean-clone-smoke.mjs
+```
+
+Run the learner model and skill memory smoke:
+
+```bash
+node scripts/phase2-learner-model-smoke.mjs
 ```
 
 Run the full first-run smoke:

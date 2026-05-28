@@ -15,12 +15,15 @@ export const defaultLearnerRoot = () =>
 
 export const todayStamp = (date = new Date()) => date.toISOString().slice(0, 10);
 
+const learnerSkillKeys = ["starts", "follow_ups", "clarification", "repair", "soft_disagreement"];
+
 export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
   const root = resolve(learnerRoot);
   return {
     root,
     profile: resolve(root, "profile.md"),
     progress: resolve(root, "progress.json"),
+    learnerModel: resolve(root, "learner-model.json"),
     vocabulary: resolve(root, "vocabulary.json"),
     reviewQueue: resolve(root, "review-queue.json"),
     journalDir: resolve(root, "journal"),
@@ -39,6 +42,30 @@ export function emptyVocabulary() {
     known_phrases: [],
     emerging_tokens: [],
     personal_phrases: [],
+  };
+}
+
+export function emptyLearnerModel(date = new Date()) {
+  return {
+    schema_version: 1,
+    baseline: {
+      created_at: date.toISOString(),
+      comfort_rating: 0,
+      freeze_triggers: [],
+      average_utterance_words: 0,
+      repair_phrase_count: 0,
+    },
+    interaction_skills: {
+      starts: { evidence_count: 0 },
+      follow_ups: { evidence_count: 0 },
+      clarification: { evidence_count: 0 },
+      repair: { evidence_count: 0 },
+      soft_disagreement: { evidence_count: 0 },
+    },
+    affect: {
+      last_energy: "easy",
+      last_confidence_note: "",
+    },
   };
 }
 
@@ -80,6 +107,10 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
     });
   }
 
+  if (!existsSync(paths.learnerModel)) {
+    writeLearnerModel(paths.learnerModel, emptyLearnerModel());
+  }
+
   if (!existsSync(paths.vocabulary)) {
     writeVocabulary(paths.vocabulary, emptyVocabulary());
   }
@@ -95,6 +126,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   }
 
   readVocabulary(paths.vocabulary);
+  readLearnerModel(paths.learnerModel);
   readReviewQueue(paths.reviewQueue);
 
   return paths;
@@ -110,6 +142,78 @@ export function writeProgress(progressPath, progress) {
     throw new Error(errors.join("; "));
   }
   writeFileSync(progressPath, `${JSON.stringify(progress, null, 2)}\n`);
+}
+
+function assertObject(value, path, field) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`${path}: ${field} must be an object`);
+  }
+}
+
+export function readLearnerModel(learnerModelPath) {
+  const model = JSON.parse(readFileSync(learnerModelPath, "utf8"));
+  if (model.schema_version !== 1) {
+    throw new Error(`${learnerModelPath}: schema_version must be 1`);
+  }
+  assertObject(model.baseline, learnerModelPath, "baseline");
+  assertObject(model.interaction_skills, learnerModelPath, "interaction_skills");
+  assertObject(model.affect, learnerModelPath, "affect");
+
+  if (typeof model.baseline.created_at !== "string" || !model.baseline.created_at) {
+    throw new Error(`${learnerModelPath}: baseline.created_at must be a string`);
+  }
+  if (!Array.isArray(model.baseline.freeze_triggers)) {
+    throw new Error(`${learnerModelPath}: baseline.freeze_triggers must be an array`);
+  }
+  for (const key of ["comfort_rating", "average_utterance_words", "repair_phrase_count"]) {
+    if (typeof model.baseline[key] !== "number") {
+      throw new Error(`${learnerModelPath}: baseline.${key} must be a number`);
+    }
+  }
+
+  for (const skill of learnerSkillKeys) {
+    assertObject(model.interaction_skills[skill], learnerModelPath, `interaction_skills.${skill}`);
+    if (typeof model.interaction_skills[skill].evidence_count !== "number") {
+      throw new Error(`${learnerModelPath}: interaction_skills.${skill}.evidence_count must be a number`);
+    }
+  }
+  if (typeof model.affect.last_energy !== "string") {
+    throw new Error(`${learnerModelPath}: affect.last_energy must be a string`);
+  }
+  if (typeof model.affect.last_confidence_note !== "string") {
+    throw new Error(`${learnerModelPath}: affect.last_confidence_note must be a string`);
+  }
+  return model;
+}
+
+export function writeLearnerModel(learnerModelPath, learnerModel) {
+  const defaults = emptyLearnerModel();
+  const normalized = {
+    ...defaults,
+    ...learnerModel,
+    baseline: {
+      ...defaults.baseline,
+      ...(learnerModel.baseline ?? {}),
+      created_at: learnerModel.baseline?.created_at || defaults.baseline.created_at,
+      freeze_triggers: learnerModel.baseline?.freeze_triggers ?? defaults.baseline.freeze_triggers,
+    },
+    interaction_skills: Object.fromEntries(
+      learnerSkillKeys.map((skill) => [
+        skill,
+        {
+          evidence_count:
+            learnerModel.interaction_skills?.[skill]?.evidence_count ??
+            defaults.interaction_skills[skill].evidence_count,
+        },
+      ]),
+    ),
+    affect: {
+      ...defaults.affect,
+      ...(learnerModel.affect ?? {}),
+    },
+  };
+  writeFileSync(learnerModelPath, `${JSON.stringify(normalized, null, 2)}\n`);
+  readLearnerModel(learnerModelPath);
 }
 
 export function readVocabulary(vocabularyPath) {
@@ -369,6 +473,78 @@ function updateReviewQueue(reviewQueue, session, reviewPhrase, date) {
   };
 }
 
+function learnerText(session) {
+  return (session.learner_turns ?? []).join(" ").toLowerCase();
+}
+
+function detectSkillEvidence(session) {
+  const text = learnerText(session);
+  const skills = new Set();
+  if ((session.learner_turns ?? []).length > 0) skills.add("starts");
+  if ((session.learner_turns ?? []).length > 1 || session.scenario?.cefr_skill === "turn-taking") {
+    skills.add("follow_ups");
+  }
+  if (
+    session.scenario?.cefr_skill === "clarification" ||
+    /\b(what i want to say|i mean|clarify|can you say|what does)\b/i.test(text)
+  ) {
+    skills.add("clarification");
+  }
+  if (
+    session.scenario?.cefr_skill === "repair" ||
+    /\b(i don't know how to say|dont know how to say|i mean|rescue|stuck)\b/i.test(text)
+  ) {
+    skills.add("repair");
+  }
+  if (/\b(but|however|not really|i don't think|i dont think)\b/i.test(text)) {
+    skills.add("soft_disagreement");
+  }
+  return [...skills];
+}
+
+function updateLearnerModel(learnerModel, session, options = {}) {
+  const evidenceSkills = detectSkillEvidence(session);
+  const nextModel = {
+    ...learnerModel,
+    baseline: {
+      ...learnerModel.baseline,
+    },
+    interaction_skills: Object.fromEntries(
+      learnerSkillKeys.map((skill) => [
+        skill,
+        { evidence_count: learnerModel.interaction_skills[skill].evidence_count },
+      ]),
+    ),
+    affect: {
+      ...learnerModel.affect,
+    },
+  };
+
+  for (const skill of evidenceSkills) {
+    nextModel.interaction_skills[skill].evidence_count += 1;
+  }
+
+  const previousSessionCount = options.previousSessionCount ?? 0;
+  const totalSessions = previousSessionCount + 1;
+  const previousAverage = learnerModel.baseline.average_utterance_words ?? 0;
+  const currentWords = session.session_metrics?.utterance_word_count ?? 0;
+  nextModel.baseline.average_utterance_words = Number(
+    (((previousAverage * previousSessionCount) + currentWords) / totalSessions).toFixed(2),
+  );
+  nextModel.baseline.repair_phrase_count = options.personalPhraseCount ?? 0;
+  nextModel.affect.last_energy = session.scenario?.mode || learnerModel.affect.last_energy || "easy";
+  nextModel.affect.last_confidence_note = `completed scenario: ${session.scenario?.id || "unknown"}`;
+
+  return {
+    learnerModel: nextModel,
+    evidence: {
+      updated_skills: evidenceSkills,
+      average_utterance_words: nextModel.baseline.average_utterance_words,
+      repair_phrase_count: nextModel.baseline.repair_phrase_count,
+    },
+  };
+}
+
 export function persistSession(learnerRoot, session, date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const stamp = todayStamp(date);
@@ -377,7 +553,9 @@ export function persistSession(learnerRoot, session, date = new Date()) {
   const relativeArtifactPath = relative(paths.root, artifactPath);
 
   const vocabulary = readVocabulary(paths.vocabulary);
+  const learnerModel = readLearnerModel(paths.learnerModel);
   const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const progress = readProgress(paths.progress);
   const vocabularyUpdate = updateVocabulary(vocabulary, session);
   const reviewQueueUpdate = updateReviewQueue(
     reviewQueue,
@@ -395,12 +573,17 @@ export function persistSession(learnerRoot, session, date = new Date()) {
     scheduled_review_id: reviewQueueUpdate.scheduledReviewId,
     scheduled_review_created: reviewQueueUpdate.scheduled,
   };
+  const learnerModelUpdate = updateLearnerModel(learnerModel, session, {
+    previousSessionCount: Array.isArray(progress.sessions) ? progress.sessions.length : 0,
+    personalPhraseCount: vocabularyUpdate.vocabulary.personal_phrases.length,
+  });
+  session.learner_model_evidence = learnerModelUpdate.evidence;
 
+  writeLearnerModel(paths.learnerModel, learnerModelUpdate.learnerModel);
   writeVocabulary(paths.vocabulary, vocabularyUpdate.vocabulary);
   writeReviewQueue(paths.reviewQueue, reviewQueueUpdate.reviewQueue);
   writeFileSync(artifactPath, `${JSON.stringify(session, null, 2)}\n`);
 
-  const progress = readProgress(paths.progress);
   progress.mvp_session_metrics = addMetricTotals(
     progress.mvp_session_metrics ?? emptyMetrics(),
     session.session_metrics,
@@ -467,9 +650,13 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
   const progress = readProgress(paths.progress);
   const metrics = progress.mvp_session_metrics ?? emptyMetrics();
   const latestJournal = latestJournalPath(paths.root);
+  const learnerModel = readLearnerModel(paths.learnerModel);
   const vocabulary = readVocabulary(paths.vocabulary);
   const reviewQueue = readReviewQueue(paths.reviewQueue);
   const dueReviewCount = reviewQueue.items.filter((item) => item.success_count === 0).length;
+  const skillSummary = learnerSkillKeys
+    .map((skill) => `${skill}=${learnerModel.interaction_skills[skill].evidence_count}`)
+    .join(", ");
 
   return [
     "English Learning Harness context:",
@@ -477,6 +664,7 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
     "- North star: AI 파트너와 편안하게 영어로 대화하는 능력.",
     `- Learner root: ${paths.root}`,
     `- MVP metrics: ${mvpSessionMetricKeys.map((key) => `${key}=${metrics[key] ?? 0}`).join(", ")}`,
+    `- Learner model: ${skillSummary}; average_utterance_words=${learnerModel.baseline.average_utterance_words}; energy=${learnerModel.affect.last_energy}`,
     `- Vocabulary: ${vocabulary.emerging_tokens.length} emerging tokens, ${vocabulary.personal_phrases.length} personal phrases`,
     `- Review queue: ${dueReviewCount} open items`,
     latestJournal ? `- Latest journal: ${relative(paths.root, latestJournal)}` : "- Latest journal: none",

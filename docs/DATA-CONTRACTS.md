@@ -49,6 +49,8 @@ Required fields:
 }
 ```
 
+Migration rule: if an existing learner store has `progress.json` v2 but no `learner-model.json`, setup/health/session/context commands create the default schema without changing existing progress totals.
+
 ## `vocabulary.json`
 
 Required fields:
@@ -128,6 +130,11 @@ Required fields:
     "review_phrase": "I like drinking coffee.",
     "scheduled_review_id": "phrase-i-like-drinking-coffee",
     "scheduled_review_created": true
+  },
+  "learner_model_evidence": {
+    "updated_skills": ["starts", "repair"],
+    "average_utterance_words": 8,
+    "repair_phrase_count": 1
   }
 }
 ```
