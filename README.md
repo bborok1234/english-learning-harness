@@ -232,6 +232,12 @@ Run the memory-aware scenario planner smoke:
 node scripts/phase2-scenario-planner-smoke.mjs
 ```
 
+Run the tutor policy rubric smoke:
+
+```bash
+node scripts/phase2-tutor-policy-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

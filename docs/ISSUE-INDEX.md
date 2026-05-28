@@ -61,13 +61,13 @@ M1 execution issues #11-#17 are complete after #17 merges.
 Current branch:
 
 ```bash
-git switch issue-27-memory-aware-scenario-planner
+git switch issue-28-tutor-policy-rubric
 ```
 
-Next after #27:
+Next after #28:
 
 ```bash
-git switch -c issue-28-tutor-policy-rubric
+git switch -c issue-29-weekly-mirror
 ```
 
 From #12 onward, implementation issues close through linked PRs.

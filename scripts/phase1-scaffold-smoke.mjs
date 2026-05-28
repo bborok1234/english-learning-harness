@@ -41,6 +41,7 @@ const requiredFiles = [
   "scripts/phase2-learner-model-smoke.mjs",
   "scripts/phase2-review-vault-smoke.mjs",
   "scripts/phase2-scenario-planner-smoke.mjs",
+  "scripts/phase2-tutor-policy-smoke.mjs",
 ];
 
 function readJson(path) {

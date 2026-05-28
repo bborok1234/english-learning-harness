@@ -380,9 +380,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M2 Pedagogical Learning Engine in progress",
-    "status": "Next: #28 tutor policy rubric enforcement",
+    "status": "Next: #29 weekly mirror from local evidence",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 memory-aware scenario planner는 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #28 tutor policy rubric enforcement다."
+    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 planner, M2-4 tutor rubric은 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #29 weekly mirror from local evidence다."
   },
   "ssot": [
     {
@@ -474,13 +474,13 @@
     {
       "label": "Current stage",
       "value": "M2 active",
-      "detail": "#25 learner model, #26 review/vault, #27 planner implemented; #28 next",
+      "detail": "#25 learner model, #26 review/vault, #27 planner, #28 rubric implemented; #29 next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "M2",
-      "detail": "#28 tutor policy rubric enforcement",
+      "detail": "#29 weekly mirror from local evidence",
       "tone": "red"
     },
     {
@@ -941,6 +941,19 @@
             "scripts/phase2-scenario-planner-smoke.mjs",
             "docs/phase-2-evidence/M2-3-scenario-planner.md"
           ]
+        },
+        {
+          "id": "M2-4",
+          "title": "#28 Tutor policy rubric enforcement",
+          "why": "개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.",
+          "done": "실행 가능한 tutor policy rubric, negative fixtures, Korean bridge behavior, persona fixture integration을 구현했다.",
+          "verification": "`node scripts/phase2-tutor-policy-smoke.mjs`가 prohibited claim, mini mirror, Korean dead-end, correction ladder, overcorrection violation을 모두 잡았다.",
+          "files": [
+            "docs/TUTOR-POLICY.md",
+            "scripts/lib/tutor-policy-rubric.mjs",
+            "scripts/phase2-tutor-policy-smoke.mjs",
+            "docs/phase-2-evidence/M2-4-tutor-policy-rubric.md"
+          ]
         }
       ]
     },
@@ -950,15 +963,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M2-4",
-          "title": "#28 Tutor policy rubric enforcement",
-          "why": "개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.",
-          "done": "tutor policy rubric을 실행 가능한 smoke로 만들고 session output이 gentle recast, one repair, no prohibited claims를 지키게 한다.",
-          "verification": "rubric smoke에서 prohibited claims, over-correction, missing rescue/retry prompt를 잡아야 한다.",
+          "id": "M2-5",
+          "title": "#29 Weekly mirror from local evidence",
+          "why": "매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.",
+          "done": "local artifacts/progress/learner model/review queue에서 주간 mirror를 생성하는 command를 구현한다.",
+          "verification": "weekly mirror smoke에서 최근 세션 요약, skill evidence, saved phrases, next focus가 생성되어야 한다.",
           "files": [
-            "docs/TUTOR-POLICY.md",
+            "scripts/english-learning-harness.mjs",
             "scripts/lib/english-learning-store.mjs",
-            "scripts/phase2-tutor-policy-smoke.mjs"
+            "docs/DATA-CONTRACTS.md"
           ]
         }
       ]
@@ -1122,6 +1135,11 @@
       "name": "M2-3",
       "status": "Pass",
       "detail": "due phrase planner, avoided topics, mode choice, and selection reason smoke pass"
+    },
+    {
+      "name": "M2-4",
+      "status": "Pass",
+      "detail": "tutor policy rubric and negative violation smoke pass"
     }
   ],
   "commands": [
@@ -1174,6 +1192,10 @@
       "command": "node scripts/phase2-scenario-planner-smoke.mjs"
     },
     {
+      "label": "Run tutor policy smoke",
+      "command": "node scripts/phase2-tutor-policy-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1208,12 +1230,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 memory-aware scenario planner는 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #28 tutor policy rubric enforcement다.</p>
+        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 planner, M2-4 tutor rubric은 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #29 weekly mirror from local evidence다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
         M2 Pedagogical Learning Engine in progress<br>
-        Next: #28 tutor policy rubric enforcement
+        Next: #29 weekly mirror from local evidence
       </div>
     </header>
 
@@ -1227,12 +1249,12 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M2 active</div>
-          <p>#25 learner model, #26 review/vault, #27 planner implemented; #28 next</p>
+          <p>#25 learner model, #26 review/vault, #27 planner, #28 rubric implemented; #29 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M2</div>
-          <p>#28 tutor policy rubric enforcement</p>
+          <p>#29 weekly mirror from local evidence</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1264,7 +1286,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>32</span>
+            <span>33</span>
           </header>
           <div class="column-cards">
             
@@ -1588,6 +1610,16 @@
               <div class="card-row"><b>완료</b><p>planner가 learner model, due review phrase, profile avoided topics를 읽고 scenario mode와 selection_reason을 기록하게 했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-scenario-planner-smoke.mjs`와 persona fixture 회귀 검증이 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-4</strong>
+                <span>docs/TUTOR-POLICY.md, scripts/lib/tutor-policy-rubric.mjs, scripts/phase2-tutor-policy-smoke.mjs, docs/phase-2-evidence/M2-4-tutor-policy-rubric.md</span>
+              </div>
+              <h3>#28 Tutor policy rubric enforcement</h3>
+              <div class="card-row"><b>왜</b><p>개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>실행 가능한 tutor policy rubric, negative fixtures, Korean bridge behavior, persona fixture integration을 구현했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-tutor-policy-smoke.mjs`가 prohibited claim, mini mirror, Korean dead-end, correction ladder, overcorrection violation을 모두 잡았다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1599,13 +1631,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>M2-4</strong>
-                <span>docs/TUTOR-POLICY.md, scripts/lib/english-learning-store.mjs, scripts/phase2-tutor-policy-smoke.mjs</span>
+                <strong>M2-5</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md</span>
               </div>
-              <h3>#28 Tutor policy rubric enforcement</h3>
-              <div class="card-row"><b>왜</b><p>개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>tutor policy rubric을 실행 가능한 smoke로 만들고 session output이 gentle recast, one repair, no prohibited claims를 지키게 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>rubric smoke에서 prohibited claims, over-correction, missing rescue/retry prompt를 잡아야 한다.</p></div>
+              <h3>#29 Weekly mirror from local evidence</h3>
+              <div class="card-row"><b>왜</b><p>매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>local artifacts/progress/learner model/review queue에서 주간 mirror를 생성하는 command를 구현한다.</p></div>
+              <div class="card-row"><b>검증</b><p>weekly mirror smoke에서 최근 세션 요약, skill evidence, saved phrases, next focus가 생성되어야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1871,6 +1903,10 @@
               <td>M2-3</td>
               <td><strong>Pass</strong><span>due phrase planner, avoided topics, mode choice, and selection reason smoke pass</span></td>
             </tr>
+            <tr>
+              <td>M2-4</td>
+              <td><strong>Pass</strong><span>tutor policy rubric and negative violation smoke pass</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
@@ -1922,6 +1958,10 @@
             <div class="command">
               <span>Run scenario planner smoke</span>
               <code>node scripts/phase2-scenario-planner-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run tutor policy smoke</span>
+              <code>node scripts/phase2-tutor-policy-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
