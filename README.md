@@ -185,6 +185,12 @@ Run the setup recovery smoke:
 node scripts/phase1-setup-recovery-smoke.mjs
 ```
 
+Run the clean clone first-use smoke:
+
+```bash
+node scripts/phase1-clean-clone-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

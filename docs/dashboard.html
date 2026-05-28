@@ -379,10 +379,10 @@
   "updatedAt": "2026-05-28",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Phase 1 first-usable gate pending clean-clone proof",
-    "status": "Next: PH1-FIX-7 clean clone first-usable smoke",
+    "stage": "M1 local command-wrapper first-usable proven",
+    "status": "Next: M2 Pedagogical Learning Engine issue breakdown",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11-#16 first-use hardening evidence가 대시보드에 정렬됐다. first-usable claim은 #17 clean-clone smoke 전까지 보류한다."
+    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. 사용자는 GitHub clone 후 setup, today, health로 학습을 시작할 수 있다. 다음은 M2 Pedagogical Learning Engine을 실행 이슈로 쪼개고 학습 효과를 키우는 단계다."
   },
   "ssot": [
     {
@@ -462,19 +462,19 @@
     {
       "label": "Ultragoal",
       "value": "M1",
-      "detail": "first-usable gate 진행 중",
-      "tone": "amber"
+      "detail": "local command-wrapper first-usable proven",
+      "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "Gate pending",
-      "detail": "#17 clean clone smoke 전까지 완료 claim 보류",
+      "value": "M2 next",
+      "detail": "Pedagogical Learning Engine 실행 이슈화 필요",
       "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-7",
-      "detail": "clean clone first-usable smoke",
+      "value": "M2",
+      "detail": "learner memory, tutor policy, fixture quality",
       "tone": "red"
     },
     {
@@ -529,9 +529,9 @@
     {
       "id": "GATE-6",
       "label": "Clean clone first-use",
-      "status": "Pending",
-      "evidence": "#17 not run yet",
-      "claim": "no first-usable claim until this passes"
+      "status": "Pass",
+      "evidence": "#17, phase1-clean-clone-smoke",
+      "claim": "fresh clone can run setup, today, health, progress validation, and dashboard generation"
     }
   ],
   "board": [
@@ -872,6 +872,18 @@
             "scripts/generate-dashboard.mjs",
             "docs/dashboard.html"
           ]
+        },
+        {
+          "id": "PH1-FIX-7",
+          "title": "Clean clone first-usable smoke를 통과함",
+          "why": "같은 working tree 안에서만 통과하면 clone-to-learn claim을 열 수 없다.",
+          "done": "`origin`에서 fresh clone을 만들고 setup, today, health, progress validation, dashboard generation을 실행했다.",
+          "verification": "`node scripts/phase1-clean-clone-smoke.mjs`가 pass했고 runtime tmp files가 git status에 나타나지 않았다.",
+          "files": [
+            "scripts/phase1-clean-clone-smoke.mjs",
+            "docs/phase-1-evidence/PH1-FIX-7-clean-clone-smoke.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -881,15 +893,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-7",
-          "title": "Clean clone first-usable smoke",
-          "why": "지금까지의 smoke는 같은 작업 디렉터리 안에서 실행됐다. 실제 clone-to-learn claim은 깨끗한 checkout에서 검증해야 한다.",
-          "done": "새 tmp clone에서 setup, today, health, dashboard/evidence commands를 실행하고 GitHub 주소만 보고 시작 가능한지 확인한다.",
-          "verification": "clean clone smoke가 pass해야 first-usable claim을 열 수 있다.",
+          "id": "M2-ISSUES",
+          "title": "M2 Pedagogical Learning Engine 실행 이슈 분해",
+          "why": "M1은 사용 가능한 하네스 기반이고, M2는 실제 회화 향상을 강화하는 learner memory, tutor policy, fixture quality를 다룬다.",
+          "done": "기존 epics #2-#5 아래에 M2 실행 이슈를 만들고, 각 이슈에 학습 효과/검증/claim boundary를 붙인다.",
+          "verification": "GitHub M2 issues가 생성되고 dashboard가 M2 next work를 보여야 한다.",
           "files": [
-            "scripts/phase1-clean-clone-smoke.mjs",
-            "README.md",
-            "docs/phase-1-evidence/"
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json",
+            "docs/PRODUCT-ROADMAP.md"
           ]
         }
       ]
@@ -1032,7 +1044,12 @@
     {
       "name": "PH1-FIX-6",
       "status": "Pass",
-      "detail": "First-Usable Gate rendered from structured state with #17 pending"
+      "detail": "First-Usable Gate rendered from structured state"
+    },
+    {
+      "name": "PH1-FIX-7",
+      "status": "Pass",
+      "detail": "fresh clone setup/today/health/progress/dashboard smoke pass"
     }
   ],
   "commands": [
@@ -1069,6 +1086,10 @@
       "command": "node scripts/phase1-setup-recovery-smoke.mjs"
     },
     {
+      "label": "Run clean clone smoke",
+      "command": "node scripts/phase1-clean-clone-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1103,31 +1124,31 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">제품 기준을 &#39;로컬 smoke 도구&#39;에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11-#16 first-use hardening evidence가 대시보드에 정렬됐다. first-usable claim은 #17 clean-clone smoke 전까지 보류한다.</p>
+        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. 사용자는 GitHub clone 후 setup, today, health로 학습을 시작할 수 있다. 다음은 M2 Pedagogical Learning Engine을 실행 이슈로 쪼개고 학습 효과를 키우는 단계다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
-        Phase 1 first-usable gate pending clean-clone proof<br>
-        Next: PH1-FIX-7 clean clone first-usable smoke
+        M1 local command-wrapper first-usable proven<br>
+        Next: M2 Pedagogical Learning Engine issue breakdown
       </div>
     </header>
 
     <section class="metrics" aria-label="Project metrics">
 
-        <article class="metric-card tone-amber">
+        <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M1</div>
-          <p>first-usable gate 진행 중</p>
+          <p>local command-wrapper first-usable proven</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">Gate pending</div>
-          <p>#17 clean clone smoke 전까지 완료 claim 보류</p>
+          <div class="metric-value">M2 next</div>
+          <p>Pedagogical Learning Engine 실행 이슈화 필요</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">PH1-FIX-7</div>
-          <p>clean clone first-usable smoke</p>
+          <div class="metric-value">M2</div>
+          <p>learner memory, tutor policy, fixture quality</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1159,7 +1180,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>27</span>
+            <span>28</span>
           </header>
           <div class="column-cards">
             
@@ -1433,6 +1454,16 @@
               <div class="card-row"><b>완료</b><p>`docs/project-state.json`에 First-Usable Gate를 추가하고, generated dashboard가 gate별 status/evidence/claim boundary를 렌더링하게 했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/generate-dashboard.mjs`와 `rg &#39;First-Usable Gate|GATE-6|clean clone&#39; docs/dashboard.html`로 생성 결과를 확인한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>PH1-FIX-7</strong>
+                <span>scripts/phase1-clean-clone-smoke.mjs, docs/phase-1-evidence/PH1-FIX-7-clean-clone-smoke.md, README.md</span>
+              </div>
+              <h3>Clean clone first-usable smoke를 통과함</h3>
+              <div class="card-row"><b>왜</b><p>같은 working tree 안에서만 통과하면 clone-to-learn claim을 열 수 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>`origin`에서 fresh clone을 만들고 setup, today, health, progress validation, dashboard generation을 실행했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase1-clean-clone-smoke.mjs`가 pass했고 runtime tmp files가 git status에 나타나지 않았다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1444,13 +1475,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>PH1-FIX-7</strong>
-                <span>scripts/phase1-clean-clone-smoke.mjs, README.md, docs/phase-1-evidence/</span>
+                <strong>M2-ISSUES</strong>
+                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/PRODUCT-ROADMAP.md</span>
               </div>
-              <h3>Clean clone first-usable smoke</h3>
-              <div class="card-row"><b>왜</b><p>지금까지의 smoke는 같은 작업 디렉터리 안에서 실행됐다. 실제 clone-to-learn claim은 깨끗한 checkout에서 검증해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>새 tmp clone에서 setup, today, health, dashboard/evidence commands를 실행하고 GitHub 주소만 보고 시작 가능한지 확인한다.</p></div>
-              <div class="card-row"><b>검증</b><p>clean clone smoke가 pass해야 first-usable claim을 열 수 있다.</p></div>
+              <h3>M2 Pedagogical Learning Engine 실행 이슈 분해</h3>
+              <div class="card-row"><b>왜</b><p>M1은 사용 가능한 하네스 기반이고, M2는 실제 회화 향상을 강화하는 learner memory, tutor policy, fixture quality를 다룬다.</p></div>
+              <div class="card-row"><b>완료</b><p>기존 epics #2-#5 아래에 M2 실행 이슈를 만들고, 각 이슈에 학습 효과/검증/claim boundary를 붙인다.</p></div>
+              <div class="card-row"><b>검증</b><p>GitHub M2 issues가 생성되고 dashboard가 M2 next work를 보여야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1557,8 +1588,8 @@
             </tr>
             <tr>
               <td><strong>GATE-6</strong><span>Clean clone first-use</span></td>
-              <td><strong>Pending</strong><span>#17 not run yet</span></td>
-              <td>no first-usable claim until this passes</td>
+              <td><strong>Pass</strong><span>#17, phase1-clean-clone-smoke</span></td>
+              <td>fresh clone can run setup, today, health, progress validation, and dashboard generation</td>
             </tr>
         </tbody>
       </table>
@@ -1694,7 +1725,11 @@
             </tr>
             <tr>
               <td>PH1-FIX-6</td>
-              <td><strong>Pass</strong><span>First-Usable Gate rendered from structured state with #17 pending</span></td>
+              <td><strong>Pass</strong><span>First-Usable Gate rendered from structured state</span></td>
+            </tr>
+            <tr>
+              <td>PH1-FIX-7</td>
+              <td><strong>Pass</strong><span>fresh clone setup/today/health/progress/dashboard smoke pass</span></td>
             </tr>
           </tbody>
         </table>
@@ -1731,6 +1766,10 @@
             <div class="command">
               <span>Run setup recovery smoke</span>
               <code>node scripts/phase1-setup-recovery-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run clean clone smoke</span>
+              <code>node scripts/phase1-clean-clone-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

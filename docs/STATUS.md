@@ -4,7 +4,7 @@ Last updated: 2026-05-28
 
 ## Current State
 
-The project is in **Phase 1 first-usable gate pending clean-clone proof** state.
+The project is in **M1 local command-wrapper first-usable proven / M2 planning next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -34,10 +34,11 @@ What is complete:
 - PH1-FIX-3 is implemented on the PR branch: scenario engine, tutor repair prompts, and four-persona fixture smoke are in place.
 - PH1-FIX-4 is implemented on the PR branch: command-wrapper owns session finalization and Stop hook is marker-only with smoke coverage.
 - PH1-FIX-5 is implemented on the PR branch: setup is idempotent, health reports recovery commands, and `setup --repair` backs up corrupt local JSON files.
-- PH1-FIX-6 is implemented on the PR branch: the generated dashboard now has an explicit First-Usable Gate with #17 marked pending.
+- PH1-FIX-6 is complete: the generated dashboard now has an explicit First-Usable Gate.
+- PH1-FIX-7 is implemented on the PR branch: a fresh clone from `origin` can run setup, today, health, progress validation, and dashboard generation.
 
 What is not started:
-- PH1-FIX-7 clean clone smoke from GitHub issue #17.
+- M2 executable issue breakdown for the Pedagogical Learning Engine.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -45,7 +46,7 @@ What is not started:
 What failed review:
 - Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
 - PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
-- First-usable claim remains blocked until clean-clone smoke passes.
+- Public marketplace distribution, real learner validation, and native hook runtime are still outside the local first-usable claim.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.
@@ -82,7 +83,8 @@ Strategic reset:
 - Scenario evidence: `docs/phase-1-evidence/PH1-FIX-3-scenario-loop-fixtures.md` records scenario-loop and persona fixture smoke verification.
 - Stop contract evidence: `docs/phase-1-evidence/PH1-FIX-4-stop-finalization-contract.md` records explicit finalization and marker-only Stop hook smoke verification.
 - Setup recovery evidence: `docs/phase-1-evidence/PH1-FIX-5-setup-recovery.md` records idempotent setup and repair smoke verification.
-- Dashboard evidence: `docs/project-state.json` now includes a First-Usable Gate rendered into `docs/dashboard.html`, with clean-clone proof pending.
+- Dashboard evidence: `docs/project-state.json` now includes a First-Usable Gate rendered into `docs/dashboard.html`.
+- Clean clone evidence: `docs/phase-1-evidence/PH1-FIX-7-clean-clone-smoke.md` records fresh clone setup/today/health/dashboard smoke verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -122,7 +124,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] PH1-FIX-4: Align Stop hook behavior with documentation.
 - [x] PH1-FIX-5: Make setup UX one-command and recoverable.
 - [x] PH1-FIX-6: Sync dashboard evidence for the first-usable gate.
-- [ ] PH1-FIX-7: Run clean clone first-usable smoke.
+- [x] PH1-FIX-7: Run clean clone first-usable smoke.
 - [ ] PH1-5: Run real user validation against the four target personas.
 
 ## SSOT Structure
