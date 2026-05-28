@@ -10,7 +10,10 @@ import {
   emptyVocabulary,
   ensureLearnerStore,
   learnerPaths,
+  listDueReviewItems,
+  markReviewItem,
   persistSession,
+  phraseVault,
   readLearnerModel,
   readProgress,
   readProfile,
@@ -54,6 +57,12 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--scenario") {
       options.scenario = argv[index + 1];
+      index += 1;
+    } else if (arg === "--review-id") {
+      options.reviewId = argv[index + 1];
+      index += 1;
+    } else if (arg === "--result") {
+      options.result = argv[index + 1];
       index += 1;
     } else if (arg === "--json") {
       options.json = true;
@@ -102,6 +111,8 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs context [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs review [--review-id ID --result success|fail] [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs vault [--learner-root DIR]",
     "",
     "Native hooks are optional. This wrapper is the reliable first-usable path.",
   ].join("\n");
@@ -270,6 +281,44 @@ function status(options) {
   };
 }
 
+function review(options) {
+  ensureLearnerStore(options.learnerRoot);
+  if (options.reviewId || options.result) {
+    if (!options.reviewId || !options.result) {
+      throw new Error("review requires both --review-id and --result when marking an item");
+    }
+    const reviewedItem = markReviewItem(options.learnerRoot, options.reviewId, options.result);
+    return {
+      status: "pass",
+      path: "explicit-command-wrapper",
+      action: "review-marked",
+      reviewedItem,
+      claimBoundary: "This proves local review scheduling mechanics, not long-term retention.",
+    };
+  }
+
+  const dueItems = listDueReviewItems(options.learnerRoot);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    action: "due-review-list",
+    dueCount: dueItems.length,
+    dueItems,
+    claimBoundary: "This lists locally due phrases and asks for use in context, not flashcard-only recall.",
+  };
+}
+
+function vault(options) {
+  const phrases = phraseVault(options.learnerRoot);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    phraseCount: phrases.length,
+    phrases,
+    claimBoundary: "This exposes saved personal phrases only; it does not claim retention or fluency gains.",
+  };
+}
+
 function run() {
   const { command, options } = parseArgs(process.argv);
 
@@ -295,6 +344,14 @@ function run() {
   }
   if (command === "context") {
     output(buildAdditionalContext(options.learnerRoot), options.json);
+    return;
+  }
+  if (command === "review") {
+    output(review(options), options.json);
+    return;
+  }
+  if (command === "vault") {
+    output(vault(options), options.json);
     return;
   }
 

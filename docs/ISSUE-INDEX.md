@@ -61,13 +61,13 @@ M1 execution issues #11-#17 are complete after #17 merges.
 Current branch:
 
 ```bash
-git switch issue-25-learner-model-skill-memory
+git switch issue-26-review-queue-phrase-vault
 ```
 
-Next after #25:
+Next after #26:
 
 ```bash
-git switch -c issue-26-review-queue-phrase-vault
+git switch -c issue-27-memory-aware-scenario-planner
 ```
 
 From #12 onward, implementation issues close through linked PRs.
