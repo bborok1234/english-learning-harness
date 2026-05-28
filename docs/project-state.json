@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-05-27",
+  "updatedAt": "2026-05-28",
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
     "status": "Next: PH1-FIX-1 explicit command-wrapper fallback",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. Startup-grade Ralplan consensus가 통과했고, 다음은 native hook에 매달리지 않는 명시적 command-wrapper fallback과 학습 엔진 hardening이다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. Startup-grade Ralplan consensus와 adaptive execution governance가 생겼고, 다음은 GitHub issue/milestone 운영 구조와 PH1-FIX-1 fallback 구현이다."
   },
   "ssot": [
     {
@@ -55,6 +55,12 @@
       "label": "docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md",
       "path": "./RALPLAN-CONSENSUS-STARTUP-GRADE.md",
       "role": "스타트업급 제품 설계 합의 게이트",
+      "kind": "source"
+    },
+    {
+      "label": "docs/ADAPTIVE-EXECUTION-PLAN.md",
+      "path": "./ADAPTIVE-EXECUTION-PLAN.md",
+      "role": "이슈/마일스톤 적응형 실행 거버넌스",
       "kind": "source"
     },
     {
@@ -245,6 +251,14 @@
           "done": "Startup-grade plan, tutor policy, persona fixture spec, data contracts를 만든 뒤 Architect와 Critic 검토를 순서대로 통과시켰다.",
           "verification": "Architect verdict는 APPROVE, Critic verdict는 OKAY이며 durable handoff는 `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md`에 기록됐다.",
           "files": ["docs/STARTUP-GRADE-PLAN.md", "docs/TUTOR-POLICY.md", "docs/PERSONA-FIXTURE-SPEC.md", "docs/DATA-CONTRACTS.md", "docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md"]
+        },
+        {
+          "id": "GOV-1",
+          "title": "적응형 실행 거버넌스를 설계함",
+          "why": "실제 개발은 최초 이슈 목록대로만 진행되지 않는다. 구현/검증 결과에 따라 계속 진행, 분할, 피벗, 중단, 리서치 전환을 판단해야 한다.",
+          "done": "`docs/ADAPTIVE-EXECUTION-PLAN.md`에 review lanes, research triggers, backlog mutation rules, milestone direction reviews, stop conditions를 정의했다.",
+          "verification": "Scrum inspect/adapt, backlog refinement, retrospective, Lean validated learning, DORA delivery health를 이 제품의 GitHub issue 운영 구조에 맞게 재구성했다.",
+          "files": ["docs/ADAPTIVE-EXECUTION-PLAN.md", "docs/STATUS.md", "docs/project-state.json"]
         }
       ]
     },
@@ -405,6 +419,10 @@
     {
       "label": "Read startup consensus",
       "command": "open docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md"
+    },
+    {
+      "label": "Read adaptive execution plan",
+      "command": "open docs/ADAPTIVE-EXECUTION-PLAN.md"
     },
     {
       "label": "Open dashboard",

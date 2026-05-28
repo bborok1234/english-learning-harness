@@ -26,6 +26,7 @@ What is complete:
 - Startup-grade Ralplan draft now includes `docs/STARTUP-GRADE-PLAN.md`, `docs/TUTOR-POLICY.md`, `docs/PERSONA-FIXTURE-SPEC.md`, and `docs/DATA-CONTRACTS.md`.
 - Startup-grade Ralplan consensus passed: Architect APPROVE and Critic OKAY are recorded in `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md`.
 - Multimodal GenAI usage is now explicit in `docs/MULTIMODAL-GENAI-PLAN.md`: modalities are tied to an Interaction Event Graph, not treated as media features.
+- Adaptive execution governance is defined in `docs/ADAPTIVE-EXECUTION-PLAN.md`: issues are treated as hypotheses and may continue, split, pivot, die, or trigger research based on evidence.
 
 What is not started:
 - PH1 self-review fixes from `docs/phase-1-evidence/PH1-review-gap-audit.md`.
@@ -69,6 +70,7 @@ Strategic reset:
 - Ralplan evidence: `docs/STARTUP-GRADE-PLAN.md` records options, ADR, architecture, execution stages, and critic-gate revisions.
 - Ralplan consensus evidence: `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md` records the durable Architect -> Critic approval handoff.
 - Multimodal evidence: `docs/MULTIMODAL-GENAI-PLAN.md` records voice, image, and video usage boundaries with SLA, conversation analysis, multimodal learning, and official OpenAI API references.
+- Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Final review recommendation: APPROVE.
 - Architectural status: CLEAR.
