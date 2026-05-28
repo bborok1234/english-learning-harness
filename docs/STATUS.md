@@ -29,6 +29,7 @@ What is complete:
 - Adaptive execution governance is defined in `docs/ADAPTIVE-EXECUTION-PLAN.md`: issues are treated as hypotheses and may continue, split, pivot, die, or trigger research based on evidence.
 - GitHub execution structure is created: labels, milestones M1-M6, epics #1-#10, and M1 issues #11-#17.
 - PH1-FIX-1 is complete for the supported fallback path: `scripts/english-learning-harness.mjs` provides setup/today/health/status/context without native hooks.
+- PR-first execution is now required for implementation issues after the #11 direct-commit closeout exposed a missing review trail.
 
 What is not started:
 - PH1-FIX-2 through PH1-FIX-7 from GitHub issues #12-#17.
@@ -75,6 +76,7 @@ Strategic reset:
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
+- Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
 - Architectural status: CLEAR.
 
