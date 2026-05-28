@@ -35,13 +35,19 @@ For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learne
 
 The supported first-use path is the explicit command wrapper. It does not require native Codex hooks.
 
-Set up a learner profile:
+One command prepares the learner directory and returns health plus the next command to run:
 
 ```bash
 node scripts/english-learning-harness.mjs setup \
   --name "Jieun" \
   --motivation "I want to feel less frozen when speaking English." \
   --correction-style "gentle recast first"
+```
+
+If health reports a corrupt local store, run the repair form. It backs up broken local JSON files before recreating defaults:
+
+```bash
+node scripts/english-learning-harness.mjs setup --repair
 ```
 
 Run today's text-first daily session:
@@ -171,6 +177,12 @@ Run the Stop/finalization contract smoke:
 
 ```bash
 node scripts/phase1-stop-finalization-smoke.mjs
+```
+
+Run the setup recovery smoke:
+
+```bash
+node scripts/phase1-setup-recovery-smoke.mjs
 ```
 
 Run the full first-run smoke:

@@ -36,6 +36,7 @@ const requiredFiles = [
   "scripts/phase1-scenario-loop-smoke.mjs",
   "scripts/phase1-persona-fixture-smoke.mjs",
   "scripts/phase1-stop-finalization-smoke.mjs",
+  "scripts/phase1-setup-recovery-smoke.mjs",
 ];
 
 function readJson(path) {

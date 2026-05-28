@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Phase 1 hardening required / first usable version not yet proven",
-    "status": "Next: PH1-FIX-5 one-command recoverable setup UX",
+    "status": "Next: PH1-FIX-6 dashboard evidence sync for first-usable gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11 fallback, #12 vocabulary history, #13 scenario loop, #14 Stop/finalization contract가 smoke 검증을 통과했다. 다음은 #15 one-command recoverable setup UX다."
+    "summary": "제품 기준을 '로컬 smoke 도구'에서 매일 쓰며 실제 회화 능력 향상을 노리는 학습 엔진으로 재설정했다. #11-#15 first-use hardening이 smoke 검증을 통과했다. 다음은 #16 dashboard evidence sync for first-usable gate다."
   },
   "ssot": [
     {
@@ -97,8 +97,8 @@
     },
     {
       "label": "Next block",
-      "value": "PH1-FIX-5",
-      "detail": "one-command recoverable setup UX",
+      "value": "PH1-FIX-6",
+      "detail": "dashboard evidence sync for first-usable gate",
       "tone": "red"
     },
     {
@@ -319,6 +319,14 @@
           "done": "`today` command는 `finalizesSession: true`, Stop hook은 `finalizesSession: false`와 `last_stop_contract: marker-only`를 명시한다.",
           "verification": "`node scripts/phase1-stop-finalization-smoke.mjs`에서 Stop hook이 추가 artifact/session을 만들지 않고 marker만 남기는 것을 확인했다.",
           "files": ["hooks/english-learning-hook.mjs", "scripts/phase1-stop-finalization-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-4-stop-finalization-contract.md", "README.md"]
+        },
+        {
+          "id": "PH1-FIX-5",
+          "title": "One-command recoverable setup UX를 구현함",
+          "why": "처음 쓰는 사람이 learner store 구조를 몰라도 setup, health, repair path를 이해할 수 있어야 한다.",
+          "done": "`setup`은 health/next command를 반환하고, `health`는 실패 시 recovery command를 제시하며, `setup --repair`는 broken JSON을 백업 후 기본 store를 복구한다.",
+          "verification": "`node scripts/phase1-setup-recovery-smoke.mjs`에서 idempotent setup, broken health recovery, repair backup, repaired progress validation이 통과했다.",
+          "files": ["scripts/english-learning-harness.mjs", "scripts/phase1-setup-recovery-smoke.mjs", "docs/phase-1-evidence/PH1-FIX-5-setup-recovery.md", "README.md"]
         }
       ]
     },
@@ -328,12 +336,12 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "PH1-FIX-5",
-          "title": "One-command recoverable setup UX 구현",
-          "why": "README의 setup guidance는 아직 개발자 지향이고, 처음 쓰는 사람이 한 번에 상태를 진단/복구하기 어렵다.",
-          "done": "setup command가 learner store, health, next action, recovery guidance를 한 번에 제공하게 만든다.",
-          "verification": "clean learner root에서 setup을 반복 실행해도 안전하고, health가 missing/corrupt 상태를 설명해야 한다.",
-          "files": ["scripts/english-learning-harness.mjs", "README.md", "docs/phase-1-evidence/"]
+          "id": "PH1-FIX-6",
+          "title": "Dashboard evidence sync for first-usable gate",
+          "why": "대시보드가 구현된 evidence와 남은 gate를 사람 눈에 즉시 보이게 해야 first-usable claim을 과장하지 않는다.",
+          "done": "M1 evidence, remaining blocker, smoke command, issue/PR trail을 generated dashboard에 정렬한다.",
+          "verification": "dashboard generated from `docs/project-state.json` and mentions #11-#15 evidence plus remaining #17 clean-clone gate.",
+          "files": ["docs/project-state.json", "docs/dashboard.html", "docs/STATUS.md"]
         }
       ]
     },
@@ -466,6 +474,11 @@
       "name": "PH1-FIX-4",
       "status": "Pass",
       "detail": "explicit command finalization and marker-only Stop hook contract smoke pass"
+    },
+    {
+      "name": "PH1-FIX-5",
+      "status": "Pass",
+      "detail": "idempotent setup, health recovery guidance, and setup --repair smoke pass"
     }
   ],
   "commands": [
@@ -496,6 +509,10 @@
     {
       "label": "Run Stop finalization smoke",
       "command": "node scripts/phase1-stop-finalization-smoke.mjs"
+    },
+    {
+      "label": "Run setup recovery smoke",
+      "command": "node scripts/phase1-setup-recovery-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",
