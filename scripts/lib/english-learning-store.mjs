@@ -399,6 +399,11 @@ export function buildSession(learnerTurns, options = {}) {
       role_context: scenario.role_context,
       cefr_skill: scenario.cefr_skill,
       rescue_phrase: scenario.rescue_phrase,
+      retry_prompt: scenario.retry_prompt,
+      due_review: scenario.due_review,
+      selection_reason: options.selectionReason || scenario.selection_reason || {
+        source: "unspecified",
+      },
     },
     learner_turns: learnerTurns,
     turns,

@@ -61,13 +61,13 @@ M1 execution issues #11-#17 are complete after #17 merges.
 Current branch:
 
 ```bash
-git switch issue-26-review-queue-phrase-vault
+git switch issue-27-memory-aware-scenario-planner
 ```
 
-Next after #26:
+Next after #27:
 
 ```bash
-git switch -c issue-27-memory-aware-scenario-planner
+git switch -c issue-28-tutor-policy-rubric
 ```
 
 From #12 onward, implementation issues close through linked PRs.

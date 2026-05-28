@@ -117,7 +117,20 @@ Required fields:
     "goal": "...",
     "role_context": "...",
     "rescue_phrase": "...",
-    "cefr_skill": "clarification|repair|turn-taking|..."
+    "cefr_skill": "clarification|repair|turn-taking|...",
+    "due_review": {
+      "id": "phrase-id",
+      "text": "Coffee helps me wake up.",
+      "due_at": "ISO-8601"
+    },
+    "selection_reason": {
+      "source": "profile-memory|due-review|preferred",
+      "weak_skill": "repair",
+      "mode": "easy|normal|stretch",
+      "due_review_id": "phrase-id",
+      "due_review_phrase": "Coffee helps me wake up.",
+      "avoided_topics": []
+    }
   },
   "turns": [],
   "mirror": {

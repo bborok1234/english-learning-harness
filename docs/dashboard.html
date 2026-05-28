@@ -380,9 +380,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M2 Pedagogical Learning Engine in progress",
-    "status": "Next: #27 memory-aware scenario planner",
+    "status": "Next: #28 tutor policy rubric enforcement",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory와 M2-2 review/vault는 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #27 memory-aware scenario planner다."
+    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 memory-aware scenario planner는 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #28 tutor policy rubric enforcement다."
   },
   "ssot": [
     {
@@ -474,13 +474,13 @@
     {
       "label": "Current stage",
       "value": "M2 active",
-      "detail": "#25 learner model and #26 review/vault implemented; #27 next",
+      "detail": "#25 learner model, #26 review/vault, #27 planner implemented; #28 next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "M2",
-      "detail": "#27 memory-aware scenario planner",
+      "detail": "#28 tutor policy rubric enforcement",
       "tone": "red"
     },
     {
@@ -928,6 +928,19 @@
             "scripts/phase2-review-vault-smoke.mjs",
             "docs/phase-2-evidence/M2-2-review-vault.md"
           ]
+        },
+        {
+          "id": "M2-3",
+          "title": "#27 Memory-aware scenario planner",
+          "why": "학습자가 자주 막히는 skill과 due phrase를 다음 대화 시나리오에 반영해야 매일 들어갈 이유가 생긴다.",
+          "done": "planner가 learner model, due review phrase, profile avoided topics를 읽고 scenario mode와 selection_reason을 기록하게 했다.",
+          "verification": "`node scripts/phase2-scenario-planner-smoke.mjs`와 persona fixture 회귀 검증이 통과했다.",
+          "files": [
+            "scripts/lib/scenario-engine.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase2-scenario-planner-smoke.mjs",
+            "docs/phase-2-evidence/M2-3-scenario-planner.md"
+          ]
         }
       ]
     },
@@ -937,15 +950,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M2-3",
-          "title": "#27 Memory-aware scenario planner",
-          "why": "학습자가 자주 막히는 skill과 due phrase를 다음 대화 시나리오에 반영해야 매일 들어갈 이유가 생긴다.",
-          "done": "scenario planner가 learner model, due review needs, profile context를 읽어 다음 scenario와 review phrase를 선택하게 만든다.",
-          "verification": "planner smoke에서 weak skill과 due review phrase에 따라 scenario/retry prompt가 달라지는 것을 증명해야 한다.",
+          "id": "M2-4",
+          "title": "#28 Tutor policy rubric enforcement",
+          "why": "개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.",
+          "done": "tutor policy rubric을 실행 가능한 smoke로 만들고 session output이 gentle recast, one repair, no prohibited claims를 지키게 한다.",
+          "verification": "rubric smoke에서 prohibited claims, over-correction, missing rescue/retry prompt를 잡아야 한다.",
           "files": [
-            "scripts/lib/scenario-engine.mjs",
+            "docs/TUTOR-POLICY.md",
             "scripts/lib/english-learning-store.mjs",
-            "scripts/english-learning-harness.mjs"
+            "scripts/phase2-tutor-policy-smoke.mjs"
           ]
         }
       ]
@@ -1104,6 +1117,11 @@
       "name": "M2-2",
       "status": "Pass",
       "detail": "review due list, success/fail interval, and phrase vault smoke pass"
+    },
+    {
+      "name": "M2-3",
+      "status": "Pass",
+      "detail": "due phrase planner, avoided topics, mode choice, and selection reason smoke pass"
     }
   ],
   "commands": [
@@ -1152,6 +1170,10 @@
       "command": "node scripts/phase2-review-vault-smoke.mjs"
     },
     {
+      "label": "Run scenario planner smoke",
+      "command": "node scripts/phase2-scenario-planner-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1186,12 +1208,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory와 M2-2 review/vault는 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #27 memory-aware scenario planner다.</p>
+        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1 learner memory, M2-2 review/vault, M2-3 memory-aware scenario planner는 PR 브랜치에서 구현/검증됐고, 다음 구현 단위는 #28 tutor policy rubric enforcement다.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-28</strong>
         M2 Pedagogical Learning Engine in progress<br>
-        Next: #27 memory-aware scenario planner
+        Next: #28 tutor policy rubric enforcement
       </div>
     </header>
 
@@ -1205,12 +1227,12 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M2 active</div>
-          <p>#25 learner model and #26 review/vault implemented; #27 next</p>
+          <p>#25 learner model, #26 review/vault, #27 planner implemented; #28 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M2</div>
-          <p>#27 memory-aware scenario planner</p>
+          <p>#28 tutor policy rubric enforcement</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1242,7 +1264,7 @@
         <section class="board-column tone-green">
           <header class="column-head">
             <h2>Done</h2>
-            <span>31</span>
+            <span>32</span>
           </header>
           <div class="column-cards">
             
@@ -1556,6 +1578,16 @@
               <div class="card-row"><b>완료</b><p>`review`/`vault` command, due item list, success/fail update, interval progression, phrase vault output을 구현했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-review-vault-smoke.mjs`에서 due listing, success 3-day interval, fail 1-day reset, vault phrase output이 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-3</strong>
+                <span>scripts/lib/scenario-engine.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-scenario-planner-smoke.mjs, docs/phase-2-evidence/M2-3-scenario-planner.md</span>
+              </div>
+              <h3>#27 Memory-aware scenario planner</h3>
+              <div class="card-row"><b>왜</b><p>학습자가 자주 막히는 skill과 due phrase를 다음 대화 시나리오에 반영해야 매일 들어갈 이유가 생긴다.</p></div>
+              <div class="card-row"><b>완료</b><p>planner가 learner model, due review phrase, profile avoided topics를 읽고 scenario mode와 selection_reason을 기록하게 했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-scenario-planner-smoke.mjs`와 persona fixture 회귀 검증이 통과했다.</p></div>
+            </article>
           </div>
         </section>
         <section class="board-column tone-blue">
@@ -1567,13 +1599,13 @@
             
             <article class="work-card">
               <div class="work-meta">
-                <strong>M2-3</strong>
-                <span>scripts/lib/scenario-engine.mjs, scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs</span>
+                <strong>M2-4</strong>
+                <span>docs/TUTOR-POLICY.md, scripts/lib/english-learning-store.mjs, scripts/phase2-tutor-policy-smoke.mjs</span>
               </div>
-              <h3>#27 Memory-aware scenario planner</h3>
-              <div class="card-row"><b>왜</b><p>학습자가 자주 막히는 skill과 due phrase를 다음 대화 시나리오에 반영해야 매일 들어갈 이유가 생긴다.</p></div>
-              <div class="card-row"><b>완료</b><p>scenario planner가 learner model, due review needs, profile context를 읽어 다음 scenario와 review phrase를 선택하게 만든다.</p></div>
-              <div class="card-row"><b>검증</b><p>planner smoke에서 weak skill과 due review phrase에 따라 scenario/retry prompt가 달라지는 것을 증명해야 한다.</p></div>
+              <h3>#28 Tutor policy rubric enforcement</h3>
+              <div class="card-row"><b>왜</b><p>개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>tutor policy rubric을 실행 가능한 smoke로 만들고 session output이 gentle recast, one repair, no prohibited claims를 지키게 한다.</p></div>
+              <div class="card-row"><b>검증</b><p>rubric smoke에서 prohibited claims, over-correction, missing rescue/retry prompt를 잡아야 한다.</p></div>
             </article>
           </div>
         </section>
@@ -1835,6 +1867,10 @@
               <td>M2-2</td>
               <td><strong>Pass</strong><span>review due list, success/fail interval, and phrase vault smoke pass</span></td>
             </tr>
+            <tr>
+              <td>M2-3</td>
+              <td><strong>Pass</strong><span>due phrase planner, avoided topics, mode choice, and selection reason smoke pass</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
@@ -1882,6 +1918,10 @@
             <div class="command">
               <span>Run review/vault smoke</span>
               <code>node scripts/phase2-review-vault-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run scenario planner smoke</span>
+              <code>node scripts/phase2-scenario-planner-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
