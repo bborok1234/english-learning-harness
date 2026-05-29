@@ -408,7 +408,7 @@
     "stage": "M6 Private Beta Clone-to-Learn closed",
     "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact and hosted-download mechanics now pass locally, but public hosting/download is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, and release workflow wiring now pass, but public hosting/download is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -1357,6 +1357,18 @@
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
             "README.md"
           ]
+        },
+        {
+          "id": "M7-1c",
+          "title": "#83 release artifact workflow를 준비함",
+          "why": "public artifact를 매번 로컬에서 손으로 만들면 publish/download evidence가 재현되기 어렵다.",
+          "done": "manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.",
+          "verification": "`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "scripts/phase7-release-workflow-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -1368,12 +1380,12 @@
         {
           "id": "M7-1",
           "title": "#83 real public artifact URL",
-          "why": "download mechanics는 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
-          "done": "GitHub release asset, public repo artifact, or another public URL을 정하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
+          "why": "artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
+          "done": "manual workflow로 artifact를 publish하거나 별도 public URL에 업로드한 뒤 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
           "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
-            "scripts/phase7-hosted-artifact-smoke.mjs",
-            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+            ".github/workflows/public-artifact.yml",
+            "scripts/phase7-hosted-artifact-smoke.mjs"
           ]
         }
       ]
@@ -1701,6 +1713,11 @@
       "name": "M7-1 hosted artifact",
       "status": "Partial",
       "detail": "hosted-download mechanics pass through local loopback; real public URL remains unverified"
+    },
+    {
+      "name": "M7-1 release workflow",
+      "status": "Pass",
+      "detail": "manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload"
     }
   ],
   "commands": [
@@ -1837,6 +1854,10 @@
       "command": "node scripts/phase7-hosted-artifact-smoke.mjs"
     },
     {
+      "label": "Run M7 release workflow smoke",
+      "command": "node scripts/phase7-release-workflow-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1875,7 +1896,7 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact and hosted-download mechanics now pass locally, but public hosting/download is still unproven and keeps #83 open.</p>
+        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, and release workflow wiring now pass, but public hosting/download is still unproven and keeps #83 open.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
@@ -1937,11 +1958,11 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-1</strong>
-                <span>scripts/phase7-hosted-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+                <span>.github/workflows/public-artifact.yml, scripts/phase7-hosted-artifact-smoke.mjs</span>
               </div>
               <h3>#83 real public artifact URL</h3>
-              <div class="card-row"><b>왜</b><p>download mechanics는 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.</p></div>
-              <div class="card-row"><b>완료</b><p>GitHub release asset, public repo artifact, or another public URL을 정하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.</p></div>
+              <div class="card-row"><b>왜</b><p>artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>manual workflow로 artifact를 publish하거나 별도 public URL에 업로드한 뒤 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.</p></div>
               <div class="card-row"><b>검증</b><p>hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.</p></div>
             </article>
             <article class="work-card">
@@ -1963,16 +1984,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M6-3</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/phase6-onboarding-diagnostics-smoke.mjs, docs/phase-6-evidence/M6-3-onboarding-diagnostics.md, README.md</span>
-              </div>
-              <h3>#74 first-run onboarding/support diagnostics를 강화함</h3>
-              <div class="card-row"><b>왜</b><p>새 사용자나 지인이 implementation docs 없이도 다음 행동, 복구 명령, support file 위치, native hook 경계를 이해해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>setup/health/status JSON과 context text에 support diagnostics를 추가하고, setup next commands를 daily/today/weekly/home/export/health로 확장했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase6-onboarding-diagnostics-smoke.mjs`가 setup/health/status/context support, corrupt progress recovery, setup --repair backup, progress v2 restore를 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M6-4</strong>
@@ -2022,6 +2033,16 @@
               <div class="card-row"><b>왜</b><p>public artifact는 file extraction만이 아니라 URL download 후 학습 루프까지 견뎌야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1c</strong>
+                <span>.github/workflows/public-artifact.yml, scripts/phase7-release-workflow-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+              </div>
+              <h3>#83 release artifact workflow를 준비함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact를 매번 로컬에서 손으로 만들면 publish/download evidence가 재현되기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -2200,10 +2221,6 @@
           <tbody>
 
             <tr>
-              <td>M6-2</td>
-              <td><strong>Pass</strong><span>clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified</span></td>
-            </tr>
-            <tr>
               <td>M6-3</td>
               <td><strong>Pass</strong><span>setup/health/status/context support diagnostics and corrupt-store repair guidance pass</span></td>
             </tr>
@@ -2230,6 +2247,10 @@
             <tr>
               <td>M7-1 hosted artifact</td>
               <td><strong>Partial</strong><span>hosted-download mechanics pass through local loopback; real public URL remains unverified</span></td>
+            </tr>
+            <tr>
+              <td>M7-1 release workflow</td>
+              <td><strong>Pass</strong><span>manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload</span></td>
             </tr>
           </tbody>
         </table>
@@ -2275,7 +2296,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 53개 보기</summary>
+        <summary>완료 이력 54개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2808,10 +2829,20 @@
               <div class="card-row"><b>완료</b><p>clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M6-3</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase6-onboarding-diagnostics-smoke.mjs, docs/phase-6-evidence/M6-3-onboarding-diagnostics.md, README.md</span>
+              </div>
+              <h3>#74 first-run onboarding/support diagnostics를 강화함</h3>
+              <div class="card-row"><b>왜</b><p>새 사용자나 지인이 implementation docs 없이도 다음 행동, 복구 명령, support file 위치, native hook 경계를 이해해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>setup/health/status JSON과 context text에 support diagnostics를 추가하고, setup next commands를 daily/today/weekly/home/export/health로 확장했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-onboarding-diagnostics-smoke.mjs`가 setup/health/status/context support, corrupt progress recovery, setup --repair backup, progress v2 restore를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 51개 보기</summary>
+        <summary>전체 검증 52개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3020,12 +3051,16 @@
               <td>M7-1 hosted artifact</td>
               <td><strong>Partial</strong><span>hosted-download mechanics pass through local loopback; real public URL remains unverified</span></td>
             </tr>
+            <tr>
+              <td>M7-1 release workflow</td>
+              <td><strong>Pass</strong><span>manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 41개 보기</summary>
+        <summary>전체 명령 42개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3159,6 +3194,10 @@
             <div class="command">
               <span>Run M7 hosted artifact smoke</span>
               <code>node scripts/phase7-hosted-artifact-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 release workflow smoke</span>
+              <code>node scripts/phase7-release-workflow-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

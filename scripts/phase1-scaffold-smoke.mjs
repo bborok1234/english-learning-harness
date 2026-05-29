@@ -16,6 +16,7 @@ const codexHome = resolve(tmpRoot, "codex-home");
 
 const requiredFiles = [
   ".codex-plugin/plugin.json",
+  ".github/workflows/public-artifact.yml",
   "skills/onboarding/SKILL.md",
   "skills/daily-session/SKILL.md",
   "skills/mini-mirror/SKILL.md",
@@ -65,6 +66,7 @@ const requiredFiles = [
   "scripts/phase6-release-gate-smoke.mjs",
   "scripts/phase7-public-artifact-smoke.mjs",
   "scripts/phase7-hosted-artifact-smoke.mjs",
+  "scripts/phase7-release-workflow-smoke.mjs",
 ];
 
 function readJson(path) {
