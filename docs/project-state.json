@@ -134,7 +134,7 @@
     {
       "label": "Current stage",
       "value": "M6 active",
-      "detail": "#72 mechanics pass privately; #78 blocks public claim",
+      "detail": "#73 marketplace install passes; #78 blocks public claim",
       "tone": "amber"
     },
     {
@@ -857,6 +857,19 @@
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M6-2",
+          "title": "#73 local marketplace packaging/install path를 검증함",
+          "why": "friend/invited-user handoff에는 public Git-backed install을 과장하지 않고 실제 검증된 Codex plugin install 경로가 필요하다.",
+          "done": "clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.",
+          "verification": "`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.",
+          "files": [
+            "scripts/phase6-marketplace-install-smoke.mjs",
+            "docs/phase-6-evidence/M6-2-marketplace-install.md",
+            "README.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1164,6 +1177,11 @@
       "name": "M6-1",
       "status": "Blocked",
       "detail": "authenticated clone mechanics pass, but public clone smoke fails by design while repository visibility is PRIVATE"
+    },
+    {
+      "name": "M6-2",
+      "status": "Pass",
+      "detail": "clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified"
     }
   ],
   "commands": [
@@ -1274,6 +1292,10 @@
     {
       "label": "Run M6 authenticated clone mechanics smoke",
       "command": "ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs"
+    },
+    {
+      "label": "Run M6 marketplace install smoke",
+      "command": "node scripts/phase6-marketplace-install-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

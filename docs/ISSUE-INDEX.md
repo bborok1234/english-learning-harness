@@ -166,3 +166,9 @@ M6 remains open. Epic #10 has been split into executable issues #72-#75, and #78
 - authenticated clone mechanics pass with `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`.
 - default public clone smoke fails by design while repository visibility is `PRIVATE`.
 - public-facing clone-to-learn readiness cannot be claimed until #78 is resolved.
+
+#73 evidence currently shows:
+
+- clean clone can package a local marketplace root with `scripts/package-local-marketplace.mjs`.
+- isolated `CODEX_HOME` can add that marketplace and install `english-learning-harness@phase6-marketplace`.
+- README explicitly keeps public Git-backed install unverified and avoids unsupported URL/GitHub install commands.

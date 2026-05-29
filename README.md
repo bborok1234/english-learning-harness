@@ -248,6 +248,8 @@ CODEX_HOME="$PWD/tmp/codex-home" codex plugin list
 
 Public Git-backed install remains unverified and should not be documented as the default install path yet.
 
+The verified install claim is local marketplace packaging only: a clean repository can package the plugin into a local marketplace root, install that marketplace into an isolated `CODEX_HOME`, and list the plugin as installed/enabled. Do not replace this with a GitHub-backed install command until a separate smoke proves that path.
+
 ## Verification
 
 Run the supported wrapper smoke:
@@ -405,6 +407,12 @@ Run the M6 public clean clone smoke:
 
 ```bash
 node scripts/phase6-public-clean-clone-smoke.mjs
+```
+
+Run the M6 local marketplace install smoke:
+
+```bash
+node scripts/phase6-marketplace-install-smoke.mjs
 ```
 
 Run the full first-run smoke:
