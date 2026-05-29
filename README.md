@@ -12,7 +12,7 @@ North star: **AI 파트너와 편안하게 영어로 대화하는 능력.**
 
 ## Codex에 붙여넣기
 
-Codex를 열고 아래 프롬프트를 붙여넣으세요.
+Codex를 열고 아래 프롬프트를 붙여넣으세요. 대괄호 안 내용은 본인 정보로 바꾸면 됩니다.
 
 ```text
 Install English Learning Harness from:
@@ -21,9 +21,9 @@ https://github.com/bborok1234/english-learning-harness
 Use the repo setup script to install the Codex skills, then start my first 5-minute English speaking practice.
 Do not ask me to clone the repo or run Node commands manually. You operate the harness and local engine for me.
 
-내 이름은 지은이야.
-영어로 말해야 할 때 자주 얼어붙어.
-부드럽게 고쳐주고, 실제로 다시 쓸 수 있는 표현을 남겨줘.
+내 이름은 [이름]이야.
+[영어로 말할 때 자주 겪는 어려움]이 있어.
+[원하는 교정 방식이나 목표]에 맞춰서 도와줘.
 ```
 
 Codex가 skill 설치, 학습자 설정, 첫 연습, progress 저장, mini mirror까지 처리해야 합니다. 학습자가 할 일은 스크립트를 조작하는 것이 아니라 Codex의 질문에 영어로 대답하는 것입니다.
