@@ -299,6 +299,12 @@ Run the M3 clone-to-daily gate smoke:
 node scripts/phase3-m3-gate-smoke.mjs
 ```
 
+Run the interaction event schema smoke:
+
+```bash
+node scripts/phase4-interaction-event-schema-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

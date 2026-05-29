@@ -17,6 +17,16 @@ export const todayStamp = (date = new Date()) => date.toISOString().slice(0, 10)
 
 const learnerSkillKeys = ["starts", "follow_ups", "clarification", "repair", "soft_disagreement"];
 const reviewIntervals = [1, 3, 7, 14];
+const interactionEventModalities = ["text", "voice", "image", "video", "realtime"];
+const mediationLevels = ["prompt-first", "hint", "recast", "explicit-model", "retry"];
+const unsupportedEventClaims = [
+  "native speaker",
+  "confident with foreigners",
+  "guaranteed",
+  "fluent",
+  "your level",
+  "pronunciation score",
+];
 
 export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
   const root = resolve(learnerRoot);
@@ -344,6 +354,114 @@ export function buildMiniMirror(learnerTurns, scenario = defaultScenario()) {
   };
 }
 
+function eventId(sessionId, index) {
+  return `${sessionId}-event-${index + 1}`;
+}
+
+function inferTroubleSource(session, learnerOutput) {
+  if (session.scenario?.due_review?.text) return "needs saved phrase reuse in context";
+  if (session.scenario?.cefr_skill === "repair") return "missing word or stuck moment";
+  if (session.scenario?.cefr_skill === "clarification") return "unclear intended meaning";
+  if (/\b(korean|hangul|[가-힣])\b/i.test(learnerOutput)) return "needs bridge from Korean to English";
+  return "needs more natural phrasing";
+}
+
+function transferTargetsForScenario(scenario = {}) {
+  const skill = scenario.cefr_skill || "conversation";
+  if (skill === "repair") return ["stuck moment", "daily explanation", "work chat"];
+  if (skill === "clarification") return ["planning conversation", "misunderstanding repair", "follow-up question"];
+  if (skill === "turn-taking") return ["small talk", "daily routine", "friendly check-in"];
+  return ["personal opinion", "recommendation", "casual conversation"];
+}
+
+export function buildInteractionEvents(session) {
+  const learnerTurns = session.learner_turns ?? [];
+  return learnerTurns.map((learnerOutput, index) => {
+    const retryOutput = index === learnerTurns.length - 1
+      ? session.mirror?.recast ?? learnerOutput
+      : learnerTurns[index + 1];
+    return {
+      schema_version: 1,
+      event_id: eventId(session.id, index),
+      modality: session.mode === "text-first" ? "text" : session.mode,
+      scenario_id: session.scenario?.id ?? "",
+      learner_intent: session.scenario?.goal ?? "complete a small English interaction",
+      learner_output: learnerOutput,
+      trouble_source: inferTroubleSource(session, learnerOutput),
+      mediation_level: "recast",
+      repair_move: session.mirror?.pattern
+        ? `Try the pattern: ${session.mirror.pattern}`
+        : "Try one clearer version.",
+      retry_output: retryOutput,
+      saved_phrase: session.mirror?.reviewPhrase ?? session.mirror?.recast ?? retryOutput,
+      transfer_targets: transferTargetsForScenario(session.scenario),
+      claim_boundary:
+        "This event records local interaction evidence only. It does not prove real-world fluency.",
+    };
+  });
+}
+
+function assertNonEmptyString(value, field, source) {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(`${source}: ${field} must be a non-empty string`);
+  }
+}
+
+function assertNoUnsupportedEventClaims(event, source) {
+  const text = JSON.stringify(event).toLowerCase();
+  for (const claim of unsupportedEventClaims) {
+    if (text.includes(claim)) {
+      throw new Error(`${source}: unsupported learning claim appeared: ${claim}`);
+    }
+  }
+}
+
+export function validateInteractionEvent(event, source = "interaction_event") {
+  if (!event || typeof event !== "object" || Array.isArray(event)) {
+    throw new Error(`${source}: event must be an object`);
+  }
+  if (event.schema_version !== 1) {
+    throw new Error(`${source}: schema_version must be 1`);
+  }
+  assertNonEmptyString(event.event_id, "event_id", source);
+  if (!interactionEventModalities.includes(event.modality)) {
+    throw new Error(`${source}: modality must be one of ${interactionEventModalities.join(", ")}`);
+  }
+  for (const field of [
+    "scenario_id",
+    "learner_intent",
+    "learner_output",
+    "trouble_source",
+    "repair_move",
+    "retry_output",
+    "saved_phrase",
+    "claim_boundary",
+  ]) {
+    assertNonEmptyString(event[field], field, source);
+  }
+  if (!mediationLevels.includes(event.mediation_level)) {
+    throw new Error(`${source}: mediation_level must be one of ${mediationLevels.join(", ")}`);
+  }
+  if (!Array.isArray(event.transfer_targets) || event.transfer_targets.length === 0) {
+    throw new Error(`${source}: transfer_targets must be a non-empty array`);
+  }
+  for (const [index, target] of event.transfer_targets.entries()) {
+    assertNonEmptyString(target, `transfer_targets[${index}]`, source);
+  }
+  assertNoUnsupportedEventClaims(event, source);
+  return event;
+}
+
+export function validateInteractionEvents(events, source = "interaction_events") {
+  if (!Array.isArray(events)) {
+    throw new Error(`${source}: must be an array`);
+  }
+  for (const [index, event] of events.entries()) {
+    validateInteractionEvent(event, `${source}[${index}]`);
+  }
+  return events;
+}
+
 export function recastUtterance(text) {
   const normalized = text.trim().replace(/\s+/g, " ");
   if (/today morning coffee/i.test(normalized)) {
@@ -391,7 +509,7 @@ export function buildSession(learnerTurns, options = {}) {
     ].join("\n"),
   });
 
-  return {
+  const session = {
     id: options.sessionId || `${todayStamp()}-${Date.now()}`,
     mode: "text-first",
     scenario: {
@@ -413,6 +531,9 @@ export function buildSession(learnerTurns, options = {}) {
     mirror,
     session_metrics: estimateSessionMetrics(learnerTurns),
   };
+  session.interaction_events = buildInteractionEvents(session);
+  validateInteractionEvents(session.interaction_events, "session.interaction_events");
+  return session;
 }
 
 function reviewItemId(text) {

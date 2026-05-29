@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M4 Multimodal Interaction Lab planning complete",
-    "status": "Next: #50 interaction event graph schema",
+    "stage": "M4 Multimodal Interaction Lab implementation active",
+    "status": "Next: #49 persist text sessions as interaction events",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4 is split into executable issues: #50 event schema, #49 text event persistence, #53 transcription-first voice import, #52 image information-gap fixture, and #54 multimodal-ready gate. Next implementation is #50."
+    "summary": "M4-1 interaction event schema is implemented and smoke-tested. Text-first sessions now produce valid local interaction events; next work is #49 event-backed text session persistence and summaries."
   },
   "ssot": [
     {
@@ -506,19 +506,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "multimodal execution issues created",
+      "detail": "interaction event schema implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M4 active",
-      "detail": "#50/#49/#53/#52/#54 created; #50 next",
-      "tone": "amber"
+      "detail": "#50 implemented; #49 next",
+      "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "#50 interaction event graph schema",
+      "detail": "#49 text event persistence",
       "tone": "red"
     },
     {
@@ -1095,6 +1095,19 @@
             "docs/project-state.json",
             "docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md"
           ]
+        },
+        {
+          "id": "M4-1",
+          "title": "#50 Interaction event graph schema를 구현함",
+          "why": "voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.",
+          "done": "`interaction_events` schema, validator, default text event builder를 추가했다. 기존 text-first `today` artifact가 modality=text event를 저장한다.",
+          "verification": "`node scripts/phase4-interaction-event-schema-smoke.mjs`가 valid text event와 invalid fixture rejection을 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase4-interaction-event-schema-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-4-evidence/M4-1-interaction-event-schema.md"
+          ]
         }
       ]
     },
@@ -1102,25 +1115,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M4-1",
-          "title": "#50 Interaction event graph schema",
-          "why": "voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.",
-          "done": "session artifact가 intent/output/trouble/mediation/retry/transfer를 담는 `interaction_events`를 저장할 수 있게 schema, validator, default builder를 만든다.",
-          "verification": "invalid fixture rejection과 text-first valid event smoke가 통과해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/DATA-CONTRACTS.md",
-            "scripts/phase4-interaction-event-schema-smoke.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M4-2",
@@ -1132,7 +1126,14 @@
             "scripts/lib/english-learning-store.mjs",
             "scripts/english-learning-harness.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M4-3",
           "title": "#53 Transcription-first voice event import",
@@ -1366,6 +1367,11 @@
       "name": "M4-0",
       "status": "Pass",
       "detail": "M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan"
+    },
+    {
+      "name": "M4-1",
+      "status": "Pass",
+      "detail": "interaction event schema smoke passes valid text event and invalid fixture rejection"
     }
   ],
   "commands": [
@@ -1446,6 +1452,10 @@
       "command": "node scripts/phase3-m3-gate-smoke.mjs"
     },
     {
+      "label": "Run interaction event schema smoke",
+      "command": "node scripts/phase4-interaction-event-schema-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1475,7 +1485,7 @@
     },
     {
       "label": "View next M4 issue",
-      "command": "gh issue view 50"
+      "command": "gh issue view 49"
     }
   ]
 }
@@ -1484,12 +1494,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M4 is split into executable issues: #50 event schema, #49 text event persistence, #53 transcription-first voice import, #52 image information-gap fixture, and #54 multimodal-ready gate. Next implementation is #50.</p>
+        <p class="summary">M4-1 interaction event schema is implemented and smoke-tested. Text-first sessions now produce valid local interaction events; next work is #49 event-backed text session persistence and summaries.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M4 Multimodal Interaction Lab planning complete<br>
-        Next: #50 interaction event graph schema
+        M4 Multimodal Interaction Lab implementation active<br>
+        Next: #49 persist text sessions as interaction events
       </div>
     </header>
 
@@ -1498,17 +1508,17 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M4</div>
-          <p>multimodal execution issues created</p>
+          <p>interaction event schema implemented</p>
         </article>
-        <article class="metric-card tone-amber">
+        <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M4 active</div>
-          <p>#50/#49/#53/#52/#54 created; #50 next</p>
+          <p>#50 implemented; #49 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M4</div>
-          <p>#50 interaction event graph schema</p>
+          <p>#49 text event persistence</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1539,20 +1549,10 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>5</span>
+          <span>4</span>
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M4-1</strong>
-                <span>scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md, scripts/phase4-interaction-event-schema-smoke.mjs</span>
-              </div>
-              <h3>#50 Interaction event graph schema</h3>
-              <div class="card-row"><b>왜</b><p>voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.</p></div>
-              <div class="card-row"><b>완료</b><p>session artifact가 intent/output/trouble/mediation/retry/transfer를 담는 `interaction_events`를 저장할 수 있게 schema, validator, default builder를 만든다.</p></div>
-              <div class="card-row"><b>검증</b><p>invalid fixture rejection과 text-first valid event smoke가 통과해야 한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M4-2</strong>
@@ -1604,16 +1604,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M3-1</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-daily-cockpit-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-1-daily-cockpit.md</span>
-              </div>
-              <h3>#37 Daily cockpit command를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M3-2</strong>
                 <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-learner-home-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-2-learner-home.md</span>
               </div>
@@ -1661,6 +1651,16 @@
               <div class="card-row"><b>왜</b><p>M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;`가 #50/#49/#53/#52/#54를 보여준다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-1</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/phase4-interaction-event-schema-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-1-interaction-event-schema.md</span>
+              </div>
+              <h3>#50 Interaction event graph schema를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>`interaction_events` schema, validator, default text event builder를 추가했다. 기존 text-first `today` artifact가 modality=text event를 저장한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase4-interaction-event-schema-smoke.mjs`가 valid text event와 invalid fixture rejection을 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1815,10 +1815,6 @@
           <tbody>
 
             <tr>
-              <td>M2-5</td>
-              <td><strong>Pass</strong><span>weekly mirror local evidence smoke and M2 regression smokes pass</span></td>
-            </tr>
-            <tr>
               <td>M3-0</td>
               <td><strong>Pass</strong><span>M1/M2 milestones closed and M3 execution issues #37-#41 created</span></td>
             </tr>
@@ -1845,6 +1841,10 @@
             <tr>
               <td>M4-0</td>
               <td><strong>Pass</strong><span>M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan</span></td>
+            </tr>
+            <tr>
+              <td>M4-1</td>
+              <td><strong>Pass</strong><span>interaction event schema smoke passes valid text event and invalid fixture rejection</span></td>
             </tr>
           </tbody>
         </table>
@@ -1890,7 +1890,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 35개 보기</summary>
+        <summary>완료 이력 36개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2243,10 +2243,20 @@
               <div class="card-row"><b>완료</b><p>M1/M2 epics와 milestones를 evidence comment로 close하고, M3 실행 이슈 #37-#41을 생성했다. M4는 multimodal lab으로 유지했다.</p></div>
               <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #37-#41을 기록하고 dashboard now가 #37 daily cockpit을 가리킨다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-1</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-daily-cockpit-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-1-daily-cockpit.md</span>
+              </div>
+              <h3>#37 Daily cockpit command를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 31개 보기</summary>
+        <summary>전체 검증 32개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2375,12 +2385,16 @@
               <td>M4-0</td>
               <td><strong>Pass</strong><span>M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan</span></td>
             </tr>
+            <tr>
+              <td>M4-1</td>
+              <td><strong>Pass</strong><span>interaction event schema smoke passes valid text event and invalid fixture rejection</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 27개 보기</summary>
+        <summary>전체 명령 28개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2460,6 +2474,10 @@
               <code>node scripts/phase3-m3-gate-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run interaction event schema smoke</span>
+              <code>node scripts/phase4-interaction-event-schema-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2489,7 +2507,7 @@
             </div>
             <div class="command">
               <span>View next M4 issue</span>
-              <code>gh issue view 50</code>
+              <code>gh issue view 49</code>
             </div>
         </div>
       </details>

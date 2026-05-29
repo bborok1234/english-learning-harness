@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M4 Multimodal Interaction Lab planning complete",
-    "status": "Next: #50 interaction event graph schema",
+    "stage": "M4 Multimodal Interaction Lab implementation active",
+    "status": "Next: #49 persist text sessions as interaction events",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4 is split into executable issues: #50 event schema, #49 text event persistence, #53 transcription-first voice import, #52 image information-gap fixture, and #54 multimodal-ready gate. Next implementation is #50."
+    "summary": "M4-1 interaction event schema is implemented and smoke-tested. Text-first sessions now produce valid local interaction events; next work is #49 event-backed text session persistence and summaries."
   },
   "ssot": [
     {
@@ -104,19 +104,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "multimodal execution issues created",
+      "detail": "interaction event schema implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M4 active",
-      "detail": "#50/#49/#53/#52/#54 created; #50 next",
-      "tone": "amber"
+      "detail": "#50 implemented; #49 next",
+      "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "#50 interaction event graph schema",
+      "detail": "#49 text event persistence",
       "tone": "red"
     },
     {
@@ -693,6 +693,19 @@
             "docs/project-state.json",
             "docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md"
           ]
+        },
+        {
+          "id": "M4-1",
+          "title": "#50 Interaction event graph schema를 구현함",
+          "why": "voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.",
+          "done": "`interaction_events` schema, validator, default text event builder를 추가했다. 기존 text-first `today` artifact가 modality=text event를 저장한다.",
+          "verification": "`node scripts/phase4-interaction-event-schema-smoke.mjs`가 valid text event와 invalid fixture rejection을 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase4-interaction-event-schema-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-4-evidence/M4-1-interaction-event-schema.md"
+          ]
         }
       ]
     },
@@ -700,25 +713,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M4-1",
-          "title": "#50 Interaction event graph schema",
-          "why": "voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.",
-          "done": "session artifact가 intent/output/trouble/mediation/retry/transfer를 담는 `interaction_events`를 저장할 수 있게 schema, validator, default builder를 만든다.",
-          "verification": "invalid fixture rejection과 text-first valid event smoke가 통과해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/DATA-CONTRACTS.md",
-            "scripts/phase4-interaction-event-schema-smoke.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M4-2",
@@ -730,7 +724,14 @@
             "scripts/lib/english-learning-store.mjs",
             "scripts/english-learning-harness.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M4-3",
           "title": "#53 Transcription-first voice event import",
@@ -964,6 +965,11 @@
       "name": "M4-0",
       "status": "Pass",
       "detail": "M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan"
+    },
+    {
+      "name": "M4-1",
+      "status": "Pass",
+      "detail": "interaction event schema smoke passes valid text event and invalid fixture rejection"
     }
   ],
   "commands": [
@@ -1044,6 +1050,10 @@
       "command": "node scripts/phase3-m3-gate-smoke.mjs"
     },
     {
+      "label": "Run interaction event schema smoke",
+      "command": "node scripts/phase4-interaction-event-schema-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1073,7 +1083,7 @@
     },
     {
       "label": "View next M4 issue",
-      "command": "gh issue view 50"
+      "command": "gh issue view 49"
     }
   ]
 }

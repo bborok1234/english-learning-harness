@@ -104,7 +104,8 @@ M3 epic #6 is closed. M3 milestone is closed.
 Current implementation target:
 
 ```bash
-gh issue view 50
+gh issue view 49
 ```
 
 M4 remains open. Epics #7 and #8 are now split into executable issues #50, #49, #53, #52, and #54 tied to `docs/MULTIMODAL-GENAI-PLAN.md`.
+M4-1 is implemented on the PR branch and waits for PR review/merge evidence before closing #50.
