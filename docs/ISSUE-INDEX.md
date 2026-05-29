@@ -1,6 +1,6 @@
 # GitHub Issue Index
 
-Last updated: 2026-05-28
+Last updated: 2026-05-29
 Repository: https://github.com/bborok1234/english-learning-harness
 
 ## Operating Rule
@@ -17,18 +17,18 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 ## Epics
 
-| Issue | Epic | Area |
-|---|---|---|
-| #1 | E1 Platform reliability | platform |
-| #2 | E2 Learner memory and data contracts | learning-engine |
-| #3 | E3 Scenario-based daily session | learning-engine / conversation-ux |
-| #4 | E4 Tutor policy enforcement | conversation-ux |
-| #5 | E5 Persona fixture evaluation | evaluation |
-| #6 | E6 Dashboard and human-readable progress | evaluation |
-| #7 | E7 Multimodal interaction event graph | multimodal |
-| #8 | E8 Voice image video learning loops | multimodal |
-| #9 | E9 Seven-day validation protocol | evaluation |
-| #10 | E10 Public onboarding and distribution | distribution |
+| Issue | Epic | Area | Status |
+|---|---|---|---|
+| #1 | E1 Platform reliability | platform | closed |
+| #2 | E2 Learner memory and data contracts | learning-engine | closed |
+| #3 | E3 Scenario-based daily session | learning-engine / conversation-ux | closed |
+| #4 | E4 Tutor policy enforcement | conversation-ux | closed |
+| #5 | E5 Persona fixture evaluation | evaluation | closed |
+| #6 | E6 Dashboard and human-readable progress | evaluation | open |
+| #7 | E7 Multimodal interaction event graph | multimodal | open |
+| #8 | E8 Voice image video learning loops | multimodal | open |
+| #9 | E9 Seven-day validation protocol | evaluation | open |
+| #10 | E10 Public onboarding and distribution | distribution | open |
 
 ## M1 First-Usable Codex Harness
 
@@ -46,7 +46,7 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 
 #11 is complete but was closed by direct commit `204dbec`, not by PR. That is now treated as a process gap.
 
-M1 execution issues #11-#17 are complete after #17 merges.
+M1 execution issues #11-#17 are complete. M1 milestone is closed.
 
 ## M2 Pedagogical Learning Engine
 
@@ -58,16 +58,28 @@ M1 execution issues #11-#17 are complete after #17 merges.
 | #28 | M2-4: Enforce tutor policy with rubric smoke tests | continue |
 | #29 | M2-5: Generate weekly mirror from local evidence | continue |
 
+M2 execution issues #25-#29 are complete. M2 milestone is closed.
+
+## M3 Daily Return Experience
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #37 | M3-1: Add daily cockpit command | continue |
+| #38 | M3-2: Generate learner home HTML from local evidence | continue |
+| #39 | M3-3: Add no-streak return and resume guidance | continue |
+| #40 | M3-4: Add seven-day local return simulation smoke | continue |
+| #41 | M3-5: Close M3 gate with clone-to-daily evidence | continue |
+
 Current branch:
 
 ```bash
-git switch issue-29-weekly-mirror
+git switch -c issue-37-daily-cockpit
 ```
 
-Next after #29:
+Current implementation target:
 
 ```bash
-gh issue list --milestone "M3 Multimodal Interaction Event Graph"
+gh issue view 37
 ```
 
 From #12 onward, implementation issues close through linked PRs.
