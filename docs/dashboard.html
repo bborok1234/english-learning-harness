@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M5 Real Learning Validation active",
-    "status": "Next: #66 M5 validation gate",
+    "stage": "M5 Real Learning Validation gate complete on PR branch",
+    "status": "Next: #72 M6 public clean clone setup",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 target-persona validation fixture is implemented. The next target is #66: close the M5 validation gate by reviewing protocol, export, rubric, persona evidence, and claim boundaries."
+    "summary": "M5 gate smoke passes with decision continue_to_m6. Local simulated validation readiness is approved; real learner outcome claims remain blocked. Next is #72 public clean clone setup verification."
   },
   "ssot": [
     {
@@ -523,26 +523,26 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M5",
-      "detail": "persona validation implemented",
+      "value": "M6",
+      "detail": "M5 gate complete; M6 split created",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M4 closed",
-      "detail": "#7/#8/#49/#50/#52/#53/#54 closed",
+      "value": "M5 gate",
+      "detail": "#62/#63/#64/#65 closed; #66 on PR branch",
       "tone": "green"
     },
     {
       "label": "Next block",
-      "value": "M5",
-      "detail": "#66 validation gate",
+      "value": "M6",
+      "detail": "#72 public clean clone setup",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "32 issues",
-      "detail": "M1-M4 closed; M5 #62-#66 created",
+      "value": "36 issues",
+      "detail": "M1-M4 closed; M6 #72-#75 created",
       "tone": "green"
     },
     {
@@ -1240,6 +1240,19 @@
             "docs/phase-5-evidence/M5-4-persona-validation.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M5-5",
+          "title": "#66 M5 real learning validation gate를 구현함",
+          "why": "M5는 tooling 완료가 아니라 claim을 계속/보류/다운그레이드할지 evidence로 판단해야 한다.",
+          "done": "M5 gate smoke가 protocol, export, rubric, persona validation evidence를 재검증하고 M6 #72-#75를 생성했다.",
+          "verification": "`node scripts/phase5-m5-gate-smoke.mjs`가 decision=continue_to_m6, personaCount=4, blocked real learner claims를 통과했다.",
+          "files": [
+            "scripts/phase5-m5-gate-smoke.mjs",
+            "docs/phase-5-evidence/M5-5-validation-gate.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1250,10 +1263,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#66 M5 real learning validation gate",
-          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
-          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
-          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "title": "#72 M6 public clean clone setup path",
+          "why": "M5가 local simulated validation readiness를 통과했으므로 다음 병목은 친구/공개 사용자가 GitHub clone만으로 시작할 수 있는지다.",
+          "done": "fresh public clone에서 setup, daily, today, weekly, home, export를 실행하고 README 경로를 검증한다.",
+          "verification": "public clean clone smoke, dashboard render, clone git status check가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -1269,10 +1282,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "After M5: M6 public clone-to-learn release split",
-          "why": "M5 closeout 후에는 public clone/setup/onboarding release readiness를 executable issues로 쪼개야 한다.",
-          "done": "M6 epic 상태와 public Git-backed marketplace/install gap을 재검토한다.",
-          "verification": "ISSUE-INDEX와 dashboard가 같은 M6 next target을 가리켜야 한다.",
+          "title": "#73 M6 marketplace packaging and install docs",
+          "why": "public clone smoke 다음에는 marketplace package/install guidance가 실제 검증 경로와 일치해야 한다.",
+          "done": "local marketplace install을 clean clone/isolated CODEX_HOME에서 재검증하고 README claim을 정리한다.",
+          "verification": "marketplace install smoke와 README command audit이 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1528,6 +1541,11 @@
       "name": "M5-4",
       "status": "Pass",
       "detail": "persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions"
+    },
+    {
+      "name": "M5-5",
+      "status": "Pass",
+      "detail": "M5 gate smoke passes continue_to_m6 while blocking real learner outcome claims"
     }
   ],
   "commands": [
@@ -1657,7 +1675,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 66"
+      "command": "gh issue view 72"
     }
   ]
 }
@@ -1666,12 +1684,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M5 target-persona validation fixture is implemented. The next target is #66: close the M5 validation gate by reviewing protocol, export, rubric, persona evidence, and claim boundaries.</p>
+        <p class="summary">M5 gate smoke passes with decision continue_to_m6. Local simulated validation readiness is approved; real learner outcome claims remain blocked. Next is #72 public clean clone setup verification.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M5 Real Learning Validation active<br>
-        Next: #66 M5 validation gate
+        M5 Real Learning Validation gate complete on PR branch<br>
+        Next: #72 M6 public clean clone setup
       </div>
     </header>
 
@@ -1679,23 +1697,23 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M5</div>
-          <p>persona validation implemented</p>
+          <div class="metric-value">M6</div>
+          <p>M5 gate complete; M6 split created</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M4 closed</div>
-          <p>#7/#8/#49/#50/#52/#53/#54 closed</p>
+          <div class="metric-value">M5 gate</div>
+          <p>#62/#63/#64/#65 closed; #66 on PR branch</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">M5</div>
-          <p>#66 validation gate</p>
+          <div class="metric-value">M6</div>
+          <p>#72 public clean clone setup</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">32 issues</div>
-          <p>M1-M4 closed; M5 #62-#66 created</p>
+          <div class="metric-value">36 issues</div>
+          <p>M1-M4 closed; M6 #72-#75 created</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -1730,20 +1748,20 @@
                 <strong>M5</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-5-evidence/</span>
               </div>
-              <h3>#66 M5 real learning validation gate</h3>
-              <div class="card-row"><b>왜</b><p>Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.</p></div>
-              <div class="card-row"><b>검증</b><p>M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.</p></div>
+              <h3>#72 M6 public clean clone setup path</h3>
+              <div class="card-row"><b>왜</b><p>M5가 local simulated validation readiness를 통과했으므로 다음 병목은 친구/공개 사용자가 GitHub clone만으로 시작할 수 있는지다.</p></div>
+              <div class="card-row"><b>완료</b><p>fresh public clone에서 setup, daily, today, weekly, home, export를 실행하고 README 경로를 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>public clean clone smoke, dashboard render, clone git status check가 통과해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M5-1</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>After M5: M6 public clone-to-learn release split</h3>
-              <div class="card-row"><b>왜</b><p>M5 closeout 후에는 public clone/setup/onboarding release readiness를 executable issues로 쪼개야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>M6 epic 상태와 public Git-backed marketplace/install gap을 재검토한다.</p></div>
-              <div class="card-row"><b>검증</b><p>ISSUE-INDEX와 dashboard가 같은 M6 next target을 가리켜야 한다.</p></div>
+              <h3>#73 M6 marketplace packaging and install docs</h3>
+              <div class="card-row"><b>왜</b><p>public clone smoke 다음에는 marketplace package/install guidance가 실제 검증 경로와 일치해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>local marketplace install을 clean clone/isolated CODEX_HOME에서 재검증하고 README claim을 정리한다.</p></div>
+              <div class="card-row"><b>검증</b><p>marketplace install smoke와 README command audit이 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1754,16 +1772,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M4-5</strong>
-                <span>scripts/phase4-multimodal-gate-smoke.mjs, docs/phase-4-evidence/M4-5-multimodal-gate.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
-              </div>
-              <h3>#54 M4 multimodal-ready gate를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`phase4-multimodal-gate-smoke`가 한 learner store에서 text, voice, image event를 만들고 weekly mirror가 세 modality를 요약하는지 검증한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase4-multimodal-gate-smoke.mjs`가 event_count=3, modalities=text/voice/image, unsupported claim guard를 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M5-0</strong>
@@ -1813,6 +1821,16 @@
               <div class="card-row"><b>왜</b><p>실제 learner pilot 전에 네 target persona가 7일 protocol/export/rubric loop를 견디는지 확인해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>지은/민호/수진/혜원 각각 7 sessions, weekly mirror, evidence export, transcript rubric을 통과하는 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase5-persona-validation-smoke.mjs`가 네 persona 모두 session_count=7, reused_review_item_count=6, rubric decision=continue를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5-5</strong>
+                <span>scripts/phase5-m5-gate-smoke.mjs, docs/phase-5-evidence/M5-5-validation-gate.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
+              </div>
+              <h3>#66 M5 real learning validation gate를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>M5는 tooling 완료가 아니라 claim을 계속/보류/다운그레이드할지 evidence로 판단해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>M5 gate smoke가 protocol, export, rubric, persona validation evidence를 재검증하고 M6 #72-#75를 생성했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase5-m5-gate-smoke.mjs`가 decision=continue_to_m6, personaCount=4, blocked real learner claims를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1979,10 +1997,6 @@
           <tbody>
 
             <tr>
-              <td>M4-3</td>
-              <td><strong>Pass</strong><span>voice event import smoke passes transcript-first voice modality, local audio metadata, and weekly modality summary</span></td>
-            </tr>
-            <tr>
               <td>M4-4</td>
               <td><strong>Pass</strong><span>image information-gap smoke passes image modality, source artifact metadata, hidden-detail prompt context, and weekly modality summary</span></td>
             </tr>
@@ -2009,6 +2023,10 @@
             <tr>
               <td>M5-4</td>
               <td><strong>Pass</strong><span>persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions</span></td>
+            </tr>
+            <tr>
+              <td>M5-5</td>
+              <td><strong>Pass</strong><span>M5 gate smoke passes continue_to_m6 while blocking real learner outcome claims</span></td>
             </tr>
           </tbody>
         </table>
@@ -2044,7 +2062,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 66</code>
+              <code>gh issue view 72</code>
             </div>
         </div>
       </aside>
@@ -2054,7 +2072,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 45개 보기</summary>
+        <summary>완료 이력 46개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2507,10 +2525,20 @@
               <div class="card-row"><b>완료</b><p>`image` command가 local image path, hidden detail, clarification prompt를 받아 `mode=image-info-gap`, `modality=image` event를 저장한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase4-image-information-gap-smoke.mjs`가 image event validation, source artifact metadata, weekly modality summary를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-5</strong>
+                <span>scripts/phase4-multimodal-gate-smoke.mjs, docs/phase-4-evidence/M4-5-multimodal-gate.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
+              </div>
+              <h3>#54 M4 multimodal-ready gate를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`phase4-multimodal-gate-smoke`가 한 learner store에서 text, voice, image event를 만들고 weekly mirror가 세 modality를 요약하는지 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase4-multimodal-gate-smoke.mjs`가 event_count=3, modalities=text/voice/image, unsupported claim guard를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 41개 보기</summary>
+        <summary>전체 검증 42개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2679,6 +2707,10 @@
               <td>M5-4</td>
               <td><strong>Pass</strong><span>persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions</span></td>
             </tr>
+            <tr>
+              <td>M5-5</td>
+              <td><strong>Pass</strong><span>M5 gate smoke passes continue_to_m6 while blocking real learner outcome claims</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -2813,7 +2845,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 66</code>
+              <code>gh issue view 72</code>
             </div>
         </div>
       </details>

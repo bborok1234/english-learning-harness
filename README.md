@@ -379,6 +379,12 @@ Run the M5 target-persona validation smoke:
 node scripts/phase5-persona-validation-smoke.mjs
 ```
 
+Run the M5 validation gate smoke:
+
+```bash
+node scripts/phase5-m5-gate-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash
