@@ -35,6 +35,8 @@ Source: [GitHub Docs: About repositories](https://docs.github.com/github/creatin
 
 Current recommendation: keep this source repository private if needed, but publish the distributable tarball from a separate public artifact repository release or another public static URL, then verify that URL with `phase7-hosted-artifact-smoke`.
 
+The manual `public-artifact.yml` workflow is aligned to this boundary: it defaults to `publish_release: false`; if publication is explicitly approved, it targets the `artifact_repo` input and requires `PUBLIC_ARTIFACT_REPO_TOKEN`.
+
 ## Claim Boundary
 
 This proves the release decision gate is explicit. It does not publish a release asset, prove a public URL, or close #83.

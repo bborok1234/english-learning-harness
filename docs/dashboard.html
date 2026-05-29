@@ -1428,6 +1428,18 @@
             "scripts/phase7-public-artifact-handoff-smoke.mjs",
             "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
           ]
+        },
+        {
+          "id": "M7-4",
+          "title": "#98 release workflow를 별도 public artifact repo 경로로 정렬함",
+          "why": "private source repo의 release asset은 public proof가 아니므로 optional publish workflow도 별도 artifact repo를 명시해야 한다.",
+          "done": "workflow_dispatch에 artifact_repo input을 추가하고, publish step이 PUBLIC_ARTIFACT_REPO_TOKEN과 --repo ARTIFACT_REPO를 사용하도록 변경했다. 기본 publish_release=false는 유지한다.",
+          "verification": "`node scripts/phase7-release-workflow-smoke.mjs`가 artifact_repo input, token boundary, source repo read-only permission, --repo target을 검증한다.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "scripts/phase7-release-workflow-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -1808,6 +1820,11 @@
       "name": "M7-3 public artifact README",
       "status": "Pass",
       "detail": "handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance"
+    },
+    {
+      "name": "M7-4 artifact repo workflow",
+      "status": "Pass",
+      "detail": "manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication"
     }
   ],
   "commands": [
@@ -2094,16 +2111,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-1c</strong>
-                <span>.github/workflows/public-artifact.yml, scripts/phase7-release-workflow-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
-              </div>
-              <h3>#83 release artifact workflow를 준비함</h3>
-              <div class="card-row"><b>왜</b><p>public artifact를 매번 로컬에서 손으로 만들면 publish/download evidence가 재현되기 어렵다.</p></div>
-              <div class="card-row"><b>완료</b><p>manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M7-1d</strong>
                 <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
               </div>
@@ -2151,6 +2158,16 @@
               <div class="card-row"><b>왜</b><p>public artifact repository 주소만 본 사용자가 private source repo를 몰라도 다운로드, 검증, 시작까지 진행할 수 있어야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>handoff bundle에 top-level README.md를 추가해 latest release download, SHA256 검증, extract, setup/daily/today, public URL smoke boundary를 문서화했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 public README의 download/checksum/setup/today/public URL smoke 문구를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-4</strong>
+                <span>.github/workflows/public-artifact.yml, scripts/phase7-release-workflow-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+              </div>
+              <h3>#98 release workflow를 별도 public artifact repo 경로로 정렬함</h3>
+              <div class="card-row"><b>왜</b><p>private source repo의 release asset은 public proof가 아니므로 optional publish workflow도 별도 artifact repo를 명시해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>workflow_dispatch에 artifact_repo input을 추가하고, publish step이 PUBLIC_ARTIFACT_REPO_TOKEN과 --repo ARTIFACT_REPO를 사용하도록 변경했다. 기본 publish_release=false는 유지한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 artifact_repo input, token boundary, source repo read-only permission, --repo target을 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -2329,10 +2346,6 @@
           <tbody>
 
             <tr>
-              <td>M7-1</td>
-              <td><strong>Open</strong><span>M7 #83 tracks unauthenticated public distribution path</span></td>
-            </tr>
-            <tr>
               <td>M7-1 artifact</td>
               <td><strong>Partial</strong><span>public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven</span></td>
             </tr>
@@ -2359,6 +2372,10 @@
             <tr>
               <td>M7-3 public artifact README</td>
               <td><strong>Pass</strong><span>handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance</span></td>
+            </tr>
+            <tr>
+              <td>M7-4 artifact repo workflow</td>
+              <td><strong>Pass</strong><span>manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication</span></td>
             </tr>
           </tbody>
         </table>
@@ -2404,7 +2421,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 59개 보기</summary>
+        <summary>완료 이력 60개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2997,10 +3014,20 @@
               <div class="card-row"><b>완료</b><p>hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1c</strong>
+                <span>.github/workflows/public-artifact.yml, scripts/phase7-release-workflow-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+              </div>
+              <h3>#83 release artifact workflow를 준비함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact를 매번 로컬에서 손으로 만들면 publish/download evidence가 재현되기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 56개 보기</summary>
+        <summary>전체 검증 57개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3228,6 +3255,10 @@
             <tr>
               <td>M7-3 public artifact README</td>
               <td><strong>Pass</strong><span>handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance</span></td>
+            </tr>
+            <tr>
+              <td>M7-4 artifact repo workflow</td>
+              <td><strong>Pass</strong><span>manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication</span></td>
             </tr>
             </tbody>
           </table>

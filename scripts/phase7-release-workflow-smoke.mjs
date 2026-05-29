@@ -17,10 +17,15 @@ function main() {
     "workflow_dispatch:",
     "publish_release:",
     "release_tag:",
+    "artifact_repo:",
+    "bborok1234/english-learning-harness-public",
     "node scripts/package-public-artifact.mjs --target tmp/public-artifact",
     "node scripts/phase7-public-artifact-smoke.mjs",
     "actions/upload-artifact@v4",
     "gh release upload",
+    "PUBLIC_ARTIFACT_REPO_TOKEN",
+    "ARTIFACT_REPO: ${{ inputs.artifact_repo }}",
+    "--repo \"$ARTIFACT_REPO\"",
     "if: ${{ inputs.publish_release == 'true' }}",
     "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: \"true\"",
   ]) {
@@ -28,8 +33,8 @@ function main() {
   }
 
   assert(
-    workflow.includes("permissions:") && workflow.includes("contents: write"),
-    "workflow should declare release upload permissions",
+    workflow.includes("permissions:") && workflow.includes("contents: read"),
+    "workflow should keep source repository permissions read-only",
   );
   assert(
     workflow.includes("node-version: \"24\""),
@@ -42,11 +47,12 @@ function main() {
         status: "pass",
         issue: "M7-1",
         workflowPath: ".github/workflows/public-artifact.yml",
+        artifactRepoDefault: "bborok1234/english-learning-harness-public",
         packageCommand: "node scripts/package-public-artifact.mjs --target tmp/public-artifact",
         verificationCommand: "node scripts/phase7-public-artifact-smoke.mjs",
         publishReleaseDefault: false,
         claimBoundary:
-          "This proves the release workflow is wired for artifact generation and optional release upload. It does not prove that a public URL exists.",
+          "This proves the release workflow is wired for artifact generation and owner-approved optional upload to a separate artifact repository. It does not prove that a public URL exists.",
       },
       null,
       2,
