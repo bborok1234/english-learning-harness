@@ -536,7 +536,7 @@
     {
       "label": "Current stage",
       "value": "M6 active",
-      "detail": "#73 marketplace install passes; #78 blocks public claim",
+      "detail": "#73/#74 pass; #78 blocks public claim",
       "tone": "amber"
     },
     {
@@ -1272,6 +1272,19 @@
             "README.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M6-3",
+          "title": "#74 first-run onboarding/support diagnostics를 강화함",
+          "why": "새 사용자나 지인이 implementation docs 없이도 다음 행동, 복구 명령, support file 위치, native hook 경계를 이해해야 한다.",
+          "done": "setup/health/status JSON과 context text에 support diagnostics를 추가하고, setup next commands를 daily/today/weekly/home/export/health로 확장했다.",
+          "verification": "`node scripts/phase6-onboarding-diagnostics-smoke.mjs`가 setup/health/status/context support, corrupt progress recovery, setup --repair backup, progress v2 restore를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase6-onboarding-diagnostics-smoke.mjs",
+            "docs/phase-6-evidence/M6-3-onboarding-diagnostics.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1584,6 +1597,11 @@
       "name": "M6-2",
       "status": "Pass",
       "detail": "clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified"
+    },
+    {
+      "name": "M6-3",
+      "status": "Pass",
+      "detail": "setup/health/status/context support diagnostics and corrupt-store repair guidance pass"
     }
   ],
   "commands": [
@@ -1700,6 +1718,10 @@
       "command": "node scripts/phase6-marketplace-install-smoke.mjs"
     },
     {
+      "label": "Run M6 onboarding diagnostics smoke",
+      "command": "node scripts/phase6-onboarding-diagnostics-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1757,7 +1779,7 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M6 active</div>
-          <p>#73 marketplace install passes; #78 blocks public claim</p>
+          <p>#73/#74 pass; #78 blocks public claim</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
@@ -1828,16 +1850,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M5-1</strong>
-                <span>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, docs/phase-5-evidence/M5-1-validation-protocol.md, docs/project-state.json</span>
-              </div>
-              <h3>#62 M5 seven-day validation protocol을 정의함</h3>
-              <div class="card-row"><b>왜</b><p>효과 검증은 protocol 없이 export나 rubric부터 만들면 claim 기준이 흔들린다.</p></div>
-              <div class="card-row"><b>완료</b><p>Day 0-7 schedule, comparable prompt set, evidence fields, continue/split/pivot/research/kill thresholds, privacy handoff를 문서화했다.</p></div>
-              <div class="card-row"><b>검증</b><p>protocol이 LEARNING-ENGINE Gate D와 PRODUCT-ROADMAP seven-day pilot 기준을 충족하고, fluency/guarantee claim을 만들지 않는다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M5-2</strong>
                 <span>scripts/english-learning-harness.mjs, scripts/phase5-evidence-export-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-5-evidence/M5-2-evidence-export.md</span>
               </div>
@@ -1885,6 +1897,16 @@
               <div class="card-row"><b>왜</b><p>friend/invited-user handoff에는 public Git-backed install을 과장하지 않고 실제 검증된 Codex plugin install 경로가 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M6-3</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase6-onboarding-diagnostics-smoke.mjs, docs/phase-6-evidence/M6-3-onboarding-diagnostics.md, README.md</span>
+              </div>
+              <h3>#74 first-run onboarding/support diagnostics를 강화함</h3>
+              <div class="card-row"><b>왜</b><p>새 사용자나 지인이 implementation docs 없이도 다음 행동, 복구 명령, support file 위치, native hook 경계를 이해해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>setup/health/status JSON과 context text에 support diagnostics를 추가하고, setup next commands를 daily/today/weekly/home/export/health로 확장했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-onboarding-diagnostics-smoke.mjs`가 setup/health/status/context support, corrupt progress recovery, setup --repair backup, progress v2 restore를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -2055,10 +2077,6 @@
           <tbody>
 
             <tr>
-              <td>M5-0</td>
-              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66</span></td>
-            </tr>
-            <tr>
               <td>M5-1</td>
               <td><strong>Pass</strong><span>seven-day validation protocol defines schedule, prompt set, evidence fields, thresholds, privacy, and claim boundary</span></td>
             </tr>
@@ -2085,6 +2103,10 @@
             <tr>
               <td>M6-2</td>
               <td><strong>Pass</strong><span>clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified</span></td>
+            </tr>
+            <tr>
+              <td>M6-3</td>
+              <td><strong>Pass</strong><span>setup/health/status/context support diagnostics and corrupt-store repair guidance pass</span></td>
             </tr>
           </tbody>
         </table>
@@ -2130,7 +2152,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 47개 보기</summary>
+        <summary>완료 이력 48개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2603,10 +2625,20 @@
               <div class="card-row"><b>완료</b><p>#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M5 Real Learning Validation&quot;`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5-1</strong>
+                <span>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, docs/phase-5-evidence/M5-1-validation-protocol.md, docs/project-state.json</span>
+              </div>
+              <h3>#62 M5 seven-day validation protocol을 정의함</h3>
+              <div class="card-row"><b>왜</b><p>효과 검증은 protocol 없이 export나 rubric부터 만들면 claim 기준이 흔들린다.</p></div>
+              <div class="card-row"><b>완료</b><p>Day 0-7 schedule, comparable prompt set, evidence fields, continue/split/pivot/research/kill thresholds, privacy handoff를 문서화했다.</p></div>
+              <div class="card-row"><b>검증</b><p>protocol이 LEARNING-ENGINE Gate D와 PRODUCT-ROADMAP seven-day pilot 기준을 충족하고, fluency/guarantee claim을 만들지 않는다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 44개 보기</summary>
+        <summary>전체 검증 45개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2787,12 +2819,16 @@
               <td>M6-2</td>
               <td><strong>Pass</strong><span>clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified</span></td>
             </tr>
+            <tr>
+              <td>M6-3</td>
+              <td><strong>Pass</strong><span>setup/health/status/context support diagnostics and corrupt-store repair guidance pass</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 36개 보기</summary>
+        <summary>전체 명령 37개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2906,6 +2942,10 @@
             <div class="command">
               <span>Run M6 marketplace install smoke</span>
               <code>node scripts/phase6-marketplace-install-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M6 onboarding diagnostics smoke</span>
+              <code>node scripts/phase6-onboarding-diagnostics-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

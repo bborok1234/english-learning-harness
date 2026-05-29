@@ -68,6 +68,7 @@ What is complete:
 - M6-D issue #78 is created: #72 cannot honestly pass as a public clone-to-learn release gate while the GitHub repository is `PRIVATE`.
 - M6-1 authenticated clone mechanics pass from a disposable clone, but the default public clone smoke fails by design until repository visibility or distribution policy is resolved.
 - M6-2 local marketplace packaging/install path passes from a disposable clone with isolated `CODEX_HOME`; public Git-backed install remains unverified.
+- M6-3 onboarding diagnostics pass: setup/health/status/context expose next commands, support files, repair commands, and native-hook optionality.
 
 What is not started:
 - Real user validation.
@@ -116,6 +117,7 @@ Strategic reset:
 - M5-5 evidence: `docs/phase-5-evidence/M5-5-validation-gate.md` records M5 closeout decision, approved claims, blocked claims, and M6 split.
 - M6-1 evidence: `docs/phase-6-evidence/M6-1-public-clean-clone.md` records authenticated clone mechanics, README command audit, clone git status cleanliness, and the private-repository blocker for public clone readiness.
 - M6-2 evidence: `docs/phase-6-evidence/M6-2-marketplace-install.md` records clean-clone local marketplace packaging, isolated `CODEX_HOME` install, README command audit, and the public Git-backed install boundary.
+- M6-3 evidence: `docs/phase-6-evidence/M6-3-onboarding-diagnostics.md` records support diagnostics, next-step clarity, non-destructive repair guidance, and corrupt-store recovery verification.
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
@@ -219,7 +221,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [~] M6-1: Verify public clean clone setup path (#72). Authenticated clone mechanics pass; public clone is blocked by private repository visibility.
 - [ ] M6-D: Decide repository visibility for public clone-to-learn (#78).
 - [x] M6-2: Verify marketplace packaging and install docs (#73).
-- [ ] M6-3: Harden first-run onboarding and support diagnostics (#74).
+- [x] M6-3: Harden first-run onboarding and support diagnostics (#74).
 - [ ] M6-4: Close public clone-to-learn release gate (#75).
 
 ## SSOT Structure

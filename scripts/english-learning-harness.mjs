@@ -149,8 +149,51 @@ function helpText() {
   ].join("\n");
 }
 
-function recoveryCommand(command, options) {
-  return `node scripts/english-learning-harness.mjs ${command} --learner-root ${JSON.stringify(options.learnerRoot)}`;
+function commandWithRoot(command, learnerRoot, extraArgs = []) {
+  return [
+    "node scripts/english-learning-harness.mjs",
+    command,
+    "--learner-root",
+    JSON.stringify(learnerRoot),
+    ...extraArgs,
+  ].join(" ");
+}
+
+function supportDiagnostics(options, paths) {
+  const learnerRoot = paths?.root ?? options.learnerRoot;
+  const supportFiles = paths
+    ? [
+        paths.profile,
+        paths.progress,
+        paths.learnerModel,
+        paths.vocabulary,
+        paths.reviewQueue,
+        paths.journalDir,
+        paths.artifactDir,
+      ]
+    : [];
+
+  return {
+    summary: "Use the explicit command-wrapper path. Native hooks are optional.",
+    learnerRoot,
+    nativeHooksRequired: false,
+    nativeHooksStatus: "optional",
+    nextCommands: [
+      commandWithRoot("daily", learnerRoot, ["--json"]),
+      commandWithRoot("today", learnerRoot, ["--say", JSON.stringify("I want to practice today."), "--json"]),
+      commandWithRoot("weekly", learnerRoot, ["--json"]),
+      commandWithRoot("home", learnerRoot, ["--json"]),
+      commandWithRoot("export", learnerRoot, ["--json"]),
+      commandWithRoot("health", learnerRoot, ["--json"]),
+    ],
+    recoveryCommands: [
+      `${commandWithRoot("setup", learnerRoot)} --repair --json`,
+      commandWithRoot("health", learnerRoot, ["--json"]),
+    ],
+    supportFiles,
+    claimBoundary:
+      "These diagnostics explain local command-wrapper recovery and next steps only. They do not modify files unless --repair is used.",
+  };
 }
 
 function backupIfExists(path, stamp) {
@@ -188,15 +231,14 @@ function repairLearnerStore(learnerRoot) {
 }
 
 function recoverableFailure(error, options) {
+  const support = supportDiagnostics(options);
   return {
     status: "fail",
     path: "explicit-command-wrapper",
     learnerRoot: options.learnerRoot,
     error: error.message,
-    recovery: [
-      `${recoveryCommand("setup", options)} --repair`,
-      recoveryCommand("health", options),
-    ],
+    recovery: support.recoveryCommands,
+    support,
     claimBoundary:
       "This reports local setup health and recovery guidance; it does not modify files unless --repair is used.",
   };
@@ -229,11 +271,8 @@ function setup(options) {
       checks: healthResult.checks,
     },
     nativeHooksRequired: false,
-    next: [
-      `node scripts/english-learning-harness.mjs daily --learner-root ${JSON.stringify(paths.root)}`,
-      `node scripts/english-learning-harness.mjs today --learner-root ${JSON.stringify(paths.root)} --say "I want to practice today."`,
-      `node scripts/english-learning-harness.mjs health --learner-root ${JSON.stringify(paths.root)}`,
-    ],
+    next: supportDiagnostics(options, paths).nextCommands,
+    support: supportDiagnostics(options, paths),
   };
 }
 
@@ -433,6 +472,7 @@ function health(options) {
     recovery: [],
     nativeHooksRequired: false,
     nativeHooksStatus: "optional",
+    support: supportDiagnostics(options, paths),
     claimBoundary:
       "Health checks local learner store readiness for the command-wrapper path only.",
   };
@@ -446,7 +486,21 @@ function status(options) {
     profile: readProfile(paths.profile),
     progress: readProgress(paths.progress),
     learnerModel: readLearnerModel(paths.learnerModel),
+    support: supportDiagnostics(options, paths),
   };
+}
+
+function context(options) {
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const support = supportDiagnostics(options, paths);
+  return [
+    buildAdditionalContext(paths.root),
+    "",
+    "Support diagnostics:",
+    `- Native hooks: ${support.nativeHooksStatus}; explicit command wrapper is supported.`,
+    `- Recovery: ${support.recoveryCommands.join(" | ")}`,
+    `- Next: ${support.nextCommands.join(" | ")}`,
+  ].join("\n");
 }
 
 function review(options) {
@@ -738,7 +792,7 @@ function run() {
     return;
   }
   if (command === "context") {
-    output(buildAdditionalContext(options.learnerRoot), options.json);
+    output(context(options), options.json);
     return;
   }
   if (command === "review") {
