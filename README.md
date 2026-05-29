@@ -107,6 +107,12 @@ Codex가 skill 설치, 학습자 설정, 첫 연습, progress 저장, mini mirro
 - **Weekly mirror:** 여러 날의 연습을 묶어 반복 패턴과 다음 focus를 보여줍니다.
 - **Multimodal-ready evidence:** text, transcript-backed voice, image information-gap event가 같은 interaction-event 구조를 공유합니다.
 
+## 학습 방식의 근거
+
+이 하네스는 "AI와 아무 영어 채팅이나 많이 하기"를 목표로 하지 않습니다. output practice, interaction repair, corrective feedback, retrieval practice, task-based conversation을 제품 구조에 박아두는 방향입니다.
+
+출처와 기능 매핑은 [docs/RESEARCH-BASIS.md](docs/RESEARCH-BASIS.md)에 정리되어 있습니다. 각 근거는 실제 구현 표면과 claim boundary까지 함께 적혀 있습니다. 연구 근거는 설계 방향을 뒷받침하지만, 장기 회화 능력 향상 claim은 실제 multi-day learner pilot 전까지 보류합니다.
+
 ## 무엇이 기록되나
 
 학습자 데이터는 기본적으로 로컬에 저장됩니다.

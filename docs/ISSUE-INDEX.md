@@ -361,6 +361,7 @@ M7 now targets the current source repository as the open-source public distribut
 | #128 | M8-1: Implement Speaking Skill OS diagnosis and backlog loop | continue |
 | #130 | M8-2: Add multi-skill diagnosis and adaptive speaking queue | continue |
 | #132 | M8-3: Add seven-day Speaking Skill OS simulation gate | continue |
+| #134 | M8-4: Add research basis citation map | continue |
 
 #128 evidence currently shows:
 
@@ -389,3 +390,11 @@ M7 now targets the current source repository as the open-source public distribut
 - weekly mirror includes `speaking_os_summary`.
 - export evidence includes speaking backlog counts.
 - this is a local fixture gate, not real learner outcome proof.
+
+#134 evidence currently shows:
+
+- `docs/RESEARCH-BASIS.md` maps source families to product behaviors, implementation surfaces, and claim boundaries.
+- README Korean/English surfaces link to the research basis instead of leaving citations hidden in planning docs.
+- `docs/LEARNING-ENGINE.md` now points to the citation map and adds a Speaking Skill OS research anchor.
+- `scripts/phase8-research-basis-smoke.mjs` verifies required source URLs, README links, and unsupported-claim guardrails.
+- this justifies the instructional design direction; it does not prove real learner outcome improvement.
