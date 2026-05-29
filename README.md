@@ -39,7 +39,7 @@ For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learne
 
 ## Quick Start
 
-From a fresh public clone:
+From a fresh private beta / invited-user clone:
 
 ```bash
 git clone https://github.com/bborok1234/english-learning-harness.git
@@ -54,6 +54,8 @@ node scripts/english-learning-harness.mjs weekly --json
 node scripts/english-learning-harness.mjs home --json
 node scripts/english-learning-harness.mjs export --json
 ```
+
+The M6 first-complete release claim is **private beta / invited-user clone-to-learn**. The repository is currently private, so unauthenticated public clone is deferred to M7. Do not describe the HTTPS clone command as public release evidence until the default public clone smoke passes without private access.
 
 The supported first-use path is the explicit command wrapper. It does not require native Codex hooks.
 
@@ -409,6 +411,12 @@ Run the M6 public clean clone smoke:
 
 ```bash
 node scripts/phase6-public-clean-clone-smoke.mjs
+```
+
+Run the M6 distribution policy smoke:
+
+```bash
+node scripts/phase6-distribution-policy-smoke.mjs
 ```
 
 Run the M6 local marketplace install smoke:

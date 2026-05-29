@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M6 Public Clone-to-Learn active",
-    "status": "Decision needed: #78 repository visibility blocks #72 public clone claim",
+    "stage": "M6 Private Beta Clone-to-Learn closeout",
+    "status": "M6 private beta release gate ready; public distribution deferred to #83",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 gate smoke passes with decision continue_to_m6. M6 public clone verification found that authenticated clone mechanics pass, but the repository is PRIVATE, so public clone-to-learn readiness is blocked until #78 resolves distribution policy."
+    "summary": "M6 distribution policy selects private beta / invited-user clone-to-learn. Authenticated clone, local marketplace install, onboarding diagnostics, and release gate audit pass. Unauthenticated public distribution is deferred to M7 #83."
   },
   "ssot": [
     {
@@ -19,6 +19,12 @@
       "label": "docs/project-state.json",
       "path": "./project-state.json",
       "role": "대시보드 상태 데이터",
+      "kind": "source"
+    },
+    {
+      "label": "docs/distribution-policy.json",
+      "path": "./distribution-policy.json",
+      "role": "private-beta/public distribution policy",
       "kind": "source"
     },
     {
@@ -133,20 +139,20 @@
     },
     {
       "label": "Current stage",
-      "value": "M6 active",
-      "detail": "#73/#74 pass; #75 gate blocked by #78",
-      "tone": "amber"
+      "value": "M6 closeout",
+      "detail": "private beta gate ready; public release in M7",
+      "tone": "green"
     },
     {
       "label": "Next block",
-      "value": "#78",
-      "detail": "repository visibility / distribution policy",
-      "tone": "red"
+      "value": "M7",
+      "detail": "#83 public distribution path",
+      "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "37 issues",
-      "detail": "M1-M5 closed; M6 #72-#75 plus #78",
+      "value": "38 issues",
+      "detail": "M1-M5 closed; M6 private beta; M7 #83 created",
       "tone": "green"
     },
     {
@@ -886,14 +892,38 @@
         },
         {
           "id": "M6-4",
-          "title": "#75 M6 release gate audit을 추가함",
-          "why": "M6 closeout은 개별 smoke 통과가 아니라 public clone claim, install docs, diagnostics, claim boundary를 함께 판단해야 한다.",
-          "done": "release gate smoke가 M6 evidence를 재검증하고 decision=blocked_by_distribution_policy, canCloseM6=false를 반환한다.",
-          "verification": "`node scripts/phase6-release-gate-smoke.mjs`가 authenticated clone, marketplace install, onboarding diagnostics를 검증하고 #72/#78 blockers를 보고했다.",
+          "title": "#75 M6 private beta release gate가 ready 상태임",
+          "why": "M6 closeout은 clone, install, diagnostics, distribution policy를 함께 판단해야 한다.",
+          "done": "release gate smoke가 distribution policy, authenticated clone, marketplace install, onboarding diagnostics를 재검증하고 ready_to_close_m6_private_beta를 반환한다.",
+          "verification": "`node scripts/phase6-release-gate-smoke.mjs`가 decision=ready_to_close_m6_private_beta, canCloseM6=true를 통과했다.",
           "files": [
             "scripts/phase6-release-gate-smoke.mjs",
             "docs/phase-6-evidence/M6-4-release-gate.md",
             "docs/project-state.json"
+          ]
+        },
+        {
+          "id": "M6-D",
+          "title": "#78 distribution policy를 private beta로 결정함",
+          "why": "repo visibility를 public으로 바꾸는 것은 외부 release action이라 암묵적으로 수행하면 안 된다.",
+          "done": "M6 first-complete claim을 private beta / invited-user clone-to-learn으로 정하고 unauthenticated public release를 M7 #83으로 분리했다.",
+          "verification": "`node scripts/phase6-distribution-policy-smoke.mjs`가 currentPolicy=private-beta, releaseClaim=invited-user clone-to-learn, publicReleaseStatus=deferred를 통과했다.",
+          "files": [
+            "docs/distribution-policy.json",
+            "docs/phase-6-evidence/M6-D-distribution-policy.md",
+            "docs/ISSUE-INDEX.md"
+          ]
+        },
+        {
+          "id": "M6-1",
+          "title": "#72 private beta clone setup path를 검증함",
+          "why": "친구/초대 사용자가 repository access를 가진 상태에서 clone 후 바로 학습할 수 있어야 한다.",
+          "done": "authenticated clone에서 setup, daily, today, weekly, home, export, README command audit, clone git status check를 통과했다. public clone은 M7로 분리했다.",
+          "verification": "`ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`가 통과했고 default public smoke는 PRIVATE visibility를 정직하게 거부한다.",
+          "files": [
+            "scripts/phase6-public-clean-clone-smoke.mjs",
+            "docs/phase-6-evidence/M6-1-public-clean-clone.md",
+            "README.md"
           ]
         }
       ]
@@ -904,17 +934,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M6-1",
-          "title": "#72 public clean clone gate is blocked by repo visibility",
-          "why": "M5가 local simulated validation readiness를 통과했으므로 다음 병목은 친구/공개 사용자가 GitHub clone만으로 시작할 수 있는지다.",
-          "done": "setup, daily, today, weekly, home, export, README command audit, clone git status check를 포함한 M6 smoke를 추가했다. 인증된 SSH clone mechanics는 통과한다.",
-          "verification": "`ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`는 통과한다. 기본 `node scripts/phase6-public-clean-clone-smoke.mjs`는 repo visibility PRIVATE 때문에 실패한다.",
+          "id": "M6-closeout",
+          "title": "M6 private beta closeout ready",
+          "why": "M6의 완료 claim이 public release가 아니라 invited-user clone-to-learn으로 재정의되었고 해당 evidence가 통과했다.",
+          "done": "#72/#75/#78을 private beta pivot으로 닫고 M6 milestone을 close할 준비가 됐다.",
+          "verification": "distribution policy smoke와 release gate smoke가 모두 pass해야 한다.",
           "files": [
-            "scripts/phase6-public-clean-clone-smoke.mjs",
-            "docs/phase-6-evidence/M6-1-public-clean-clone.md",
-            "README.md",
-            "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/distribution-policy.json",
+            "docs/phase-6-evidence/M6-D-distribution-policy.md",
+            "docs/phase-6-evidence/M6-4-release-gate.md"
           ]
         }
       ]
@@ -925,14 +953,14 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "M6-D",
-          "title": "#78 repository visibility decision",
-          "why": "#72의 public clone claim은 repo가 PRIVATE인 한 기술 구현만으로 닫을 수 없다.",
-          "done": "public repo, private beta, separate public artifact 중 하나를 선택하고 README/STATUS/dashboard claim을 맞춘다.",
-          "verification": "선택한 distribution policy 아래에서 #72 acceptance를 재검증하거나 명시적으로 pivot한다.",
+          "id": "M7-1",
+          "title": "#83 public distribution path",
+          "why": "unauthenticated public clone/install claim은 private beta와 다른 release problem이다.",
+          "done": "public repo 또는 별도 public artifact 중 하나를 선택하고 default public clone/download smoke를 추가한다.",
+          "verification": "private access override 없이 public distribution smoke가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/distribution-policy.json"
           ]
         }
       ]
@@ -944,10 +972,10 @@
       "cards": [
         {
           "id": "R000",
-          "title": "Public clone claim is blocked by PRIVATE repository visibility",
-          "why": "GitHub repository visibility is currently PRIVATE, so unauthenticated `git clone https://github.com/bborok1234/english-learning-harness.git` cannot be treated as verified public onboarding.",
-          "done": "#78 tracks the distribution-policy decision. Authenticated clone mechanics are verified separately and are not public release evidence.",
-          "verification": "default `node scripts/phase6-public-clean-clone-smoke.mjs` fails by design; allow-private mode passes authenticated mechanics only."
+          "title": "Unauthenticated public release is deferred to M7",
+          "why": "GitHub repository visibility is currently PRIVATE, so unauthenticated public clone cannot be claimed inside M6.",
+          "done": "M6 is scoped to private beta / invited-user clone-to-learn; M7 #83 owns public distribution.",
+          "verification": "distribution policy smoke and release gate smoke separate private beta evidence from public release evidence."
         },
         {
           "id": "R001",
@@ -1200,8 +1228,8 @@
     },
     {
       "name": "M6-1",
-      "status": "Blocked",
-      "detail": "authenticated clone mechanics pass, but public clone smoke fails by design while repository visibility is PRIVATE"
+      "status": "Pass",
+      "detail": "authenticated clone mechanics pass under private beta policy; unauthenticated public clone deferred to M7"
     },
     {
       "name": "M6-2",
@@ -1215,8 +1243,13 @@
     },
     {
       "name": "M6-4",
-      "status": "Blocked",
-      "detail": "release gate audit passes with decision blocked_by_distribution_policy; #72/#78 prevent M6 closeout"
+      "status": "Pass",
+      "detail": "release gate audit passes with decision ready_to_close_m6_private_beta and canCloseM6=true"
+    },
+    {
+      "name": "M6-D",
+      "status": "Pass",
+      "detail": "distribution policy smoke passes private-beta / invited-user clone-to-learn with public release deferred to M7"
     }
   ],
   "commands": [
@@ -1329,6 +1362,10 @@
       "command": "ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs"
     },
     {
+      "label": "Run M6 distribution policy smoke",
+      "command": "node scripts/phase6-distribution-policy-smoke.mjs"
+    },
+    {
       "label": "Run M6 marketplace install smoke",
       "command": "node scripts/phase6-marketplace-install-smoke.mjs"
     },
@@ -1369,8 +1406,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View current M6 decision issue",
-      "command": "gh issue view 78"
+      "label": "View next public distribution issue",
+      "command": "gh issue view 83"
     }
   ]
 }
