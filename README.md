@@ -1,6 +1,6 @@
 # English Learning Harness
 
-Local-first Codex plugin/harness for gentle English practice.
+Open-source, local-first Codex plugin/harness for gentle English practice.
 
 North star: **AI 파트너와 편안하게 영어로 대화하는 능력.**
 
@@ -39,7 +39,7 @@ For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learne
 
 ## Quick Start
 
-From a fresh private beta / invited-user clone:
+From a fresh clone:
 
 ```bash
 git clone https://github.com/bborok1234/english-learning-harness.git
@@ -55,7 +55,7 @@ node scripts/english-learning-harness.mjs home --json
 node scripts/english-learning-harness.mjs export --json
 ```
 
-The M6 first-complete release claim is **private beta / invited-user clone-to-learn**. The repository is currently private, so unauthenticated public clone is deferred to M7. Do not describe the HTTPS clone command as public release evidence until the default public clone smoke passes without private access.
+The intended public release surface is this open-source repository. Public clone-to-learn is claimed only after repository visibility is public and `node scripts/phase6-public-clean-clone-smoke.mjs` passes without `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE`.
 
 The supported first-use path is the explicit command wrapper. It does not require native Codex hooks.
 
@@ -254,9 +254,24 @@ Public Git-backed install remains unverified and should not be documented as the
 
 The verified install claim is local marketplace packaging only: a clean repository can package the plugin into a local marketplace root, install that marketplace into an isolated `CODEX_HOME`, and list the plugin as installed/enabled. Do not replace this with a GitHub-backed install command until a separate smoke proves that path.
 
-## Public Artifact Candidate
+## Public Distribution
 
-The repository is private, so unauthenticated public clone is deferred. The current public distribution candidate is a tarball that can be published later through a public release or another public URL:
+The primary open-source distribution path is the source repository:
+
+```bash
+git clone https://github.com/bborok1234/english-learning-harness.git
+cd english-learning-harness
+node scripts/english-learning-harness.mjs setup --json
+node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
+```
+
+Before claiming public distribution, verify a default public clone:
+
+```bash
+node scripts/phase6-public-clean-clone-smoke.mjs
+```
+
+The tarball artifact path remains optional for release assets or mirrors:
 
 ```bash
 node scripts/package-public-artifact.mjs --target tmp/public-artifact
@@ -287,7 +302,7 @@ ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL="https://example.com/SHA256SUMS" \
 
 Without both public URL variables, this smoke uses local loopback and proves mechanics only.
 
-The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a separate public artifact repository release when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. A release asset on this private source repository is not public evidence; verify the final URL with `phase7-hosted-artifact-smoke.mjs`.
+The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a release when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. This is secondary to the open-source repository path.
 
 For a separate public artifact repository handoff, generate the bundle locally:
 
@@ -299,6 +314,21 @@ The handoff directory contains a public artifact repository `README.md`, the tar
 
 ```bash
 node scripts/phase7-public-artifact-handoff-smoke.mjs
+```
+
+## Open Source
+
+- License: MIT. See `LICENSE`.
+- Contributing guide: `CONTRIBUTING.md`.
+- Code of conduct: `CODE_OF_CONDUCT.md`.
+- Security policy: `SECURITY.md`.
+- Support guidance: `SUPPORT.md`.
+- Governance notes: `GOVERNANCE.md`.
+
+Before changing repository visibility to public, run:
+
+```bash
+node scripts/phase7-open-source-readiness-smoke.mjs
 ```
 
 ## Verification
@@ -530,6 +560,12 @@ Run the M7 public release approval packet smoke:
 
 ```bash
 node scripts/phase7-public-release-approval-smoke.mjs
+```
+
+Run the M7 open-source readiness smoke:
+
+```bash
+node scripts/phase7-open-source-readiness-smoke.mjs
 ```
 
 Run the M7 public publication preflight:

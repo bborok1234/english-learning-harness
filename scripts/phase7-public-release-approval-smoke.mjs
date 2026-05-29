@@ -23,25 +23,43 @@ function main() {
   assert(packet.decisionIssue === 90, "packet must point to #90 decision");
   assert(packet.distributionIssue === 83, "packet must point to #83 proof");
   assert(packet.approvalRequired === true, "packet must require owner approval");
-  assert(packet.decisionStatus === "owner_decision_required", "packet should preserve current owner decision blocker");
+  assert(
+    ["owner_decision_required", "approved_pending_visibility_change"].includes(packet.decisionStatus),
+    "packet should preserve current owner decision or visibility-change status",
+  );
   assert(packet.publicationPerformed === false, "packet must not publish");
   assert(packet.canPublishNow === false, "packet must not authorize publication");
   assert(packet.canClosePublicDistribution === false, "packet must not claim public distribution complete");
-  assert(packet.workflowDispatchCommand.includes("publish_release=true"), "packet missing approval-time workflow command");
-  assert(packet.workflowDispatchCommand.includes("artifact_repo=bborok1234/english-learning-harness-public"), "packet missing artifact repo target");
-  assert(packet.proofCommand.includes("ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL"), "packet missing artifact proof URL");
-  assert(packet.proofCommand.includes("ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL"), "packet missing checksum proof URL");
-  assert(packet.proofCommand.includes("phase7-public-release-url-smoke.mjs"), "packet missing checksum-aware smoke");
 
-  for (const required of [
-    "Do not execute this command until #90 records explicit owner approval",
-    "Required Proof After Publication",
-    "hostedAccessStatus=public_url_candidate",
-    "checksumVerified=true",
-    "canClosePublicDistribution=true",
-    "This packet is for the owner decision in #90",
-  ]) {
-    assert(markdown.includes(required), `approval markdown missing ${required}`);
+  if (packet.recommendedSurface === "public_source_repository") {
+    assert(packet.repositoryVisibilityChanged === false, "packet must not change repository visibility");
+    assert(packet.visibilityChangeCommand.includes("--visibility public"), "packet missing visibility change command");
+    assert(packet.proofCommand.includes("phase6-public-clean-clone-smoke.mjs"), "packet missing public clone proof");
+    for (const required of [
+      "Public Source Repository Approval Packet",
+      "Do not execute this command until #90 records explicit owner approval",
+      "Required Proof After Visibility Change",
+      "phase6-public-clean-clone-smoke.mjs",
+    ]) {
+      assert(markdown.includes(required), `approval markdown missing ${required}`);
+    }
+  } else {
+    assert(packet.workflowDispatchCommand.includes("publish_release=true"), "packet missing approval-time workflow command");
+    assert(packet.workflowDispatchCommand.includes("artifact_repo=bborok1234/english-learning-harness-public"), "packet missing artifact repo target");
+    assert(packet.proofCommand.includes("ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL"), "packet missing artifact proof URL");
+    assert(packet.proofCommand.includes("ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL"), "packet missing checksum proof URL");
+    assert(packet.proofCommand.includes("phase7-public-release-url-smoke.mjs"), "packet missing checksum-aware smoke");
+
+    for (const required of [
+      "Do not execute this command until #90 records explicit owner approval",
+      "Required Proof After Publication",
+      "hostedAccessStatus=public_url_candidate",
+      "checksumVerified=true",
+      "canClosePublicDistribution=true",
+      "This packet is for the owner decision in #90",
+    ]) {
+      assert(markdown.includes(required), `approval markdown missing ${required}`);
+    }
   }
 
   console.log(
@@ -52,9 +70,12 @@ function main() {
         target: smokeRoot,
         markdownPath: result.markdownPath,
         jsonPath: result.jsonPath,
+        recommendedSurface: packet.recommendedSurface,
         artifactRepo: packet.artifactRepo,
+        sourceRepo: packet.sourceRepo,
         decisionStatus: packet.decisionStatus,
         publicationPerformed: packet.publicationPerformed,
+        repositoryVisibilityChanged: packet.repositoryVisibilityChanged,
         canPublishNow: packet.canPublishNow,
         canClosePublicDistribution: packet.canClosePublicDistribution,
         claimBoundary: packet.claimBoundary,

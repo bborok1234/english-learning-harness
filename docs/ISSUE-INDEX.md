@@ -207,15 +207,16 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #106 | M7-8: Verify plugin install from downloaded public artifact | continue |
 | #108 | M7-9: Prepare owner approval packet for public artifact publication | continue |
 | #110 | M7-10: Align public release policy with artifact-first path | continue |
+| #112 | M7-11: Prepare repository for open-source public launch | continue |
 
-M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
+M7 now targets the current source repository as the open-source public distribution surface. Do not advertise public clone/install claims until the repository is public and public clone smoke passes.
 
 #90 decision currently shows:
 
-- the recommended public surface is a release asset in a separate public artifact repository, or another public static URL.
-- a release asset in this private source repository is not accepted as unauthenticated public evidence.
-- Codex must not execute `publish_release=true` or any public release publication without explicit owner approval.
-- `scripts/phase7-public-release-decision-smoke.mjs` verifies the decision gate and prevents public distribution completion from being claimed before owner approval.
+- the recommended public surface is now this source repository as an open-source public repository.
+- a separate public artifact repository is no longer the primary path; it remains an optional fallback if the source repository must stay private.
+- Codex must not change repository visibility until open-source readiness smoke passes and the owner intentionally approves the final visibility change.
+- `scripts/phase7-public-release-decision-smoke.mjs` verifies the decision gate and prevents public distribution completion from being claimed before public clone proof.
 - #94 prepares a local handoff bundle for a separate public artifact repository without publishing.
 - #96 adds a public artifact repository README to that handoff so the public repository URL can explain download, verification, extraction, setup, and first practice.
 - #98 aligns the manual workflow so optional publication targets `artifact_repo` with `PUBLIC_ARTIFACT_REPO_TOKEN`, not the private source repository.
@@ -223,9 +224,10 @@ M7 remains open for a future public repository clone or separate public artifact
 - #102 records a successful no-publication GitHub Actions run for the artifact repo workflow.
 - #104 adds a non-publishing preflight that reports owner decision and artifact repository readiness before any release action.
 - #106 verifies local Codex plugin install from a checksum-verified downloaded public artifact.
-- #108 prepares the non-publishing owner approval packet for #90, including approval-time commands and the required #83 proof command.
-- #110 aligns distribution policy so public clone smoke is required for the public source repository path, while the current artifact-first path requires real artifact + `SHA256SUMS` URL smoke.
-- after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL=... node scripts/phase7-public-release-url-smoke.mjs` against the real URLs.
+- #108 now prepares the non-publishing owner approval packet for the source repository visibility change and required public clone proof.
+- #110 keeps artifact release as a fallback but makes public source clone the primary path.
+- #112 adds open-source community files and readiness smoke before repository visibility changes.
+- after visibility changes to public, #83 can run `node scripts/phase6-public-clean-clone-smoke.mjs` without `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE`.
 
 #94 evidence currently shows:
 
@@ -280,16 +282,24 @@ M7 remains open for a future public repository clone or separate public artifact
 #108 evidence currently shows:
 
 - `scripts/prepare-public-release-approval.mjs` generates `PUBLIC-RELEASE-APPROVAL.md` and `PUBLIC-RELEASE-APPROVAL.json` under `tmp/`.
-- `scripts/phase7-public-release-approval-smoke.mjs` verifies the packet keeps `approvalRequired=true`, `publicationPerformed=false`, `canPublishNow=false`, and `canClosePublicDistribution=false`.
-- the packet includes the approval-time workflow command for `publish_release=true`, the manual fallback command, forbidden-before-approval actions, and the checksum-aware real public URL proof command.
-- this does not create a public repository, publish a release, prove public URL access, or resolve #90/#83.
+- `scripts/phase7-public-release-approval-smoke.mjs` verifies the packet keeps `approvalRequired=true`, `repositoryVisibilityChanged=false`, `canPublishNow=false`, and `canClosePublicDistribution=false`.
+- the packet includes the explicit repository visibility command and required public clone smoke command.
+- this does not change repository visibility, prove public clone access, or resolve #90/#83.
 
 #110 evidence currently shows:
 
 - `docs/distribution-policy.json` now groups public release requirements by `publicSourceRepository`, `publicArtifactRepositoryRelease`, and `publicStaticArtifactUrl`.
 - `scripts/phase6-distribution-policy-smoke.mjs` verifies the default public clone smoke remains required for the public source repository path.
-- the same smoke verifies the current artifact-first path requires `scripts/phase7-public-release-url-smoke.mjs` with artifact and `SHA256SUMS` URLs, while keeping Git-backed plugin install unclaimed.
+- the same smoke verifies the artifact release path is now a fallback requiring `scripts/phase7-public-release-url-smoke.mjs` with artifact and `SHA256SUMS` URLs, while keeping Git-backed plugin install unclaimed.
 - this does not create a public repository, publish a release, prove public URL access, or resolve #90/#83.
+
+#112 evidence currently shows:
+
+- `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md`, and `GOVERNANCE.md` exist.
+- `.github` issue templates and pull request template exist.
+- `scripts/phase7-open-source-readiness-smoke.mjs` verifies README public clone framing, policy alignment, required community files, and absence of obvious local secret files.
+- current output reports `visibilityReady=false` only because `bborok1234/english-learning-harness` is still `PRIVATE`.
+- this does not change repository visibility or prove public clone access.
 
 #83 evidence currently shows:
 

@@ -17,24 +17,26 @@ function main() {
   assert(decision, "publicReleaseDecision missing");
   assert(decision.issue === 90, "public release decision should be tracked by issue 90");
   assert(
-    ["owner_decision_required", "approved"].includes(decision.status),
-    "public release decision status must be owner_decision_required or approved",
+    ["owner_decision_required", "approved", "approved_pending_visibility_change"].includes(decision.status),
+    "public release decision status must be owner_decision_required, approved, or approved_pending_visibility_change",
   );
   assert(
-    decision.recommendedSurface === "public_artifact_repository_release",
-    "recommended public surface should be a separate public artifact repository release",
+    decision.recommendedSurface === "public_source_repository",
+    "recommended public surface should be the source repository for open-source launch",
   );
   assert(
     decision.codexMayPublishWithoutExplicitApproval === false,
     "Codex must not be allowed to publish public release assets without explicit approval",
   );
   assert(
-    policy.publicReleaseRequirements.some((requirement) => requirement.includes("#90")),
+    policy.publicReleaseRequirements.common.some((requirement) => requirement.includes("#90")),
     "public release requirements should mention the issue 90 decision",
   );
 
   const canPublishNow =
-    decision.status === "approved" && decision.codexMayPublishWithoutExplicitApproval === false;
+    decision.status === "approved" &&
+    decision.recommendedSurface === "public_source_repository" &&
+    decision.codexMayPublishWithoutExplicitApproval === false;
 
   console.log(
     JSON.stringify(
@@ -48,9 +50,9 @@ function main() {
           decision.codexMayPublishWithoutExplicitApproval,
         canPublishNow,
         nextGate:
-          decision.status === "approved"
-            ? "Run the manually approved public artifact repository or static URL publication path, then verify the real URL with phase7-hosted-artifact-smoke."
-            : "Resolve the public release surface and publication authority before publishing any release asset.",
+          decision.status === "approved" || decision.status === "approved_pending_visibility_change"
+            ? "Run the open-source readiness audit, make the repository public with owner approval, then verify public clone smoke."
+            : "Resolve the public release surface and publication authority before changing repository visibility.",
         claimBoundary:
           "This proves the release decision gate is explicit. It does not publish or prove a public URL.",
       },

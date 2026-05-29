@@ -1,0 +1,25 @@
+name: Feature request
+description: Suggest an improvement to the harness.
+title: "Feature: "
+labels:
+  - type:feature
+body:
+  - type: textarea
+    id: learner-problem
+    attributes:
+      label: Learner problem
+      description: What learner pain or practice loop should this improve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the smallest useful version.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or inspiration
+      description: Link docs, learning research, examples, or existing harness behavior if relevant.
