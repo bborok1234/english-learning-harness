@@ -38,6 +38,10 @@ Codex should install the skill surface, handle setup, run practice, save local p
 - suggests due review and next scenarios
 - generates mini mirrors and weekly mirrors
 
+## Learning Basis
+
+The harness is not designed as generic English chat. Its learning loop is grounded in output practice, interaction repair, corrective feedback, retrieval practice, and task-based conversation. See [docs/RESEARCH-BASIS.md](docs/RESEARCH-BASIS.md) for the source-to-feature map and claim boundaries.
+
 ## Learner Data
 
 Local learner state defaults to:

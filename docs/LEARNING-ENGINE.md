@@ -17,6 +17,8 @@ Do not claim native fluency, exam improvement, or guaranteed real-person confide
 
 ## Research Anchors
 
+For the source-to-feature map and claim boundaries, see `docs/RESEARCH-BASIS.md`.
+
 ### Balanced Language Work
 
 Paul Nation's "four strands" framework is a useful curriculum guardrail: a balanced program needs meaning-focused input, meaning-focused output, language-focused learning, and fluency development. The harness should not become only chatbot output practice.
@@ -70,6 +72,21 @@ Product implication:
 
 Source:
 - "Large Language Model based Situational Dialogues for Second Language Learning": https://arxiv.org/abs/2403.20005
+
+### Speaking Skill OS
+
+The product differentiator is not open-ended AI chat. The Speaking Skill OS turns one weak utterance into a concrete interaction backlog item, then routes future practice toward a targeted drill and transfer test.
+
+Product implication:
+
+- Diagnose observable interaction behaviors such as clarification, repair, follow-up, and soft disagreement.
+- Keep failed transfer work ahead of generic practice.
+- Show weekly evidence as behavior-level progress, not vague fluency praise.
+
+Sources:
+- Merrill Swain and Sharon Lapkin on output, noticing, and modified output: https://academic.oup.com/applij/article/16/3/371/184113
+- Alison Mackey on interaction, negotiation for meaning, and output in instructed SLA: https://www.cambridge.org/core/journals/language-teaching/article/interaction-and-instructed-second-language-acquisition/78A156EE200F744F5978F99BFB073DBE
+- Roy Lyster and Leila Ranta on corrective feedback and learner uptake: https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/abs/corrective-feedback-and-learner-uptake/59229F0CA2F085F5F5016FB4674877BF
 
 ### Voice Architecture
 

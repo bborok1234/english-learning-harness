@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Speaking Skill OS core live",
-    "status": "Public onboarding is live and the harness now has a seven-day local Speaking Skill OS gate",
+    "stage": "Speaking Skill OS with research basis live",
+    "status": "Public onboarding is live, Speaking Skill OS has a seven-day local gate, and learning-method citations are mapped to product behavior",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets sessions from the queue, retries failed transfer work, and passes a seven-day local fixture with weekly mirror plus export evidence."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets sessions from the queue, retries failed transfer work, passes a seven-day local fixture, and now has a visible research basis map that ties output practice, interaction repair, corrective feedback, retrieval practice, task-based scenarios, and claim boundaries to product surfaces."
   },
   "ssot": [
     {
@@ -118,6 +118,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/RESEARCH-BASIS.md",
+      "path": "./RESEARCH-BASIS.md",
+      "role": "학습 방식 출처/근거와 source-to-feature claim boundary map",
+      "kind": "source"
+    },
+    {
       "label": "docs/PRODUCT-ROADMAP.md",
       "path": "./PRODUCT-ROADMAP.md",
       "role": "제품 로드맵과 게이트",
@@ -181,14 +187,14 @@
     },
     {
       "label": "GitHub plan",
-      "value": "51 issues",
-      "detail": "#132 adds seven-day Speaking Skill OS gate",
+      "value": "52 issues",
+      "detail": "#134 adds the research basis citation map",
       "tone": "green"
     },
     {
       "label": "Differentiator",
       "value": "Speaking OS",
-      "detail": "diagnose -> backlog -> targeted drill -> transfer evidence",
+      "detail": "diagnose -> backlog -> targeted drill -> transfer evidence, with cited learning basis",
       "tone": "green"
     }
   ],
@@ -234,6 +240,13 @@
       "status": "Pass",
       "evidence": "#17, phase1-clean-clone-smoke",
       "claim": "fresh clone can run setup, today, health, progress validation, and dashboard generation"
+    },
+    {
+      "id": "GATE-7",
+      "label": "Research basis mapped to product behavior",
+      "status": "Pass",
+      "evidence": "#134, docs/RESEARCH-BASIS.md, phase8-research-basis-smoke",
+      "claim": "learning-method sources are visible and bounded by explicit non-outcome claims"
     }
   ],
   "board": [
@@ -1279,6 +1292,21 @@
             "docs/STATUS.md",
             "docs/ISSUE-INDEX.md"
           ]
+        },
+        {
+          "id": "M8-4",
+          "title": "#134 학습 방식 근거와 출처를 제품 표면에 박음",
+          "why": "Speaking Skill OS가 그냥 AI 영어 채팅처럼 보이지 않으려면, 어떤 학습 원리가 어떤 기능으로 구현됐는지 사람이 확인할 수 있어야 한다.",
+          "done": "docs/RESEARCH-BASIS.md를 추가하고 README/LEARNING-ENGINE에 연결했다. source-to-feature map은 output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, claim boundary를 다룬다.",
+          "verification": "`node scripts/phase8-research-basis-smoke.mjs`가 필수 출처 URL, README 링크, claim boundary guard를 확인한다.",
+          "files": [
+            "docs/RESEARCH-BASIS.md",
+            "README.md",
+            "README.en.md",
+            "docs/LEARNING-ENGINE.md",
+            "scripts/phase8-research-basis-smoke.mjs",
+            "docs/phase-8-evidence/M8-4-research-basis.md"
+          ]
         }
       ]
     },
@@ -1289,13 +1317,14 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Seven-day Speaking Skill OS gate",
-          "why": "제품 차별점은 하루짜리 기능이 아니라 지속적으로 약점을 운영하는 하네스다. 7일 fixture로 queue, retry, weekly mirror, export가 이어지는지 검증한다.",
-          "done": "seven-day Speaking Skill OS smoke를 추가했다.",
-          "verification": "`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 통과한다.",
+          "title": "Research-backed Speaking Skill OS",
+          "why": "현재 제품 차별점은 diagnose/backlog/drill/transfer 루프이고, 이 루프가 어떤 교육학적 근거 위에 있는지 공개 표면에서 바로 보여야 한다.",
+          "done": "Research basis citation map을 추가했다.",
+          "verification": "`node scripts/phase8-research-basis-smoke.mjs`가 통과한다.",
           "files": [
-            "scripts/phase8-speaking-skill-os-seven-day-smoke.mjs",
-            "docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md"
+            "docs/RESEARCH-BASIS.md",
+            "README.md",
+            "docs/LEARNING-ENGINE.md"
           ]
         }
       ]
@@ -1734,6 +1763,11 @@
       "name": "M8-3 seven-day Speaking OS gate",
       "status": "Pass",
       "detail": "seven-session fixture proves queue retry, weekly mirror, and export evidence"
+    },
+    {
+      "name": "M8-4 research basis",
+      "status": "Pass",
+      "detail": "source-to-feature citation map, README links, and claim-boundary guard smoke pass"
     }
   ],
   "commands": [
@@ -1940,6 +1974,10 @@
     {
       "label": "View next public distribution issue",
       "command": "gh issue view 83"
+    },
+    {
+      "label": "Run M8 research basis smoke",
+      "command": "node scripts/phase8-research-basis-smoke.mjs"
     }
   ]
 }

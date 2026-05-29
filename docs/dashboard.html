@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Speaking Skill OS core live",
-    "status": "Public onboarding is live and the harness now has a seven-day local Speaking Skill OS gate",
+    "stage": "Speaking Skill OS with research basis live",
+    "status": "Public onboarding is live, Speaking Skill OS has a seven-day local gate, and learning-method citations are mapped to product behavior",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets sessions from the queue, retries failed transfer work, and passes a seven-day local fixture with weekly mirror plus export evidence."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets sessions from the queue, retries failed transfer work, passes a seven-day local fixture, and now has a visible research basis map that ties output practice, interaction repair, corrective feedback, retrieval practice, task-based scenarios, and claim boundaries to product surfaces."
   },
   "ssot": [
     {
@@ -520,6 +520,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/RESEARCH-BASIS.md",
+      "path": "./RESEARCH-BASIS.md",
+      "role": "학습 방식 출처/근거와 source-to-feature claim boundary map",
+      "kind": "source"
+    },
+    {
       "label": "docs/PRODUCT-ROADMAP.md",
       "path": "./PRODUCT-ROADMAP.md",
       "role": "제품 로드맵과 게이트",
@@ -583,14 +589,14 @@
     },
     {
       "label": "GitHub plan",
-      "value": "51 issues",
-      "detail": "#132 adds seven-day Speaking Skill OS gate",
+      "value": "52 issues",
+      "detail": "#134 adds the research basis citation map",
       "tone": "green"
     },
     {
       "label": "Differentiator",
       "value": "Speaking OS",
-      "detail": "diagnose -> backlog -> targeted drill -> transfer evidence",
+      "detail": "diagnose -> backlog -> targeted drill -> transfer evidence, with cited learning basis",
       "tone": "green"
     }
   ],
@@ -636,6 +642,13 @@
       "status": "Pass",
       "evidence": "#17, phase1-clean-clone-smoke",
       "claim": "fresh clone can run setup, today, health, progress validation, and dashboard generation"
+    },
+    {
+      "id": "GATE-7",
+      "label": "Research basis mapped to product behavior",
+      "status": "Pass",
+      "evidence": "#134, docs/RESEARCH-BASIS.md, phase8-research-basis-smoke",
+      "claim": "learning-method sources are visible and bounded by explicit non-outcome claims"
     }
   ],
   "board": [
@@ -1681,6 +1694,21 @@
             "docs/STATUS.md",
             "docs/ISSUE-INDEX.md"
           ]
+        },
+        {
+          "id": "M8-4",
+          "title": "#134 학습 방식 근거와 출처를 제품 표면에 박음",
+          "why": "Speaking Skill OS가 그냥 AI 영어 채팅처럼 보이지 않으려면, 어떤 학습 원리가 어떤 기능으로 구현됐는지 사람이 확인할 수 있어야 한다.",
+          "done": "docs/RESEARCH-BASIS.md를 추가하고 README/LEARNING-ENGINE에 연결했다. source-to-feature map은 output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, claim boundary를 다룬다.",
+          "verification": "`node scripts/phase8-research-basis-smoke.mjs`가 필수 출처 URL, README 링크, claim boundary guard를 확인한다.",
+          "files": [
+            "docs/RESEARCH-BASIS.md",
+            "README.md",
+            "README.en.md",
+            "docs/LEARNING-ENGINE.md",
+            "scripts/phase8-research-basis-smoke.mjs",
+            "docs/phase-8-evidence/M8-4-research-basis.md"
+          ]
         }
       ]
     },
@@ -1691,13 +1719,14 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Seven-day Speaking Skill OS gate",
-          "why": "제품 차별점은 하루짜리 기능이 아니라 지속적으로 약점을 운영하는 하네스다. 7일 fixture로 queue, retry, weekly mirror, export가 이어지는지 검증한다.",
-          "done": "seven-day Speaking Skill OS smoke를 추가했다.",
-          "verification": "`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 통과한다.",
+          "title": "Research-backed Speaking Skill OS",
+          "why": "현재 제품 차별점은 diagnose/backlog/drill/transfer 루프이고, 이 루프가 어떤 교육학적 근거 위에 있는지 공개 표면에서 바로 보여야 한다.",
+          "done": "Research basis citation map을 추가했다.",
+          "verification": "`node scripts/phase8-research-basis-smoke.mjs`가 통과한다.",
           "files": [
-            "scripts/phase8-speaking-skill-os-seven-day-smoke.mjs",
-            "docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md"
+            "docs/RESEARCH-BASIS.md",
+            "README.md",
+            "docs/LEARNING-ENGINE.md"
           ]
         }
       ]
@@ -2136,6 +2165,11 @@
       "name": "M8-3 seven-day Speaking OS gate",
       "status": "Pass",
       "detail": "seven-session fixture proves queue retry, weekly mirror, and export evidence"
+    },
+    {
+      "name": "M8-4 research basis",
+      "status": "Pass",
+      "detail": "source-to-feature citation map, README links, and claim-boundary guard smoke pass"
     }
   ],
   "commands": [
@@ -2342,6 +2376,10 @@
     {
       "label": "View next public distribution issue",
       "command": "gh issue view 83"
+    },
+    {
+      "label": "Run M8 research basis smoke",
+      "command": "node scripts/phase8-research-basis-smoke.mjs"
     }
   ]
 }
@@ -2350,12 +2388,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets sessions from the queue, retries failed transfer work, and passes a seven-day local fixture with weekly mirror plus export evidence.</p>
+        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets sessions from the queue, retries failed transfer work, passes a seven-day local fixture, and now has a visible research basis map that ties output practice, interaction repair, corrective feedback, retrieval practice, task-based scenarios, and claim boundaries to product surfaces.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        Speaking Skill OS core live<br>
-        Public onboarding is live and the harness now has a seven-day local Speaking Skill OS gate
+        Speaking Skill OS with research basis live<br>
+        Public onboarding is live, Speaking Skill OS has a seven-day local gate, and learning-method citations are mapped to product behavior
       </div>
     </header>
 
@@ -2378,13 +2416,13 @@
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">51 issues</div>
-          <p>#132 adds seven-day Speaking Skill OS gate</p>
+          <div class="metric-value">52 issues</div>
+          <p>#134 adds the research basis citation map</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
           <div class="metric-value">Speaking OS</div>
-          <p>diagnose -&gt; backlog -&gt; targeted drill -&gt; transfer evidence</p>
+          <p>diagnose -&gt; backlog -&gt; targeted drill -&gt; transfer evidence, with cited learning basis</p>
         </article>
     </section>
 
@@ -2412,12 +2450,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/phase8-speaking-skill-os-seven-day-smoke.mjs, docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md</span>
+                <span>docs/RESEARCH-BASIS.md, README.md, docs/LEARNING-ENGINE.md</span>
               </div>
-              <h3>Seven-day Speaking Skill OS gate</h3>
-              <div class="card-row"><b>왜</b><p>제품 차별점은 하루짜리 기능이 아니라 지속적으로 약점을 운영하는 하네스다. 7일 fixture로 queue, retry, weekly mirror, export가 이어지는지 검증한다.</p></div>
-              <div class="card-row"><b>완료</b><p>seven-day Speaking Skill OS smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 통과한다.</p></div>
+              <h3>Research-backed Speaking Skill OS</h3>
+              <div class="card-row"><b>왜</b><p>현재 제품 차별점은 diagnose/backlog/drill/transfer 루프이고, 이 루프가 어떤 교육학적 근거 위에 있는지 공개 표면에서 바로 보여야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>Research basis citation map을 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase8-research-basis-smoke.mjs`가 통과한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2438,16 +2476,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-15</strong>
-                <span>README.md, .codex-plugin/plugin.json, skills/onboarding/SKILL.md, skills/daily-session/SKILL.md, skills/mini-mirror/SKILL.md, skills/picture-description/SKILL.md, scripts/phase7-learner-readme-smoke.mjs, docs/phase-7-evidence/M7-15-codex-native-user-surface.md</span>
-              </div>
-              <h3>#120 사용자 표면을 Codex 대화로 되돌림</h3>
-              <div class="card-row"><b>왜</b><p>학습자가 `node` 명령을 직접 치는 제품이면 애초 목표와 다르다. 사용자는 Codex에게 영어 연습을 요청하고, Codex가 내부 엔진을 실행해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>README 첫 시작 경로를 자연어 Codex prompt로 바꾸고, `node` 명령은 Internal Engine For Maintainers 아래로 내렸다. skills와 plugin manifest도 Codex 대화 surface를 명시한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`가 `node scripts/`가 internal engine section 이전에 나오면 실패하도록 강화됐고, public clean clone/open-source readiness/marketplace install smoke도 통과한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-16</strong>
@@ -2497,6 +2525,16 @@
               <div class="card-row"><b>왜</b><p>하루짜리 smoke만으로는 하네스가 학습 여정을 운영한다고 말하기 어렵다. 여러 날 동안 queue, retry, weekly mirror, export가 이어지는지 확인해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>7일 fixture가 multi-skill backlog를 seed하고, daily/today를 반복하며, 실패한 clarification transfer를 retry 후 pass시키고, weekly/export evidence를 만든다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 7 sessions, backlog 4개, pass 4개, transfer attempts 5개, weekly mirror, evidence pack을 확인한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M8-4</strong>
+                <span>docs/RESEARCH-BASIS.md, README.md, README.en.md, docs/LEARNING-ENGINE.md, scripts/phase8-research-basis-smoke.mjs, docs/phase-8-evidence/M8-4-research-basis.md</span>
+              </div>
+              <h3>#134 학습 방식 근거와 출처를 제품 표면에 박음</h3>
+              <div class="card-row"><b>왜</b><p>Speaking Skill OS가 그냥 AI 영어 채팅처럼 보이지 않으려면, 어떤 학습 원리가 어떤 기능으로 구현됐는지 사람이 확인할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>docs/RESEARCH-BASIS.md를 추가하고 README/LEARNING-ENGINE에 연결했다. source-to-feature map은 output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, claim boundary를 다룬다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase8-research-basis-smoke.mjs`가 필수 출처 URL, README 링크, claim boundary guard를 확인한다.</p></div>
             </article>
         </div>
       </section>
@@ -2573,6 +2611,11 @@
               <td><strong>GATE-6</strong><span>Clean clone first-use</span></td>
               <td><strong>Pass</strong><span>#17, phase1-clean-clone-smoke</span></td>
               <td>fresh clone can run setup, today, health, progress validation, and dashboard generation</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-7</strong><span>Research basis mapped to product behavior</span></td>
+              <td><strong>Pass</strong><span>#134, docs/RESEARCH-BASIS.md, phase8-research-basis-smoke</span></td>
+              <td>learning-method sources are visible and bounded by explicit non-outcome claims</td>
             </tr>
         </tbody>
       </table>
@@ -2655,6 +2698,10 @@
               <strong>docs/LEARNING-ENGINE.md</strong>
               <span>학습 엔진 설계</span>
             </a>
+            <a class="link-card source" href="./RESEARCH-BASIS.md">
+              <strong>docs/RESEARCH-BASIS.md</strong>
+              <span>학습 방식 출처/근거와 source-to-feature claim boundary map</span>
+            </a>
             <a class="link-card source" href="./PRODUCT-ROADMAP.md">
               <strong>docs/PRODUCT-ROADMAP.md</strong>
               <span>제품 로드맵과 게이트</span>
@@ -2691,10 +2738,6 @@
           <tbody>
 
             <tr>
-              <td>M7-13 public source clone</td>
-              <td><strong>Pass</strong><span>public clone smoke passes from the now-public source repository</span></td>
-            </tr>
-            <tr>
               <td>M7-14 learner-first README</td>
               <td><strong>Pass</strong><span>README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries</span></td>
             </tr>
@@ -2721,6 +2764,10 @@
             <tr>
               <td>M8-3 seven-day Speaking OS gate</td>
               <td><strong>Pass</strong><span>seven-session fixture proves queue retry, weekly mirror, and export evidence</span></td>
+            </tr>
+            <tr>
+              <td>M8-4 research basis</td>
+              <td><strong>Pass</strong><span>source-to-feature citation map, README links, and claim-boundary guard smoke pass</span></td>
             </tr>
           </tbody>
         </table>
@@ -2766,7 +2813,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 76개 보기</summary>
+        <summary>완료 이력 77개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3529,10 +3576,20 @@
               <div class="card-row"><b>완료</b><p>README를 제품 약속, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, open-source readiness smoke, marketplace install smoke, public clean clone smoke가 모두 통과한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-15</strong>
+                <span>README.md, .codex-plugin/plugin.json, skills/onboarding/SKILL.md, skills/daily-session/SKILL.md, skills/mini-mirror/SKILL.md, skills/picture-description/SKILL.md, scripts/phase7-learner-readme-smoke.mjs, docs/phase-7-evidence/M7-15-codex-native-user-surface.md</span>
+              </div>
+              <h3>#120 사용자 표면을 Codex 대화로 되돌림</h3>
+              <div class="card-row"><b>왜</b><p>학습자가 `node` 명령을 직접 치는 제품이면 애초 목표와 다르다. 사용자는 Codex에게 영어 연습을 요청하고, Codex가 내부 엔진을 실행해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>README 첫 시작 경로를 자연어 Codex prompt로 바꾸고, `node` 명령은 Internal Engine For Maintainers 아래로 내렸다. skills와 plugin manifest도 Codex 대화 surface를 명시한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`가 `node scripts/`가 internal engine section 이전에 나오면 실패하도록 강화됐고, public clean clone/open-source readiness/marketplace install smoke도 통과한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 73개 보기</summary>
+        <summary>전체 검증 74개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3829,12 +3886,16 @@
               <td>M8-3 seven-day Speaking OS gate</td>
               <td><strong>Pass</strong><span>seven-session fixture proves queue retry, weekly mirror, and export evidence</span></td>
             </tr>
+            <tr>
+              <td>M8-4 research basis</td>
+              <td><strong>Pass</strong><span>source-to-feature citation map, README links, and claim-boundary guard smoke pass</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 51개 보기</summary>
+        <summary>전체 명령 52개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -4040,6 +4101,10 @@
             <div class="command">
               <span>View next public distribution issue</span>
               <code>gh issue view 83</code>
+            </div>
+            <div class="command">
+              <span>Run M8 research basis smoke</span>
+              <code>node scripts/phase8-research-basis-smoke.mjs</code>
             </div>
         </div>
       </details>

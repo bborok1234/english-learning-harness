@@ -98,6 +98,7 @@ What is complete:
 - M8-1 Speaking Skill OS core adds `speaking-backlog.json`, `diagnose`, `backlog`, backlog-driven `daily`/`today`, transfer-test evidence, and smoke coverage so the harness is no longer just generic English chat.
 - M8-2 Speaking Skill OS queue adds multi-skill diagnosis and adaptive ordering, so failed transfer work stays ahead of generic practice.
 - M8-3 Speaking Skill OS seven-day gate proves the local multi-day loop: seeded backlog, daily queue targeting, failed transfer retry, weekly mirror, and evidence export.
+- M8-4 research basis citation map ties output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, and claim boundaries to visible product surfaces.
 
 What is not started:
 - Real user validation.
@@ -281,12 +282,14 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M8-1: Implement diagnosis and speaking backlog loop (#128). `diagnose -> backlog -> daily/today target -> transfer evidence` passes in local smoke.
 - [x] M8-2: Add multi-skill diagnosis and adaptive speaking queue (#130). One learner sample can create multiple backlog items, and failed transfer stays at the front.
 - [x] M8-3: Add seven-day Speaking Skill OS simulation gate (#132). The fixture completes 7 sessions with backlog attempts, retry, weekly mirror, and export evidence.
+- [x] M8-4: Add research basis citation map (#134). Source-to-feature mapping now links Speaking Skill OS behaviors to output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, and explicit claim boundaries.
 
 ## SSOT Structure
 
 - `DESIGN.md` — product/design/UX source of truth.
 - `docs/project-state.json` — structured execution/status state for generated dashboards.
 - `docs/distribution-policy.json` — current private-beta/public distribution policy.
+- `docs/RESEARCH-BASIS.md` — learning research source-to-feature map and claim boundaries.
 - `docs/PHASE-0-SPIKE.md` — Phase 0 execution plan and pass/fail criteria.
 - `docs/ISSUE-INDEX.md` — GitHub epics, milestones, and first-usable issue index.
 - `docs/phase-0-evidence/` — Phase 0 spike evidence notes.
