@@ -44,11 +44,12 @@ What is complete:
 - M2-5 is implemented on the PR branch: weekly mirror generation summarizes local themes, saved/reused phrases, repair attempts, skill evidence, and next focus from local evidence only.
 - M1 and M2 milestones are closed after completed evidence review.
 - M3 Daily Return Experience implementation issues #37-#41 are created.
-- M3-1 is implemented on the PR branch: `daily` returns due review, suggested scenario, learner model summary, latest weekly mirror/journal pointers, and exact next commands from local files.
-- M3-2 is implemented on the PR branch: `home` writes learner-owned `home.html` from local evidence and excludes project process logs.
-- M3-3 is implemented on the PR branch: return state now has `gap_kind` and `restart_action` with same-day, next-day, and long-gap fixture coverage.
-- M3-4 is implemented on the PR branch: seven simulated days run through setup, daily, review, today, weekly mirror, and learner home generation.
-- M3-5 is implemented on the PR branch: clean clone reaches daily cockpit, review/vault, weekly mirror, learner home, and seven-day simulation.
+- M3-1 is merged: `daily` returns due review, suggested scenario, learner model summary, latest weekly mirror/journal pointers, and exact next commands from local files.
+- M3-2 is merged: `home` writes learner-owned `home.html` from local evidence and excludes project process logs.
+- M3-3 is merged: return state now has `gap_kind` and `restart_action` with same-day, next-day, and long-gap fixture coverage.
+- M3-4 is merged: seven simulated days run through setup, daily, review, today, weekly mirror, and learner home generation.
+- M3-5 is merged: clean clone reaches daily cockpit, review/vault, weekly mirror, learner home, and seven-day simulation.
+- M3 epic #6 and the M3 Daily Return Experience milestone are closed.
 
 What is not started:
 - M4 multimodal interaction event graph.

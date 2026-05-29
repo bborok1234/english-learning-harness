@@ -24,7 +24,7 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 | #3 | E3 Scenario-based daily session | learning-engine / conversation-ux | closed |
 | #4 | E4 Tutor policy enforcement | conversation-ux | closed |
 | #5 | E5 Persona fixture evaluation | evaluation | closed |
-| #6 | E6 Dashboard and human-readable progress | evaluation | open |
+| #6 | E6 Dashboard and human-readable progress | evaluation | closed |
 | #7 | E7 Multimodal interaction event graph | multimodal | open |
 | #8 | E8 Voice image video learning loops | multimodal | open |
 | #9 | E9 Seven-day validation protocol | evaluation | open |
@@ -73,7 +73,7 @@ M2 execution issues #25-#29 are complete. M2 milestone is closed.
 Current branch:
 
 ```bash
-git switch -c issue-37-daily-cockpit
+git switch -c m4-multimodal-task-reconciliation
 ```
 
 Current implementation target:
@@ -88,7 +88,8 @@ M3-1 is merged through PR #43 and closed #37.
 M3-2 is merged through PR #44 and closed #38.
 M3-3 is merged through PR #45 and closed #39.
 M3-4 is merged through PR #46 and closed #40.
-M3-5 is implemented on the PR branch and waits for PR review/merge evidence before closing #41.
+M3-5 is merged through PR #47 and closed #41.
+M3 epic #6 is closed. M3 milestone is closed.
 
 ## M4 Multimodal Interaction Lab
 
