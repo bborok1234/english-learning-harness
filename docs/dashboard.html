@@ -408,7 +408,7 @@
     "stage": "M7 Public Distribution active",
     "status": "Next: decide public release surface in #90, then prove public URL in #83",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. The next human decision is #90 public release surface/authority; #83 remains open until a real public URL passes smoke."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, no-publish Actions evidence, artifact plugin install, and owner approval packet pass. The next human decision is #90 public release surface/authority; #83 remains open until a real public URL passes smoke."
   },
   "ssot": [
     {
@@ -559,8 +559,8 @@
     },
     {
       "label": "GitHub plan",
-      "value": "39 issues",
-      "detail": "M1-M5 closed; M6 private beta; M7 #83/#90 open",
+      "value": "40 issues",
+      "detail": "M1-M5 closed; M6 private beta; M7 #83/#90 open; #108 prepared",
       "tone": "green"
     },
     {
@@ -1488,6 +1488,18 @@
             "scripts/prepare-public-artifact-handoff.mjs",
             "docs/phase-7-evidence/M7-8-public-artifact-install.md"
           ]
+        },
+        {
+          "id": "M7-9",
+          "title": "#108 public release approval packet을 준비함",
+          "why": "#90 owner decision은 무엇을 승인하는지, 승인 후 어떤 명령과 증거가 필요한지 사람이 한눈에 확인할 수 있어야 한다.",
+          "done": "PUBLIC-RELEASE-APPROVAL.md/json을 생성하는 non-publishing packet과 smoke를 추가했다. packet은 approval-time workflow command, manual fallback, forbidden-before-approval, #83 proof command를 포함한다.",
+          "verification": "`node scripts/phase7-public-release-approval-smoke.mjs`가 approvalRequired=true, publicationPerformed=false, canPublishNow=false, canClosePublicDistribution=false를 통과한다.",
+          "files": [
+            "scripts/prepare-public-release-approval.mjs",
+            "scripts/phase7-public-release-approval-smoke.mjs",
+            "docs/phase-7-evidence/M7-9-public-release-approval.md"
+          ]
         }
       ]
     },
@@ -1518,11 +1530,12 @@
           "id": "M7-D",
           "title": "#90 public release surface decision",
           "why": "public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.",
-          "done": "preflight 기준 현재 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.",
-          "verification": "publication preflight가 publicationReady=true가 되려면 #90 approval과 public artifact repo visibility가 필요하다.",
+          "done": "approval packet은 준비됐다. 남은 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.",
+          "verification": "publication preflight가 publicationReady=true가 되고 approval packet의 command가 승인되려면 #90 approval과 public artifact repo visibility가 필요하다.",
           "files": [
             "docs/distribution-policy.json",
-            "scripts/phase7-publication-preflight.mjs"
+            "scripts/phase7-publication-preflight.mjs",
+            "scripts/prepare-public-release-approval.mjs"
           ]
         }
       ]
@@ -1882,6 +1895,11 @@
       "name": "M7-8 public artifact install",
       "status": "Pass",
       "detail": "checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME"
+    },
+    {
+      "name": "M7-9 approval packet",
+      "status": "Pass",
+      "detail": "owner approval packet is generated without publishing and includes the approval command plus #83 proof command"
     }
   ],
   "commands": [
@@ -2038,6 +2056,10 @@
       "command": "node scripts/phase7-public-artifact-install-smoke.mjs"
     },
     {
+      "label": "Run M7 public release approval smoke",
+      "command": "node scripts/phase7-public-release-approval-smoke.mjs"
+    },
+    {
       "label": "Run M7 publication preflight",
       "command": "node scripts/phase7-publication-preflight.mjs"
     },
@@ -2080,7 +2102,7 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. The next human decision is #90 public release surface/authority; #83 remains open until a real public URL passes smoke.</p>
+        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, no-publish Actions evidence, artifact plugin install, and owner approval packet pass. The next human decision is #90 public release surface/authority; #83 remains open until a real public URL passes smoke.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
@@ -2108,8 +2130,8 @@
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">39 issues</div>
-          <p>M1-M5 closed; M6 private beta; M7 #83/#90 open</p>
+          <div class="metric-value">40 issues</div>
+          <p>M1-M5 closed; M6 private beta; M7 #83/#90 open; #108 prepared</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -2152,12 +2174,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-D</strong>
-                <span>docs/distribution-policy.json, scripts/phase7-publication-preflight.mjs</span>
+                <span>docs/distribution-policy.json, scripts/phase7-publication-preflight.mjs, scripts/prepare-public-release-approval.mjs</span>
               </div>
               <h3>#90 public release surface decision</h3>
               <div class="card-row"><b>왜</b><p>public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.</p></div>
-              <div class="card-row"><b>완료</b><p>preflight 기준 현재 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.</p></div>
-              <div class="card-row"><b>검증</b><p>publication preflight가 publicationReady=true가 되려면 #90 approval과 public artifact repo visibility가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>approval packet은 준비됐다. 남은 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.</p></div>
+              <div class="card-row"><b>검증</b><p>publication preflight가 publicationReady=true가 되고 approval packet의 command가 승인되려면 #90 approval과 public artifact repo visibility가 필요하다.</p></div>
             </article>
         </div>
       </section>
@@ -2168,16 +2190,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-3</strong>
-                <span>scripts/prepare-public-artifact-handoff.mjs, scripts/phase7-public-artifact-handoff-smoke.mjs, docs/phase-7-evidence/M7-2-public-artifact-handoff.md</span>
-              </div>
-              <h3>#96 public artifact repo README를 준비함</h3>
-              <div class="card-row"><b>왜</b><p>public artifact repository 주소만 본 사용자가 private source repo를 몰라도 다운로드, 검증, 시작까지 진행할 수 있어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>handoff bundle에 top-level README.md를 추가해 latest release download, SHA256 검증, extract, setup/daily/today, public URL smoke boundary를 문서화했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 public README의 download/checksum/setup/today/public URL smoke 문구를 검증한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-4</strong>
@@ -2227,6 +2239,16 @@
               <div class="card-row"><b>왜</b><p>public artifact 사용자가 direct script 학습뿐 아니라 Codex plugin install까지 할 수 있는지 M7-install gate를 검증해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-9</strong>
+                <span>scripts/prepare-public-release-approval.mjs, scripts/phase7-public-release-approval-smoke.mjs, docs/phase-7-evidence/M7-9-public-release-approval.md</span>
+              </div>
+              <h3>#108 public release approval packet을 준비함</h3>
+              <div class="card-row"><b>왜</b><p>#90 owner decision은 무엇을 승인하는지, 승인 후 어떤 명령과 증거가 필요한지 사람이 한눈에 확인할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>PUBLIC-RELEASE-APPROVAL.md/json을 생성하는 non-publishing packet과 smoke를 추가했다. packet은 approval-time workflow command, manual fallback, forbidden-before-approval, #83 proof command를 포함한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-approval-smoke.mjs`가 approvalRequired=true, publicationPerformed=false, canPublishNow=false, canClosePublicDistribution=false를 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2405,10 +2427,6 @@
           <tbody>
 
             <tr>
-              <td>M7-D decision gate</td>
-              <td><strong>Pass</strong><span>public release publication remains blocked until the issue 90 owner decision is recorded</span></td>
-            </tr>
-            <tr>
               <td>M7-2 handoff bundle</td>
               <td><strong>Pass</strong><span>public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing</span></td>
             </tr>
@@ -2435,6 +2453,10 @@
             <tr>
               <td>M7-8 public artifact install</td>
               <td><strong>Pass</strong><span>checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME</span></td>
+            </tr>
+            <tr>
+              <td>M7-9 approval packet</td>
+              <td><strong>Pass</strong><span>owner approval packet is generated without publishing and includes the approval command plus #83 proof command</span></td>
             </tr>
           </tbody>
         </table>
@@ -2480,7 +2502,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 64개 보기</summary>
+        <summary>완료 이력 65개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3123,10 +3145,20 @@
               <div class="card-row"><b>완료</b><p>tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-3</strong>
+                <span>scripts/prepare-public-artifact-handoff.mjs, scripts/phase7-public-artifact-handoff-smoke.mjs, docs/phase-7-evidence/M7-2-public-artifact-handoff.md</span>
+              </div>
+              <h3>#96 public artifact repo README를 준비함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact repository 주소만 본 사용자가 private source repo를 몰라도 다운로드, 검증, 시작까지 진행할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>handoff bundle에 top-level README.md를 추가해 latest release download, SHA256 검증, extract, setup/daily/today, public URL smoke boundary를 문서화했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 public README의 download/checksum/setup/today/public URL smoke 문구를 검증한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 61개 보기</summary>
+        <summary>전체 검증 62개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3375,12 +3407,16 @@
               <td>M7-8 public artifact install</td>
               <td><strong>Pass</strong><span>checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME</span></td>
             </tr>
+            <tr>
+              <td>M7-9 approval packet</td>
+              <td><strong>Pass</strong><span>owner approval packet is generated without publishing and includes the approval command plus #83 proof command</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 47개 보기</summary>
+        <summary>전체 명령 48개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3534,6 +3570,10 @@
             <div class="command">
               <span>Run M7 public artifact install smoke</span>
               <code>node scripts/phase7-public-artifact-install-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 public release approval smoke</span>
+              <code>node scripts/phase7-public-release-approval-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run M7 publication preflight</span>
