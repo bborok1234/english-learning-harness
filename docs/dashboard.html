@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M5 Real Learning Validation active",
-    "status": "Next: #65 M5 persona validation fixture",
+    "status": "Next: #66 M5 validation gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 transcript rubric is implemented. The next target is #65: run target-persona seven-day validation fixtures before any real learner impact claim."
+    "summary": "M5 target-persona validation fixture is implemented. The next target is #66: close the M5 validation gate by reviewing protocol, export, rubric, persona evidence, and claim boundaries."
   },
   "ssot": [
     {
@@ -524,7 +524,7 @@
     {
       "label": "Ultragoal",
       "value": "M5",
-      "detail": "transcript rubric implemented",
+      "detail": "persona validation implemented",
       "tone": "green"
     },
     {
@@ -536,7 +536,7 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#65 persona validation fixture",
+      "detail": "#66 validation gate",
       "tone": "red"
     },
     {
@@ -1228,6 +1228,18 @@
             "docs/M5-TRANSCRIPT-REVIEW-RUBRIC.md",
             "docs/phase-5-evidence/M5-3-transcript-rubric.md"
           ]
+        },
+        {
+          "id": "M5-4",
+          "title": "#65 M5 target-persona validation fixture를 구현함",
+          "why": "실제 learner pilot 전에 네 target persona가 7일 protocol/export/rubric loop를 견디는지 확인해야 한다.",
+          "done": "지은/민호/수진/혜원 각각 7 sessions, weekly mirror, evidence export, transcript rubric을 통과하는 smoke를 추가했다.",
+          "verification": "`node scripts/phase5-persona-validation-smoke.mjs`가 네 persona 모두 session_count=7, reused_review_item_count=6, rubric decision=continue를 통과했다.",
+          "files": [
+            "scripts/phase5-persona-validation-smoke.mjs",
+            "docs/phase-5-evidence/M5-4-persona-validation.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1238,10 +1250,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#65 M5 target-persona seven-day validation fixture",
-          "why": "Rubric 다음에는 네 target persona가 7일 validation protocol을 통과하는지 리허설해야 한다.",
-          "done": "지은/민호/수진/혜원 fixture를 7일 evidence loop로 실행하고 persona-specific risk를 기록한다.",
-          "verification": "persona seven-day validation smoke와 dashboard risk render가 통과해야 한다.",
+          "title": "#66 M5 real learning validation gate",
+          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
+          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
+          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -1257,10 +1269,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "#66 M5 real learning validation gate",
-          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
-          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
-          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "title": "After M5: M6 public clone-to-learn release split",
+          "why": "M5 closeout 후에는 public clone/setup/onboarding release readiness를 executable issues로 쪼개야 한다.",
+          "done": "M6 epic 상태와 public Git-backed marketplace/install gap을 재검토한다.",
+          "verification": "ISSUE-INDEX와 dashboard가 같은 M6 next target을 가리켜야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1511,6 +1523,11 @@
       "name": "M5-3",
       "status": "Pass",
       "detail": "transcript rubric smoke passes positive before/after fixture and unsupported-claim, prompt-mismatch, missing-sample negatives"
+    },
+    {
+      "name": "M5-4",
+      "status": "Pass",
+      "detail": "persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions"
     }
   ],
   "commands": [
@@ -1640,7 +1657,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 65"
+      "command": "gh issue view 66"
     }
   ]
 }
@@ -1649,12 +1666,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M5 transcript rubric is implemented. The next target is #65: run target-persona seven-day validation fixtures before any real learner impact claim.</p>
+        <p class="summary">M5 target-persona validation fixture is implemented. The next target is #66: close the M5 validation gate by reviewing protocol, export, rubric, persona evidence, and claim boundaries.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M5 Real Learning Validation active<br>
-        Next: #65 M5 persona validation fixture
+        Next: #66 M5 validation gate
       </div>
     </header>
 
@@ -1663,7 +1680,7 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M5</div>
-          <p>transcript rubric implemented</p>
+          <p>persona validation implemented</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
@@ -1673,7 +1690,7 @@
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M5</div>
-          <p>#65 persona validation fixture</p>
+          <p>#66 validation gate</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1713,20 +1730,20 @@
                 <strong>M5</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-5-evidence/</span>
               </div>
-              <h3>#65 M5 target-persona seven-day validation fixture</h3>
-              <div class="card-row"><b>왜</b><p>Rubric 다음에는 네 target persona가 7일 validation protocol을 통과하는지 리허설해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>지은/민호/수진/혜원 fixture를 7일 evidence loop로 실행하고 persona-specific risk를 기록한다.</p></div>
-              <div class="card-row"><b>검증</b><p>persona seven-day validation smoke와 dashboard risk render가 통과해야 한다.</p></div>
+              <h3>#66 M5 real learning validation gate</h3>
+              <div class="card-row"><b>왜</b><p>Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.</p></div>
+              <div class="card-row"><b>검증</b><p>M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M5-1</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>#66 M5 real learning validation gate</h3>
-              <div class="card-row"><b>왜</b><p>Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.</p></div>
-              <div class="card-row"><b>검증</b><p>M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.</p></div>
+              <h3>After M5: M6 public clone-to-learn release split</h3>
+              <div class="card-row"><b>왜</b><p>M5 closeout 후에는 public clone/setup/onboarding release readiness를 executable issues로 쪼개야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>M6 epic 상태와 public Git-backed marketplace/install gap을 재검토한다.</p></div>
+              <div class="card-row"><b>검증</b><p>ISSUE-INDEX와 dashboard가 같은 M6 next target을 가리켜야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1737,16 +1754,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M4-4</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/phase4-image-information-gap-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-4-image-information-gap.md</span>
-              </div>
-              <h3>#52 Image information-gap event fixture를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`image` command가 local image path, hidden detail, clarification prompt를 받아 `mode=image-info-gap`, `modality=image` event를 저장한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase4-image-information-gap-smoke.mjs`가 image event validation, source artifact metadata, weekly modality summary를 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M4-5</strong>
@@ -1796,6 +1803,16 @@
               <div class="card-row"><b>왜</b><p>Day 0/Day 7 transcript는 같은 기준으로 읽어야 하며 fluency/level claim으로 번지면 안 된다.</p></div>
               <div class="card-row"><b>완료</b><p>observable behavior rubric이 voluntary output, clarification, repair, phrase reuse, comfort proxy를 비교하고 unsupported claims를 거부한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase5-transcript-rubric-smoke.mjs`가 positive fixture와 unsupported/mismatch/missing negative fixtures를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5-4</strong>
+                <span>scripts/phase5-persona-validation-smoke.mjs, docs/phase-5-evidence/M5-4-persona-validation.md, docs/project-state.json</span>
+              </div>
+              <h3>#65 M5 target-persona validation fixture를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>실제 learner pilot 전에 네 target persona가 7일 protocol/export/rubric loop를 견디는지 확인해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>지은/민호/수진/혜원 각각 7 sessions, weekly mirror, evidence export, transcript rubric을 통과하는 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase5-persona-validation-smoke.mjs`가 네 persona 모두 session_count=7, reused_review_item_count=6, rubric decision=continue를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1962,10 +1979,6 @@
           <tbody>
 
             <tr>
-              <td>M4-2</td>
-              <td><strong>Pass</strong><span>text event persistence smoke passes weekly event summary and learner home transfer target rendering</span></td>
-            </tr>
-            <tr>
               <td>M4-3</td>
               <td><strong>Pass</strong><span>voice event import smoke passes transcript-first voice modality, local audio metadata, and weekly modality summary</span></td>
             </tr>
@@ -1992,6 +2005,10 @@
             <tr>
               <td>M5-3</td>
               <td><strong>Pass</strong><span>transcript rubric smoke passes positive before/after fixture and unsupported-claim, prompt-mismatch, missing-sample negatives</span></td>
+            </tr>
+            <tr>
+              <td>M5-4</td>
+              <td><strong>Pass</strong><span>persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions</span></td>
             </tr>
           </tbody>
         </table>
@@ -2027,7 +2044,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 65</code>
+              <code>gh issue view 66</code>
             </div>
         </div>
       </aside>
@@ -2037,7 +2054,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 44개 보기</summary>
+        <summary>완료 이력 45개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2480,10 +2497,20 @@
               <div class="card-row"><b>완료</b><p>`voice` command가 transcript와 optional local audio path를 받아 `mode=voice-transcript`, `modality=voice` event를 저장한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase4-voice-event-import-smoke.mjs`가 voice event validation, local audio metadata, weekly modality summary를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-4</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase4-image-information-gap-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-4-image-information-gap.md</span>
+              </div>
+              <h3>#52 Image information-gap event fixture를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`image` command가 local image path, hidden detail, clarification prompt를 받아 `mode=image-info-gap`, `modality=image` event를 저장한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase4-image-information-gap-smoke.mjs`가 image event validation, source artifact metadata, weekly modality summary를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 40개 보기</summary>
+        <summary>전체 검증 41개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2648,6 +2675,10 @@
               <td>M5-3</td>
               <td><strong>Pass</strong><span>transcript rubric smoke passes positive before/after fixture and unsupported-claim, prompt-mismatch, missing-sample negatives</span></td>
             </tr>
+            <tr>
+              <td>M5-4</td>
+              <td><strong>Pass</strong><span>persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -2782,7 +2813,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 65</code>
+              <code>gh issue view 66</code>
             </div>
         </div>
       </details>

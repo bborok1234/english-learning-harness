@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M5 Real Learning Validation active",
-    "status": "Next: #65 M5 persona validation fixture",
+    "status": "Next: #66 M5 validation gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 transcript rubric is implemented. The next target is #65: run target-persona seven-day validation fixtures before any real learner impact claim."
+    "summary": "M5 target-persona validation fixture is implemented. The next target is #66: close the M5 validation gate by reviewing protocol, export, rubric, persona evidence, and claim boundaries."
   },
   "ssot": [
     {
@@ -122,7 +122,7 @@
     {
       "label": "Ultragoal",
       "value": "M5",
-      "detail": "transcript rubric implemented",
+      "detail": "persona validation implemented",
       "tone": "green"
     },
     {
@@ -134,7 +134,7 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#65 persona validation fixture",
+      "detail": "#66 validation gate",
       "tone": "red"
     },
     {
@@ -826,6 +826,18 @@
             "docs/M5-TRANSCRIPT-REVIEW-RUBRIC.md",
             "docs/phase-5-evidence/M5-3-transcript-rubric.md"
           ]
+        },
+        {
+          "id": "M5-4",
+          "title": "#65 M5 target-persona validation fixture를 구현함",
+          "why": "실제 learner pilot 전에 네 target persona가 7일 protocol/export/rubric loop를 견디는지 확인해야 한다.",
+          "done": "지은/민호/수진/혜원 각각 7 sessions, weekly mirror, evidence export, transcript rubric을 통과하는 smoke를 추가했다.",
+          "verification": "`node scripts/phase5-persona-validation-smoke.mjs`가 네 persona 모두 session_count=7, reused_review_item_count=6, rubric decision=continue를 통과했다.",
+          "files": [
+            "scripts/phase5-persona-validation-smoke.mjs",
+            "docs/phase-5-evidence/M5-4-persona-validation.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -836,10 +848,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#65 M5 target-persona seven-day validation fixture",
-          "why": "Rubric 다음에는 네 target persona가 7일 validation protocol을 통과하는지 리허설해야 한다.",
-          "done": "지은/민호/수진/혜원 fixture를 7일 evidence loop로 실행하고 persona-specific risk를 기록한다.",
-          "verification": "persona seven-day validation smoke와 dashboard risk render가 통과해야 한다.",
+          "title": "#66 M5 real learning validation gate",
+          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
+          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
+          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -855,10 +867,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "#66 M5 real learning validation gate",
-          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
-          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
-          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "title": "After M5: M6 public clone-to-learn release split",
+          "why": "M5 closeout 후에는 public clone/setup/onboarding release readiness를 executable issues로 쪼개야 한다.",
+          "done": "M6 epic 상태와 public Git-backed marketplace/install gap을 재검토한다.",
+          "verification": "ISSUE-INDEX와 dashboard가 같은 M6 next target을 가리켜야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1109,6 +1121,11 @@
       "name": "M5-3",
       "status": "Pass",
       "detail": "transcript rubric smoke passes positive before/after fixture and unsupported-claim, prompt-mismatch, missing-sample negatives"
+    },
+    {
+      "name": "M5-4",
+      "status": "Pass",
+      "detail": "persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions"
     }
   ],
   "commands": [
@@ -1238,7 +1255,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 65"
+      "command": "gh issue view 66"
     }
   ]
 }
