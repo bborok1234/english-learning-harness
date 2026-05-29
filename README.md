@@ -305,6 +305,12 @@ Run the interaction event schema smoke:
 node scripts/phase4-interaction-event-schema-smoke.mjs
 ```
 
+Run the text event persistence smoke:
+
+```bash
+node scripts/phase4-text-event-persistence-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

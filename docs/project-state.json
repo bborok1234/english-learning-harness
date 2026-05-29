@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M4 Multimodal Interaction Lab implementation active",
-    "status": "Next: #49 persist text sessions as interaction events",
+    "status": "Next: #53 transcription-first voice event import",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4-1 interaction event schema is implemented and smoke-tested. Text-first sessions now produce valid local interaction events; next work is #49 event-backed text session persistence and summaries."
+    "summary": "M4-2 text interaction events are persisted into learner reflection surfaces: weekly mirror summarizes event evidence and learner home renders interaction evidence and transfer targets. Next is #53 transcription-first voice event import."
   },
   "ssot": [
     {
@@ -104,19 +104,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "interaction event schema implemented",
+      "detail": "text event summaries implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M4 active",
-      "detail": "#50 implemented; #49 next",
+      "detail": "#50/#49 implemented; #53 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "#49 text event persistence",
+      "detail": "#53 transcription-first voice import",
       "tone": "red"
     },
     {
@@ -706,6 +706,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-4-evidence/M4-1-interaction-event-schema.md"
           ]
+        },
+        {
+          "id": "M4-2",
+          "title": "#49 Text sessions as interaction events를 구현함",
+          "why": "새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.",
+          "done": "Weekly mirror가 `interaction_event_summary`를 생성하고 learner home이 Interaction evidence/Transfer targets를 렌더링한다.",
+          "verification": "`node scripts/phase4-text-event-persistence-smoke.mjs`가 artifact event validation, weekly summary, learner home render를 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase4-text-event-persistence-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-4-evidence/M4-2-text-event-persistence.md"
+          ]
         }
       ]
     },
@@ -713,24 +726,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M4-2",
-          "title": "#49 Persist text sessions as interaction events",
-          "why": "새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.",
-          "done": "today artifacts가 valid text interaction events를 포함하고 weekly/home이 event-backed repair/transfer summary를 표시한다.",
-          "verification": "text event persistence smoke와 seven-day simulation regression이 통과해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "scripts/english-learning-harness.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M4-3",
@@ -742,7 +737,14 @@
             "scripts/english-learning-harness.mjs",
             "scripts/lib/english-learning-store.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M4-4",
           "title": "#52 Image information-gap event fixture",
@@ -970,6 +972,11 @@
       "name": "M4-1",
       "status": "Pass",
       "detail": "interaction event schema smoke passes valid text event and invalid fixture rejection"
+    },
+    {
+      "name": "M4-2",
+      "status": "Pass",
+      "detail": "text event persistence smoke passes weekly event summary and learner home transfer target rendering"
     }
   ],
   "commands": [
@@ -1054,6 +1061,10 @@
       "command": "node scripts/phase4-interaction-event-schema-smoke.mjs"
     },
     {
+      "label": "Run text event persistence smoke",
+      "command": "node scripts/phase4-text-event-persistence-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1083,7 +1094,7 @@
     },
     {
       "label": "View next M4 issue",
-      "command": "gh issue view 49"
+      "command": "gh issue view 53"
     }
   ]
 }

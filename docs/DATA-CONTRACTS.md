@@ -209,6 +209,14 @@ Required fields:
   "saved_phrases": [],
   "reused_phrases": [],
   "repair_attempts": [],
+  "interaction_event_summary": {
+    "event_count": 3,
+    "modalities": ["text"],
+    "trouble_sources": ["missing word or stuck moment"],
+    "mediation_levels": ["recast"],
+    "saved_phrases": ["I like drinking coffee."],
+    "transfer_targets": ["small talk", "daily routine"]
+  },
   "skill_evidence": {
     "starts": 0,
     "follow_ups": 0,

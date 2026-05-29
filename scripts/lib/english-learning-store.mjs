@@ -884,6 +884,21 @@ function uniqueRecent(values, limit = 5) {
   return [...new Set(values.filter(Boolean))].slice(-limit);
 }
 
+function interactionEventsFromArtifacts(artifacts) {
+  return artifacts.flatMap((artifact) => artifact.interaction_events ?? []);
+}
+
+function buildInteractionEventSummary(events) {
+  return {
+    event_count: events.length,
+    modalities: uniqueRecent(events.map((event) => event.modality), 6),
+    trouble_sources: uniqueRecent(events.map((event) => event.trouble_source), 6),
+    mediation_levels: uniqueRecent(events.map((event) => event.mediation_level), 6),
+    saved_phrases: uniqueRecent(events.map((event) => event.saved_phrase), 7),
+    transfer_targets: uniqueRecent(events.flatMap((event) => event.transfer_targets ?? []), 7),
+  };
+}
+
 export function buildWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const progress = readProgress(paths.progress);
@@ -891,6 +906,7 @@ export function buildWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new
   const vocabulary = readVocabulary(paths.vocabulary);
   const reviewQueue = readReviewQueue(paths.reviewQueue);
   const artifacts = readSessionArtifacts(paths, progress).slice(-7);
+  const interactionEvents = interactionEventsFromArtifacts(artifacts);
   const dueItems = listDueReviewItems(paths.root, date);
   const weakSkill = weakestLearnerSkill(learnerModel);
   const communicatedThemes = uniqueRecent(
@@ -920,6 +936,7 @@ export function buildWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new
     saved_phrases: savedPhrases,
     reused_phrases: uniqueRecent(reusedPhrases, 5),
     repair_attempts: repairAttempts,
+    interaction_event_summary: buildInteractionEventSummary(interactionEvents),
     skill_evidence: Object.fromEntries(
       learnerSkillKeys.map((skill) => [skill, learnerModel.interaction_skills[skill].evidence_count]),
     ),
@@ -1093,6 +1110,7 @@ function learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases }) {
   const weeklyThemes = weeklyMirror?.communicated_themes ?? [];
   const weeklyPhrases = weeklyMirror?.saved_phrases ?? [];
   const nextFocus = weeklyMirror?.next_focus;
+  const eventSummary = weeklyMirror?.interaction_event_summary;
 
   return `<!doctype html>
 <html lang="ko">
@@ -1266,6 +1284,21 @@ function learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases }) {
               : ""
           }`
               : '<p class="empty">아직 weekly mirror가 없습니다. 몇 번 연습한 뒤 weekly 명령을 실행하세요.</p>'
+          }
+        </section>
+
+        <section aria-labelledby="interaction-evidence">
+          <h2 id="interaction-evidence">Interaction evidence</h2>
+          ${
+            eventSummary?.event_count
+              ? `<div class="meta">
+            <div class="metric"><span>Events</span><b>${escapeHtml(eventSummary.event_count)}</b></div>
+            <div class="metric"><span>Modalities</span><b>${escapeHtml(eventSummary.modalities.join(", "))}</b></div>
+            <div class="metric"><span>Mediation</span><b>${escapeHtml(eventSummary.mediation_levels.join(", "))}</b></div>
+          </div>
+          <h3>Transfer targets</h3>
+          ${htmlList(eventSummary.transfer_targets ?? [], (target) => escapeHtml(target), "No transfer targets yet.")}`
+              : '<p class="empty">No interaction events have been summarized yet.</p>'
           }
         </section>
       </div>

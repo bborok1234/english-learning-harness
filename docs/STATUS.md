@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M4 Multimodal Interaction Lab implementation active / #49 next** state.
+The project is in **M4 Multimodal Interaction Lab implementation active / #53 next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -54,6 +54,7 @@ What is complete:
 What is not started:
 - M4-0 is complete: multimodal epics #7/#8 are split into executable issues #50, #49, #53, #52, and #54.
 - M4-1 is implemented on the PR branch: text-first sessions now write valid `interaction_events` and invalid event fixtures are rejected.
+- M4-2 is implemented on the PR branch: weekly mirror and learner home now summarize text interaction events with transfer targets.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -175,7 +176,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 - [x] M4-0: Reconcile multimodal event graph issues and create executable M4 implementation tasks.
 - [x] M4-1: Add interaction event graph schema (#50).
-- [ ] M4-2: Persist text sessions as interaction events (#49).
+- [x] M4-2: Persist text sessions as interaction events (#49).
 - [ ] M4-3: Add transcription-first voice event import (#53).
 - [ ] M4-4: Add image information-gap event fixture (#52).
 - [ ] M4-5: Close multimodal-ready event graph gate (#54).
