@@ -97,6 +97,19 @@ node scripts/english-learning-harness.mjs voice \
 
 The voice path stores transcript-backed interaction evidence. It does not score accent or prove realtime conversation.
 
+Run an image information-gap practice from a local image path:
+
+```bash
+node scripts/english-learning-harness.mjs image \
+  --image-file path/to/local-image.png \
+  --hidden-detail "the wallet is partly hidden near the cup" \
+  --clarification-prompt "Where is the wallet compared with the cup?" \
+  --say "The cup is on the left." \
+  --json
+```
+
+The image path is local prompt context only; the learner output is the learning evidence.
+
 Review due personal phrases:
 
 ```bash
@@ -326,6 +339,12 @@ Run the voice event import smoke:
 
 ```bash
 node scripts/phase4-voice-event-import-smoke.mjs
+```
+
+Run the image information-gap smoke:
+
+```bash
+node scripts/phase4-image-information-gap-smoke.mjs
 ```
 
 Run the full first-run smoke:

@@ -181,6 +181,8 @@ Required fields:
   "source_artifact": {
     "type": "audio|image|video optional",
     "path": "/local/path optional",
+    "hidden_detail": "optional information-gap detail for image/video prompts",
+    "clarification_prompt": "optional clarification prompt tied to hidden_detail",
     "claim_boundary": "Audio path is local metadata only; no speech-quality judgment is inferred."
   },
   "claim_boundary": "This event records local interaction evidence only. It does not prove real-world fluency."

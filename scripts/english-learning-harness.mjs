@@ -62,6 +62,15 @@ function parseArgs(argv) {
     } else if (arg === "--audio-file") {
       options.audioFile = argv[index + 1];
       index += 1;
+    } else if (arg === "--image-file") {
+      options.imageFile = argv[index + 1];
+      index += 1;
+    } else if (arg === "--hidden-detail") {
+      options.hiddenDetail = argv[index + 1];
+      index += 1;
+    } else if (arg === "--clarification-prompt") {
+      options.clarificationPrompt = argv[index + 1];
+      index += 1;
     } else if (arg === "--scenario") {
       options.scenario = argv[index + 1];
       index += 1;
@@ -125,6 +134,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs voice [--say TEXT ...] [--transcript FILE] [--audio-file FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
+    "  node scripts/english-learning-harness.mjs image [--image-file FILE] [--hidden-detail TEXT] [--clarification-prompt TEXT] [--say TEXT ...] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs context [--learner-root DIR]",
@@ -337,6 +347,60 @@ function voice(options) {
   };
 }
 
+function image(options) {
+  const date = options.date || new Date();
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const profileText = readProfile(paths.profile);
+  const scenarioPlan = planScenario({
+    profileText,
+    preferredId: options.scenario || "reactivation-check-in",
+    learnerModel: readLearnerModel(paths.learnerModel),
+    vocabulary: readVocabulary(paths.vocabulary),
+    dueReviewItems: listDueReviewItems(paths.root, date),
+  });
+  const sourceArtifact = {
+    type: "image",
+    path: options.imageFile || "",
+    hidden_detail: options.hiddenDetail || "one important visual detail is missing from the learner description",
+    clarification_prompt:
+      options.clarificationPrompt || "Ask one clarification question about the missing visual detail.",
+    claim_boundary: "Image path is local prompt context only; the image itself is not proof of learning.",
+  };
+  const session = buildSession(transcriptInputs(options), {
+    sessionId: `${date.toISOString().slice(0, 10)}-${date.getTime()}-image`,
+    mode: "image-info-gap",
+    modality: "image",
+    sourceArtifact,
+    opening:
+      "Let's use this image as an information-gap speaking task. Describe what matters, then clarify one missing detail.",
+    scenario: scenarioPlan.scenario,
+    selectionReason: {
+      ...scenarioPlan.selectionReason,
+      source: "image-information-gap",
+      hidden_detail: sourceArtifact.hidden_detail,
+    },
+  });
+  const persisted = persistSession(options.learnerRoot, session, date);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: persisted.learnerRoot,
+    sessionId: session.id,
+    mode: session.mode,
+    eventModality: "image",
+    imageFile: options.imageFile || "",
+    hiddenDetail: sourceArtifact.hidden_detail,
+    clarificationPrompt: sourceArtifact.clarification_prompt,
+    scenario: session.scenario,
+    interactionEvents: session.interaction_events,
+    journalPath: persisted.journalPath,
+    artifactPath: persisted.artifactPath,
+    finalizesSession: true,
+    claimBoundary:
+      "This creates a local image information-gap event only. It does not evaluate generated media or real-world transfer.",
+  };
+}
+
 function health(options) {
   let paths;
   try {
@@ -461,6 +525,10 @@ function run() {
   }
   if (command === "voice") {
     output(voice(options), options.json);
+    return;
+  }
+  if (command === "image") {
+    output(image(options), options.json);
     return;
   }
   if (command === "health") {
