@@ -75,6 +75,7 @@ const requiredFiles = [
   "scripts/prepare-public-release-approval.mjs",
   "scripts/phase7-public-release-approval-smoke.mjs",
   "scripts/phase7-open-source-readiness-smoke.mjs",
+  "scripts/phase7-open-source-history-audit-smoke.mjs",
   "scripts/phase7-publication-preflight.mjs",
 ];
 

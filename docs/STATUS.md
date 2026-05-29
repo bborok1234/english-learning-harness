@@ -88,6 +88,7 @@ What is complete:
 - M7-9 owner approval packet smoke now prepares a non-publishing public source repository visibility-change packet and the required #83 public clone proof command.
 - M7-10 distribution policy branches public release requirements by chosen surface: public source repo requires public clone smoke, while artifact release remains a fallback path.
 - M7-11 open-source readiness smoke verifies MIT license, contribution docs, code of conduct, security/support/governance docs, issue templates, PR template, README public clone framing, policy alignment, and absence of obvious local secret files.
+- M7-12 git history audit smoke scans committed history for obvious secret patterns, forbidden local/runtime paths, and oversized accidental artifacts before repository visibility changes.
 
 What is not started:
 - Real user validation.
@@ -110,6 +111,7 @@ What failed review:
 - M7-9 approval smoke verifies repository visibility remains unchanged while giving the owner the exact public-source visibility command and required #83 public clone proof.
 - M7-10 policy smoke verifies the default public clone smoke is required for the public source repository path, while artifact release is optional fallback.
 - M7-11 readiness smoke reports `visibilityReady=false` only because GitHub repository visibility is still `PRIVATE`.
+- M7-12 history audit reports zero forbidden historical paths, zero secret-like historical content findings, and zero large historical objects.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.

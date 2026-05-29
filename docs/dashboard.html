@@ -559,8 +559,8 @@
     },
     {
       "label": "GitHub plan",
-      "value": "42 issues",
-      "detail": "OSS readiness #112 in progress; #83/#90 still open",
+      "value": "43 issues",
+      "detail": "OSS readiness #112 closed; history audit #114 in progress",
       "tone": "green"
     },
     {
@@ -1530,6 +1530,18 @@
             ".github/PULL_REQUEST_TEMPLATE.md",
             "scripts/phase7-open-source-readiness-smoke.mjs"
           ]
+        },
+        {
+          "id": "M7-12",
+          "title": "#114 open-source git history audit을 추가함",
+          "why": "repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.",
+          "done": "전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.",
+          "verification": "`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=119, committedPathsScanned=181, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.",
+          "files": [
+            "scripts/phase7-open-source-history-audit-smoke.mjs",
+            "docs/phase-7-evidence/M7-12-open-source-history-audit.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1942,6 +1954,11 @@
       "name": "M7-11 open-source readiness",
       "status": "Blocked",
       "detail": "community files and policy pass; only blocker is repository visibility still PRIVATE"
+    },
+    {
+      "name": "M7-12 git history audit",
+      "status": "Pass",
+      "detail": "git history audit reports zero forbidden paths, secret-like content findings, and oversized objects"
     }
   ],
   "commands": [
@@ -2106,6 +2123,10 @@
       "command": "node scripts/phase7-open-source-readiness-smoke.mjs"
     },
     {
+      "label": "Run M7 open-source history audit",
+      "command": "node scripts/phase7-open-source-history-audit-smoke.mjs"
+    },
+    {
       "label": "Run distribution policy smoke",
       "command": "node scripts/phase6-distribution-policy-smoke.mjs"
     },
@@ -2180,8 +2201,8 @@
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">42 issues</div>
-          <p>OSS readiness #112 in progress; #83/#90 still open</p>
+          <div class="metric-value">43 issues</div>
+          <p>OSS readiness #112 closed; history audit #114 in progress</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -2242,16 +2263,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-6</strong>
-                <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-6-no-publish-workflow-run.md, docs/project-state.json</span>
-              </div>
-              <h3>#102 no-publish artifact repo workflow run을 검증함</h3>
-              <div class="card-row"><b>왜</b><p>workflow가 별도 artifact_repo target으로 바뀐 뒤 GitHub Actions runner에서도 no-publication mode가 안전하게 통과하는지 증거가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.</p></div>
-              <div class="card-row"><b>검증</b><p>`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M7-7</strong>
                 <span>scripts/phase7-publication-preflight.mjs, docs/phase-7-evidence/M7-7-publication-preflight.md, docs/project-state.json</span>
               </div>
@@ -2299,6 +2310,16 @@
               <div class="card-row"><b>왜</b><p>public repo로 열기 전에 license, contribution, conduct, security, support, governance, issue/PR template, README public clone framing이 갖춰져야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>MIT LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, SUPPORT, GOVERNANCE, GitHub issue templates, PR template, open-source readiness smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-readiness-smoke.mjs`가 required community files, README public clone path, policy alignment, local secret-file absence를 통과하고 visibilityReady=false는 repo가 아직 PRIVATE이기 때문이라고 보고한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-12</strong>
+                <span>scripts/phase7-open-source-history-audit-smoke.mjs, docs/phase-7-evidence/M7-12-open-source-history-audit.md, README.md</span>
+              </div>
+              <h3>#114 open-source git history audit을 추가함</h3>
+              <div class="card-row"><b>왜</b><p>repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=119, committedPathsScanned=181, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.</p></div>
             </article>
         </div>
       </section>
@@ -2477,10 +2498,6 @@
           <tbody>
 
             <tr>
-              <td>M7-4 artifact repo workflow</td>
-              <td><strong>Pass</strong><span>manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication</span></td>
-            </tr>
-            <tr>
               <td>M7-5 checksum URL smoke</td>
               <td><strong>Pass</strong><span>public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist</span></td>
             </tr>
@@ -2507,6 +2524,10 @@
             <tr>
               <td>M7-11 open-source readiness</td>
               <td><strong>Blocked</strong><span>community files and policy pass; only blocker is repository visibility still PRIVATE</span></td>
+            </tr>
+            <tr>
+              <td>M7-12 git history audit</td>
+              <td><strong>Pass</strong><span>git history audit reports zero forbidden paths, secret-like content findings, and oversized objects</span></td>
             </tr>
           </tbody>
         </table>
@@ -2552,7 +2573,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 67개 보기</summary>
+        <summary>완료 이력 68개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3225,10 +3246,20 @@
               <div class="card-row"><b>완료</b><p>artifact URL과 SHA256SUMS URL을 다운로드하고 shasum 검증 후 setup/daily/today를 실행하는 smoke를 추가했다. 기본은 local loopback으로 publication 없이 실행된다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-url-smoke.mjs`가 checksumVerified=true, hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false로 mechanics를 통과한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-6</strong>
+                <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-6-no-publish-workflow-run.md, docs/project-state.json</span>
+              </div>
+              <h3>#102 no-publish artifact repo workflow run을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>workflow가 별도 artifact_repo target으로 바뀐 뒤 GitHub Actions runner에서도 no-publication mode가 안전하게 통과하는지 증거가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 64개 보기</summary>
+        <summary>전체 검증 65개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3489,12 +3520,16 @@
               <td>M7-11 open-source readiness</td>
               <td><strong>Blocked</strong><span>community files and policy pass; only blocker is repository visibility still PRIVATE</span></td>
             </tr>
+            <tr>
+              <td>M7-12 git history audit</td>
+              <td><strong>Pass</strong><span>git history audit reports zero forbidden paths, secret-like content findings, and oversized objects</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 50개 보기</summary>
+        <summary>전체 명령 51개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3656,6 +3691,10 @@
             <div class="command">
               <span>Run M7 open-source readiness smoke</span>
               <code>node scripts/phase7-open-source-readiness-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 open-source history audit</span>
+              <code>node scripts/phase7-open-source-history-audit-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run distribution policy smoke</span>

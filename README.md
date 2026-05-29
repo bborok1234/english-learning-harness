@@ -329,6 +329,7 @@ Before changing repository visibility to public, run:
 
 ```bash
 node scripts/phase7-open-source-readiness-smoke.mjs
+node scripts/phase7-open-source-history-audit-smoke.mjs
 ```
 
 ## Verification
@@ -566,6 +567,12 @@ Run the M7 open-source readiness smoke:
 
 ```bash
 node scripts/phase7-open-source-readiness-smoke.mjs
+```
+
+Run the M7 open-source git history audit:
+
+```bash
+node scripts/phase7-open-source-history-audit-smoke.mjs
 ```
 
 Run the M7 public publication preflight:
