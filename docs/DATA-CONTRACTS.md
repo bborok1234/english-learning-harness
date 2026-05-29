@@ -178,6 +178,11 @@ Required fields:
   "retry_output": "I don't know how to say it, but the meeting was okay.",
   "saved_phrase": "I don't know how to say it, but the meeting was okay.",
   "transfer_targets": ["stuck moment", "daily explanation", "work chat"],
+  "source_artifact": {
+    "type": "audio|image|video optional",
+    "path": "/local/path optional",
+    "claim_boundary": "Audio path is local metadata only; no speech-quality judgment is inferred."
+  },
   "claim_boundary": "This event records local interaction evidence only. It does not prove real-world fluency."
 }
 ```
