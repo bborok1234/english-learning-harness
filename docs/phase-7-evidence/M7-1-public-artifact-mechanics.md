@@ -31,6 +31,7 @@ It verifies:
 - generated learner files stay outside the extracted artifact root.
 - hosted-download mechanics work through a local loopback URL.
 - `.github/workflows/public-artifact.yml` can package and verify the artifact from GitHub Actions, then optionally upload it to a GitHub release when explicitly dispatched with `publish_release: true`.
+- GitHub Actions run `26618527553` completed successfully with `publish_release: false` and uploaded workflow artifact `english-learning-harness-public`.
 
 ## Remaining Blocker
 
