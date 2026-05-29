@@ -13,7 +13,7 @@ The product direction is open source, so the public distribution surface should 
 - Added `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md`, and `GOVERNANCE.md`.
 - Added GitHub issue templates and pull request template.
 - Updated README to frame the source repository as the primary public distribution path.
-- Updated distribution policy to `open-source-prep`, `public_source_repository`, and `public-git-clone`.
+- Updated distribution policy to `open-source-public`, `public_source_repository`, and `public-git-clone`.
 - Added `scripts/phase7-open-source-readiness-smoke.mjs`.
 
 ## Verified Behavior
@@ -28,12 +28,8 @@ It verifies:
 - README contains public clone and open-source readiness commands.
 - distribution policy recommends the public source repository path.
 - obvious local secret/token/key files are not present outside ignored runtime directories.
-- repository visibility is reported separately.
-
-Current expected blocker:
-
-- `source repository is not public yet`
+- repository visibility is reported separately and now returns `PUBLIC`.
 
 ## Claim Boundary
 
-This prepares the repository for open-source launch. It does not change repository visibility, prove public clone access, or complete #83/#90.
+This verifies open-source readiness. Public clone access is proven separately by `phase6-public-clean-clone-smoke`.

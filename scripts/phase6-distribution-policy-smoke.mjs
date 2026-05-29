@@ -47,16 +47,16 @@ function main() {
 
   assert(policy.schemaVersion === 1, "distribution policy schema mismatch");
   assert(
-    ["private-beta", "open-source-prep"].includes(policy.currentPolicy),
-    "distribution policy should be private-beta or open-source-prep",
+    ["private-beta", "open-source-prep", "open-source-public"].includes(policy.currentPolicy),
+    "distribution policy should be private-beta, open-source-prep, or open-source-public",
   );
   assert(
     ["invited-user clone-to-learn", "public source clone-to-learn"].includes(policy.releaseClaim),
     "release claim should be invited-user or public source clone-to-learn",
   );
   assert(
-    ["deferred", "preparing-public-source"].includes(policy.publicReleaseStatus),
-    "public release should be deferred or preparing-public-source",
+    ["deferred", "preparing-public-source", "public-source-live"].includes(policy.publicReleaseStatus),
+    "public release should be deferred, preparing-public-source, or public-source-live",
   );
   assert(
     policy.approvedClaims.some((claim) =>
@@ -65,10 +65,12 @@ function main() {
     ),
     "approved claims should mention invited access or public source repository intent",
   );
-  assert(
-    policy.blockedClaims.some((claim) => claim.includes("Unauthenticated public HTTPS clone")),
-    "blocked claims should include unauthenticated public clone",
-  );
+  if (policy.currentPolicy !== "open-source-public") {
+    assert(
+      policy.blockedClaims.some((claim) => claim.includes("Unauthenticated public HTTPS clone")),
+      "blocked claims should include unauthenticated public clone before public source release",
+    );
+  }
   assert(policy.publicReleaseRequirements?.common, "public release requirements should be grouped by surface");
   assert(
     policy.publicReleaseRequirements.common.some((requirement) => requirement.includes("Resolve #90")),

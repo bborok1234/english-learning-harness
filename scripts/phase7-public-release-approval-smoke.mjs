@@ -24,8 +24,8 @@ function main() {
   assert(packet.distributionIssue === 83, "packet must point to #83 proof");
   assert(packet.approvalRequired === true, "packet must require owner approval");
   assert(
-    ["owner_decision_required", "approved_pending_visibility_change"].includes(packet.decisionStatus),
-    "packet should preserve current owner decision or visibility-change status",
+    ["owner_decision_required", "approved_pending_visibility_change", "approved"].includes(packet.decisionStatus),
+    "packet should preserve current owner decision, visibility-change, or approved status",
   );
   assert(packet.publicationPerformed === false, "packet must not publish");
   assert(packet.canPublishNow === false, "packet must not authorize publication");

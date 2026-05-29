@@ -325,7 +325,7 @@ node scripts/phase7-public-artifact-handoff-smoke.mjs
 - Support guidance: `SUPPORT.md`.
 - Governance notes: `GOVERNANCE.md`.
 
-Before changing repository visibility to public, run:
+For open-source release checks, run:
 
 ```bash
 node scripts/phase7-open-source-readiness-smoke.mjs

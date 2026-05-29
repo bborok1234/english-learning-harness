@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-05-29",
-  "currentPolicy": "open-source-prep",
+  "currentPolicy": "open-source-public",
   "releaseClaim": "public source clone-to-learn",
   "publicReleaseDecision": {
     "issue": 90,
-    "status": "approved_pending_visibility_change",
+    "status": "approved",
     "recommendedSurface": "public_source_repository",
     "reason": "The product direction is open source, so the simplest public distribution surface is this source repository. A separate artifact repository is unnecessary unless the source repository must remain private.",
     "codexMayPublishWithoutExplicitApproval": false,
@@ -13,15 +13,14 @@
   },
   "repositoryVisibilityRequired": "public",
   "cloneMode": "public-git-clone",
-  "publicReleaseStatus": "preparing-public-source",
+  "publicReleaseStatus": "public-source-live",
   "approvedClaims": [
     "The intended public release surface is the source repository itself.",
-    "A fresh clone can start local learning through the explicit command wrapper once repository visibility is public.",
+    "Unauthenticated users can clone the public source repository and start local learning through the explicit command wrapper.",
     "Local marketplace packaging and isolated CODEX_HOME install are verified.",
     "First-run support diagnostics and non-destructive repair guidance are verified."
   ],
   "blockedClaims": [
-    "Unauthenticated public HTTPS clone is not verified until repository visibility is public and the default public clone smoke passes.",
     "Public Git-backed plugin install is not verified.",
     "Realtime voice and real learner outcome claims remain outside the first-complete release claim."
   ],
@@ -48,5 +47,5 @@
       "Document the static URL host, retention owner, and update procedure before claiming public distribution."
     ]
   },
-  "claimBoundary": "This policy prepares an open-source public source repository release. It does not claim unauthenticated public release until repository visibility is public and the default public clone smoke passes."
+  "claimBoundary": "This policy claims open-source public source clone-to-learn only. It does not claim public Git-backed plugin install, realtime voice, or real learner outcomes."
 }
