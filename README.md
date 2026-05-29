@@ -9,7 +9,7 @@ This first usable version is text/transcription-first. Realtime voice is not a d
 ## What Works
 
 - Onboarding/profile setup under a local learner directory.
-- Supported command-wrapper path for setup, daily session, health, status, and context.
+- Supported command-wrapper path for setup, daily cockpit, daily session, health, status, and context.
 - Daily English session runner with text input or transcript file input.
 - Mini mirror after each session.
 - `progress.json` v2 updates for the five MVP session metrics.
@@ -29,7 +29,9 @@ By default learner-owned files live here:
 ├── vocabulary.json
 ├── review-queue.json
 ├── journal/
-└── artifacts/sessions/
+└── artifacts/
+    ├── sessions/
+    └── weekly/
 ```
 
 For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learner-root`.
@@ -60,6 +62,14 @@ node scripts/english-learning-harness.mjs today \
   --say "I like coffee." \
   --say "Today morning coffee."
 ```
+
+Ask the daily cockpit what to do next:
+
+```bash
+node scripts/english-learning-harness.mjs daily --json
+```
+
+The cockpit reads local files only and returns due review, suggested scenario, learner model summary, latest weekly mirror pointer, and exact next commands.
 
 Run from a transcript file:
 
@@ -248,6 +258,12 @@ Run the weekly mirror smoke:
 
 ```bash
 node scripts/phase2-weekly-mirror-smoke.mjs
+```
+
+Run the daily cockpit smoke:
+
+```bash
+node scripts/phase3-daily-cockpit-smoke.mjs
 ```
 
 Run the full first-run smoke:

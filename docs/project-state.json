@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience planning complete",
-    "status": "Next: #37 daily cockpit command",
+    "stage": "M3 Daily Return Experience implementation active",
+    "status": "Next: #38 learner home HTML",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1과 M2는 milestone/epic closeout까지 완료됐다. M3는 multimodal이 아니라 Daily Return Experience로 정렬됐고, #37-#41 실행 이슈가 생성됐다. 다음 구현은 #37 daily cockpit command다."
+    "summary": "M3-1 daily cockpit command is implemented and smoke-tested. The shared dashboard now moves daily return from planning into implementation, and the next work is #38 learner home HTML from local evidence."
   },
   "ssot": [
     {
@@ -98,19 +98,19 @@
     {
       "label": "Ultragoal",
       "value": "M3",
-      "detail": "daily return experience planning complete",
+      "detail": "daily return implementation active",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M3 active",
-      "detail": "#37-#41 created; #37 next",
-      "tone": "amber"
+      "detail": "#37 implemented; #38 next",
+      "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#37 daily cockpit command",
+      "detail": "#38 learner home HTML",
       "tone": "red"
     },
     {
@@ -609,6 +609,20 @@
             "docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M3-1",
+          "title": "#37 Daily cockpit command를 구현함",
+          "why": "today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.",
+          "done": "`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.",
+          "verification": "`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase3-daily-cockpit-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-3-evidence/M3-1-daily-cockpit.md"
+          ]
         }
       ]
     },
@@ -616,25 +630,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-1",
-          "title": "#37 Daily cockpit command",
-          "why": "today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.",
-          "done": "`daily` command가 오늘의 계획, due phrases, suggested scenario, learner model summary, latest weekly mirror, exact next commands를 보여주게 한다.",
-          "verification": "fresh learner와 returning learner smoke에서 daily cockpit output이 통과해야 한다.",
-          "files": [
-            "scripts/english-learning-harness.mjs",
-            "scripts/lib/english-learning-store.mjs",
-            "docs/DATA-CONTRACTS.md"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-2",
@@ -646,7 +641,14 @@
             "scripts/english-learning-harness.mjs",
             "scripts/lib/english-learning-store.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M3-3",
           "title": "#39 No-streak return guidance",
@@ -850,6 +852,11 @@
       "name": "M3-0",
       "status": "Pass",
       "detail": "M1/M2 milestones closed and M3 execution issues #37-#41 created"
+    },
+    {
+      "name": "M3-1",
+      "status": "Pass",
+      "detail": "daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands"
     }
   ],
   "commands": [
@@ -910,6 +917,10 @@
       "command": "node scripts/phase2-weekly-mirror-smoke.mjs"
     },
     {
+      "label": "Run daily cockpit smoke",
+      "command": "node scripts/phase3-daily-cockpit-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -939,7 +950,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 37"
+      "command": "gh issue view 38"
     }
   ]
 }

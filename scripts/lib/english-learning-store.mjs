@@ -8,7 +8,7 @@ import {
 import { homedir } from "node:os";
 import { relative, resolve } from "node:path";
 import { mvpSessionMetricKeys, validateProgress } from "../validate-progress.mjs";
-import { defaultScenario, scenarioFollowUp, scenarioOpening } from "./scenario-engine.mjs";
+import { defaultScenario, planScenario, scenarioFollowUp, scenarioOpening } from "./scenario-engine.mjs";
 
 export const defaultLearnerRoot = () =>
   resolve(process.env.ENGLISH_LEARNING_HOME || `${homedir()}/english-learning`);
@@ -729,6 +729,15 @@ export function latestJournalPath(learnerRoot = defaultLearnerRoot()) {
   return entries.length ? resolve(paths.journalDir, entries.at(-1)) : "";
 }
 
+export function latestWeeklyMirrorPath(learnerRoot = defaultLearnerRoot()) {
+  const paths = learnerPaths(learnerRoot);
+  if (!existsSync(paths.weeklyMirrorDir)) return "";
+  const entries = readdirSync(paths.weeklyMirrorDir)
+    .filter((entry) => entry.endsWith(".json"))
+    .sort();
+  return entries.length ? resolve(paths.weeklyMirrorDir, entries.at(-1)) : "";
+}
+
 function readSessionArtifacts(paths, progress) {
   const sessions = Array.isArray(progress.sessions) ? progress.sessions : [];
   return sessions
@@ -813,6 +822,100 @@ export function writeWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new
   return {
     mirrorPath,
     mirror,
+  };
+}
+
+function daysSince(isoDate, date = new Date()) {
+  if (!isoDate || !Number.isFinite(Date.parse(isoDate))) return null;
+  return Math.max(0, Math.floor((date.getTime() - Date.parse(isoDate)) / 86400000));
+}
+
+function returnMessage(sessionCount, daysSinceLastSession) {
+  if (!sessionCount) return "Start with one small text-first session.";
+  if (daysSinceLastSession === 0) return "You already practiced today. Review or save one phrase; no streak penalty.";
+  if (daysSinceLastSession === 1) return "Continue with one small return session; no streak penalty.";
+  return "Restart gently with one useful sentence; no streak penalty.";
+}
+
+function commandLine(root, command, extraArgs = []) {
+  return [
+    "node",
+    "scripts/english-learning-harness.mjs",
+    command,
+    "--learner-root",
+    JSON.stringify(root),
+    ...extraArgs,
+  ].join(" ");
+}
+
+function skillEvidenceSummary(learnerModel) {
+  return Object.fromEntries(
+    learnerSkillKeys.map((skill) => [
+      skill,
+      learnerModel.interaction_skills[skill]?.evidence_count ?? 0,
+    ]),
+  );
+}
+
+export function buildDailyCockpit(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const profileText = readProfile(paths.profile);
+  const progress = readProgress(paths.progress);
+  const learnerModel = readLearnerModel(paths.learnerModel);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const dueReviewItems = listDueReviewItems(paths.root, date);
+  const scenarioPlan = planScenario({
+    profileText,
+    learnerModel,
+    vocabulary,
+    dueReviewItems,
+  });
+  const latestJournal = latestJournalPath(paths.root);
+  const latestWeeklyMirror = latestWeeklyMirrorPath(paths.root);
+  const sessionCount = Array.isArray(progress.sessions) ? progress.sessions.length : 0;
+  const daysSinceLastSession = daysSince(progress.last_session_at, date);
+  const dueReviewPreview = dueReviewItems.slice(0, 3);
+
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    return_state: {
+      session_count: sessionCount,
+      last_session_at: progress.last_session_at ?? "",
+      days_since_last_session: daysSinceLastSession,
+      message: returnMessage(sessionCount, daysSinceLastSession),
+    },
+    due_review: {
+      count: dueReviewItems.length,
+      items: dueReviewPreview,
+    },
+    suggested_scenario: {
+      id: scenarioPlan.scenario.id,
+      title: scenarioPlan.scenario.title,
+      mode: scenarioPlan.scenario.mode,
+      goal: scenarioPlan.scenario.goal,
+      rescue_phrase: scenarioPlan.scenario.rescue_phrase,
+      due_review: scenarioPlan.scenario.due_review,
+      selection_reason: scenarioPlan.selectionReason,
+    },
+    learner_model_summary: {
+      skill_evidence: skillEvidenceSummary(learnerModel),
+      average_utterance_words: learnerModel.baseline.average_utterance_words,
+      repair_phrase_count: learnerModel.baseline.repair_phrase_count,
+      energy: learnerModel.affect.last_energy,
+    },
+    saved_phrase_count: vocabulary.personal_phrases.length,
+    latest_weekly_mirror: latestWeeklyMirror ? relative(paths.root, latestWeeklyMirror) : "",
+    latest_journal: latestJournal ? relative(paths.root, latestJournal) : "",
+    next_commands: [
+      ...(dueReviewItems.length ? [commandLine(paths.root, "review")] : []),
+      commandLine(paths.root, "today", ["--say", JSON.stringify("I want to practice today.")]),
+      commandLine(paths.root, "weekly"),
+      commandLine(paths.root, "vault"),
+    ],
+    claim_boundary:
+      "This cockpit chooses the next local practice action from local files only. It does not measure long-term skill transfer.",
   };
 }
 
