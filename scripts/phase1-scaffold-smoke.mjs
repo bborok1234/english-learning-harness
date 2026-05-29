@@ -57,6 +57,7 @@ const requiredFiles = [
   "scripts/phase5-transcript-rubric-smoke.mjs",
   "scripts/phase5-persona-validation-smoke.mjs",
   "scripts/phase5-m5-gate-smoke.mjs",
+  "scripts/phase6-public-clean-clone-smoke.mjs",
 ];
 
 function readJson(path) {

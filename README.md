@@ -39,6 +39,22 @@ For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learne
 
 ## Quick Start
 
+From a fresh public clone:
+
+```bash
+git clone https://github.com/bborok1234/english-learning-harness.git
+cd english-learning-harness
+node scripts/english-learning-harness.mjs setup \
+  --name "Jieun" \
+  --motivation "I want to feel less frozen when speaking English." \
+  --correction-style "gentle recast first"
+node scripts/english-learning-harness.mjs daily --json
+node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
+node scripts/english-learning-harness.mjs weekly --json
+node scripts/english-learning-harness.mjs home --json
+node scripts/english-learning-harness.mjs export --json
+```
+
 The supported first-use path is the explicit command wrapper. It does not require native Codex hooks.
 
 One command prepares the learner directory and returns health plus the next command to run:
@@ -383,6 +399,12 @@ Run the M5 validation gate smoke:
 
 ```bash
 node scripts/phase5-m5-gate-smoke.mjs
+```
+
+Run the M6 public clean clone smoke:
+
+```bash
+node scripts/phase6-public-clean-clone-smoke.mjs
 ```
 
 Run the full first-run smoke:

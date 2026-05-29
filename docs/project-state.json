@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M5 Real Learning Validation closed",
-    "status": "Next: #72 M6 public clean clone setup",
+    "stage": "M6 Public Clone-to-Learn active",
+    "status": "Decision needed: #78 repository visibility blocks #72 public clone claim",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 gate smoke passes with decision continue_to_m6. Local simulated validation readiness is approved; real learner outcome claims remain blocked. Next is #72 public clean clone setup verification."
+    "summary": "M5 gate smoke passes with decision continue_to_m6. M6 public clone verification found that authenticated clone mechanics pass, but the repository is PRIVATE, so public clone-to-learn readiness is blocked until #78 resolves distribution policy."
   },
   "ssot": [
     {
@@ -61,6 +61,12 @@
       "label": "docs/phase-5-evidence/",
       "path": "./phase-5-evidence/",
       "role": "Phase 5 validation evidence notes",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-6-evidence/",
+      "path": "./phase-6-evidence/",
+      "role": "Phase 6 distribution and clone-to-learn evidence notes",
       "kind": "source"
     },
     {
@@ -122,25 +128,25 @@
     {
       "label": "Ultragoal",
       "value": "M6",
-      "detail": "M5 gate complete; M6 split created",
+      "detail": "M5 gate complete; M6 distribution gate active",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M6 active",
-      "detail": "M5 closed; #72 next",
-      "tone": "green"
+      "detail": "#72 mechanics pass privately; #78 blocks public claim",
+      "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "M6",
-      "detail": "#72 public clean clone setup",
+      "value": "#78",
+      "detail": "repository visibility / distribution policy",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "36 issues",
-      "detail": "M1-M4 closed; M6 #72-#75 created",
+      "value": "37 issues",
+      "detail": "M1-M5 closed; M6 #72-#75 plus #78",
       "tone": "green"
     },
     {
@@ -860,15 +866,17 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M5",
-          "title": "#72 M6 public clean clone setup path",
+          "id": "M6-1",
+          "title": "#72 public clean clone gate is blocked by repo visibility",
           "why": "M5가 local simulated validation readiness를 통과했으므로 다음 병목은 친구/공개 사용자가 GitHub clone만으로 시작할 수 있는지다.",
-          "done": "fresh public clone에서 setup, daily, today, weekly, home, export를 실행하고 README 경로를 검증한다.",
-          "verification": "public clean clone smoke, dashboard render, clone git status check가 통과해야 한다.",
+          "done": "setup, daily, today, weekly, home, export, README command audit, clone git status check를 포함한 M6 smoke를 추가했다. 인증된 SSH clone mechanics는 통과한다.",
+          "verification": "`ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`는 통과한다. 기본 `node scripts/phase6-public-clean-clone-smoke.mjs`는 repo visibility PRIVATE 때문에 실패한다.",
           "files": [
+            "scripts/phase6-public-clean-clone-smoke.mjs",
+            "docs/phase-6-evidence/M6-1-public-clean-clone.md",
+            "README.md",
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json",
-            "docs/phase-5-evidence/"
+            "docs/project-state.json"
           ]
         }
       ]
@@ -879,11 +887,11 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "M5-1",
-          "title": "#73 M6 marketplace packaging and install docs",
-          "why": "public clone smoke 다음에는 marketplace package/install guidance가 실제 검증 경로와 일치해야 한다.",
-          "done": "local marketplace install을 clean clone/isolated CODEX_HOME에서 재검증하고 README claim을 정리한다.",
-          "verification": "marketplace install smoke와 README command audit이 통과해야 한다.",
+          "id": "M6-D",
+          "title": "#78 repository visibility decision",
+          "why": "#72의 public clone claim은 repo가 PRIVATE인 한 기술 구현만으로 닫을 수 없다.",
+          "done": "public repo, private beta, separate public artifact 중 하나를 선택하고 README/STATUS/dashboard claim을 맞춘다.",
+          "verification": "선택한 distribution policy 아래에서 #72 acceptance를 재검증하거나 명시적으로 pivot한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -896,6 +904,13 @@
       "title": "Risks",
       "tone": "red",
       "cards": [
+        {
+          "id": "R000",
+          "title": "Public clone claim is blocked by PRIVATE repository visibility",
+          "why": "GitHub repository visibility is currently PRIVATE, so unauthenticated `git clone https://github.com/bborok1234/english-learning-harness.git` cannot be treated as verified public onboarding.",
+          "done": "#78 tracks the distribution-policy decision. Authenticated clone mechanics are verified separately and are not public release evidence.",
+          "verification": "default `node scripts/phase6-public-clean-clone-smoke.mjs` fails by design; allow-private mode passes authenticated mechanics only."
+        },
         {
           "id": "R001",
           "title": "Implementation-ready는 fallback 조건부",
@@ -1144,6 +1159,11 @@
       "name": "M5-5",
       "status": "Pass",
       "detail": "M5 gate smoke passes continue_to_m6 while blocking real learner outcome claims"
+    },
+    {
+      "name": "M6-1",
+      "status": "Blocked",
+      "detail": "authenticated clone mechanics pass, but public clone smoke fails by design while repository visibility is PRIVATE"
     }
   ],
   "commands": [
@@ -1244,6 +1264,18 @@
       "command": "node scripts/phase4-multimodal-gate-smoke.mjs"
     },
     {
+      "label": "Run M5 validation gate smoke",
+      "command": "node scripts/phase5-m5-gate-smoke.mjs"
+    },
+    {
+      "label": "Run M6 public clone smoke",
+      "command": "node scripts/phase6-public-clean-clone-smoke.mjs"
+    },
+    {
+      "label": "Run M6 authenticated clone mechanics smoke",
+      "command": "ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1272,8 +1304,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View next M5 issue",
-      "command": "gh issue view 72"
+      "label": "View current M6 decision issue",
+      "command": "gh issue view 78"
     }
   ]
 }
