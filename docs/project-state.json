@@ -1026,6 +1026,18 @@
             "scripts/phase7-public-artifact-handoff-smoke.mjs",
             "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
           ]
+        },
+        {
+          "id": "M7-4",
+          "title": "#98 release workflow를 별도 public artifact repo 경로로 정렬함",
+          "why": "private source repo의 release asset은 public proof가 아니므로 optional publish workflow도 별도 artifact repo를 명시해야 한다.",
+          "done": "workflow_dispatch에 artifact_repo input을 추가하고, publish step이 PUBLIC_ARTIFACT_REPO_TOKEN과 --repo ARTIFACT_REPO를 사용하도록 변경했다. 기본 publish_release=false는 유지한다.",
+          "verification": "`node scripts/phase7-release-workflow-smoke.mjs`가 artifact_repo input, token boundary, source repo read-only permission, --repo target을 검증한다.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "scripts/phase7-release-workflow-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -1406,6 +1418,11 @@
       "name": "M7-3 public artifact README",
       "status": "Pass",
       "detail": "handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance"
+    },
+    {
+      "name": "M7-4 artifact repo workflow",
+      "status": "Pass",
+      "detail": "manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication"
     }
   ],
   "commands": [
