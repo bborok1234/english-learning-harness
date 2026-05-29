@@ -204,5 +204,6 @@ M7 remains open for a future public repository clone or separate public artifact
 
 - `scripts/package-public-artifact.mjs` creates a tarball candidate.
 - `scripts/phase7-public-artifact-smoke.mjs` extracts the tarball and verifies setup, daily, today, weekly, home, export, and progress validation from the extracted artifact.
+- `scripts/phase7-hosted-artifact-smoke.mjs` verifies URL download/extract/first-session mechanics through local loopback, and can verify a real public URL through `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`.
 - the tarball excludes `.git`, `.omx`, `tmp`, and `node_modules`.
-- public hosting/download is still unproven, so #83 remains open.
+- public hosting/download is still unproven, so #83 remains open until hosted access reports `public_url_candidate`.
