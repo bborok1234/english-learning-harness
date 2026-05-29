@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M3 Daily Return Experience implementation active / #41 next** state.
+The project is in **M3 Daily Return Experience gate passed / M4 next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -48,9 +48,10 @@ What is complete:
 - M3-2 is implemented on the PR branch: `home` writes learner-owned `home.html` from local evidence and excludes project process logs.
 - M3-3 is implemented on the PR branch: return state now has `gap_kind` and `restart_action` with same-day, next-day, and long-gap fixture coverage.
 - M3-4 is implemented on the PR branch: seven simulated days run through setup, daily, review, today, weekly mirror, and learner home generation.
+- M3-5 is implemented on the PR branch: clean clone reaches daily cockpit, review/vault, weekly mirror, learner home, and seven-day simulation.
 
 What is not started:
-- M3 clone-to-daily gate closeout.
+- M4 multimodal interaction event graph.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -108,6 +109,7 @@ Strategic reset:
 - Learner home evidence: `docs/phase-3-evidence/M3-2-learner-home.md` records `home.html` generation and Playwright render smoke verification.
 - No-streak return evidence: `docs/phase-3-evidence/M3-3-no-streak-return.md` records deterministic gap fixtures and safe restart copy.
 - Seven-day simulation evidence: `docs/phase-3-evidence/M3-4-seven-day-simulation.md` records repeated local daily loop verification.
+- M3 gate evidence: `docs/phase-3-evidence/M3-5-clone-to-daily-gate.md` records clone-to-daily verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -165,7 +167,11 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M3-2: Generate learner home HTML from local evidence (#38).
 - [x] M3-3: Add no-streak return and resume guidance (#39).
 - [x] M3-4: Add seven-day local return simulation smoke (#40).
-- [ ] M3-5: Close M3 gate with clone-to-daily evidence (#41).
+- [x] M3-5: Close M3 gate with clone-to-daily evidence (#41).
+
+### Phase 4 Multimodal Interaction Lab
+
+- [ ] M4-0: Reconcile multimodal event graph issues and create executable M4 implementation tasks.
 
 ## SSOT Structure
 

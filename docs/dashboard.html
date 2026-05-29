@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience gate closeout next",
-    "status": "Next: #41 clone-to-daily gate",
+    "stage": "M3 Daily Return Experience gate passed",
+    "status": "Next: M4 multimodal interaction event graph planning",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 through M3-4 are implemented and smoke-tested, including a seven-day local simulation. The next work is #41 clone-to-daily gate closeout."
+    "summary": "M3 local daily return path is gate-passed: clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning."
   },
   "ssot": [
     {
@@ -499,20 +499,20 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M3",
-      "detail": "daily return gate closeout next",
+      "value": "M3 passed",
+      "detail": "daily return gate passed; M4 next",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M3 closeout",
-      "detail": "#37-#40 implemented; #41 next",
-      "tone": "green"
+      "value": "M4 planning",
+      "detail": "multimodal event graph task reconciliation next",
+      "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "M3",
-      "detail": "#41 clone-to-daily gate",
+      "value": "M4",
+      "detail": "multimodal interaction lab issue split",
       "tone": "red"
     },
     {
@@ -1064,6 +1064,18 @@
             "scripts/phase3-seven-day-simulation-smoke.mjs",
             "docs/phase-3-evidence/M3-4-seven-day-simulation.md"
           ]
+        },
+        {
+          "id": "M3-5",
+          "title": "#41 M3 clone-to-daily gate를 통과함",
+          "why": "M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.",
+          "done": "`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다.",
+          "verification": "clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true.",
+          "files": [
+            "scripts/phase3-m3-gate-smoke.mjs",
+            "docs/phase-3-evidence/M3-5-clone-to-daily-gate.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1073,15 +1085,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M3-5",
-          "title": "#41 M3 clone-to-daily gate",
-          "why": "M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.",
-          "done": "clean clone이 setup, daily cockpit, learner home, review/vault, weekly mirror, M3 smoke를 통과하게 한다.",
-          "verification": "M3 gate smoke, clean clone smoke, dashboard render smoke가 통과해야 한다.",
+          "id": "M4-0",
+          "title": "M4 multimodal event graph tasks를 재정렬해야 함",
+          "why": "M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.",
+          "done": "epics #7/#8과 `docs/MULTIMODAL-GENAI-PLAN.md`를 검토해 M4 실행 이슈를 만들고, 각 이슈에 modality contract, fallback, smoke, claim boundary를 붙인다.",
+          "verification": "GitHub M4 issues, ISSUE-INDEX, dashboard가 같은 next plan을 가리켜야 한다.",
           "files": [
-            "docs/project-state.json",
-            "docs/dashboard.html",
-            "scripts/phase1-clean-clone-smoke.mjs"
+            "docs/MULTIMODAL-GENAI-PLAN.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
           ]
         }
       ]
@@ -1280,6 +1292,11 @@
       "name": "M3-4",
       "status": "Pass",
       "detail": "seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow"
+    },
+    {
+      "name": "M3-5",
+      "status": "Pass",
+      "detail": "clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation"
     }
   ],
   "commands": [
@@ -1356,6 +1373,10 @@
       "command": "node scripts/phase3-seven-day-simulation-smoke.mjs"
     },
     {
+      "label": "Run M3 gate smoke",
+      "command": "node scripts/phase3-m3-gate-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1384,8 +1405,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View next M3 issue",
-      "command": "gh issue view 41"
+      "label": "View M4 milestone issues",
+      "command": "gh issue list --milestone \"M4 Multimodal Interaction Lab\""
     }
   ]
 }
@@ -1394,12 +1415,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M3-1 through M3-4 are implemented and smoke-tested, including a seven-day local simulation. The next work is #41 clone-to-daily gate closeout.</p>
+        <p class="summary">M3 local daily return path is gate-passed: clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M3 Daily Return Experience gate closeout next<br>
-        Next: #41 clone-to-daily gate
+        M3 Daily Return Experience gate passed<br>
+        Next: M4 multimodal interaction event graph planning
       </div>
     </header>
 
@@ -1407,18 +1428,18 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M3</div>
-          <p>daily return gate closeout next</p>
+          <div class="metric-value">M3 passed</div>
+          <p>daily return gate passed; M4 next</p>
         </article>
-        <article class="metric-card tone-green">
+        <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M3 closeout</div>
-          <p>#37-#40 implemented; #41 next</p>
+          <div class="metric-value">M4 planning</div>
+          <p>multimodal event graph task reconciliation next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">M3</div>
-          <p>#41 clone-to-daily gate</p>
+          <div class="metric-value">M4</div>
+          <p>multimodal interaction lab issue split</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1455,13 +1476,13 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M3-5</strong>
-                <span>docs/project-state.json, docs/dashboard.html, scripts/phase1-clean-clone-smoke.mjs</span>
+                <strong>M4-0</strong>
+                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>#41 M3 clone-to-daily gate</h3>
-              <div class="card-row"><b>왜</b><p>M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>clean clone이 setup, daily cockpit, learner home, review/vault, weekly mirror, M3 smoke를 통과하게 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>M3 gate smoke, clean clone smoke, dashboard render smoke가 통과해야 한다.</p></div>
+              <h3>M4 multimodal event graph tasks를 재정렬해야 함</h3>
+              <div class="card-row"><b>왜</b><p>M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>epics #7/#8과 `docs/MULTIMODAL-GENAI-PLAN.md`를 검토해 M4 실행 이슈를 만들고, 각 이슈에 modality contract, fallback, smoke, claim boundary를 붙인다.</p></div>
+              <div class="card-row"><b>검증</b><p>GitHub M4 issues, ISSUE-INDEX, dashboard가 같은 next plan을 가리켜야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1472,16 +1493,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M2-5</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-weekly-mirror-smoke.mjs, docs/phase-2-evidence/M2-5-weekly-mirror.md</span>
-              </div>
-              <h3>#29 Weekly mirror from local evidence</h3>
-              <div class="card-row"><b>왜</b><p>매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.</p></div>
-              <div class="card-row"><b>완료</b><p>`weekly` command와 `artifacts/weekly/weekly-mirror-YYYY-MM-DD.json` 생성을 구현하고 local evidence 기반 요약만 남기게 했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase2-weekly-mirror-smoke.mjs`가 세션 3개에서 themes, saved/reused phrases, repair attempts, next focus를 생성했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-0</strong>
@@ -1531,6 +1542,16 @@
               <div class="card-row"><b>왜</b><p>개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.</p></div>
               <div class="card-row"><b>완료</b><p>`phase3-seven-day-simulation-smoke`가 7일 동안 setup, daily, review, today, weekly, home 경로를 command-wrapper로 반복 실행한다.</p></div>
               <div class="card-row"><b>검증</b><p>7 sessions, 7 saved phrases, 7 review items, 6 reviewed due items, weekly mirror, learner home, skill evidence growth를 확인했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-5</strong>
+                <span>scripts/phase3-m3-gate-smoke.mjs, docs/phase-3-evidence/M3-5-clone-to-daily-gate.md, docs/project-state.json</span>
+              </div>
+              <h3>#41 M3 clone-to-daily gate를 통과함</h3>
+              <div class="card-row"><b>왜</b><p>M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다.</p></div>
+              <div class="card-row"><b>검증</b><p>clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true.</p></div>
             </article>
         </div>
       </section>
@@ -1681,10 +1702,6 @@
           <tbody>
 
             <tr>
-              <td>M2-3</td>
-              <td><strong>Pass</strong><span>due phrase planner, avoided topics, mode choice, and selection reason smoke pass</span></td>
-            </tr>
-            <tr>
               <td>M2-4</td>
               <td><strong>Pass</strong><span>tutor policy rubric and negative violation smoke pass</span></td>
             </tr>
@@ -1711,6 +1728,10 @@
             <tr>
               <td>M3-4</td>
               <td><strong>Pass</strong><span>seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow</span></td>
+            </tr>
+            <tr>
+              <td>M3-5</td>
+              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation</span></td>
             </tr>
           </tbody>
         </table>
@@ -1756,7 +1777,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 33개 보기</summary>
+        <summary>완료 이력 34개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2089,10 +2110,20 @@
               <div class="card-row"><b>완료</b><p>실행 가능한 tutor policy rubric, negative fixtures, Korean bridge behavior, persona fixture integration을 구현했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-tutor-policy-smoke.mjs`가 prohibited claim, mini mirror, Korean dead-end, correction ladder, overcorrection violation을 모두 잡았다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-5</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-weekly-mirror-smoke.mjs, docs/phase-2-evidence/M2-5-weekly-mirror.md</span>
+              </div>
+              <h3>#29 Weekly mirror from local evidence</h3>
+              <div class="card-row"><b>왜</b><p>매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>`weekly` command와 `artifacts/weekly/weekly-mirror-YYYY-MM-DD.json` 생성을 구현하고 local evidence 기반 요약만 남기게 했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-weekly-mirror-smoke.mjs`가 세션 3개에서 themes, saved/reused phrases, repair attempts, next focus를 생성했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 29개 보기</summary>
+        <summary>전체 검증 30개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2213,12 +2244,16 @@
               <td>M3-4</td>
               <td><strong>Pass</strong><span>seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow</span></td>
             </tr>
+            <tr>
+              <td>M3-5</td>
+              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 26개 보기</summary>
+        <summary>전체 명령 27개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2294,6 +2329,10 @@
               <code>node scripts/phase3-seven-day-simulation-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run M3 gate smoke</span>
+              <code>node scripts/phase3-m3-gate-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2322,8 +2361,8 @@
               <code>open docs/dashboard.html</code>
             </div>
             <div class="command">
-              <span>View next M3 issue</span>
-              <code>gh issue view 41</code>
+              <span>View M4 milestone issues</span>
+              <code>gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;</code>
             </div>
         </div>
       </details>

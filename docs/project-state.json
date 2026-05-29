@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience gate closeout next",
-    "status": "Next: #41 clone-to-daily gate",
+    "stage": "M3 Daily Return Experience gate passed",
+    "status": "Next: M4 multimodal interaction event graph planning",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 through M3-4 are implemented and smoke-tested, including a seven-day local simulation. The next work is #41 clone-to-daily gate closeout."
+    "summary": "M3 local daily return path is gate-passed: clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning."
   },
   "ssot": [
     {
@@ -97,20 +97,20 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M3",
-      "detail": "daily return gate closeout next",
+      "value": "M3 passed",
+      "detail": "daily return gate passed; M4 next",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M3 closeout",
-      "detail": "#37-#40 implemented; #41 next",
-      "tone": "green"
+      "value": "M4 planning",
+      "detail": "multimodal event graph task reconciliation next",
+      "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "M3",
-      "detail": "#41 clone-to-daily gate",
+      "value": "M4",
+      "detail": "multimodal interaction lab issue split",
       "tone": "red"
     },
     {
@@ -662,6 +662,18 @@
             "scripts/phase3-seven-day-simulation-smoke.mjs",
             "docs/phase-3-evidence/M3-4-seven-day-simulation.md"
           ]
+        },
+        {
+          "id": "M3-5",
+          "title": "#41 M3 clone-to-daily gate를 통과함",
+          "why": "M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.",
+          "done": "`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다.",
+          "verification": "clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true.",
+          "files": [
+            "scripts/phase3-m3-gate-smoke.mjs",
+            "docs/phase-3-evidence/M3-5-clone-to-daily-gate.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -671,15 +683,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M3-5",
-          "title": "#41 M3 clone-to-daily gate",
-          "why": "M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.",
-          "done": "clean clone이 setup, daily cockpit, learner home, review/vault, weekly mirror, M3 smoke를 통과하게 한다.",
-          "verification": "M3 gate smoke, clean clone smoke, dashboard render smoke가 통과해야 한다.",
+          "id": "M4-0",
+          "title": "M4 multimodal event graph tasks를 재정렬해야 함",
+          "why": "M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.",
+          "done": "epics #7/#8과 `docs/MULTIMODAL-GENAI-PLAN.md`를 검토해 M4 실행 이슈를 만들고, 각 이슈에 modality contract, fallback, smoke, claim boundary를 붙인다.",
+          "verification": "GitHub M4 issues, ISSUE-INDEX, dashboard가 같은 next plan을 가리켜야 한다.",
           "files": [
-            "docs/project-state.json",
-            "docs/dashboard.html",
-            "scripts/phase1-clean-clone-smoke.mjs"
+            "docs/MULTIMODAL-GENAI-PLAN.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
           ]
         }
       ]
@@ -878,6 +890,11 @@
       "name": "M3-4",
       "status": "Pass",
       "detail": "seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow"
+    },
+    {
+      "name": "M3-5",
+      "status": "Pass",
+      "detail": "clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation"
     }
   ],
   "commands": [
@@ -954,6 +971,10 @@
       "command": "node scripts/phase3-seven-day-simulation-smoke.mjs"
     },
     {
+      "label": "Run M3 gate smoke",
+      "command": "node scripts/phase3-m3-gate-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -982,8 +1003,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View next M3 issue",
-      "command": "gh issue view 41"
+      "label": "View M4 milestone issues",
+      "command": "gh issue list --milestone \"M4 Multimodal Interaction Lab\""
     }
   ]
 }
