@@ -359,6 +359,7 @@ M7 now targets the current source repository as the open-source public distribut
 | Issue | Work | Default Decision |
 |---|---|---|
 | #128 | M8-1: Implement Speaking Skill OS diagnosis and backlog loop | continue |
+| #130 | M8-2: Add multi-skill diagnosis and adaptive speaking queue | continue |
 
 #128 evidence currently shows:
 
@@ -369,3 +370,12 @@ M7 now targets the current source repository as the open-source public distribut
 - `today` records transfer-test evidence back to the backlog and session artifact.
 - `scripts/phase8-speaking-skill-os-smoke.mjs` proves diagnose -> backlog -> targeted practice -> pass evidence.
 - this proves local harness mechanics, not real-world fluency or long-term learner outcomes.
+
+#130 evidence currently shows:
+
+- `diagnose` can create multiple speaking backlog items from one sample.
+- backlog ordering prioritizes failed `needs_review` transfer work ahead of open generic practice.
+- after repair passes, `daily` advances to the next unresolved skill.
+- if clarification fails, the item stays at the front as `needs_review`.
+- `scripts/phase8-speaking-skill-os-queue-smoke.mjs` proves multi-skill diagnosis and adaptive queue advancement.
+- this remains heuristic local diagnosis, not certified speaking assessment.

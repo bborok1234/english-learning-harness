@@ -325,10 +325,13 @@ function diagnose(options) {
     learnerRoot: result.learnerRoot,
     action: "speaking-diagnosis",
     diagnosis: result.diagnosis,
+    diagnoses: result.diagnoses,
     backlogItem: result.backlogItem,
+    backlogItems: result.backlogItems,
     backlogPath: result.backlogPath,
     artifactPath: result.artifactPath,
     created: result.created,
+    createdCount: result.createdCount,
     nextCommand: commandWithRoot("today", result.learnerRoot, ["--say", JSON.stringify(result.backlogItem.drill_prompt), "--json"]),
     claimBoundary: result.claimBoundary,
   };
