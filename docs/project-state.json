@@ -6,7 +6,7 @@
     "stage": "M6 Private Beta Clone-to-Learn closed",
     "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact and hosted-download mechanics now pass locally, but public hosting/download is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, and release workflow wiring now pass, but public hosting/download is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -955,6 +955,18 @@
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
             "README.md"
           ]
+        },
+        {
+          "id": "M7-1c",
+          "title": "#83 release artifact workflow를 준비함",
+          "why": "public artifact를 매번 로컬에서 손으로 만들면 publish/download evidence가 재현되기 어렵다.",
+          "done": "manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.",
+          "verification": "`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "scripts/phase7-release-workflow-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -966,12 +978,12 @@
         {
           "id": "M7-1",
           "title": "#83 real public artifact URL",
-          "why": "download mechanics는 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
-          "done": "GitHub release asset, public repo artifact, or another public URL을 정하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
+          "why": "artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
+          "done": "manual workflow로 artifact를 publish하거나 별도 public URL에 업로드한 뒤 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
           "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
-            "scripts/phase7-hosted-artifact-smoke.mjs",
-            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+            ".github/workflows/public-artifact.yml",
+            "scripts/phase7-hosted-artifact-smoke.mjs"
           ]
         }
       ]
@@ -1299,6 +1311,11 @@
       "name": "M7-1 hosted artifact",
       "status": "Partial",
       "detail": "hosted-download mechanics pass through local loopback; real public URL remains unverified"
+    },
+    {
+      "name": "M7-1 release workflow",
+      "status": "Pass",
+      "detail": "manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload"
     }
   ],
   "commands": [
@@ -1433,6 +1450,10 @@
     {
       "label": "Run M7 hosted artifact smoke",
       "command": "node scripts/phase7-hosted-artifact-smoke.mjs"
+    },
+    {
+      "label": "Run M7 release workflow smoke",
+      "command": "node scripts/phase7-release-workflow-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

@@ -30,6 +30,7 @@ It verifies:
 - the extracted artifact can run setup, daily, today, weekly, home, export, and progress validation.
 - generated learner files stay outside the extracted artifact root.
 - hosted-download mechanics work through a local loopback URL.
+- `.github/workflows/public-artifact.yml` can package and verify the artifact from GitHub Actions, then optionally upload it to a GitHub release when explicitly dispatched with `publish_release: true`.
 
 ## Remaining Blocker
 
@@ -43,6 +44,8 @@ ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harne
 ```
 
 The public distribution claim can close only when the smoke reports `hostedAccessStatus: public_url_candidate` and `canClosePublicDistribution: true`.
+
+The release workflow is intentionally manual. Publishing a release asset remains an explicit external release action.
 
 ## Claim Boundary
 

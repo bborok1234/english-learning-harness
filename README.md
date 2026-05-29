@@ -277,6 +277,8 @@ ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harne
 
 Without `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`, the hosted-artifact smoke uses a local loopback server and proves mechanics only, not public access.
 
+The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a GitHub release when explicitly dispatched with `publish_release: true`. A release asset on a private repository is not automatically public evidence; verify the final URL with `phase7-hosted-artifact-smoke.mjs`.
+
 ## Verification
 
 Run the supported wrapper smoke:
@@ -470,6 +472,12 @@ Run the M7 hosted artifact smoke:
 
 ```bash
 node scripts/phase7-hosted-artifact-smoke.mjs
+```
+
+Run the M7 release workflow static smoke:
+
+```bash
+node scripts/phase7-release-workflow-smoke.mjs
 ```
 
 Run the full first-run smoke:
