@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience gate passed",
-    "status": "Next: M4 multimodal interaction event graph planning",
+    "stage": "M4 Multimodal Interaction Lab planning complete",
+    "status": "Next: #50 interaction event graph schema",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3 local daily return path is closed in GitHub: #37-#41, epic #6, and the M3 milestone are closed. Clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning."
+    "summary": "M4 is split into executable issues: #50 event schema, #49 text event persistence, #53 transcription-first voice import, #52 image information-gap fixture, and #54 multimodal-ready gate. Next implementation is #50."
   },
   "ssot": [
     {
@@ -451,6 +451,12 @@
       "label": "docs/phase-3-evidence/",
       "path": "./phase-3-evidence/",
       "role": "Phase 3 daily return 구현 증거",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-4-evidence/",
+      "path": "./phase-4-evidence/",
+      "role": "Phase 4 multimodal evidence notes",
       "kind": "source"
     },
     {
@@ -499,26 +505,26 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M3 closed",
-      "detail": "M3 milestone and epic closed; M4 next",
+      "value": "M4",
+      "detail": "multimodal execution issues created",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M4 planning",
-      "detail": "multimodal event graph task reconciliation next",
+      "value": "M4 active",
+      "detail": "#50/#49/#53/#52/#54 created; #50 next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "multimodal interaction lab issue split",
+      "detail": "#50 interaction event graph schema",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
       "value": "27 issues",
-      "detail": "M1/M2/M3 closed; M4-M6 remain open",
+      "detail": "M1/M2/M3 closed; M4 execution issues created",
       "tone": "green"
     },
     {
@@ -1076,6 +1082,19 @@
             "docs/phase-3-evidence/M3-5-clone-to-daily-gate.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M4-0",
+          "title": "M4 multimodal event graph 실행 이슈를 정렬함",
+          "why": "M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.",
+          "done": "Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.",
+          "verification": "`gh issue list --milestone \"M4 Multimodal Interaction Lab\"`가 #50/#49/#53/#52/#54를 보여준다.",
+          "files": [
+            "docs/MULTIMODAL-GENAI-PLAN.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json",
+            "docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md"
+          ]
         }
       ]
     },
@@ -1085,15 +1104,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M4-0",
-          "title": "M4 multimodal event graph tasks를 재정렬해야 함",
-          "why": "M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.",
-          "done": "epics #7/#8과 `docs/MULTIMODAL-GENAI-PLAN.md`를 검토해 M4 실행 이슈를 만들고, 각 이슈에 modality contract, fallback, smoke, claim boundary를 붙인다.",
-          "verification": "GitHub M4 issues, ISSUE-INDEX, dashboard가 같은 next plan을 가리켜야 한다.",
+          "id": "M4-1",
+          "title": "#50 Interaction event graph schema",
+          "why": "voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.",
+          "done": "session artifact가 intent/output/trouble/mediation/retry/transfer를 담는 `interaction_events`를 저장할 수 있게 schema, validator, default builder를 만든다.",
+          "verification": "invalid fixture rejection과 text-first valid event smoke가 통과해야 한다.",
           "files": [
-            "docs/MULTIMODAL-GENAI-PLAN.md",
-            "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "scripts/lib/english-learning-store.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "scripts/phase4-interaction-event-schema-smoke.mjs"
           ]
         }
       ]
@@ -1102,7 +1121,52 @@
       "id": "next",
       "title": "Next",
       "tone": "amber",
-      "cards": []
+      "cards": [
+        {
+          "id": "M4-2",
+          "title": "#49 Persist text sessions as interaction events",
+          "why": "새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.",
+          "done": "today artifacts가 valid text interaction events를 포함하고 weekly/home이 event-backed repair/transfer summary를 표시한다.",
+          "verification": "text event persistence smoke와 seven-day simulation regression이 통과해야 한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs"
+          ]
+        },
+        {
+          "id": "M4-3",
+          "title": "#53 Transcription-first voice event import",
+          "why": "Realtime voice는 아직 기본 경로가 아니지만 voice transcript는 event graph에 들어올 수 있어야 한다.",
+          "done": "transcript-first voice import가 modality=voice event를 저장하고 optional audio metadata는 local path로만 남긴다.",
+          "verification": "voice event import smoke와 tutor policy smoke가 통과해야 한다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs"
+          ]
+        },
+        {
+          "id": "M4-4",
+          "title": "#52 Image information-gap event fixture",
+          "why": "이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.",
+          "done": "local image fixture가 hidden detail/clarification prompt를 포함하고 modality=image event를 만든다.",
+          "verification": "image information-gap smoke와 event validator가 통과해야 한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "docs/DATA-CONTRACTS.md"
+          ]
+        },
+        {
+          "id": "M4-5",
+          "title": "#54 M4 multimodal-ready gate",
+          "why": "M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.",
+          "done": "text, voice-transcript, image-info-gap events를 gate smoke로 검증하고 M4 milestone/epics를 close한다.",
+          "verification": "M4 gate smoke, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
+          ]
+        }
+      ]
     },
     {
       "id": "risks",
@@ -1297,6 +1361,11 @@
       "name": "M3-5",
       "status": "Pass",
       "detail": "clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0"
+    },
+    {
+      "name": "M4-0",
+      "status": "Pass",
+      "detail": "M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan"
     }
   ],
   "commands": [
@@ -1405,8 +1474,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View M4 milestone issues",
-      "command": "gh issue list --milestone \"M4 Multimodal Interaction Lab\""
+      "label": "View next M4 issue",
+      "command": "gh issue view 50"
     }
   ]
 }
@@ -1415,12 +1484,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M3 local daily return path is closed in GitHub: #37-#41, epic #6, and the M3 milestone are closed. Clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning.</p>
+        <p class="summary">M4 is split into executable issues: #50 event schema, #49 text event persistence, #53 transcription-first voice import, #52 image information-gap fixture, and #54 multimodal-ready gate. Next implementation is #50.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M3 Daily Return Experience gate passed<br>
-        Next: M4 multimodal interaction event graph planning
+        M4 Multimodal Interaction Lab planning complete<br>
+        Next: #50 interaction event graph schema
       </div>
     </header>
 
@@ -1428,23 +1497,23 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M3 closed</div>
-          <p>M3 milestone and epic closed; M4 next</p>
+          <div class="metric-value">M4</div>
+          <p>multimodal execution issues created</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M4 planning</div>
-          <p>multimodal event graph task reconciliation next</p>
+          <div class="metric-value">M4 active</div>
+          <p>#50/#49/#53/#52/#54 created; #50 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M4</div>
-          <p>multimodal interaction lab issue split</p>
+          <p>#50 interaction event graph schema</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
           <div class="metric-value">27 issues</div>
-          <p>M1/M2/M3 closed; M4-M6 remain open</p>
+          <p>M1/M2/M3 closed; M4 execution issues created</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -1470,19 +1539,59 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>1</span>
+          <span>5</span>
         </header>
         <div class="column-cards">
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M4-0</strong>
-                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
+                <strong>M4-1</strong>
+                <span>scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md, scripts/phase4-interaction-event-schema-smoke.mjs</span>
               </div>
-              <h3>M4 multimodal event graph tasks를 재정렬해야 함</h3>
-              <div class="card-row"><b>왜</b><p>M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>epics #7/#8과 `docs/MULTIMODAL-GENAI-PLAN.md`를 검토해 M4 실행 이슈를 만들고, 각 이슈에 modality contract, fallback, smoke, claim boundary를 붙인다.</p></div>
-              <div class="card-row"><b>검증</b><p>GitHub M4 issues, ISSUE-INDEX, dashboard가 같은 next plan을 가리켜야 한다.</p></div>
+              <h3>#50 Interaction event graph schema</h3>
+              <div class="card-row"><b>왜</b><p>voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>session artifact가 intent/output/trouble/mediation/retry/transfer를 담는 `interaction_events`를 저장할 수 있게 schema, validator, default builder를 만든다.</p></div>
+              <div class="card-row"><b>검증</b><p>invalid fixture rejection과 text-first valid event smoke가 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-2</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs</span>
+              </div>
+              <h3>#49 Persist text sessions as interaction events</h3>
+              <div class="card-row"><b>왜</b><p>새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.</p></div>
+              <div class="card-row"><b>완료</b><p>today artifacts가 valid text interaction events를 포함하고 weekly/home이 event-backed repair/transfer summary를 표시한다.</p></div>
+              <div class="card-row"><b>검증</b><p>text event persistence smoke와 seven-day simulation regression이 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-3</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs</span>
+              </div>
+              <h3>#53 Transcription-first voice event import</h3>
+              <div class="card-row"><b>왜</b><p>Realtime voice는 아직 기본 경로가 아니지만 voice transcript는 event graph에 들어올 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>transcript-first voice import가 modality=voice event를 저장하고 optional audio metadata는 local path로만 남긴다.</p></div>
+              <div class="card-row"><b>검증</b><p>voice event import smoke와 tutor policy smoke가 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-4</strong>
+                <span>scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md</span>
+              </div>
+              <h3>#52 Image information-gap event fixture</h3>
+              <div class="card-row"><b>왜</b><p>이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>local image fixture가 hidden detail/clarification prompt를 포함하고 modality=image event를 만든다.</p></div>
+              <div class="card-row"><b>검증</b><p>image information-gap smoke와 event validator가 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-5</strong>
+                <span>docs/ISSUE-INDEX.md, docs/project-state.json</span>
+              </div>
+              <h3>#54 M4 multimodal-ready gate</h3>
+              <div class="card-row"><b>왜</b><p>M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>text, voice-transcript, image-info-gap events를 gate smoke로 검증하고 M4 milestone/epics를 close한다.</p></div>
+              <div class="card-row"><b>검증</b><p>M4 gate smoke, dashboard render, GitHub milestone audit이 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1493,16 +1602,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-0</strong>
-                <span>docs/ISSUE-INDEX.md, docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md, docs/project-state.json</span>
-              </div>
-              <h3>M3 Daily Return Experience 실행 이슈를 정렬함</h3>
-              <div class="card-row"><b>왜</b><p>상위 Goal은 1차 제품 완성인데 dashboard는 M3를 multimodal로, GitHub milestone은 Daily Return으로 가리켜 진행판이 어긋났다.</p></div>
-              <div class="card-row"><b>완료</b><p>M1/M2 epics와 milestones를 evidence comment로 close하고, M3 실행 이슈 #37-#41을 생성했다. M4는 multimodal lab으로 유지했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #37-#41을 기록하고 dashboard now가 #37 daily cockpit을 가리킨다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-1</strong>
@@ -1552,6 +1651,16 @@
               <div class="card-row"><b>왜</b><p>M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다. #41, epic #6, M3 milestone도 닫혔다.</p></div>
               <div class="card-row"><b>검증</b><p>clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true; GitHub M3 open_issues=0.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-0</strong>
+                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md</span>
+              </div>
+              <h3>M4 multimodal event graph 실행 이슈를 정렬함</h3>
+              <div class="card-row"><b>왜</b><p>M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;`가 #50/#49/#53/#52/#54를 보여준다.</p></div>
             </article>
         </div>
       </section>
@@ -1666,6 +1775,10 @@
               <strong>docs/phase-3-evidence/</strong>
               <span>Phase 3 daily return 구현 증거</span>
             </a>
+            <a class="link-card source" href="./phase-4-evidence/">
+              <strong>docs/phase-4-evidence/</strong>
+              <span>Phase 4 multimodal evidence notes</span>
+            </a>
             <a class="link-card source" href="./LEARNING-ENGINE.md">
               <strong>docs/LEARNING-ENGINE.md</strong>
               <span>학습 엔진 설계</span>
@@ -1702,10 +1815,6 @@
           <tbody>
 
             <tr>
-              <td>M2-4</td>
-              <td><strong>Pass</strong><span>tutor policy rubric and negative violation smoke pass</span></td>
-            </tr>
-            <tr>
               <td>M2-5</td>
               <td><strong>Pass</strong><span>weekly mirror local evidence smoke and M2 regression smokes pass</span></td>
             </tr>
@@ -1732,6 +1841,10 @@
             <tr>
               <td>M3-5</td>
               <td><strong>Pass</strong><span>clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0</span></td>
+            </tr>
+            <tr>
+              <td>M4-0</td>
+              <td><strong>Pass</strong><span>M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan</span></td>
             </tr>
           </tbody>
         </table>
@@ -1777,7 +1890,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 34개 보기</summary>
+        <summary>완료 이력 35개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2120,10 +2233,20 @@
               <div class="card-row"><b>완료</b><p>`weekly` command와 `artifacts/weekly/weekly-mirror-YYYY-MM-DD.json` 생성을 구현하고 local evidence 기반 요약만 남기게 했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-weekly-mirror-smoke.mjs`가 세션 3개에서 themes, saved/reused phrases, repair attempts, next focus를 생성했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-0</strong>
+                <span>docs/ISSUE-INDEX.md, docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md, docs/project-state.json</span>
+              </div>
+              <h3>M3 Daily Return Experience 실행 이슈를 정렬함</h3>
+              <div class="card-row"><b>왜</b><p>상위 Goal은 1차 제품 완성인데 dashboard는 M3를 multimodal로, GitHub milestone은 Daily Return으로 가리켜 진행판이 어긋났다.</p></div>
+              <div class="card-row"><b>완료</b><p>M1/M2 epics와 milestones를 evidence comment로 close하고, M3 실행 이슈 #37-#41을 생성했다. M4는 multimodal lab으로 유지했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #37-#41을 기록하고 dashboard now가 #37 daily cockpit을 가리킨다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 30개 보기</summary>
+        <summary>전체 검증 31개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2248,6 +2371,10 @@
               <td>M3-5</td>
               <td><strong>Pass</strong><span>clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0</span></td>
             </tr>
+            <tr>
+              <td>M4-0</td>
+              <td><strong>Pass</strong><span>M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -2361,8 +2488,8 @@
               <code>open docs/dashboard.html</code>
             </div>
             <div class="command">
-              <span>View M4 milestone issues</span>
-              <code>gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;</code>
+              <span>View next M4 issue</span>
+              <code>gh issue view 50</code>
             </div>
         </div>
       </details>

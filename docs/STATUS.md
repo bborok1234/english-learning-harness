@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M3 Daily Return Experience gate passed / M4 next** state.
+The project is in **M4 Multimodal Interaction Lab planning complete / #50 next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -52,7 +52,7 @@ What is complete:
 - M3 epic #6 and the M3 Daily Return Experience milestone are closed.
 
 What is not started:
-- M4 multimodal interaction event graph.
+- M4-0 is complete: multimodal epics #7/#8 are split into executable issues #50, #49, #53, #52, and #54.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -172,7 +172,12 @@ Start from the verified/fallback Phase 0 constraints.
 
 ### Phase 4 Multimodal Interaction Lab
 
-- [ ] M4-0: Reconcile multimodal event graph issues and create executable M4 implementation tasks.
+- [x] M4-0: Reconcile multimodal event graph issues and create executable M4 implementation tasks.
+- [ ] M4-1: Add interaction event graph schema (#50).
+- [ ] M4-2: Persist text sessions as interaction events (#49).
+- [ ] M4-3: Add transcription-first voice event import (#53).
+- [ ] M4-4: Add image information-gap event fixture (#52).
+- [ ] M4-5: Close multimodal-ready event graph gate (#54).
 
 ## SSOT Structure
 

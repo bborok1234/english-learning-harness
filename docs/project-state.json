@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience gate passed",
-    "status": "Next: M4 multimodal interaction event graph planning",
+    "stage": "M4 Multimodal Interaction Lab planning complete",
+    "status": "Next: #50 interaction event graph schema",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3 local daily return path is closed in GitHub: #37-#41, epic #6, and the M3 milestone are closed. Clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning."
+    "summary": "M4 is split into executable issues: #50 event schema, #49 text event persistence, #53 transcription-first voice import, #52 image information-gap fixture, and #54 multimodal-ready gate. Next implementation is #50."
   },
   "ssot": [
     {
@@ -49,6 +49,12 @@
       "label": "docs/phase-3-evidence/",
       "path": "./phase-3-evidence/",
       "role": "Phase 3 daily return 구현 증거",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-4-evidence/",
+      "path": "./phase-4-evidence/",
+      "role": "Phase 4 multimodal evidence notes",
       "kind": "source"
     },
     {
@@ -97,26 +103,26 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M3 closed",
-      "detail": "M3 milestone and epic closed; M4 next",
+      "value": "M4",
+      "detail": "multimodal execution issues created",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M4 planning",
-      "detail": "multimodal event graph task reconciliation next",
+      "value": "M4 active",
+      "detail": "#50/#49/#53/#52/#54 created; #50 next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "multimodal interaction lab issue split",
+      "detail": "#50 interaction event graph schema",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
       "value": "27 issues",
-      "detail": "M1/M2/M3 closed; M4-M6 remain open",
+      "detail": "M1/M2/M3 closed; M4 execution issues created",
       "tone": "green"
     },
     {
@@ -674,6 +680,19 @@
             "docs/phase-3-evidence/M3-5-clone-to-daily-gate.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M4-0",
+          "title": "M4 multimodal event graph 실행 이슈를 정렬함",
+          "why": "M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.",
+          "done": "Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.",
+          "verification": "`gh issue list --milestone \"M4 Multimodal Interaction Lab\"`가 #50/#49/#53/#52/#54를 보여준다.",
+          "files": [
+            "docs/MULTIMODAL-GENAI-PLAN.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json",
+            "docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md"
+          ]
         }
       ]
     },
@@ -683,15 +702,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M4-0",
-          "title": "M4 multimodal event graph tasks를 재정렬해야 함",
-          "why": "M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.",
-          "done": "epics #7/#8과 `docs/MULTIMODAL-GENAI-PLAN.md`를 검토해 M4 실행 이슈를 만들고, 각 이슈에 modality contract, fallback, smoke, claim boundary를 붙인다.",
-          "verification": "GitHub M4 issues, ISSUE-INDEX, dashboard가 같은 next plan을 가리켜야 한다.",
+          "id": "M4-1",
+          "title": "#50 Interaction event graph schema",
+          "why": "voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.",
+          "done": "session artifact가 intent/output/trouble/mediation/retry/transfer를 담는 `interaction_events`를 저장할 수 있게 schema, validator, default builder를 만든다.",
+          "verification": "invalid fixture rejection과 text-first valid event smoke가 통과해야 한다.",
           "files": [
-            "docs/MULTIMODAL-GENAI-PLAN.md",
-            "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "scripts/lib/english-learning-store.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "scripts/phase4-interaction-event-schema-smoke.mjs"
           ]
         }
       ]
@@ -700,7 +719,52 @@
       "id": "next",
       "title": "Next",
       "tone": "amber",
-      "cards": []
+      "cards": [
+        {
+          "id": "M4-2",
+          "title": "#49 Persist text sessions as interaction events",
+          "why": "새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.",
+          "done": "today artifacts가 valid text interaction events를 포함하고 weekly/home이 event-backed repair/transfer summary를 표시한다.",
+          "verification": "text event persistence smoke와 seven-day simulation regression이 통과해야 한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs"
+          ]
+        },
+        {
+          "id": "M4-3",
+          "title": "#53 Transcription-first voice event import",
+          "why": "Realtime voice는 아직 기본 경로가 아니지만 voice transcript는 event graph에 들어올 수 있어야 한다.",
+          "done": "transcript-first voice import가 modality=voice event를 저장하고 optional audio metadata는 local path로만 남긴다.",
+          "verification": "voice event import smoke와 tutor policy smoke가 통과해야 한다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs"
+          ]
+        },
+        {
+          "id": "M4-4",
+          "title": "#52 Image information-gap event fixture",
+          "why": "이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.",
+          "done": "local image fixture가 hidden detail/clarification prompt를 포함하고 modality=image event를 만든다.",
+          "verification": "image information-gap smoke와 event validator가 통과해야 한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "docs/DATA-CONTRACTS.md"
+          ]
+        },
+        {
+          "id": "M4-5",
+          "title": "#54 M4 multimodal-ready gate",
+          "why": "M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.",
+          "done": "text, voice-transcript, image-info-gap events를 gate smoke로 검증하고 M4 milestone/epics를 close한다.",
+          "verification": "M4 gate smoke, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
+          ]
+        }
+      ]
     },
     {
       "id": "risks",
@@ -895,6 +959,11 @@
       "name": "M3-5",
       "status": "Pass",
       "detail": "clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0"
+    },
+    {
+      "name": "M4-0",
+      "status": "Pass",
+      "detail": "M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan"
     }
   ],
   "commands": [
@@ -1003,8 +1072,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View M4 milestone issues",
-      "command": "gh issue list --milestone \"M4 Multimodal Interaction Lab\""
+      "label": "View next M4 issue",
+      "command": "gh issue view 50"
     }
   ]
 }
