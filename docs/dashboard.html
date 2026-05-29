@@ -1476,6 +1476,18 @@
             "docs/phase-7-evidence/M7-7-publication-preflight.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M7-8",
+          "title": "#106 public artifact에서 plugin install을 검증함",
+          "why": "public artifact 사용자가 direct script 학습뿐 아니라 Codex plugin install까지 할 수 있는지 M7-install gate를 검증해야 한다.",
+          "done": "checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.",
+          "verification": "`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.",
+          "files": [
+            "scripts/phase7-public-artifact-install-smoke.mjs",
+            "scripts/prepare-public-artifact-handoff.mjs",
+            "docs/phase-7-evidence/M7-8-public-artifact-install.md"
+          ]
         }
       ]
     },
@@ -1511,17 +1523,6 @@
           "files": [
             "docs/distribution-policy.json",
             "scripts/phase7-publication-preflight.mjs"
-          ]
-        },
-        {
-          "id": "M7-install",
-          "title": "Public install claim gate",
-          "why": "public artifact가 hosted된 뒤에도 Codex plugin install claim은 별도 검증이 필요하다.",
-          "done": "public artifact 또는 public repo 기준으로 local marketplace/public install smoke를 다시 실행한다.",
-          "verification": "public install smoke와 README command audit이 통과해야 한다.",
-          "files": [
-            "README.md",
-            "scripts/phase6-marketplace-install-smoke.mjs"
           ]
         }
       ]
@@ -1876,6 +1877,11 @@
       "name": "M7-7 publication preflight",
       "status": "Blocked",
       "detail": "preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible"
+    },
+    {
+      "name": "M7-8 public artifact install",
+      "status": "Pass",
+      "detail": "checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME"
     }
   ],
   "commands": [
@@ -2028,6 +2034,10 @@
       "command": "node scripts/phase7-public-release-url-smoke.mjs"
     },
     {
+      "label": "Run M7 public artifact install smoke",
+      "command": "node scripts/phase7-public-artifact-install-smoke.mjs"
+    },
+    {
       "label": "Run M7 publication preflight",
       "command": "node scripts/phase7-publication-preflight.mjs"
     },
@@ -2125,7 +2135,7 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>3</span>
+          <span>2</span>
         </header>
         <div class="column-cards">
 
@@ -2149,16 +2159,6 @@
               <div class="card-row"><b>완료</b><p>preflight 기준 현재 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.</p></div>
               <div class="card-row"><b>검증</b><p>publication preflight가 publicationReady=true가 되려면 #90 approval과 public artifact repo visibility가 필요하다.</p></div>
             </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-install</strong>
-                <span>README.md, scripts/phase6-marketplace-install-smoke.mjs</span>
-              </div>
-              <h3>Public install claim gate</h3>
-              <div class="card-row"><b>왜</b><p>public artifact가 hosted된 뒤에도 Codex plugin install claim은 별도 검증이 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>public artifact 또는 public repo 기준으로 local marketplace/public install smoke를 다시 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>public install smoke와 README command audit이 통과해야 한다.</p></div>
-            </article>
         </div>
       </section>
       <section class="board-column compact tone-green">
@@ -2168,16 +2168,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-2</strong>
-                <span>scripts/prepare-public-artifact-handoff.mjs, scripts/phase7-public-artifact-handoff-smoke.mjs, docs/phase-7-evidence/M7-2-public-artifact-handoff.md</span>
-              </div>
-              <h3>#94 public artifact repo handoff bundle을 준비함</h3>
-              <div class="card-row"><b>왜</b><p>별도 public artifact repository release를 선택하더라도 무엇을 게시할지 재현 가능한 bundle이 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-3</strong>
@@ -2227,6 +2217,16 @@
               <div class="card-row"><b>왜</b><p>실제 공개 publish 전, owner decision/target repo/workflow/handoff가 준비됐는지 한 번에 보여주는 non-publishing readiness check가 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>distribution policy, workflow artifact_repo/token boundary, handoff bundle, gh repo visibility를 검사하는 preflight를 추가했다. 현재 publicationReady=false다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-publication-preflight.mjs`가 decisionStatus=owner_decision_required, artifactRepoStatus=unavailable, publicationReady=false, canPublishNow=false를 반환한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-8</strong>
+                <span>scripts/phase7-public-artifact-install-smoke.mjs, scripts/prepare-public-artifact-handoff.mjs, docs/phase-7-evidence/M7-8-public-artifact-install.md</span>
+              </div>
+              <h3>#106 public artifact에서 plugin install을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact 사용자가 direct script 학습뿐 아니라 Codex plugin install까지 할 수 있는지 M7-install gate를 검증해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2405,10 +2405,6 @@
           <tbody>
 
             <tr>
-              <td>M7-1 workflow run</td>
-              <td><strong>Pass</strong><span>GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public</span></td>
-            </tr>
-            <tr>
               <td>M7-D decision gate</td>
               <td><strong>Pass</strong><span>public release publication remains blocked until the issue 90 owner decision is recorded</span></td>
             </tr>
@@ -2435,6 +2431,10 @@
             <tr>
               <td>M7-7 publication preflight</td>
               <td><strong>Blocked</strong><span>preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible</span></td>
+            </tr>
+            <tr>
+              <td>M7-8 public artifact install</td>
+              <td><strong>Pass</strong><span>checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME</span></td>
             </tr>
           </tbody>
         </table>
@@ -2480,7 +2480,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 63개 보기</summary>
+        <summary>완료 이력 64개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3113,10 +3113,20 @@
               <div class="card-row"><b>완료</b><p>distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=public_artifact_repository_release, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-2</strong>
+                <span>scripts/prepare-public-artifact-handoff.mjs, scripts/phase7-public-artifact-handoff-smoke.mjs, docs/phase-7-evidence/M7-2-public-artifact-handoff.md</span>
+              </div>
+              <h3>#94 public artifact repo handoff bundle을 준비함</h3>
+              <div class="card-row"><b>왜</b><p>별도 public artifact repository release를 선택하더라도 무엇을 게시할지 재현 가능한 bundle이 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 60개 보기</summary>
+        <summary>전체 검증 61개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3361,12 +3371,16 @@
               <td>M7-7 publication preflight</td>
               <td><strong>Blocked</strong><span>preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible</span></td>
             </tr>
+            <tr>
+              <td>M7-8 public artifact install</td>
+              <td><strong>Pass</strong><span>checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 46개 보기</summary>
+        <summary>전체 명령 47개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3516,6 +3530,10 @@
             <div class="command">
               <span>Run M7 public release URL smoke</span>
               <code>node scripts/phase7-public-release-url-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 public artifact install smoke</span>
+              <code>node scripts/phase7-public-artifact-install-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run M7 publication preflight</span>

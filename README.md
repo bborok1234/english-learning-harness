@@ -520,6 +520,12 @@ Run the M7 public release URL checksum smoke:
 node scripts/phase7-public-release-url-smoke.mjs
 ```
 
+Run the M7 public artifact plugin install smoke:
+
+```bash
+node scripts/phase7-public-artifact-install-smoke.mjs
+```
+
 Run the M7 public publication preflight:
 
 ```bash

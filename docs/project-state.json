@@ -1074,6 +1074,18 @@
             "docs/phase-7-evidence/M7-7-publication-preflight.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M7-8",
+          "title": "#106 public artifact에서 plugin install을 검증함",
+          "why": "public artifact 사용자가 direct script 학습뿐 아니라 Codex plugin install까지 할 수 있는지 M7-install gate를 검증해야 한다.",
+          "done": "checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.",
+          "verification": "`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.",
+          "files": [
+            "scripts/phase7-public-artifact-install-smoke.mjs",
+            "scripts/prepare-public-artifact-handoff.mjs",
+            "docs/phase-7-evidence/M7-8-public-artifact-install.md"
+          ]
         }
       ]
     },
@@ -1109,17 +1121,6 @@
           "files": [
             "docs/distribution-policy.json",
             "scripts/phase7-publication-preflight.mjs"
-          ]
-        },
-        {
-          "id": "M7-install",
-          "title": "Public install claim gate",
-          "why": "public artifact가 hosted된 뒤에도 Codex plugin install claim은 별도 검증이 필요하다.",
-          "done": "public artifact 또는 public repo 기준으로 local marketplace/public install smoke를 다시 실행한다.",
-          "verification": "public install smoke와 README command audit이 통과해야 한다.",
-          "files": [
-            "README.md",
-            "scripts/phase6-marketplace-install-smoke.mjs"
           ]
         }
       ]
@@ -1474,6 +1475,11 @@
       "name": "M7-7 publication preflight",
       "status": "Blocked",
       "detail": "preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible"
+    },
+    {
+      "name": "M7-8 public artifact install",
+      "status": "Pass",
+      "detail": "checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME"
     }
   ],
   "commands": [
@@ -1624,6 +1630,10 @@
     {
       "label": "Run M7 public release URL smoke",
       "command": "node scripts/phase7-public-release-url-smoke.mjs"
+    },
+    {
+      "label": "Run M7 public artifact install smoke",
+      "command": "node scripts/phase7-public-artifact-install-smoke.mjs"
     },
     {
       "label": "Run M7 publication preflight",

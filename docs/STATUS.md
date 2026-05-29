@@ -84,6 +84,7 @@ What is complete:
 - M7-5 public release URL smoke verifies artifact plus `SHA256SUMS` before setup/daily/today; current evidence is local loopback only until real public URLs exist.
 - M7-6 GitHub Actions run `26619701714` verifies the separate artifact repo workflow path in no-publication mode with artifact upload and skipped release publication.
 - M7-7 publication preflight is in place and currently reports `publicationReady=false`: owner decision is not approved and `bborok1234/english-learning-harness-public` is not visible to `gh repo view`.
+- M7-8 public artifact install smoke verifies a checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated `CODEX_HOME`.
 
 What is not started:
 - Real user validation.
@@ -102,6 +103,7 @@ What failed review:
 - M7-5 public release URL smoke verifies checksum-aware download-to-learning mechanics and keeps `canClosePublicDistribution=false` in local mode.
 - M7-6 no-publish workflow evidence verifies `publish_release=false`, `artifact_repo=bborok1234/english-learning-harness-public`, workflow artifact upload, and skipped publish step.
 - M7-7 preflight verifies policy/workflow/handoff readiness while keeping `canPublishNow=false` until owner approval and public artifact repo visibility exist.
+- M7-8 install smoke verifies local marketplace plugin install from the downloaded public artifact path; public Git-backed plugin install remains unclaimed.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.
