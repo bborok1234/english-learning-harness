@@ -79,11 +79,12 @@ git switch -c issue-37-daily-cockpit
 Current implementation target:
 
 ```bash
-gh issue view 40
+gh issue view 41
 ```
 
 From #12 onward, implementation issues close through linked PRs.
 
 M3-1 is merged through PR #43 and closed #37.
 M3-2 is merged through PR #44 and closed #38.
-M3-3 is implemented on the PR branch and waits for PR review/merge evidence before closing #39.
+M3-3 is merged through PR #45 and closed #39.
+M3-4 is implemented on the PR branch and waits for PR review/merge evidence before closing #40.

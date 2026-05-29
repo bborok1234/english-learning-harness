@@ -46,6 +46,7 @@ const requiredFiles = [
   "scripts/phase3-daily-cockpit-smoke.mjs",
   "scripts/phase3-learner-home-smoke.mjs",
   "scripts/phase3-no-streak-return-smoke.mjs",
+  "scripts/phase3-seven-day-simulation-smoke.mjs",
 ];
 
 function readJson(path) {

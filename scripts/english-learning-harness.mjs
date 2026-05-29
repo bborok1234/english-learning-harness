@@ -68,6 +68,13 @@ function parseArgs(argv) {
     } else if (arg === "--result") {
       options.result = argv[index + 1];
       index += 1;
+    } else if (arg === "--date") {
+      const date = new Date(argv[index + 1]);
+      if (!Number.isFinite(date.getTime())) {
+        throw new Error(`Invalid --date: ${argv[index + 1]}`);
+      }
+      options.date = date;
+      index += 1;
     } else if (arg === "--json") {
       options.json = true;
     } else if (arg === "--repair") {
@@ -111,15 +118,15 @@ function helpText() {
     "",
     "Usage:",
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
-    "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--json]",
-    "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--json]",
-    "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs context [--learner-root DIR]",
-    "  node scripts/english-learning-harness.mjs review [--review-id ID --result success|fail] [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs review [--review-id ID --result success|fail] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs vault [--learner-root DIR]",
-    "  node scripts/english-learning-harness.mjs weekly [--learner-root DIR]",
+    "  node scripts/english-learning-harness.mjs weekly [--learner-root DIR] [--date ISO]",
     "",
     "Native hooks are optional. This wrapper is the reliable first-usable path.",
   ].join("\n");
@@ -214,7 +221,7 @@ function setup(options) {
 }
 
 function daily(options) {
-  const cockpit = buildDailyCockpit(options.learnerRoot);
+  const cockpit = buildDailyCockpit(options.learnerRoot, options.date || new Date());
   return {
     status: "pass",
     path: "explicit-command-wrapper",
@@ -225,7 +232,7 @@ function daily(options) {
 }
 
 function home(options) {
-  const result = writeLearnerHome(options.learnerRoot);
+  const result = writeLearnerHome(options.learnerRoot, options.date || new Date());
   return {
     status: "pass",
     path: "explicit-command-wrapper",
@@ -240,6 +247,7 @@ function home(options) {
 }
 
 function today(options) {
+  const date = options.date || new Date();
   const paths = ensureLearnerStore(options.learnerRoot);
   const profileText = readProfile(paths.profile);
   const scenarioPlan = planScenario({
@@ -247,15 +255,16 @@ function today(options) {
     preferredId: options.scenario,
     learnerModel: readLearnerModel(paths.learnerModel),
     vocabulary: readVocabulary(paths.vocabulary),
-    dueReviewItems: listDueReviewItems(paths.root),
+    dueReviewItems: listDueReviewItems(paths.root, date),
   });
   const session = buildSession(transcriptInputs(options), {
+    sessionId: `${date.toISOString().slice(0, 10)}-${date.getTime()}`,
     opening:
       "Let's keep this low pressure. Say one useful sentence, then we will repair it once.",
     scenario: scenarioPlan.scenario,
     selectionReason: scenarioPlan.selectionReason,
   });
-  const persisted = persistSession(options.learnerRoot, session);
+  const persisted = persistSession(options.learnerRoot, session, date);
   return {
     status: "pass",
     path: "explicit-command-wrapper",
@@ -328,7 +337,12 @@ function review(options) {
     if (!options.reviewId || !options.result) {
       throw new Error("review requires both --review-id and --result when marking an item");
     }
-    const reviewedItem = markReviewItem(options.learnerRoot, options.reviewId, options.result);
+    const reviewedItem = markReviewItem(
+      options.learnerRoot,
+      options.reviewId,
+      options.result,
+      options.date || new Date(),
+    );
     return {
       status: "pass",
       path: "explicit-command-wrapper",
@@ -338,7 +352,7 @@ function review(options) {
     };
   }
 
-  const dueItems = listDueReviewItems(options.learnerRoot);
+  const dueItems = listDueReviewItems(options.learnerRoot, options.date || new Date());
   return {
     status: "pass",
     path: "explicit-command-wrapper",
@@ -361,7 +375,7 @@ function vault(options) {
 }
 
 function weekly(options) {
-  const result = writeWeeklyMirror(options.learnerRoot);
+  const result = writeWeeklyMirror(options.learnerRoot, options.date || new Date());
   return {
     status: "pass",
     path: "explicit-command-wrapper",
