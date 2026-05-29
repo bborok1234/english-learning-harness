@@ -8,7 +8,7 @@ import { personaFixtures, prohibitedFixtureClaims } from "./lib/persona-fixtures
 import { evaluateTranscriptReview } from "./lib/transcript-review-rubric.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const fixtureRoot = resolve(repoRoot, "tmp/phase-5-persona-validation");
+const fixtureRoot = resolve(repoRoot, "tmp/phase-5-persona-validation", String(process.pid));
 const promptSet = ["warm_start", "clarification", "reuse", "image_info_gap", "reflection"];
 const days = [
   "2026-05-23T12:00:00.000Z",

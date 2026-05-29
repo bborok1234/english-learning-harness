@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M5 Real Learning Validation active",
-    "status": "Next: #66 M5 validation gate",
+    "stage": "M5 Real Learning Validation gate complete on PR branch",
+    "status": "Next: #72 M6 public clean clone setup",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 target-persona validation fixture is implemented. The next target is #66: close the M5 validation gate by reviewing protocol, export, rubric, persona evidence, and claim boundaries."
+    "summary": "M5 gate smoke passes with decision continue_to_m6. Local simulated validation readiness is approved; real learner outcome claims remain blocked. Next is #72 public clean clone setup verification."
   },
   "ssot": [
     {
@@ -121,26 +121,26 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M5",
-      "detail": "persona validation implemented",
+      "value": "M6",
+      "detail": "M5 gate complete; M6 split created",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M4 closed",
-      "detail": "#7/#8/#49/#50/#52/#53/#54 closed",
+      "value": "M5 gate",
+      "detail": "#62/#63/#64/#65 closed; #66 on PR branch",
       "tone": "green"
     },
     {
       "label": "Next block",
-      "value": "M5",
-      "detail": "#66 validation gate",
+      "value": "M6",
+      "detail": "#72 public clean clone setup",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "32 issues",
-      "detail": "M1-M4 closed; M5 #62-#66 created",
+      "value": "36 issues",
+      "detail": "M1-M4 closed; M6 #72-#75 created",
       "tone": "green"
     },
     {
@@ -838,6 +838,19 @@
             "docs/phase-5-evidence/M5-4-persona-validation.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M5-5",
+          "title": "#66 M5 real learning validation gate를 구현함",
+          "why": "M5는 tooling 완료가 아니라 claim을 계속/보류/다운그레이드할지 evidence로 판단해야 한다.",
+          "done": "M5 gate smoke가 protocol, export, rubric, persona validation evidence를 재검증하고 M6 #72-#75를 생성했다.",
+          "verification": "`node scripts/phase5-m5-gate-smoke.mjs`가 decision=continue_to_m6, personaCount=4, blocked real learner claims를 통과했다.",
+          "files": [
+            "scripts/phase5-m5-gate-smoke.mjs",
+            "docs/phase-5-evidence/M5-5-validation-gate.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -848,10 +861,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#66 M5 real learning validation gate",
-          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
-          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
-          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "title": "#72 M6 public clean clone setup path",
+          "why": "M5가 local simulated validation readiness를 통과했으므로 다음 병목은 친구/공개 사용자가 GitHub clone만으로 시작할 수 있는지다.",
+          "done": "fresh public clone에서 setup, daily, today, weekly, home, export를 실행하고 README 경로를 검증한다.",
+          "verification": "public clean clone smoke, dashboard render, clone git status check가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -867,10 +880,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "After M5: M6 public clone-to-learn release split",
-          "why": "M5 closeout 후에는 public clone/setup/onboarding release readiness를 executable issues로 쪼개야 한다.",
-          "done": "M6 epic 상태와 public Git-backed marketplace/install gap을 재검토한다.",
-          "verification": "ISSUE-INDEX와 dashboard가 같은 M6 next target을 가리켜야 한다.",
+          "title": "#73 M6 marketplace packaging and install docs",
+          "why": "public clone smoke 다음에는 marketplace package/install guidance가 실제 검증 경로와 일치해야 한다.",
+          "done": "local marketplace install을 clean clone/isolated CODEX_HOME에서 재검증하고 README claim을 정리한다.",
+          "verification": "marketplace install smoke와 README command audit이 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1126,6 +1139,11 @@
       "name": "M5-4",
       "status": "Pass",
       "detail": "persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions"
+    },
+    {
+      "name": "M5-5",
+      "status": "Pass",
+      "detail": "M5 gate smoke passes continue_to_m6 while blocking real learner outcome claims"
     }
   ],
   "commands": [
@@ -1255,7 +1273,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 66"
+      "command": "gh issue view 72"
     }
   ]
 }

@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M5 Real Learning Validation active / #66 validation gate next** state.
+The project is in **M5 Real Learning Validation gate complete on PR branch / #72 M6 public clone setup next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -62,6 +62,8 @@ What is complete:
 - M5-2 is implemented on the PR branch: `export` writes a redacted JSON+Markdown evidence pack from a seven-day learner store.
 - M5-3 is implemented on the PR branch: before/after transcript rubric scores observable behavior and rejects unsupported claims.
 - M5-4 is implemented on the PR branch: four target personas complete seven-day validation fixtures with evidence export and transcript rubric decisions.
+- M5-5 is implemented on the PR branch: M5 gate smoke approves continuing to M6 while blocking real learner outcome claims.
+- M6 is split into executable issues #72-#75.
 
 What is not started:
 - Real user validation.
@@ -107,6 +109,7 @@ Strategic reset:
 - M5-2 evidence: `docs/phase-5-evidence/M5-2-evidence-export.md` records export pack behavior, redaction, and smoke verification.
 - M5-3 evidence: `docs/phase-5-evidence/M5-3-transcript-rubric.md` records before/after transcript rubric behavior and negative fixtures.
 - M5-4 evidence: `docs/phase-5-evidence/M5-4-persona-validation.md` records target-persona seven-day fixture behavior and claim boundaries.
+- M5-5 evidence: `docs/phase-5-evidence/M5-5-validation-gate.md` records M5 closeout decision, approved claims, blocked claims, and M6 split.
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
@@ -203,7 +206,14 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M5-2: Export seven-day pilot evidence pack (#63).
 - [x] M5-3: Add before-after transcript review rubric (#64).
 - [x] M5-4: Run target-persona seven-day validation fixture (#65).
-- [ ] M5-5: Close real learning validation gate (#66).
+- [x] M5-5: Close real learning validation gate (#66).
+
+### Phase 6 Public Clone-to-Learn Release
+
+- [ ] M6-1: Verify public clean clone setup path (#72).
+- [ ] M6-2: Verify marketplace packaging and install docs (#73).
+- [ ] M6-3: Harden first-run onboarding and support diagnostics (#74).
+- [ ] M6-4: Close public clone-to-learn release gate (#75).
 
 ## SSOT Structure
 
