@@ -315,6 +315,53 @@ Forbidden content:
 - guaranteed outcomes,
 - level ranking.
 
+## M5 Evidence Pack
+
+The `export` command writes JSON and Markdown review packs under `artifacts/validation/`.
+
+Required JSON fields:
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "ISO-8601",
+  "protocol": "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+  "learner_root": {
+    "local_path_redacted": true,
+    "basename": "learner",
+    "note": "Local path is metadata only and is not included in the evidence pack."
+  },
+  "source_files": {
+    "profile": "profile.md",
+    "progress": "progress.json",
+    "learner_model": "learner-model.json",
+    "vocabulary": "vocabulary.json",
+    "review_queue": "review-queue.json",
+    "learner_home": "home.html"
+  },
+  "summary": {
+    "session_count": 7,
+    "total_learner_word_count": 0,
+    "repair_session_count": 0,
+    "interaction_event_count": 0,
+    "modalities": [],
+    "saved_phrase_count": 0,
+    "review_item_count": 0,
+    "reused_review_item_count": 0,
+    "weekly_mirror_count": 0
+  },
+  "sessions": [],
+  "weekly_mirrors": [],
+  "review_queue": {
+    "item_count": 0,
+    "items": []
+  },
+  "claim_boundary": "This evidence pack summarizes local practice artifacts for review. It does not prove learning improvement, fluency, or real-world speaking ability."
+}
+```
+
+Local learner roots and source media paths must be redacted or marked local-only inside the evidence pack. The command output may include the local pack paths so the user can open the generated files on their own machine.
+
 ## Contract Rule
 
 The dashboard may not claim learning progress from a field unless that field has:
