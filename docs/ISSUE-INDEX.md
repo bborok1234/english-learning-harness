@@ -79,7 +79,7 @@ git switch -c issue-37-daily-cockpit
 Current implementation target:
 
 ```bash
-gh issue view 41
+gh issue list --milestone "M4 Multimodal Interaction Lab"
 ```
 
 From #12 onward, implementation issues close through linked PRs.
@@ -87,4 +87,9 @@ From #12 onward, implementation issues close through linked PRs.
 M3-1 is merged through PR #43 and closed #37.
 M3-2 is merged through PR #44 and closed #38.
 M3-3 is merged through PR #45 and closed #39.
-M3-4 is implemented on the PR branch and waits for PR review/merge evidence before closing #40.
+M3-4 is merged through PR #46 and closed #40.
+M3-5 is implemented on the PR branch and waits for PR review/merge evidence before closing #41.
+
+## M4 Multimodal Interaction Lab
+
+M4 remains open. Before implementation, reconcile epics #7 and #8 into executable tasks tied to `docs/MULTIMODAL-GENAI-PLAN.md`.

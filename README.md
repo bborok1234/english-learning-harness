@@ -293,6 +293,12 @@ Run the seven-day local simulation smoke:
 node scripts/phase3-seven-day-simulation-smoke.mjs
 ```
 
+Run the M3 clone-to-daily gate smoke:
+
+```bash
+node scripts/phase3-m3-gate-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash
