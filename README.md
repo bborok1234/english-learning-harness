@@ -4,27 +4,35 @@ Open-source, local-first Codex harness that turns Codex into a daily English spe
 
 North star: **AI 파트너와 편안하게 영어로 대화하는 능력.**
 
-This is not a learner-facing Node CLI product. The learner-facing surface is **Codex conversation inside this repository**: you talk to Codex, Codex runs the local learning engine internally, and your practice history stays on your machine.
+This is not a learner-facing Node CLI product. The learner-facing surface is **Codex conversation**: you paste one install prompt into Codex, Codex installs the harness skills, and then your daily English practice happens through natural language.
 
 The first usable version is text/transcription-first. Realtime voice conversation is not the default path yet because the current local Codex CLI does not expose a stable realtime voice command.
 
-## Start In Codex
+## Paste This Into Codex
 
-1. Clone or download this repository.
-2. Open the folder in Codex.
-3. Tell Codex:
+Open Codex and paste this:
 
 ```text
-Use this repository as my English Learning Harness.
-Set me up as a learner, then run today's 5-minute speaking practice.
-Do not ask me to run Node commands; use the repo's local engine internally when you need to save progress.
+Install English Learning Harness from:
+https://github.com/bborok1234/english-learning-harness
+
+Use the repo setup script to install the Codex skills, then start my first 5-minute English speaking practice.
+Do not ask me to clone the repo or run Node commands manually. You operate the harness and local engine for me.
 
 My name is Jieun.
 I freeze when I need to speak English.
 I want gentle corrections and practical phrases I can reuse.
 ```
 
-Codex should handle setup, practice, mini mirror, review memory, and progress files for you. The ordinary learner action is to answer Codex in English, not to operate scripts.
+Codex should install the skill surface, handle setup, run practice, save local progress, and finish with a mini mirror. The ordinary learner action is to answer Codex in English, not to operate scripts.
+
+If you are already inside a checked-out copy of this repo, paste this shorter prompt:
+
+```text
+Use this repository as my English Learning Harness.
+Install its Codex skills if needed, then run today's 5-minute practice.
+Keep me in conversation; use the local engine internally when you need to save progress.
+```
 
 ## Try These Prompts
 
@@ -64,7 +72,7 @@ When the harness is used correctly, Codex is the tutor and operator:
 - generates a weekly mirror from local evidence
 - can create a local learner home page for your journey
 
-The scripts in this repo are the engine underneath that experience. They are for Codex, maintainers, and verification. They are not the product surface a learner should have to operate by hand.
+The scripts in this repo are the engine underneath that experience. They are for Codex, maintainers, setup, and verification. They are not the product surface a learner should have to operate by hand.
 
 ## Who This Is For
 
@@ -164,6 +172,35 @@ This repository ships Codex skill instructions for:
 - `english-picture-description`
 
 The skill contract is: keep the learner in conversation, use the local engine internally for durable state when available, and do not turn ordinary learning into a command-line chore.
+
+The setup script installs these skills into Codex:
+
+```text
+~/.codex/skills/english-learning-onboarding
+~/.codex/skills/english-learning-daily-session
+~/.codex/skills/english-learning-mini-mirror
+~/.codex/skills/english-learning-picture-description
+```
+
+## Agent Install Details
+
+The install prompt above should lead Codex to run the equivalent of:
+
+```bash
+mkdir -p ~/.english-learning-harness
+git clone --single-branch --depth 1 https://github.com/bborok1234/english-learning-harness.git ~/.english-learning-harness/repo
+~/.english-learning-harness/repo/setup --host codex
+```
+
+If the repo already exists, Codex should update it instead of cloning a second copy:
+
+```bash
+cd ~/.english-learning-harness/repo
+git pull --ff-only
+./setup --host codex
+```
+
+This is an agent-operated install path. A learner should not need to type it.
 
 ## Internal Engine For Maintainers
 

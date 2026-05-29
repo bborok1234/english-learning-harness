@@ -16,6 +16,17 @@ Summarize progress without scoring the learner against other people.
 - Use persisted local evidence when available, but keep the learner-facing output conversational.
 - Do not ask the learner to run `node` commands just to receive a mirror.
 
+## Engine Discovery
+
+When persisted evidence is needed, find the local engine in this order:
+
+1. `ENGLISH_LEARNING_HARNESS_REPO`
+2. `~/.english-learning-harness/repo`
+3. `repoRoot` in `~/.english-learning-harness/install.json`
+4. current workspace when `scripts/english-learning-harness.mjs` exists
+
+Use that engine yourself. Do not hand the command to the learner.
+
 ## Output Shape
 
 ```text

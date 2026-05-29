@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# English Learning Harness setup — register Codex skills from this repo.
+set -euo pipefail
+
+HOST="codex"
+COPY_MODE=0
+QUIET=0
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --host)
+      [ -z "${2:-}" ] && echo "Missing value for --host (expected codex)" >&2 && exit 1
+      HOST="$2"
+      shift 2
+      ;;
+    --host=*)
+      HOST="${1#--host=}"
+      shift
+      ;;
+    --copy)
+      COPY_MODE=1
+      shift
+      ;;
+    -q|--quiet)
+      QUIET=1
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [ "$HOST" != "codex" ]; then
+  echo "Unsupported --host value: $HOST (only codex is implemented)." >&2
+  exit 1
+fi
+
+REPO_DIR="$(cd "$(dirname "$0")" && pwd -P)"
+CODEX_SKILLS_DIR="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
+INSTALL_STATE_DIR="${ENGLISH_LEARNING_INSTALL_STATE:-$HOME/.english-learning-harness}"
+INSTALL_STATE_FILE="$INSTALL_STATE_DIR/install.json"
+
+log() {
+  [ "$QUIET" -eq 0 ] && echo "$@" || true
+}
+
+install_skill() {
+  local source_dir="$1"
+  local target_name="$2"
+  local target_dir="$CODEX_SKILLS_DIR/$target_name"
+
+  if [ ! -f "$source_dir/SKILL.md" ]; then
+    echo "Missing skill file: $source_dir/SKILL.md" >&2
+    exit 1
+  fi
+
+  mkdir -p "$CODEX_SKILLS_DIR"
+  rm -rf "$target_dir"
+
+  if [ "$COPY_MODE" -eq 1 ]; then
+    cp -R "$source_dir" "$target_dir"
+  else
+    ln -s "$source_dir" "$target_dir"
+  fi
+
+  log "installed $target_name -> $source_dir"
+}
+
+install_skill "$REPO_DIR/skills/onboarding" "english-learning-onboarding"
+install_skill "$REPO_DIR/skills/daily-session" "english-learning-daily-session"
+install_skill "$REPO_DIR/skills/mini-mirror" "english-learning-mini-mirror"
+install_skill "$REPO_DIR/skills/picture-description" "english-learning-picture-description"
+
+mkdir -p "$INSTALL_STATE_DIR"
+cat > "$INSTALL_STATE_FILE" <<EOF
+{
+  "repoRoot": "$REPO_DIR",
+  "host": "codex",
+  "skillsDir": "$CODEX_SKILLS_DIR"
+}
+EOF
+
+log ""
+log "English Learning Harness installed for Codex."
+log "Next prompt to try:"
+log ""
+log "  오늘 5분 영어 회화 연습 시작하자. 한 질문씩 해주고, 끝나면 mini mirror로 정리해줘."
+log ""
+log "Installer state: $INSTALL_STATE_FILE"

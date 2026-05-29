@@ -327,6 +327,14 @@ M7 now targets the current source repository as the open-source public distribut
 - existing public clone, open-source readiness, and local marketplace README audits still pass.
 - this improves first-time public understanding; it does not claim realtime voice, accent scoring, public Git-backed plugin install, or long-term learner outcomes.
 
+#122 agent-installed harness evidence currently shows:
+
+- `docs/BENCHMARK-HARNESS-TRENDS.md` records the `oh-my-openagent` and `gstack` pattern: paste prompt into agent, agent installs skills/setup, user invokes workflows by natural language or slash commands.
+- `setup --host codex` installs `english-learning-onboarding`, `english-learning-daily-session`, `english-learning-mini-mirror`, and `english-learning-picture-description` into `~/.codex/skills`.
+- `scripts/phase7-agent-install-smoke.mjs` verifies setup in an isolated temp Codex skills dir, including default symlink mode and `--copy` mode.
+- README now leads with a paste-into-Codex install prompt and rejects human clone/download as the primary path.
+- this does not publish an npm/binary installer or prove public Git-backed plugin install.
+
 #83 artifact fallback evidence currently shows:
 
 - `scripts/package-public-artifact.mjs` creates a tarball candidate.

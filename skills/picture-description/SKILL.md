@@ -17,6 +17,17 @@ Use this activity for low-pressure descriptive English.
 - If repository tools are available, persist image/transcript evidence internally.
 - Do not ask the learner to run `node` commands for ordinary image practice.
 
+## Engine Discovery
+
+When persistence is needed, find the local engine in this order:
+
+1. `ENGLISH_LEARNING_HARNESS_REPO`
+2. `~/.english-learning-harness/repo`
+3. `repoRoot` in `~/.english-learning-harness/install.json`
+4. current workspace when `scripts/english-learning-harness.mjs` exists
+
+Use that engine yourself. Do not hand the command to the learner.
+
 ## Fallback Prompt
 
 When no image is available, describe this simple scene:

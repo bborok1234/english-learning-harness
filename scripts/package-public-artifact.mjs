@@ -11,6 +11,7 @@ const artifactName = "english-learning-harness-public.tar.gz";
 
 const includedPaths = [
   "README.md",
+  "setup",
   "DESIGN.md",
   "AGENTS.md",
   ".codex-plugin",
