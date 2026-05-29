@@ -408,7 +408,7 @@
     "stage": "M3 Daily Return Experience gate passed",
     "status": "Next: M4 multimodal interaction event graph planning",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3 local daily return path is gate-passed: clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning."
+    "summary": "M3 local daily return path is closed in GitHub: #37-#41, epic #6, and the M3 milestone are closed. Clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning."
   },
   "ssot": [
     {
@@ -499,8 +499,8 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M3 passed",
-      "detail": "daily return gate passed; M4 next",
+      "value": "M3 closed",
+      "detail": "M3 milestone and epic closed; M4 next",
       "tone": "green"
     },
     {
@@ -518,7 +518,7 @@
     {
       "label": "GitHub plan",
       "value": "27 issues",
-      "detail": "10 epics + M1/M2/M3 execution issues",
+      "detail": "M1/M2/M3 closed; M4-M6 remain open",
       "tone": "green"
     },
     {
@@ -1069,8 +1069,8 @@
           "id": "M3-5",
           "title": "#41 M3 clone-to-daily gate를 통과함",
           "why": "M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.",
-          "done": "`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다.",
-          "verification": "clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true.",
+          "done": "`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다. #41, epic #6, M3 milestone도 닫혔다.",
+          "verification": "clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true; GitHub M3 open_issues=0.",
           "files": [
             "scripts/phase3-m3-gate-smoke.mjs",
             "docs/phase-3-evidence/M3-5-clone-to-daily-gate.md",
@@ -1296,7 +1296,7 @@
     {
       "name": "M3-5",
       "status": "Pass",
-      "detail": "clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation"
+      "detail": "clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0"
     }
   ],
   "commands": [
@@ -1415,7 +1415,7 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M3 local daily return path is gate-passed: clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning.</p>
+        <p class="summary">M3 local daily return path is closed in GitHub: #37-#41, epic #6, and the M3 milestone are closed. Clean clone can reach daily cockpit, due review, vault, weekly mirror, learner home, and seven-day simulation. Next is M4 multimodal interaction event graph planning.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
@@ -1428,8 +1428,8 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M3 passed</div>
-          <p>daily return gate passed; M4 next</p>
+          <div class="metric-value">M3 closed</div>
+          <p>M3 milestone and epic closed; M4 next</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
@@ -1444,7 +1444,7 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
           <div class="metric-value">27 issues</div>
-          <p>10 epics + M1/M2/M3 execution issues</p>
+          <p>M1/M2/M3 closed; M4-M6 remain open</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -1550,8 +1550,8 @@
               </div>
               <h3>#41 M3 clone-to-daily gate를 통과함</h3>
               <div class="card-row"><b>왜</b><p>M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다.</p></div>
-              <div class="card-row"><b>검증</b><p>clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true.</p></div>
+              <div class="card-row"><b>완료</b><p>`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다. #41, epic #6, M3 milestone도 닫혔다.</p></div>
+              <div class="card-row"><b>검증</b><p>clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true; GitHub M3 open_issues=0.</p></div>
             </article>
         </div>
       </section>
@@ -1731,7 +1731,7 @@
             </tr>
             <tr>
               <td>M3-5</td>
-              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation</span></td>
+              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0</span></td>
             </tr>
           </tbody>
         </table>
@@ -2246,7 +2246,7 @@
             </tr>
             <tr>
               <td>M3-5</td>
-              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes clean clone daily cockpit, learner home, review/vault, weekly mirror, and seven-day simulation</span></td>
+              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0</span></td>
             </tr>
             </tbody>
           </table>
