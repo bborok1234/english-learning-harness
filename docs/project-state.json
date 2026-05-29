@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M6 Private Beta Clone-to-Learn closed",
-    "status": "Next: #83 M7 public distribution path",
+    "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed with authenticated clone, local marketplace install, onboarding diagnostics, distribution policy, and release gate evidence. Unauthenticated public distribution remains open as M7 #83."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact mechanics now pass from a tarball candidate, but public hosting/download is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -76,6 +76,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/phase-7-evidence/",
+      "path": "./phase-7-evidence/",
+      "role": "Phase 7 public distribution evidence notes",
+      "kind": "source"
+    },
+    {
       "label": "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
       "path": "./M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
       "role": "M5 seven-day pilot protocol",
@@ -140,13 +146,13 @@
     {
       "label": "Current stage",
       "value": "M7 active",
-      "detail": "#83 public distribution path",
+      "detail": "#83 artifact mechanics pass; hosting next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "#83",
-      "detail": "unauthenticated public distribution",
+      "detail": "public hosting/download evidence",
       "tone": "red"
     },
     {
@@ -925,6 +931,18 @@
             "docs/phase-6-evidence/M6-1-public-clean-clone.md",
             "README.md"
           ]
+        },
+        {
+          "id": "M7-1a",
+          "title": "#83 public artifact mechanics를 검증함",
+          "why": "private repo를 public으로 바꾸지 않고도 public distribution artifact 경로를 준비해야 한다.",
+          "done": "tarball candidate를 만들고 extract된 artifact root에서 setup, daily, today, weekly, home, export, progress validation을 통과시켰다.",
+          "verification": "`node scripts/phase7-public-artifact-smoke.mjs`가 artifact packaging/extraction/learner-loop를 통과했다.",
+          "files": [
+            "scripts/package-public-artifact.mjs",
+            "scripts/phase7-public-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -935,14 +953,13 @@
       "cards": [
         {
           "id": "M7-1",
-          "title": "#83 public distribution path",
-          "why": "M6는 private beta로 닫혔지만 original public clone-to-learn claim은 아직 검증되지 않았다.",
-          "done": "public repo 또는 별도 public artifact 중 하나를 선택하고 private access 없이 clone/download부터 first session까지 검증한다.",
-          "verification": "default public distribution smoke가 private access override 없이 통과해야 한다.",
+          "title": "#83 public hosting/download path",
+          "why": "artifact mechanics는 통과했지만 public user가 실제로 받을 수 있는 URL 또는 GitHub release가 아직 없다.",
+          "done": "public GitHub release asset 또는 public repository/artifact URL 중 하나를 선택하고 private access 없이 download smoke를 추가한다.",
+          "verification": "private credentials 없이 public download/extract/first-session smoke가 통과해야 한다.",
           "files": [
-            "docs/distribution-policy.json",
-            "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
+            "docs/distribution-policy.json"
           ]
         }
       ]
@@ -953,14 +970,14 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "M7-followup",
+          "id": "M7-install",
           "title": "Public install claim gate",
-          "why": "Git-backed plugin install은 아직 unverified이므로 public docs에 실으면 안 된다.",
-          "done": "public artifact가 정해진 뒤 public install smoke를 별도 추가한다.",
+          "why": "public artifact가 hosted된 뒤에도 Codex plugin install claim은 별도 검증이 필요하다.",
+          "done": "public artifact 또는 public repo 기준으로 local marketplace/public install smoke를 다시 실행한다.",
           "verification": "public install smoke와 README command audit이 통과해야 한다.",
           "files": [
             "README.md",
-            "docs/distribution-policy.json"
+            "scripts/phase6-marketplace-install-smoke.mjs"
           ]
         }
       ]
@@ -972,10 +989,10 @@
       "cards": [
         {
           "id": "R000",
-          "title": "Unauthenticated public release is deferred to M7",
-          "why": "GitHub repository visibility is currently PRIVATE, so unauthenticated public clone cannot be claimed inside M6.",
-          "done": "M6 is scoped to private beta / invited-user clone-to-learn; M7 #83 owns public distribution.",
-          "verification": "distribution policy smoke and release gate smoke separate private beta evidence from public release evidence."
+          "title": "Public hosting/download is still unproven",
+          "why": "Tarball artifact mechanics pass locally, but there is not yet a public URL or release asset for unauthenticated users.",
+          "done": "M7 #83 now separates artifact mechanics from public hosting evidence.",
+          "verification": "phase7 public artifact smoke passes, but #83 remains open until public download smoke passes."
         },
         {
           "id": "R001",
@@ -1260,6 +1277,11 @@
       "name": "M7-1",
       "status": "Open",
       "detail": "M7 #83 tracks unauthenticated public distribution path"
+    },
+    {
+      "name": "M7-1 artifact",
+      "status": "Partial",
+      "detail": "public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven"
     }
   ],
   "commands": [
@@ -1386,6 +1408,10 @@
     {
       "label": "Run M6 release gate audit",
       "command": "node scripts/phase6-release-gate-smoke.mjs"
+    },
+    {
+      "label": "Run M7 public artifact smoke",
+      "command": "node scripts/phase7-public-artifact-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

@@ -31,6 +31,7 @@ const requiredFiles = [
   "scripts/lib/scenario-engine.mjs",
   "scripts/lib/persona-fixtures.mjs",
   "scripts/package-local-marketplace.mjs",
+  "scripts/package-public-artifact.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
   "scripts/phase1-vocabulary-history-smoke.mjs",
   "scripts/phase1-scenario-loop-smoke.mjs",
@@ -62,6 +63,7 @@ const requiredFiles = [
   "scripts/phase6-marketplace-install-smoke.mjs",
   "scripts/phase6-onboarding-diagnostics-smoke.mjs",
   "scripts/phase6-release-gate-smoke.mjs",
+  "scripts/phase7-public-artifact-smoke.mjs",
 ];
 
 function readJson(path) {
