@@ -831,11 +831,31 @@ function daysSince(isoDate, date = new Date()) {
   return Math.max(0, Math.floor((date.getTime() - Date.parse(isoDate)) / 86400000));
 }
 
-function returnMessage(sessionCount, daysSinceLastSession) {
-  if (!sessionCount) return "Start with one small text-first session.";
-  if (daysSinceLastSession === 0) return "You already practiced today. Review or save one phrase; no streak penalty.";
-  if (daysSinceLastSession === 1) return "Continue with one small return session; no streak penalty.";
+function returnGapKind(sessionCount, daysSinceLastSession) {
+  if (!sessionCount) return "fresh";
+  if (daysSinceLastSession === 0) return "same-day";
+  if (daysSinceLastSession === 1) return "next-day";
+  return "long-gap";
+}
+
+function returnMessage(gapKind) {
+  if (gapKind === "fresh") return "Start with one small text-first session.";
+  if (gapKind === "same-day") return "You already practiced today. Review or save one phrase; no streak penalty.";
+  if (gapKind === "next-day") return "Continue with one small return session; no streak penalty.";
   return "Restart gently with one useful sentence; no streak penalty.";
+}
+
+function restartAction(gapKind, dueReviewCount) {
+  if (gapKind === "fresh") return "Say one useful sentence about today.";
+  if (gapKind === "same-day") return dueReviewCount
+    ? "Review one due phrase in a tiny real-life context."
+    : "Save or repeat one phrase while practice still feels easy.";
+  if (gapKind === "next-day") return dueReviewCount
+    ? "Start with one due phrase, then add one new detail."
+    : "Continue with one useful sentence and one gentle repair.";
+  return dueReviewCount
+    ? "Restart with the first due phrase; one sentence is enough."
+    : "Restart with one familiar topic and one useful sentence.";
 }
 
 function commandLine(root, command, extraArgs = []) {
@@ -891,6 +911,7 @@ export function buildDailyCockpit(learnerRoot = defaultLearnerRoot(), date = new
   const latestWeeklyMirror = latestWeeklyMirrorPath(paths.root);
   const sessionCount = Array.isArray(progress.sessions) ? progress.sessions.length : 0;
   const daysSinceLastSession = daysSince(progress.last_session_at, date);
+  const gapKind = returnGapKind(sessionCount, daysSinceLastSession);
   const dueReviewPreview = dueReviewItems.slice(0, 3);
 
   return {
@@ -901,7 +922,9 @@ export function buildDailyCockpit(learnerRoot = defaultLearnerRoot(), date = new
       session_count: sessionCount,
       last_session_at: progress.last_session_at ?? "",
       days_since_last_session: daysSinceLastSession,
-      message: returnMessage(sessionCount, daysSinceLastSession),
+      gap_kind: gapKind,
+      message: returnMessage(gapKind),
+      restart_action: restartAction(gapKind, dueReviewItems.length),
     },
     due_review: {
       count: dueReviewItems.length,
@@ -1079,6 +1102,7 @@ function learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases }) {
       <p class="label">Local learner home</p>
       <h1>오늘의 영어 연습</h1>
       <p class="subtle">${escapeHtml(cockpit.return_state.message)}</p>
+      <p>${escapeHtml(cockpit.return_state.restart_action)}</p>
     </header>
 
     <div class="grid">

@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M3 Daily Return Experience implementation active",
-    "status": "Next: #39 no-streak return guidance",
+    "status": "Next: #40 seven-day local return simulation",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 daily cockpit and M3-2 learner home are implemented and smoke-tested. The next work is #39 no-streak return guidance so missed days become a gentle restart path instead of a failure signal."
+    "summary": "M3-1 daily cockpit, M3-2 learner home, and M3-3 no-streak return guidance are implemented and smoke-tested. The next work is #40 seven-day local return simulation."
   },
   "ssot": [
     {
@@ -104,13 +104,13 @@
     {
       "label": "Current stage",
       "value": "M3 active",
-      "detail": "#37/#38 implemented; #39 next",
+      "detail": "#37/#38/#39 implemented; #40 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#39 no-streak return guidance",
+      "detail": "#40 seven-day return simulation",
       "tone": "red"
     },
     {
@@ -637,6 +637,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-3-evidence/M3-2-learner-home.md"
           ]
+        },
+        {
+          "id": "M3-3",
+          "title": "#39 No-streak return guidance를 구현함",
+          "why": "매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.",
+          "done": "`return_state`가 `gap_kind`와 `restart_action`을 제공한다. same-day, next-day, long-gap 모두 no-streak copy와 gentle restart action을 반환한다.",
+          "verification": "`node scripts/phase3-no-streak-return-smoke.mjs`가 fresh/same-day/next-day/long-gap fixture를 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase3-no-streak-return-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-3-evidence/M3-3-no-streak-return.md"
+          ]
         }
       ]
     },
@@ -644,24 +657,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-3",
-          "title": "#39 No-streak return guidance",
-          "why": "매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.",
-          "done": "same-day, next-day, long-gap return copy가 gentle restart action을 보여주게 한다.",
-          "verification": "date fixture smoke에서 shame/streak punishment 문구가 없어야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/TUTOR-POLICY.md"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-4",
@@ -672,7 +667,14 @@
           "files": [
             "scripts/phase3-seven-day-return-smoke.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M3-5",
           "title": "#41 M3 clone-to-daily gate",
@@ -865,6 +867,11 @@
       "name": "M3-2",
       "status": "Pass",
       "detail": "learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render"
+    },
+    {
+      "name": "M3-3",
+      "status": "Pass",
+      "detail": "no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures"
     }
   ],
   "commands": [
@@ -933,6 +940,10 @@
       "command": "node scripts/phase3-learner-home-smoke.mjs"
     },
     {
+      "label": "Run no-streak return smoke",
+      "command": "node scripts/phase3-no-streak-return-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -962,7 +973,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 39"
+      "command": "gh issue view 40"
     }
   ]
 }
