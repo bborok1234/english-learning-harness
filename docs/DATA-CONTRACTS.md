@@ -1,6 +1,6 @@
 # Data Contracts
 
-Last updated: 2026-05-28
+Last updated: 2026-05-29
 Status: Active planning contract
 
 ## Purpose
@@ -194,6 +194,54 @@ Required fields:
 ```
 
 Weekly mirrors may only summarize local artifacts, progress, learner model, vocabulary, and review queue data. They may not report level ranking, native-speaker comparisons, or guaranteed transfer to real-world confidence.
+
+## Daily Cockpit Output
+
+The `daily` command returns generated JSON and does not persist a new artifact.
+
+Required fields:
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "ISO-8601",
+  "learner_root": "/absolute/path",
+  "return_state": {
+    "session_count": 1,
+    "last_session_at": "ISO-8601",
+    "days_since_last_session": 0,
+    "message": "You already practiced today. Review or save one phrase."
+  },
+  "due_review": {
+    "count": 1,
+    "items": []
+  },
+  "suggested_scenario": {
+    "id": "stuck-repair",
+    "title": "Stuck Repair",
+    "mode": "easy",
+    "goal": "Reuse a saved phrase in a tiny real-life context.",
+    "rescue_phrase": "I don't know how to say it, but...",
+    "due_review": {},
+    "selection_reason": {
+      "source": "due-review|profile-memory|preferred"
+    }
+  },
+  "learner_model_summary": {
+    "skill_evidence": {},
+    "average_utterance_words": 0,
+    "repair_phrase_count": 0,
+    "energy": "easy"
+  },
+  "saved_phrase_count": 1,
+  "latest_weekly_mirror": "artifacts/weekly/weekly-mirror-YYYY-MM-DD.json",
+  "latest_journal": "journal/YYYY-MM-DD.md",
+  "next_commands": [],
+  "claim_boundary": "This cockpit chooses the next local practice action from local files only. It does not measure long-term skill transfer."
+}
+```
+
+The cockpit may read `profile.md`, `progress.json`, `learner-model.json`, `vocabulary.json`, `review-queue.json`, latest journal, and latest weekly mirror. It must not punish missed days or claim measured long-term outcomes.
 
 ## Contract Rule
 

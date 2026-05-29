@@ -2,6 +2,7 @@
 import { existsSync, mkdirSync, readFileSync, renameSync } from "node:fs";
 import {
   buildAdditionalContext,
+  buildDailyCockpit,
   buildSession,
   emptyLearnerModel,
   defaultLearnerRoot,
@@ -109,6 +110,7 @@ function helpText() {
     "",
     "Usage:",
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
+    "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
@@ -202,9 +204,21 @@ function setup(options) {
     },
     nativeHooksRequired: false,
     next: [
+      `node scripts/english-learning-harness.mjs daily --learner-root ${JSON.stringify(paths.root)}`,
       `node scripts/english-learning-harness.mjs today --learner-root ${JSON.stringify(paths.root)} --say "I want to practice today."`,
       `node scripts/english-learning-harness.mjs health --learner-root ${JSON.stringify(paths.root)}`,
     ],
+  };
+}
+
+function daily(options) {
+  const cockpit = buildDailyCockpit(options.learnerRoot);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: cockpit.learner_root,
+    cockpit,
+    claimBoundary: cockpit.claim_boundary,
   };
 }
 
@@ -349,6 +363,10 @@ function run() {
   }
   if (command === "setup") {
     output(setup(options), options.json);
+    return;
+  }
+  if (command === "daily") {
+    output(daily(options), options.json);
     return;
   }
   if (command === "today") {

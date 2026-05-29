@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience planning complete",
-    "status": "Next: #37 daily cockpit command",
+    "stage": "M3 Daily Return Experience implementation active",
+    "status": "Next: #38 learner home HTML",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1과 M2는 milestone/epic closeout까지 완료됐다. M3는 multimodal이 아니라 Daily Return Experience로 정렬됐고, #37-#41 실행 이슈가 생성됐다. 다음 구현은 #37 daily cockpit command다."
+    "summary": "M3-1 daily cockpit command is implemented and smoke-tested. The shared dashboard now moves daily return from planning into implementation, and the next work is #38 learner home HTML from local evidence."
   },
   "ssot": [
     {
@@ -500,19 +500,19 @@
     {
       "label": "Ultragoal",
       "value": "M3",
-      "detail": "daily return experience planning complete",
+      "detail": "daily return implementation active",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M3 active",
-      "detail": "#37-#41 created; #37 next",
-      "tone": "amber"
+      "detail": "#37 implemented; #38 next",
+      "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#37 daily cockpit command",
+      "detail": "#38 learner home HTML",
       "tone": "red"
     },
     {
@@ -1011,6 +1011,20 @@
             "docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M3-1",
+          "title": "#37 Daily cockpit command를 구현함",
+          "why": "today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.",
+          "done": "`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.",
+          "verification": "`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase3-daily-cockpit-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-3-evidence/M3-1-daily-cockpit.md"
+          ]
         }
       ]
     },
@@ -1018,25 +1032,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-1",
-          "title": "#37 Daily cockpit command",
-          "why": "today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.",
-          "done": "`daily` command가 오늘의 계획, due phrases, suggested scenario, learner model summary, latest weekly mirror, exact next commands를 보여주게 한다.",
-          "verification": "fresh learner와 returning learner smoke에서 daily cockpit output이 통과해야 한다.",
-          "files": [
-            "scripts/english-learning-harness.mjs",
-            "scripts/lib/english-learning-store.mjs",
-            "docs/DATA-CONTRACTS.md"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-2",
@@ -1048,7 +1043,14 @@
             "scripts/english-learning-harness.mjs",
             "scripts/lib/english-learning-store.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M3-3",
           "title": "#39 No-streak return guidance",
@@ -1252,6 +1254,11 @@
       "name": "M3-0",
       "status": "Pass",
       "detail": "M1/M2 milestones closed and M3 execution issues #37-#41 created"
+    },
+    {
+      "name": "M3-1",
+      "status": "Pass",
+      "detail": "daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands"
     }
   ],
   "commands": [
@@ -1312,6 +1319,10 @@
       "command": "node scripts/phase2-weekly-mirror-smoke.mjs"
     },
     {
+      "label": "Run daily cockpit smoke",
+      "command": "node scripts/phase3-daily-cockpit-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1341,7 +1352,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 37"
+      "command": "gh issue view 38"
     }
   ]
 }
@@ -1350,12 +1361,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M1과 M2는 milestone/epic closeout까지 완료됐다. M3는 multimodal이 아니라 Daily Return Experience로 정렬됐고, #37-#41 실행 이슈가 생성됐다. 다음 구현은 #37 daily cockpit command다.</p>
+        <p class="summary">M3-1 daily cockpit command is implemented and smoke-tested. The shared dashboard now moves daily return from planning into implementation, and the next work is #38 learner home HTML from local evidence.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M3 Daily Return Experience planning complete<br>
-        Next: #37 daily cockpit command
+        M3 Daily Return Experience implementation active<br>
+        Next: #38 learner home HTML
       </div>
     </header>
 
@@ -1364,17 +1375,17 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M3</div>
-          <p>daily return experience planning complete</p>
+          <p>daily return implementation active</p>
         </article>
-        <article class="metric-card tone-amber">
+        <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M3 active</div>
-          <p>#37-#41 created; #37 next</p>
+          <p>#37 implemented; #38 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M3</div>
-          <p>#37 daily cockpit command</p>
+          <p>#38 learner home HTML</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1405,20 +1416,10 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>5</span>
+          <span>4</span>
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-1</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md</span>
-              </div>
-              <h3>#37 Daily cockpit command</h3>
-              <div class="card-row"><b>왜</b><p>today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`daily` command가 오늘의 계획, due phrases, suggested scenario, learner model summary, latest weekly mirror, exact next commands를 보여주게 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>fresh learner와 returning learner smoke에서 daily cockpit output이 통과해야 한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-2</strong>
@@ -1470,16 +1471,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M2-1</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/phase2-learner-model-smoke.mjs, docs/phase-2-evidence/M2-1-learner-model.md</span>
-              </div>
-              <h3>#25 Learner model baseline and skill memory</h3>
-              <div class="card-row"><b>왜</b><p>실제 회화 향상 하네스가 되려면 단순 progress counter가 아니라 starts/follow-ups/clarification/repair/affect를 기억해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`learner-model.json` 생성/검증, setup migration, session skill evidence update, artifact evidence, context summary, setup repair 경로를 구현했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase2-learner-model-smoke.mjs`와 M1 회귀 smoke가 통과했다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M2-2</strong>
                 <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-review-vault-smoke.mjs, docs/phase-2-evidence/M2-2-review-vault.md</span>
               </div>
@@ -1527,6 +1518,16 @@
               <div class="card-row"><b>왜</b><p>상위 Goal은 1차 제품 완성인데 dashboard는 M3를 multimodal로, GitHub milestone은 Daily Return으로 가리켜 진행판이 어긋났다.</p></div>
               <div class="card-row"><b>완료</b><p>M1/M2 epics와 milestones를 evidence comment로 close하고, M3 실행 이슈 #37-#41을 생성했다. M4는 multimodal lab으로 유지했다.</p></div>
               <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #37-#41을 기록하고 dashboard now가 #37 daily cockpit을 가리킨다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-1</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-daily-cockpit-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-1-daily-cockpit.md</span>
+              </div>
+              <h3>#37 Daily cockpit command를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1677,10 +1678,6 @@
           <tbody>
 
             <tr>
-              <td>PH1-FIX-6</td>
-              <td><strong>Pass</strong><span>First-Usable Gate rendered from structured state</span></td>
-            </tr>
-            <tr>
               <td>PH1-FIX-7</td>
               <td><strong>Pass</strong><span>fresh clone setup/today/health/progress/dashboard smoke pass</span></td>
             </tr>
@@ -1707,6 +1704,10 @@
             <tr>
               <td>M3-0</td>
               <td><strong>Pass</strong><span>M1/M2 milestones closed and M3 execution issues #37-#41 created</span></td>
+            </tr>
+            <tr>
+              <td>M3-1</td>
+              <td><strong>Pass</strong><span>daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands</span></td>
             </tr>
           </tbody>
         </table>
@@ -1752,7 +1753,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 29개 보기</summary>
+        <summary>완료 이력 30개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2045,10 +2046,20 @@
               <div class="card-row"><b>완료</b><p>GitHub issues #25-#29를 만들고 learner model, review command, memory-aware planner, tutor policy rubric, weekly mirror로 분해했다.</p></div>
               <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #25-#29를 기록하고 dashboard next work가 #25를 가리킨다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-1</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/phase2-learner-model-smoke.mjs, docs/phase-2-evidence/M2-1-learner-model.md</span>
+              </div>
+              <h3>#25 Learner model baseline and skill memory</h3>
+              <div class="card-row"><b>왜</b><p>실제 회화 향상 하네스가 되려면 단순 progress counter가 아니라 starts/follow-ups/clarification/repair/affect를 기억해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`learner-model.json` 생성/검증, setup migration, session skill evidence update, artifact evidence, context summary, setup repair 경로를 구현했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-learner-model-smoke.mjs`와 M1 회귀 smoke가 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 25개 보기</summary>
+        <summary>전체 검증 26개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2153,12 +2164,16 @@
               <td>M3-0</td>
               <td><strong>Pass</strong><span>M1/M2 milestones closed and M3 execution issues #37-#41 created</span></td>
             </tr>
+            <tr>
+              <td>M3-1</td>
+              <td><strong>Pass</strong><span>daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 22개 보기</summary>
+        <summary>전체 명령 23개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2218,6 +2233,10 @@
               <code>node scripts/phase2-weekly-mirror-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run daily cockpit smoke</span>
+              <code>node scripts/phase3-daily-cockpit-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2247,7 +2266,7 @@
             </div>
             <div class="command">
               <span>View next M3 issue</span>
-              <code>gh issue view 37</code>
+              <code>gh issue view 38</code>
             </div>
         </div>
       </details>
