@@ -22,6 +22,7 @@ function main() {
     "actions/upload-artifact@v4",
     "gh release upload",
     "if: ${{ inputs.publish_release == 'true' }}",
+    "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: \"true\"",
   ]) {
     assert(workflow.includes(required), `workflow missing ${required}`);
   }

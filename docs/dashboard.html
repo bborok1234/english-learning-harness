@@ -408,7 +408,7 @@
     "stage": "M6 Private Beta Clone-to-Learn closed",
     "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, and release workflow wiring now pass, but public hosting/download is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. Public release asset URL is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -1369,6 +1369,17 @@
             "scripts/phase7-release-workflow-smoke.mjs",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-1d",
+          "title": "#83 GitHub Actions artifact run을 검증함",
+          "why": "release workflow wiring만으로는 GitHub runner에서 artifact가 실제 생성되는지 알 수 없다.",
+          "done": "workflow_dispatch run 26618527553이 publish_release=false로 성공했고 workflow artifact english-learning-harness-public을 업로드했다.",
+          "verification": "`gh run view 26618527553` shows conclusion=success; downloaded artifact exists under tmp/phase-7-gh-workflow-artifact.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -1718,6 +1729,11 @@
       "name": "M7-1 release workflow",
       "status": "Pass",
       "detail": "manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload"
+    },
+    {
+      "name": "M7-1 workflow run",
+      "status": "Pass",
+      "detail": "GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public"
     }
   ],
   "commands": [
@@ -1896,7 +1912,7 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, and release workflow wiring now pass, but public hosting/download is still unproven and keeps #83 open.</p>
+        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. Public release asset URL is still unproven and keeps #83 open.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
@@ -1986,16 +2002,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M6-4</strong>
-                <span>scripts/phase6-release-gate-smoke.mjs, docs/phase-6-evidence/M6-4-release-gate.md, docs/project-state.json</span>
-              </div>
-              <h3>#75 M6 private beta release gate가 ready 상태임</h3>
-              <div class="card-row"><b>왜</b><p>M6 closeout은 clone, install, diagnostics, distribution policy를 함께 판단해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>release gate smoke가 distribution policy, authenticated clone, marketplace install, onboarding diagnostics를 재검증하고 ready_to_close_m6_private_beta를 반환한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase6-release-gate-smoke.mjs`가 decision=ready_to_close_m6_private_beta, canCloseM6=true를 통과했다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M6-D</strong>
                 <span>docs/distribution-policy.json, docs/phase-6-evidence/M6-D-distribution-policy.md, docs/ISSUE-INDEX.md</span>
               </div>
@@ -2043,6 +2049,16 @@
               <div class="card-row"><b>왜</b><p>public artifact를 매번 로컬에서 손으로 만들면 publish/download evidence가 재현되기 어렵다.</p></div>
               <div class="card-row"><b>완료</b><p>manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1d</strong>
+                <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+              </div>
+              <h3>#83 GitHub Actions artifact run을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>release workflow wiring만으로는 GitHub runner에서 artifact가 실제 생성되는지 알 수 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>workflow_dispatch run 26618527553이 publish_release=false로 성공했고 workflow artifact english-learning-harness-public을 업로드했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh run view 26618527553` shows conclusion=success; downloaded artifact exists under tmp/phase-7-gh-workflow-artifact.</p></div>
             </article>
         </div>
       </section>
@@ -2221,10 +2237,6 @@
           <tbody>
 
             <tr>
-              <td>M6-3</td>
-              <td><strong>Pass</strong><span>setup/health/status/context support diagnostics and corrupt-store repair guidance pass</span></td>
-            </tr>
-            <tr>
               <td>M6-4</td>
               <td><strong>Pass</strong><span>release gate audit passes with decision ready_to_close_m6_private_beta and canCloseM6=true</span></td>
             </tr>
@@ -2251,6 +2263,10 @@
             <tr>
               <td>M7-1 release workflow</td>
               <td><strong>Pass</strong><span>manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload</span></td>
+            </tr>
+            <tr>
+              <td>M7-1 workflow run</td>
+              <td><strong>Pass</strong><span>GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public</span></td>
             </tr>
           </tbody>
         </table>
@@ -2296,7 +2312,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 54개 보기</summary>
+        <summary>완료 이력 55개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2839,10 +2855,20 @@
               <div class="card-row"><b>완료</b><p>setup/health/status JSON과 context text에 support diagnostics를 추가하고, setup next commands를 daily/today/weekly/home/export/health로 확장했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase6-onboarding-diagnostics-smoke.mjs`가 setup/health/status/context support, corrupt progress recovery, setup --repair backup, progress v2 restore를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M6-4</strong>
+                <span>scripts/phase6-release-gate-smoke.mjs, docs/phase-6-evidence/M6-4-release-gate.md, docs/project-state.json</span>
+              </div>
+              <h3>#75 M6 private beta release gate가 ready 상태임</h3>
+              <div class="card-row"><b>왜</b><p>M6 closeout은 clone, install, diagnostics, distribution policy를 함께 판단해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>release gate smoke가 distribution policy, authenticated clone, marketplace install, onboarding diagnostics를 재검증하고 ready_to_close_m6_private_beta를 반환한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-release-gate-smoke.mjs`가 decision=ready_to_close_m6_private_beta, canCloseM6=true를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 52개 보기</summary>
+        <summary>전체 검증 53개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3054,6 +3080,10 @@
             <tr>
               <td>M7-1 release workflow</td>
               <td><strong>Pass</strong><span>manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload</span></td>
+            </tr>
+            <tr>
+              <td>M7-1 workflow run</td>
+              <td><strong>Pass</strong><span>GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public</span></td>
             </tr>
             </tbody>
           </table>

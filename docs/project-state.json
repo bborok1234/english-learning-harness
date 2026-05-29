@@ -6,7 +6,7 @@
     "stage": "M6 Private Beta Clone-to-Learn closed",
     "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, and release workflow wiring now pass, but public hosting/download is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. Public release asset URL is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -967,6 +967,17 @@
             "scripts/phase7-release-workflow-smoke.mjs",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-1d",
+          "title": "#83 GitHub Actions artifact run을 검증함",
+          "why": "release workflow wiring만으로는 GitHub runner에서 artifact가 실제 생성되는지 알 수 없다.",
+          "done": "workflow_dispatch run 26618527553이 publish_release=false로 성공했고 workflow artifact english-learning-harness-public을 업로드했다.",
+          "verification": "`gh run view 26618527553` shows conclusion=success; downloaded artifact exists under tmp/phase-7-gh-workflow-artifact.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
+          ]
         }
       ]
     },
@@ -1316,6 +1327,11 @@
       "name": "M7-1 release workflow",
       "status": "Pass",
       "detail": "manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload"
+    },
+    {
+      "name": "M7-1 workflow run",
+      "status": "Pass",
+      "detail": "GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public"
     }
   ],
   "commands": [

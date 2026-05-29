@@ -75,6 +75,7 @@ What is complete:
 - M7 public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven.
 - M7 hosted-artifact smoke passes through local loopback and is ready to verify a real public URL via `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`.
 - M7 manual GitHub Actions workflow is wired to package/verify the artifact and optionally upload a release asset when explicitly dispatched.
+- GitHub Actions run `26618527553` completed successfully with `publish_release=false` and uploaded workflow artifact `english-learning-harness-public`.
 
 What is not started:
 - Real user validation.
