@@ -204,6 +204,7 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #100 | M7-5: Verify public release URL with checksum handoff | continue |
 | #102 | M7-6: Record no-publish artifact repo workflow evidence | continue |
 | #104 | M7-7: Add public publication preflight | continue |
+| #106 | M7-8: Verify plugin install from downloaded public artifact | continue |
 
 M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
 
@@ -219,6 +220,7 @@ M7 remains open for a future public repository clone or separate public artifact
 - #100 adds checksum-aware public release URL smoke for artifact plus `SHA256SUMS`.
 - #102 records a successful no-publication GitHub Actions run for the artifact repo workflow.
 - #104 adds a non-publishing preflight that reports owner decision and artifact repository readiness before any release action.
+- #106 verifies local Codex plugin install from a checksum-verified downloaded public artifact.
 - after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL=... node scripts/phase7-public-release-url-smoke.mjs` against the real URLs.
 
 #94 evidence currently shows:
@@ -262,6 +264,14 @@ M7 remains open for a future public repository clone or separate public artifact
 - current output reports `artifactRepoStatus=unavailable` for `bborok1234/english-learning-harness-public`.
 - current output reports `publicationReady=false` and `canPublishNow=false`.
 - this does not create a public repository, publish a release, prove a public URL, or close #83/#90.
+
+#106 evidence currently shows:
+
+- `scripts/phase7-public-artifact-install-smoke.mjs` downloads the artifact and `SHA256SUMS` through local loopback.
+- checksum verification passes before extraction.
+- the extracted artifact packages a local marketplace.
+- isolated `CODEX_HOME` installs `english-learning-harness@phase7-public-artifact`.
+- public Git-backed plugin install remains unclaimed.
 
 #83 evidence currently shows:
 
