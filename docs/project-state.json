@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M6 Private Beta Clone-to-Learn closed",
-    "status": "Next: publishable artifact hosting for #83 M7 public distribution",
+    "stage": "M7 Public Distribution active",
+    "status": "Next: decide public release surface in #90, then prove public URL in #83",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. Public release asset URL is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, and a publish_release=false GitHub Actions artifact run pass. The next human decision is #90 public release surface/authority; #83 remains open until a real public URL passes smoke."
   },
   "ssot": [
     {
@@ -146,19 +146,19 @@
     {
       "label": "Current stage",
       "value": "M7 active",
-      "detail": "#83 hosted mechanics pass locally; public URL next",
+      "detail": "#90 release surface decision; #83 public URL proof",
       "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "#83",
-      "detail": "real public artifact URL/download evidence",
+      "value": "#90",
+      "detail": "choose public release surface and publish authority",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "38 issues",
-      "detail": "M1-M5 closed; M6 private beta; M7 #83 created",
+      "value": "39 issues",
+      "detail": "M1-M5 closed; M6 private beta; M7 #83/#90 open",
       "tone": "green"
     },
     {
@@ -978,6 +978,18 @@
             ".github/workflows/public-artifact.yml",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-D",
+          "title": "#90 public release surface 결정을 분리함",
+          "why": "#83은 공개 URL 검증 이슈이고, 실제 배포면/권한 선택은 외부 release action을 수반하는 별도 결정이다.",
+          "done": "#90을 생성해 GitHub Release asset, 별도 public repo, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.",
+          "verification": "`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.",
+          "files": [
+            "docs/distribution-policy.json",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -990,7 +1002,7 @@
           "id": "M7-1",
           "title": "#83 real public artifact URL",
           "why": "artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
-          "done": "manual workflow로 artifact를 publish하거나 별도 public URL에 업로드한 뒤 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
+          "done": "#90에서 배포면/권한을 결정한 뒤 manual workflow로 artifact를 publish하거나 별도 public URL에 업로드하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
           "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
             ".github/workflows/public-artifact.yml",
@@ -1004,6 +1016,17 @@
       "title": "Next",
       "tone": "amber",
       "cards": [
+        {
+          "id": "M7-D",
+          "title": "#90 public release surface decision",
+          "why": "public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.",
+          "done": "권장안은 private repo를 유지한 채 verified workflow를 publish_release=true로 수동 실행해 GitHub Release asset을 만드는 것이다.",
+          "verification": "결정 후 docs/distribution-policy.json이 선택된 surface와 Codex publish authority를 기록해야 한다.",
+          "files": [
+            "docs/distribution-policy.json",
+            ".github/workflows/public-artifact.yml"
+          ]
+        },
         {
           "id": "M7-install",
           "title": "Public install claim gate",
@@ -1026,7 +1049,7 @@
           "id": "R000",
           "title": "Real public URL is still unproven",
           "why": "Hosted-download mechanics pass locally, but no public artifact URL has been verified without private access.",
-          "done": "The smoke can verify a real URL through ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL when the artifact is hosted.",
+          "done": "#90 must select and authorize a public distribution surface before #83 can run against a real URL.",
           "verification": "node scripts/phase7-hosted-artifact-smoke.mjs currently reports local_loopback_only; public_url_candidate is required to close #83."
         },
         {
