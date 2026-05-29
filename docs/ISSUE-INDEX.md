@@ -25,9 +25,9 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 | #4 | E4 Tutor policy enforcement | conversation-ux | closed |
 | #5 | E5 Persona fixture evaluation | evaluation | closed |
 | #6 | E6 Dashboard and human-readable progress | evaluation | closed |
-| #7 | E7 Multimodal interaction event graph | multimodal | open |
-| #8 | E8 Voice image video learning loops | multimodal | open |
-| #9 | E9 Seven-day validation protocol | evaluation | open |
+| #7 | E7 Multimodal interaction event graph | multimodal | closed |
+| #8 | E8 Voice image video learning loops | multimodal | closed |
+| #9 | E9 Seven-day validation protocol | evaluation | closed |
 | #10 | E10 Public onboarding and distribution | distribution | open |
 
 ## M1 First-Usable Codex Harness
@@ -147,9 +147,22 @@ M5 Real Learning Validation milestone is closed with `open_issues=0`.
 | Issue | Work | Default Decision |
 |---|---|---|
 | #10 | E10: Public onboarding and distribution | split |
-| #72 | M6-1: Verify public clean clone setup path | continue |
+| #72 | M6-1: Verify public clean clone setup path | research |
 | #73 | M6-2: Verify marketplace packaging and install docs | continue |
 | #74 | M6-3: Harden first-run onboarding and support diagnostics | continue |
 | #75 | M6-4: Close public clone-to-learn release gate | continue |
+| #78 | M6-D: Decide repository visibility for public clone-to-learn | research |
 
-M6 remains open. Epic #10 has been split into executable issues #72-#75.
+Current implementation target:
+
+```bash
+gh issue view 78
+```
+
+M6 remains open. Epic #10 has been split into executable issues #72-#75, and #78 now blocks the public clone claim because the repository is currently private.
+
+#72 evidence currently shows:
+
+- authenticated clone mechanics pass with `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`.
+- default public clone smoke fails by design while repository visibility is `PRIVATE`.
+- public-facing clone-to-learn readiness cannot be claimed until #78 is resolved.
