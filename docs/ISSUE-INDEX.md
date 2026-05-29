@@ -107,12 +107,14 @@ Current implementation target:
 gh issue view 9
 ```
 
-M4 remains open. Epics #7 and #8 are now split into executable issues #50, #49, #53, #52, and #54 tied to `docs/MULTIMODAL-GENAI-PLAN.md`.
+M4 is closed. Epics #7 and #8 were split into executable issues #50, #49, #53, #52, and #54 tied to `docs/MULTIMODAL-GENAI-PLAN.md`.
 M4-1 is merged through PR #56 and closed #50.
 M4-2 is merged through PR #57 and closed #49.
 M4-3 is merged through PR #58 and closed #53.
 M4-4 is merged through PR #59 and closed #52.
-M4-5 is implemented on the PR branch and waits for PR review/merge evidence before closing #54, #7, #8, and the M4 milestone.
+M4-5 is merged through PR #60 and closed #54.
+M4 epics #7/#8 are closed with evidence comments.
+M4 Multimodal Interaction Lab milestone is closed with `open_issues=0`.
 
 ## M5 Real Learning Validation
 

@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M4 Multimodal Interaction Lab gate complete on PR branch / #9 next after merge** state.
+The project is in **M4 Multimodal Interaction Lab closed / #9 M5 validation split next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -50,14 +50,15 @@ What is complete:
 - M3-4 is merged: seven simulated days run through setup, daily, review, today, weekly mirror, and learner home generation.
 - M3-5 is merged: clean clone reaches daily cockpit, review/vault, weekly mirror, learner home, and seven-day simulation.
 - M3 epic #6 and the M3 Daily Return Experience milestone are closed.
+- M4-0 is complete: multimodal epics #7/#8 were split into executable issues #50, #49, #53, #52, and #54.
+- M4-1 is merged: text-first sessions now write valid `interaction_events` and invalid event fixtures are rejected.
+- M4-2 is merged: weekly mirror and learner home now summarize text interaction events with transfer targets.
+- M4-3 is merged: `voice` imports transcript-first practice as validated `modality: voice` interaction events with local audio metadata.
+- M4-4 is merged: `image` creates local image information-gap practice as validated `modality: image` interaction events with hidden-detail prompt context and local image metadata.
+- M4-5 is merged: one gate smoke proves text, voice, and image events share the same interaction-event contract and weekly event summary.
+- M4 epics #7/#8 and the M4 Multimodal Interaction Lab milestone are closed.
 
 What is not started:
-- M4-0 is complete: multimodal epics #7/#8 are split into executable issues #50, #49, #53, #52, and #54.
-- M4-1 is implemented on the PR branch: text-first sessions now write valid `interaction_events` and invalid event fixtures are rejected.
-- M4-2 is implemented on the PR branch: weekly mirror and learner home now summarize text interaction events with transfer targets.
-- M4-3 is implemented on the PR branch: `voice` imports transcript-first practice as validated `modality: voice` interaction events with local audio metadata.
-- M4-4 is implemented on the PR branch: `image` creates local image information-gap practice as validated `modality: image` interaction events with hidden-detail prompt context and local image metadata.
-- M4-5 is implemented on the PR branch: one gate smoke proves text, voice, and image events share the same interaction-event contract and weekly event summary.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
