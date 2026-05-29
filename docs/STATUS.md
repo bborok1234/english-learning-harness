@@ -97,6 +97,7 @@ What is complete:
 - M7-17 Korean-primary README makes `README.md` the Korean public entry point, adds `README.en.md` as the secondary English surface, and updates public artifact/readiness smokes to verify the bilingual structure.
 - M8-1 Speaking Skill OS core adds `speaking-backlog.json`, `diagnose`, `backlog`, backlog-driven `daily`/`today`, transfer-test evidence, and smoke coverage so the harness is no longer just generic English chat.
 - M8-2 Speaking Skill OS queue adds multi-skill diagnosis and adaptive ordering, so failed transfer work stays ahead of generic practice.
+- M8-3 Speaking Skill OS seven-day gate proves the local multi-day loop: seeded backlog, daily queue targeting, failed transfer retry, weekly mirror, and evidence export.
 
 What is not started:
 - Real user validation.
@@ -279,6 +280,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 - [x] M8-1: Implement diagnosis and speaking backlog loop (#128). `diagnose -> backlog -> daily/today target -> transfer evidence` passes in local smoke.
 - [x] M8-2: Add multi-skill diagnosis and adaptive speaking queue (#130). One learner sample can create multiple backlog items, and failed transfer stays at the front.
+- [x] M8-3: Add seven-day Speaking Skill OS simulation gate (#132). The fixture completes 7 sessions with backlog attempts, retry, weekly mirror, and export evidence.
 
 ## SSOT Structure
 
