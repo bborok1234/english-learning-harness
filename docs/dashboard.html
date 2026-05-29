@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Speaking Skill OS core live",
-    "status": "Public onboarding is live and the harness now has a concrete diagnose -> speaking backlog -> targeted practice -> transfer evidence loop",
+    "status": "Public onboarding is live and the harness now has multi-skill diagnose -> adaptive speaking backlog -> targeted practice -> transfer evidence loops",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets the next session from that backlog, and stores transfer-test evidence."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets the next session from the queue, and keeps failed transfer work in front."
   },
   "ssot": [
     {
@@ -583,8 +583,8 @@
     },
     {
       "label": "GitHub plan",
-      "value": "49 issues",
-      "detail": "#128 adds Speaking Skill OS diagnosis/backlog loop",
+      "value": "50 issues",
+      "detail": "#130 adds multi-skill diagnosis and adaptive queue",
       "tone": "green"
     },
     {
@@ -1654,6 +1654,19 @@
             "docs/phase-8-evidence/M8-1-speaking-skill-os-core.md",
             "docs/DATA-CONTRACTS.md"
           ]
+        },
+        {
+          "id": "M8-2",
+          "title": "#130 multi-skill diagnosis와 adaptive queue를 구현함",
+          "why": "실제 학습자는 한 번에 하나의 약점만 보이지 않는다. 한 샘플에서 여러 회화 약점을 잡고, 실패한 transfer work를 다음 연습 앞에 남겨야 한다.",
+          "done": "`diagnose`가 여러 backlog item을 만들고, queue는 needs_review/high-priority/unresolved item을 passed item보다 먼저 보여준다.",
+          "verification": "`node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 multi-skill diagnosis, repair pass 후 clarification advance, clarification fail 후 needs_review 유지까지 통과한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase8-speaking-skill-os-queue-smoke.mjs",
+            "docs/phase-8-evidence/M8-2-speaking-skill-os-queue.md",
+            "docs/ISSUE-INDEX.md"
+          ]
         }
       ]
     },
@@ -1664,14 +1677,15 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Speaking Skill OS core",
-          "why": "제품 차별점은 README 문구가 아니라 기능이다. 지금은 회화 약점을 진단하고 backlog로 관리하며 transfer evidence를 남기는 첫 OS 루프를 구현 중이다.",
-          "done": "`diagnose`, `backlog`, backlog-driven `daily`/`today`, transfer evidence를 추가했다.",
-          "verification": "`node scripts/phase8-speaking-skill-os-smoke.mjs`가 통과한다.",
+          "title": "Speaking Skill OS adaptive queue",
+          "why": "제품 차별점은 README 문구가 아니라 기능이다. 지금은 한 샘플에서 여러 회화 약점을 진단하고, 실패한 transfer work를 다음 연습 앞에 남기는 queue를 구현 중이다.",
+          "done": "multi-skill `diagnose`와 needs_review 우선 queue를 추가했다.",
+          "verification": "`node scripts/phase8-speaking-skill-os-smoke.mjs`와 `node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 통과한다.",
           "files": [
             "scripts/lib/english-learning-store.mjs",
             "scripts/english-learning-harness.mjs",
-            "scripts/phase8-speaking-skill-os-smoke.mjs"
+            "scripts/phase8-speaking-skill-os-smoke.mjs",
+            "scripts/phase8-speaking-skill-os-queue-smoke.mjs"
           ]
         }
       ]
@@ -1683,10 +1697,10 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "Speaking Skill OS 확장: multi-skill diagnostic, adaptive queue, real pilot",
-          "why": "M8-1은 repair backlog의 end-to-end proof다. 다음은 여러 회화 skill을 동시에 진단하고, 실패/성공에 따라 queue를 재정렬하고, 실제 learner pilot으로 이어지는 것이다.",
-          "done": "M8-1 core loop 이후 분할할 작업이다.",
-          "verification": "다음 smoke는 multi-skill diagnosis, failed transfer retry, seven-day Speaking OS simulation을 증명해야 한다.",
+          "title": "Speaking Skill OS seven-day simulation and real pilot bridge",
+          "why": "M8-1/M8-2는 로컬 queue mechanics를 증명했다. 다음은 여러 날 동안 queue가 실제로 순환하고, pilot protocol로 연결되는지 검증해야 한다.",
+          "done": "아직 시작 전이다.",
+          "verification": "다음 smoke는 seven-day Speaking OS simulation, repeated failed-transfer retry, pilot export evidence를 증명해야 한다.",
           "files": [
             "docs/LEARNING-ENGINE.md",
             "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
@@ -2100,6 +2114,11 @@
       "name": "M8-1 Speaking Skill OS core",
       "status": "Pass",
       "detail": "diagnose -> speaking backlog -> targeted today session -> transfer evidence smoke passes"
+    },
+    {
+      "name": "M8-2 Speaking Skill OS queue",
+      "status": "Pass",
+      "detail": "multi-skill diagnosis and failed-transfer queue priority smoke passes"
     }
   ],
   "commands": [
@@ -2314,12 +2333,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets the next session from that backlog, and stores transfer-test evidence.</p>
+        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets the next session from the queue, and keeps failed transfer work in front.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         Speaking Skill OS core live<br>
-        Public onboarding is live and the harness now has a concrete diagnose -&gt; speaking backlog -&gt; targeted practice -&gt; transfer evidence loop
+        Public onboarding is live and the harness now has multi-skill diagnose -&gt; adaptive speaking backlog -&gt; targeted practice -&gt; transfer evidence loops
       </div>
     </header>
 
@@ -2342,8 +2361,8 @@
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">49 issues</div>
-          <p>#128 adds Speaking Skill OS diagnosis/backlog loop</p>
+          <div class="metric-value">50 issues</div>
+          <p>#130 adds multi-skill diagnosis and adaptive queue</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
@@ -2376,22 +2395,22 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/phase8-speaking-skill-os-smoke.mjs</span>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/phase8-speaking-skill-os-smoke.mjs, scripts/phase8-speaking-skill-os-queue-smoke.mjs</span>
               </div>
-              <h3>Speaking Skill OS core</h3>
-              <div class="card-row"><b>왜</b><p>제품 차별점은 README 문구가 아니라 기능이다. 지금은 회화 약점을 진단하고 backlog로 관리하며 transfer evidence를 남기는 첫 OS 루프를 구현 중이다.</p></div>
-              <div class="card-row"><b>완료</b><p>`diagnose`, `backlog`, backlog-driven `daily`/`today`, transfer evidence를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-smoke.mjs`가 통과한다.</p></div>
+              <h3>Speaking Skill OS adaptive queue</h3>
+              <div class="card-row"><b>왜</b><p>제품 차별점은 README 문구가 아니라 기능이다. 지금은 한 샘플에서 여러 회화 약점을 진단하고, 실패한 transfer work를 다음 연습 앞에 남기는 queue를 구현 중이다.</p></div>
+              <div class="card-row"><b>완료</b><p>multi-skill `diagnose`와 needs_review 우선 queue를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-smoke.mjs`와 `node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 통과한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>NEXT-1</strong>
                 <span>docs/LEARNING-ENGINE.md, docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, scripts/phase8-speaking-skill-os-smoke.mjs</span>
               </div>
-              <h3>Speaking Skill OS 확장: multi-skill diagnostic, adaptive queue, real pilot</h3>
-              <div class="card-row"><b>왜</b><p>M8-1은 repair backlog의 end-to-end proof다. 다음은 여러 회화 skill을 동시에 진단하고, 실패/성공에 따라 queue를 재정렬하고, 실제 learner pilot으로 이어지는 것이다.</p></div>
-              <div class="card-row"><b>완료</b><p>M8-1 core loop 이후 분할할 작업이다.</p></div>
-              <div class="card-row"><b>검증</b><p>다음 smoke는 multi-skill diagnosis, failed transfer retry, seven-day Speaking OS simulation을 증명해야 한다.</p></div>
+              <h3>Speaking Skill OS seven-day simulation and real pilot bridge</h3>
+              <div class="card-row"><b>왜</b><p>M8-1/M8-2는 로컬 queue mechanics를 증명했다. 다음은 여러 날 동안 queue가 실제로 순환하고, pilot protocol로 연결되는지 검증해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>아직 시작 전이다.</p></div>
+              <div class="card-row"><b>검증</b><p>다음 smoke는 seven-day Speaking OS simulation, repeated failed-transfer retry, pilot export evidence를 증명해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -2402,16 +2421,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-13</strong>
-                <span>README.md, scripts/phase6-public-clean-clone-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, docs/phase-7-evidence/M7-13-public-source-release.md</span>
-              </div>
-              <h3>#83/#90 public source clone-to-learn을 검증함</h3>
-              <div class="card-row"><b>왜</b><p>오픈소스 방향에서는 현재 source repo 자체가 public distribution surface이므로, 공개 repo에서 신규 사용자가 바로 clone하고 학습을 시작할 수 있어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-14</strong>
@@ -2461,6 +2470,16 @@
               <div class="card-row"><b>왜</b><p>그냥 ChatGPT와 영어로 대화하는 것과 다르려면, 하네스가 사용자의 회화 약점을 backlog로 관리하고 다음 세션을 그 약점 개선에 연결해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`speaking-backlog.json`, `diagnose`, `backlog`, backlog-driven `daily`/`today`, session transfer evidence, export summary를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-smoke.mjs`가 diagnose -&gt; backlog -&gt; targeted practice -&gt; transfer pass -&gt; export summary 루프를 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M8-2</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/phase8-speaking-skill-os-queue-smoke.mjs, docs/phase-8-evidence/M8-2-speaking-skill-os-queue.md, docs/ISSUE-INDEX.md</span>
+              </div>
+              <h3>#130 multi-skill diagnosis와 adaptive queue를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>실제 학습자는 한 번에 하나의 약점만 보이지 않는다. 한 샘플에서 여러 회화 약점을 잡고, 실패한 transfer work를 다음 연습 앞에 남겨야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`diagnose`가 여러 backlog item을 만들고, queue는 needs_review/high-priority/unresolved item을 passed item보다 먼저 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 multi-skill diagnosis, repair pass 후 clarification advance, clarification fail 후 needs_review 유지까지 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2655,10 +2674,6 @@
           <tbody>
 
             <tr>
-              <td>M7-11 open-source readiness</td>
-              <td><strong>Pass</strong><span>community files, policy, and repository visibility pass for open-source launch</span></td>
-            </tr>
-            <tr>
               <td>M7-12 git history audit</td>
               <td><strong>Pass</strong><span>git history audit reports zero forbidden paths, secret-like content findings, and oversized objects</span></td>
             </tr>
@@ -2685,6 +2700,10 @@
             <tr>
               <td>M8-1 Speaking Skill OS core</td>
               <td><strong>Pass</strong><span>diagnose -&gt; speaking backlog -&gt; targeted today session -&gt; transfer evidence smoke passes</span></td>
+            </tr>
+            <tr>
+              <td>M8-2 Speaking Skill OS queue</td>
+              <td><strong>Pass</strong><span>multi-skill diagnosis and failed-transfer queue priority smoke passes</span></td>
             </tr>
           </tbody>
         </table>
@@ -2730,7 +2749,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 74개 보기</summary>
+        <summary>완료 이력 75개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3473,10 +3492,20 @@
               <div class="card-row"><b>완료</b><p>전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-history-audit-smoke.mjs`가 forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다. revision/path scan counts는 merge마다 바뀌므로 dashboard 사실로 고정하지 않는다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-13</strong>
+                <span>README.md, scripts/phase6-public-clean-clone-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, docs/phase-7-evidence/M7-13-public-source-release.md</span>
+              </div>
+              <h3>#83/#90 public source clone-to-learn을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>오픈소스 방향에서는 현재 source repo 자체가 public distribution surface이므로, 공개 repo에서 신규 사용자가 바로 clone하고 학습을 시작할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 71개 보기</summary>
+        <summary>전체 검증 72개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3764,6 +3793,10 @@
             <tr>
               <td>M8-1 Speaking Skill OS core</td>
               <td><strong>Pass</strong><span>diagnose -&gt; speaking backlog -&gt; targeted today session -&gt; transfer evidence smoke passes</span></td>
+            </tr>
+            <tr>
+              <td>M8-2 Speaking Skill OS queue</td>
+              <td><strong>Pass</strong><span>multi-skill diagnosis and failed-transfer queue priority smoke passes</span></td>
             </tr>
             </tbody>
           </table>

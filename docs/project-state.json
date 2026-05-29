@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Speaking Skill OS core live",
-    "status": "Public onboarding is live and the harness now has a concrete diagnose -> speaking backlog -> targeted practice -> transfer evidence loop",
+    "status": "Public onboarding is live and the harness now has multi-skill diagnose -> adaptive speaking backlog -> targeted practice -> transfer evidence loops",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets the next session from that backlog, and stores transfer-test evidence."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets the next session from the queue, and keeps failed transfer work in front."
   },
   "ssot": [
     {
@@ -181,8 +181,8 @@
     },
     {
       "label": "GitHub plan",
-      "value": "49 issues",
-      "detail": "#128 adds Speaking Skill OS diagnosis/backlog loop",
+      "value": "50 issues",
+      "detail": "#130 adds multi-skill diagnosis and adaptive queue",
       "tone": "green"
     },
     {
@@ -1252,6 +1252,19 @@
             "docs/phase-8-evidence/M8-1-speaking-skill-os-core.md",
             "docs/DATA-CONTRACTS.md"
           ]
+        },
+        {
+          "id": "M8-2",
+          "title": "#130 multi-skill diagnosis와 adaptive queue를 구현함",
+          "why": "실제 학습자는 한 번에 하나의 약점만 보이지 않는다. 한 샘플에서 여러 회화 약점을 잡고, 실패한 transfer work를 다음 연습 앞에 남겨야 한다.",
+          "done": "`diagnose`가 여러 backlog item을 만들고, queue는 needs_review/high-priority/unresolved item을 passed item보다 먼저 보여준다.",
+          "verification": "`node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 multi-skill diagnosis, repair pass 후 clarification advance, clarification fail 후 needs_review 유지까지 통과한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase8-speaking-skill-os-queue-smoke.mjs",
+            "docs/phase-8-evidence/M8-2-speaking-skill-os-queue.md",
+            "docs/ISSUE-INDEX.md"
+          ]
         }
       ]
     },
@@ -1262,14 +1275,15 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Speaking Skill OS core",
-          "why": "제품 차별점은 README 문구가 아니라 기능이다. 지금은 회화 약점을 진단하고 backlog로 관리하며 transfer evidence를 남기는 첫 OS 루프를 구현 중이다.",
-          "done": "`diagnose`, `backlog`, backlog-driven `daily`/`today`, transfer evidence를 추가했다.",
-          "verification": "`node scripts/phase8-speaking-skill-os-smoke.mjs`가 통과한다.",
+          "title": "Speaking Skill OS adaptive queue",
+          "why": "제품 차별점은 README 문구가 아니라 기능이다. 지금은 한 샘플에서 여러 회화 약점을 진단하고, 실패한 transfer work를 다음 연습 앞에 남기는 queue를 구현 중이다.",
+          "done": "multi-skill `diagnose`와 needs_review 우선 queue를 추가했다.",
+          "verification": "`node scripts/phase8-speaking-skill-os-smoke.mjs`와 `node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 통과한다.",
           "files": [
             "scripts/lib/english-learning-store.mjs",
             "scripts/english-learning-harness.mjs",
-            "scripts/phase8-speaking-skill-os-smoke.mjs"
+            "scripts/phase8-speaking-skill-os-smoke.mjs",
+            "scripts/phase8-speaking-skill-os-queue-smoke.mjs"
           ]
         }
       ]
@@ -1281,10 +1295,10 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "Speaking Skill OS 확장: multi-skill diagnostic, adaptive queue, real pilot",
-          "why": "M8-1은 repair backlog의 end-to-end proof다. 다음은 여러 회화 skill을 동시에 진단하고, 실패/성공에 따라 queue를 재정렬하고, 실제 learner pilot으로 이어지는 것이다.",
-          "done": "M8-1 core loop 이후 분할할 작업이다.",
-          "verification": "다음 smoke는 multi-skill diagnosis, failed transfer retry, seven-day Speaking OS simulation을 증명해야 한다.",
+          "title": "Speaking Skill OS seven-day simulation and real pilot bridge",
+          "why": "M8-1/M8-2는 로컬 queue mechanics를 증명했다. 다음은 여러 날 동안 queue가 실제로 순환하고, pilot protocol로 연결되는지 검증해야 한다.",
+          "done": "아직 시작 전이다.",
+          "verification": "다음 smoke는 seven-day Speaking OS simulation, repeated failed-transfer retry, pilot export evidence를 증명해야 한다.",
           "files": [
             "docs/LEARNING-ENGINE.md",
             "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
@@ -1698,6 +1712,11 @@
       "name": "M8-1 Speaking Skill OS core",
       "status": "Pass",
       "detail": "diagnose -> speaking backlog -> targeted today session -> transfer evidence smoke passes"
+    },
+    {
+      "name": "M8-2 Speaking Skill OS queue",
+      "status": "Pass",
+      "detail": "multi-skill diagnosis and failed-transfer queue priority smoke passes"
     }
   ],
   "commands": [

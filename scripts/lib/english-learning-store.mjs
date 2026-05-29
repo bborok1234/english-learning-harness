@@ -805,27 +805,31 @@ function skillDiagnosisTemplate(skill) {
   return templates[skill] || templates.starts;
 }
 
-function diagnoseSkill(learnerTurns) {
+function diagnoseSkills(learnerTurns) {
   const text = learnerTurns.join(" ").trim();
-  const lower = text.toLowerCase();
   const englishTokens = extractEnglishTokens(learnerTurns);
   const hasKorean = /[가-힣]/.test(text);
+  const skills = new Set();
   if (hasKorean || /\b(i don't know how to say|dont know how to say|stuck|i mean|what i want to say)\b/i.test(text)) {
-    return "repair";
+    skills.add("repair");
   }
   if (/\?|\b(could you repeat|what does|do you mean|can you explain)\b/i.test(text)) {
-    return "clarification";
+    skills.add("clarification");
   }
-  if (/\b(but|however|not really|i see your point|i don't think|i dont think)\b/i.test(text)) {
-    return "soft_disagreement";
+  if (/\b(however|not really|i see your point|i don't think|i dont think)\b/i.test(text)) {
+    skills.add("soft_disagreement");
   }
   if (learnerTurns.length > 1 || /\b(because|when|where|also|and then)\b/i.test(text)) {
-    return "follow_ups";
+    skills.add("follow_ups");
   }
   if (englishTokens.length <= 6) {
-    return "starts";
+    skills.add("starts");
   }
-  return "follow_ups";
+  if (!skills.size) {
+    skills.add("follow_ups");
+  }
+  const priority = ["repair", "clarification", "soft_disagreement", "follow_ups", "starts"];
+  return priority.filter((skill) => skills.has(skill));
 }
 
 function upsertSpeakingBacklogItem(backlog, diagnosis, date) {
@@ -867,22 +871,32 @@ function upsertSpeakingBacklogItem(backlog, diagnosis, date) {
 
 export function diagnoseSpeakingSample(learnerRoot, learnerTurns, date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
-  const backlog = readSpeakingBacklog(paths.speakingBacklog);
-  const skill = diagnoseSkill(learnerTurns);
-  const diagnosis = {
+  let backlog = readSpeakingBacklog(paths.speakingBacklog);
+  const skills = diagnoseSkills(learnerTurns);
+  const diagnoses = skills.map((skill) => ({
     skill,
     reason: `Detected ${skill.replaceAll("_", " ")} practice need from ${learnerTurns.length} learner turn(s).`,
     sample: learnerTurns,
-  };
-  const updated = upsertSpeakingBacklogItem(backlog, diagnosis, date);
-  writeSpeakingBacklog(paths.speakingBacklog, updated.backlog);
+  }));
+  const updates = [];
+  for (const diagnosis of diagnoses) {
+    const updated = upsertSpeakingBacklogItem(backlog, diagnosis, date);
+    backlog = updated.backlog;
+    updates.push(updated);
+  }
+  writeSpeakingBacklog(paths.speakingBacklog, backlog);
+  const primaryUpdate = updates[0];
+  const primaryDiagnosis = diagnoses[0];
   const artifactPath = resolve(paths.speakingOsDir, `diagnosis-${todayStamp(date)}-${date.getTime()}.json`);
   const artifact = {
     schema_version: 1,
     generated_at: date.toISOString(),
-    diagnosis,
-    backlog_item: updated.item,
-    created: updated.created,
+    diagnosis: primaryDiagnosis,
+    diagnoses,
+    backlog_item: primaryUpdate.item,
+    backlog_items: updates.map((update) => update.item),
+    created: primaryUpdate.created,
+    created_count: updates.filter((update) => update.created).length,
     claim_boundary:
       "This is a local heuristic speaking-skill diagnosis. It assigns practice work; it does not measure real-world fluency.",
   };
@@ -891,9 +905,12 @@ export function diagnoseSpeakingSample(learnerRoot, learnerTurns, date = new Dat
     learnerRoot: paths.root,
     backlogPath: paths.speakingBacklog,
     artifactPath,
-    diagnosis,
-    backlogItem: updated.item,
-    created: updated.created,
+    diagnosis: primaryDiagnosis,
+    diagnoses,
+    backlogItem: primaryUpdate.item,
+    backlogItems: updates.map((update) => update.item),
+    created: primaryUpdate.created,
+    createdCount: artifact.created_count,
     claimBoundary: artifact.claim_boundary,
   };
 }
@@ -902,8 +919,15 @@ export function listSpeakingBacklog(learnerRoot = defaultLearnerRoot()) {
   const paths = ensureLearnerStore(learnerRoot);
   const backlog = readSpeakingBacklog(paths.speakingBacklog);
   return backlog.items.sort((a, b) => {
-    const statusRank = { open: 0, needs_review: 1, in_progress: 2, passed: 3 };
-    return (statusRank[a.status] ?? 9) - (statusRank[b.status] ?? 9) || a.updated_at.localeCompare(b.updated_at);
+    const statusRank = { needs_review: 0, open: 1, in_progress: 2, passed: 3 };
+    const priorityRank = { high: 0, medium: 1, low: 2 };
+    const skillRank = { repair: 0, clarification: 1, soft_disagreement: 2, follow_ups: 3, starts: 4 };
+    return (
+      (statusRank[a.status] ?? 9) - (statusRank[b.status] ?? 9) ||
+      (priorityRank[a.priority] ?? 9) - (priorityRank[b.priority] ?? 9) ||
+      (skillRank[a.skill] ?? 9) - (skillRank[b.skill] ?? 9) ||
+      a.updated_at.localeCompare(b.updated_at)
+    );
   });
 }
 
@@ -925,7 +949,7 @@ function transferTestPassed(session, item) {
     return /\b(i don't know how to say|dont know how to say|i mean|what i want to say|let me try again)\b/i.test(text);
   }
   if (item.skill === "soft_disagreement") {
-    return /\b(but|however|not really|i see your point|i don't think|i dont think)\b/i.test(text);
+    return /\b(however|not really|i see your point|i don't think|i dont think)\b/i.test(text);
   }
   return false;
 }
