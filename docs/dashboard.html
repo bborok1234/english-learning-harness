@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M3 Daily Return Experience implementation active",
-    "status": "Next: #39 no-streak return guidance",
+    "status": "Next: #40 seven-day local return simulation",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 daily cockpit and M3-2 learner home are implemented and smoke-tested. The next work is #39 no-streak return guidance so missed days become a gentle restart path instead of a failure signal."
+    "summary": "M3-1 daily cockpit, M3-2 learner home, and M3-3 no-streak return guidance are implemented and smoke-tested. The next work is #40 seven-day local return simulation."
   },
   "ssot": [
     {
@@ -506,13 +506,13 @@
     {
       "label": "Current stage",
       "value": "M3 active",
-      "detail": "#37/#38 implemented; #39 next",
+      "detail": "#37/#38/#39 implemented; #40 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#39 no-streak return guidance",
+      "detail": "#40 seven-day return simulation",
       "tone": "red"
     },
     {
@@ -1039,6 +1039,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-3-evidence/M3-2-learner-home.md"
           ]
+        },
+        {
+          "id": "M3-3",
+          "title": "#39 No-streak return guidance를 구현함",
+          "why": "매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.",
+          "done": "`return_state`가 `gap_kind`와 `restart_action`을 제공한다. same-day, next-day, long-gap 모두 no-streak copy와 gentle restart action을 반환한다.",
+          "verification": "`node scripts/phase3-no-streak-return-smoke.mjs`가 fresh/same-day/next-day/long-gap fixture를 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase3-no-streak-return-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-3-evidence/M3-3-no-streak-return.md"
+          ]
         }
       ]
     },
@@ -1046,24 +1059,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-3",
-          "title": "#39 No-streak return guidance",
-          "why": "매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.",
-          "done": "same-day, next-day, long-gap return copy가 gentle restart action을 보여주게 한다.",
-          "verification": "date fixture smoke에서 shame/streak punishment 문구가 없어야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/TUTOR-POLICY.md"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-4",
@@ -1074,7 +1069,14 @@
           "files": [
             "scripts/phase3-seven-day-return-smoke.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M3-5",
           "title": "#41 M3 clone-to-daily gate",
@@ -1267,6 +1269,11 @@
       "name": "M3-2",
       "status": "Pass",
       "detail": "learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render"
+    },
+    {
+      "name": "M3-3",
+      "status": "Pass",
+      "detail": "no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures"
     }
   ],
   "commands": [
@@ -1335,6 +1342,10 @@
       "command": "node scripts/phase3-learner-home-smoke.mjs"
     },
     {
+      "label": "Run no-streak return smoke",
+      "command": "node scripts/phase3-no-streak-return-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1364,7 +1375,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 39"
+      "command": "gh issue view 40"
     }
   ]
 }
@@ -1373,12 +1384,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M3-1 daily cockpit and M3-2 learner home are implemented and smoke-tested. The next work is #39 no-streak return guidance so missed days become a gentle restart path instead of a failure signal.</p>
+        <p class="summary">M3-1 daily cockpit, M3-2 learner home, and M3-3 no-streak return guidance are implemented and smoke-tested. The next work is #40 seven-day local return simulation.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M3 Daily Return Experience implementation active<br>
-        Next: #39 no-streak return guidance
+        Next: #40 seven-day local return simulation
       </div>
     </header>
 
@@ -1392,12 +1403,12 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M3 active</div>
-          <p>#37/#38 implemented; #39 next</p>
+          <p>#37/#38/#39 implemented; #40 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M3</div>
-          <p>#39 no-streak return guidance</p>
+          <p>#40 seven-day return simulation</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1428,20 +1439,10 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>3</span>
+          <span>2</span>
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-3</strong>
-                <span>scripts/lib/english-learning-store.mjs, docs/TUTOR-POLICY.md</span>
-              </div>
-              <h3>#39 No-streak return guidance</h3>
-              <div class="card-row"><b>왜</b><p>매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.</p></div>
-              <div class="card-row"><b>완료</b><p>same-day, next-day, long-gap return copy가 gentle restart action을 보여주게 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>date fixture smoke에서 shame/streak punishment 문구가 없어야 한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-4</strong>
@@ -1471,16 +1472,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M2-3</strong>
-                <span>scripts/lib/scenario-engine.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-scenario-planner-smoke.mjs, docs/phase-2-evidence/M2-3-scenario-planner.md</span>
-              </div>
-              <h3>#27 Memory-aware scenario planner</h3>
-              <div class="card-row"><b>왜</b><p>학습자가 자주 막히는 skill과 due phrase를 다음 대화 시나리오에 반영해야 매일 들어갈 이유가 생긴다.</p></div>
-              <div class="card-row"><b>완료</b><p>planner가 learner model, due review phrase, profile avoided topics를 읽고 scenario mode와 selection_reason을 기록하게 했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase2-scenario-planner-smoke.mjs`와 persona fixture 회귀 검증이 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M2-4</strong>
@@ -1530,6 +1521,16 @@
               <div class="card-row"><b>왜</b><p>프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>`home` command가 learner root 아래 `home.html`을 생성한다. 페이지는 오늘 action, due review, saved phrases, weekly mirror, local journey counts, claim boundary를 보여준다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase3-learner-home-smoke.mjs`가 파일 생성과 Playwright render를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-3</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/phase3-no-streak-return-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-3-no-streak-return.md</span>
+              </div>
+              <h3>#39 No-streak return guidance를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.</p></div>
+              <div class="card-row"><b>완료</b><p>`return_state`가 `gap_kind`와 `restart_action`을 제공한다. same-day, next-day, long-gap 모두 no-streak copy와 gentle restart action을 반환한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase3-no-streak-return-smoke.mjs`가 fresh/same-day/next-day/long-gap fixture를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1680,10 +1681,6 @@
           <tbody>
 
             <tr>
-              <td>M2-1</td>
-              <td><strong>Pass</strong><span>learner-model setup/migration/session update/context smoke pass</span></td>
-            </tr>
-            <tr>
               <td>M2-2</td>
               <td><strong>Pass</strong><span>review due list, success/fail interval, and phrase vault smoke pass</span></td>
             </tr>
@@ -1710,6 +1707,10 @@
             <tr>
               <td>M3-2</td>
               <td><strong>Pass</strong><span>learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render</span></td>
+            </tr>
+            <tr>
+              <td>M3-3</td>
+              <td><strong>Pass</strong><span>no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures</span></td>
             </tr>
           </tbody>
         </table>
@@ -1755,7 +1756,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 31개 보기</summary>
+        <summary>완료 이력 32개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2068,10 +2069,20 @@
               <div class="card-row"><b>완료</b><p>`review`/`vault` command, due item list, success/fail update, interval progression, phrase vault output을 구현했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-review-vault-smoke.mjs`에서 due listing, success 3-day interval, fail 1-day reset, vault phrase output이 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-3</strong>
+                <span>scripts/lib/scenario-engine.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-scenario-planner-smoke.mjs, docs/phase-2-evidence/M2-3-scenario-planner.md</span>
+              </div>
+              <h3>#27 Memory-aware scenario planner</h3>
+              <div class="card-row"><b>왜</b><p>학습자가 자주 막히는 skill과 due phrase를 다음 대화 시나리오에 반영해야 매일 들어갈 이유가 생긴다.</p></div>
+              <div class="card-row"><b>완료</b><p>planner가 learner model, due review phrase, profile avoided topics를 읽고 scenario mode와 selection_reason을 기록하게 했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-scenario-planner-smoke.mjs`와 persona fixture 회귀 검증이 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 27개 보기</summary>
+        <summary>전체 검증 28개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2184,12 +2195,16 @@
               <td>M3-2</td>
               <td><strong>Pass</strong><span>learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render</span></td>
             </tr>
+            <tr>
+              <td>M3-3</td>
+              <td><strong>Pass</strong><span>no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 24개 보기</summary>
+        <summary>전체 명령 25개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2257,6 +2272,10 @@
               <code>node scripts/phase3-learner-home-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run no-streak return smoke</span>
+              <code>node scripts/phase3-no-streak-return-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2286,7 +2305,7 @@
             </div>
             <div class="command">
               <span>View next M3 issue</span>
-              <code>gh issue view 39</code>
+              <code>gh issue view 40</code>
             </div>
         </div>
       </details>

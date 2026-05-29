@@ -210,7 +210,9 @@ Required fields:
     "session_count": 1,
     "last_session_at": "ISO-8601",
     "days_since_last_session": 0,
-    "message": "You already practiced today. Review or save one phrase."
+    "gap_kind": "fresh|same-day|next-day|long-gap",
+    "message": "You already practiced today. Review or save one phrase.",
+    "restart_action": "Review one due phrase in a tiny real-life context."
   },
   "due_review": {
     "count": 1,
@@ -242,6 +244,7 @@ Required fields:
 ```
 
 The cockpit may read `profile.md`, `progress.json`, `learner-model.json`, `vocabulary.json`, `review-queue.json`, latest journal, and latest weekly mirror. It must not punish missed days or claim measured long-term outcomes.
+Gap detection must use `progress.last_session_at` only. It must not create hidden streak state.
 
 ## Learner Home HTML
 

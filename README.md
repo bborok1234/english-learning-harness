@@ -281,6 +281,12 @@ Run the learner home smoke:
 node scripts/phase3-learner-home-smoke.mjs
 ```
 
+Run the no-streak return smoke:
+
+```bash
+node scripts/phase3-no-streak-return-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash
