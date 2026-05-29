@@ -16,6 +16,8 @@ const codexHome = resolve(tmpRoot, "codex-home");
 
 const requiredFiles = [
   ".codex-plugin/plugin.json",
+  "README.md",
+  "README.en.md",
   "setup",
   ".github/workflows/public-artifact.yml",
   "skills/onboarding/SKILL.md",
