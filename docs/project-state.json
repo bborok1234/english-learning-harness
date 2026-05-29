@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "Speaking Skill OS core live",
-    "status": "Public onboarding is live and the harness now has multi-skill diagnose -> adaptive speaking backlog -> targeted practice -> transfer evidence loops",
+    "status": "Public onboarding is live and the harness now has a seven-day local Speaking Skill OS gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets the next session from the queue, and keeps failed transfer work in front."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, creates multiple backlog items from one sample, targets sessions from the queue, retries failed transfer work, and passes a seven-day local fixture with weekly mirror plus export evidence."
   },
   "ssot": [
     {
@@ -181,8 +181,8 @@
     },
     {
       "label": "GitHub plan",
-      "value": "50 issues",
-      "detail": "#130 adds multi-skill diagnosis and adaptive queue",
+      "value": "51 issues",
+      "detail": "#132 adds seven-day Speaking Skill OS gate",
       "tone": "green"
     },
     {
@@ -1265,6 +1265,20 @@
             "docs/phase-8-evidence/M8-2-speaking-skill-os-queue.md",
             "docs/ISSUE-INDEX.md"
           ]
+        },
+        {
+          "id": "M8-3",
+          "title": "#132 seven-day Speaking Skill OS gate를 추가함",
+          "why": "하루짜리 smoke만으로는 하네스가 학습 여정을 운영한다고 말하기 어렵다. 여러 날 동안 queue, retry, weekly mirror, export가 이어지는지 확인해야 한다.",
+          "done": "7일 fixture가 multi-skill backlog를 seed하고, daily/today를 반복하며, 실패한 clarification transfer를 retry 후 pass시키고, weekly/export evidence를 만든다.",
+          "verification": "`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 7 sessions, backlog 4개, pass 4개, transfer attempts 5개, weekly mirror, evidence pack을 확인한다.",
+          "files": [
+            "scripts/phase8-speaking-skill-os-seven-day-smoke.mjs",
+            "scripts/phase1-scaffold-smoke.mjs",
+            "docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md",
+            "docs/STATUS.md",
+            "docs/ISSUE-INDEX.md"
+          ]
         }
       ]
     },
@@ -1275,15 +1289,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Speaking Skill OS adaptive queue",
-          "why": "제품 차별점은 README 문구가 아니라 기능이다. 지금은 한 샘플에서 여러 회화 약점을 진단하고, 실패한 transfer work를 다음 연습 앞에 남기는 queue를 구현 중이다.",
-          "done": "multi-skill `diagnose`와 needs_review 우선 queue를 추가했다.",
-          "verification": "`node scripts/phase8-speaking-skill-os-smoke.mjs`와 `node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 통과한다.",
+          "title": "Seven-day Speaking Skill OS gate",
+          "why": "제품 차별점은 하루짜리 기능이 아니라 지속적으로 약점을 운영하는 하네스다. 7일 fixture로 queue, retry, weekly mirror, export가 이어지는지 검증한다.",
+          "done": "seven-day Speaking Skill OS smoke를 추가했다.",
+          "verification": "`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 통과한다.",
           "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "scripts/english-learning-harness.mjs",
-            "scripts/phase8-speaking-skill-os-smoke.mjs",
-            "scripts/phase8-speaking-skill-os-queue-smoke.mjs"
+            "scripts/phase8-speaking-skill-os-seven-day-smoke.mjs",
+            "docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md"
           ]
         }
       ]
@@ -1295,10 +1307,10 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "Speaking Skill OS seven-day simulation and real pilot bridge",
-          "why": "M8-1/M8-2는 로컬 queue mechanics를 증명했다. 다음은 여러 날 동안 queue가 실제로 순환하고, pilot protocol로 연결되는지 검증해야 한다.",
+          "title": "Real learner pilot bridge",
+          "why": "M8 local mechanics는 7일 fixture로 통과했다. 다음 차이는 실제 한국인 학습자의 7일 pilot에서 이 OS가 지속 사용과 체감 개선을 만드는지 보는 것이다.",
           "done": "아직 시작 전이다.",
-          "verification": "다음 smoke는 seven-day Speaking OS simulation, repeated failed-transfer retry, pilot export evidence를 증명해야 한다.",
+          "verification": "다음 gate는 실제 learner pilot protocol, consent/privacy handoff, before/after sample review, qualitative retention notes가 필요하다.",
           "files": [
             "docs/LEARNING-ENGINE.md",
             "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
@@ -1717,6 +1729,11 @@
       "name": "M8-2 Speaking Skill OS queue",
       "status": "Pass",
       "detail": "multi-skill diagnosis and failed-transfer queue priority smoke passes"
+    },
+    {
+      "name": "M8-3 seven-day Speaking OS gate",
+      "status": "Pass",
+      "detail": "seven-session fixture proves queue retry, weekly mirror, and export evidence"
     }
   ],
   "commands": [

@@ -360,6 +360,7 @@ M7 now targets the current source repository as the open-source public distribut
 |---|---|---|
 | #128 | M8-1: Implement Speaking Skill OS diagnosis and backlog loop | continue |
 | #130 | M8-2: Add multi-skill diagnosis and adaptive speaking queue | continue |
+| #132 | M8-3: Add seven-day Speaking Skill OS simulation gate | continue |
 
 #128 evidence currently shows:
 
@@ -379,3 +380,12 @@ M7 now targets the current source repository as the open-source public distribut
 - if clarification fails, the item stays at the front as `needs_review`.
 - `scripts/phase8-speaking-skill-os-queue-smoke.mjs` proves multi-skill diagnosis and adaptive queue advancement.
 - this remains heuristic local diagnosis, not certified speaking assessment.
+
+#132 evidence currently shows:
+
+- `scripts/phase8-speaking-skill-os-seven-day-smoke.mjs` seeds a multi-skill backlog and runs 7 daily sessions.
+- the fixture records both passed and failed transfer attempts.
+- failed clarification stays `needs_review` until a later pass.
+- weekly mirror includes `speaking_os_summary`.
+- export evidence includes speaking backlog counts.
+- this is a local fixture gate, not real learner outcome proof.
