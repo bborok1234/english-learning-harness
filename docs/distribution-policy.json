@@ -3,6 +3,13 @@
   "updatedAt": "2026-05-29",
   "currentPolicy": "private-beta",
   "releaseClaim": "invited-user clone-to-learn",
+  "publicReleaseDecision": {
+    "issue": 90,
+    "status": "owner_decision_required",
+    "recommendedSurface": "manual_github_release_asset",
+    "reason": "The GitHub Actions artifact path is already verified without publishing; a manual GitHub Release asset is the smallest public surface that keeps the repository private.",
+    "codexMayPublishWithoutExplicitApproval": false
+  },
   "repositoryVisibilityRequired": "private-or-public",
   "cloneMode": "authenticated-git-clone",
   "publicReleaseStatus": "deferred",
@@ -17,6 +24,7 @@
     "Realtime voice and real learner outcome claims remain outside the first-complete release claim."
   ],
   "publicReleaseRequirements": [
+    "Resolve #90 by choosing the public distribution surface and publication authority.",
     "Make the repository public or publish a separate public distribution artifact.",
     "Run the default public clone smoke without ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE.",
     "Add a public install smoke before documenting Git-backed plugin install.",

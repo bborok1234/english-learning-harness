@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M6 Private Beta Clone-to-Learn closed / M7 public distribution next** state.
+The project is in **M7 Public Distribution active** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -76,6 +76,7 @@ What is complete:
 - M7 hosted-artifact smoke passes through local loopback and is ready to verify a real public URL via `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`.
 - M7 manual GitHub Actions workflow is wired to package/verify the artifact and optionally upload a release asset when explicitly dispatched.
 - GitHub Actions run `26618527553` completed successfully with `publish_release=false` and uploaded workflow artifact `english-learning-harness-public`.
+- M7 decision issue #90 is created to choose the public release surface and publication authority before #83 can prove a real public URL.
 
 What is not started:
 - Real user validation.
@@ -86,6 +87,7 @@ What failed review:
 - Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
 - PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
 - Public marketplace distribution, real learner validation, and native hook runtime are still outside the local first-usable claim.
+- Public release publication remains blocked on #90; Codex should not publish a release asset without explicit owner approval.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.
