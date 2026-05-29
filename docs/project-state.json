@@ -1014,6 +1014,18 @@
             "scripts/phase7-public-artifact-handoff-smoke.mjs",
             "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
           ]
+        },
+        {
+          "id": "M7-3",
+          "title": "#96 public artifact repo README를 준비함",
+          "why": "public artifact repository 주소만 본 사용자가 private source repo를 몰라도 다운로드, 검증, 시작까지 진행할 수 있어야 한다.",
+          "done": "handoff bundle에 top-level README.md를 추가해 latest release download, SHA256 검증, extract, setup/daily/today, public URL smoke boundary를 문서화했다.",
+          "verification": "`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 public README의 download/checksum/setup/today/public URL smoke 문구를 검증한다.",
+          "files": [
+            "scripts/prepare-public-artifact-handoff.mjs",
+            "scripts/phase7-public-artifact-handoff-smoke.mjs",
+            "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
+          ]
         }
       ]
     },
@@ -1389,6 +1401,11 @@
       "name": "M7-2 handoff bundle",
       "status": "Pass",
       "detail": "public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing"
+    },
+    {
+      "name": "M7-3 public artifact README",
+      "status": "Pass",
+      "detail": "handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance"
     }
   ],
   "commands": [

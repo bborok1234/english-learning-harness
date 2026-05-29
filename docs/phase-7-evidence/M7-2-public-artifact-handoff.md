@@ -12,6 +12,7 @@ Decision: continue
 - Added `scripts/prepare-public-artifact-handoff.mjs`.
 - Added `scripts/phase7-public-artifact-handoff-smoke.mjs`.
 - The handoff contains:
+  - `README.md`
   - `english-learning-harness-public.tar.gz`
   - `SHA256SUMS`
   - `PUBLIC-ARTIFACT-MANIFEST.json`
@@ -30,6 +31,7 @@ It verifies:
 - the tarball contains the expected harness files.
 - forbidden paths such as `.git`, `.omx`, `tmp`, and `node_modules` are not included.
 - the manifest includes the publication command as text and the real public URL smoke command.
+- the public artifact repository README includes download, checksum, extract, setup, daily, today, and hosted URL smoke guidance.
 
 ## Claim Boundary
 
