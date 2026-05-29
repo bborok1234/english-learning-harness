@@ -110,6 +110,14 @@ node scripts/english-learning-harness.mjs image \
 
 The image path is local prompt context only; the learner output is the learning evidence.
 
+Export a local evidence pack for M5 review:
+
+```bash
+node scripts/english-learning-harness.mjs export --json
+```
+
+The export writes JSON and Markdown packs under `artifacts/validation/`. Local learner roots and source media paths are redacted or marked local-only inside the pack.
+
 Review due personal phrases:
 
 ```bash
@@ -351,6 +359,12 @@ Run the M4 multimodal gate smoke:
 
 ```bash
 node scripts/phase4-multimodal-gate-smoke.mjs
+```
+
+Run the M5 evidence export smoke:
+
+```bash
+node scripts/phase5-evidence-export-smoke.mjs
 ```
 
 Run the full first-run smoke:

@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M5 Real Learning Validation active",
-    "status": "Next: #63 M5 evidence export",
+    "status": "Next: #64 M5 transcript rubric",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 validation protocol is defined. The next target is #63: export a seven-day pilot evidence pack so a human can review the learner journey without hunting through local JSON files."
+    "summary": "M5 evidence export is implemented. The next target is #64: define a before/after transcript review rubric that scores observable behavior without overclaiming fluency or guaranteed improvement."
   },
   "ssot": [
     {
@@ -116,7 +116,7 @@
     {
       "label": "Ultragoal",
       "value": "M5",
-      "detail": "validation protocol defined",
+      "detail": "evidence export implemented",
       "tone": "green"
     },
     {
@@ -128,7 +128,7 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#63 evidence export",
+      "detail": "#64 transcript rubric",
       "tone": "red"
     },
     {
@@ -794,6 +794,19 @@
             "docs/phase-5-evidence/M5-1-validation-protocol.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M5-2",
+          "title": "#63 M5 seven-day evidence export를 구현함",
+          "why": "7일 검증 자료가 여러 local JSON/HTML 파일에 흩어져 있으면 사람이 학습 여정을 검토하기 어렵다.",
+          "done": "`export` command가 sessions, weekly mirrors, review queue, interaction summaries, learner home pointer를 JSON+Markdown evidence pack으로 쓴다.",
+          "verification": "`node scripts/phase5-evidence-export-smoke.mjs`가 seven-day learner store에서 pack 생성, redaction, counts, claim guard를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase5-evidence-export-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-5-evidence/M5-2-evidence-export.md"
+          ]
         }
       ]
     },
@@ -804,12 +817,11 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#63 M5 seven-day pilot evidence export",
-          "why": "프로토콜이 생겼으므로 다음 병목은 흩어진 local artifacts를 사람이 검토 가능한 evidence pack으로 묶는 것이다.",
-          "done": "learner root에서 sessions, weekly mirrors, review/vault evidence, interaction summaries, learner home pointer를 export한다.",
-          "verification": "clean simulated seven-day learner store에서 export smoke가 통과해야 한다.",
+          "title": "#64 M5 before-after transcript review rubric",
+          "why": "Evidence pack 다음에는 Day 0/Day 7 transcript를 같은 기준으로 읽어야 한다.",
+          "done": "voluntary output, clarification, repair, reuse, comfort proxy를 observable rubric으로 정의하고 overclaim fixtures를 막는다.",
+          "verification": "transcript rubric smoke와 negative claim fixture가 통과해야 한다.",
           "files": [
-            "scripts/",
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
             "docs/phase-5-evidence/"
@@ -824,10 +836,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "#64 Before-after transcript review rubric",
-          "why": "Evidence pack 다음에는 before/after transcript를 같은 rubric으로 읽어야 한다.",
-          "done": "observable behavior rubric과 overclaim rejection fixtures를 추가한다.",
-          "verification": "transcript rubric smoke와 negative claim fixture가 통과해야 한다.",
+          "title": "#65 Target-persona seven-day validation fixture",
+          "why": "Rubric 다음에는 네 target persona가 7일 validation protocol을 통과하는지 리허설해야 한다.",
+          "done": "지은/민호/수진/혜원 fixture를 7일 evidence loop로 실행하고 persona-specific risk를 기록한다.",
+          "verification": "persona seven-day validation smoke와 dashboard risk render가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1068,6 +1080,11 @@
       "name": "M5-1",
       "status": "Pass",
       "detail": "seven-day validation protocol defines schedule, prompt set, evidence fields, thresholds, privacy, and claim boundary"
+    },
+    {
+      "name": "M5-2",
+      "status": "Pass",
+      "detail": "evidence export smoke passes seven-session pack generation, review reuse summary, path redaction, and claim guard"
     }
   ],
   "commands": [
@@ -1197,7 +1214,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 63"
+      "command": "gh issue view 64"
     }
   ]
 }

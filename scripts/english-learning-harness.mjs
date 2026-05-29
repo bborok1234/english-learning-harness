@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { existsSync, mkdirSync, readFileSync, renameSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from "node:fs";
+import { basename, relative, resolve } from "node:path";
 import {
   buildAdditionalContext,
   buildDailyCockpit,
@@ -18,6 +19,7 @@ import {
   readLearnerModel,
   readProgress,
   readProfile,
+  readReviewQueue,
   readVocabulary,
   writeWeeklyMirror,
   writeLearnerModel,
@@ -141,6 +143,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs review [--review-id ID --result success|fail] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs vault [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs weekly [--learner-root DIR] [--date ISO]",
+    "  node scripts/english-learning-harness.mjs export [--learner-root DIR] [--date ISO] [--json]",
     "",
     "Native hooks are optional. This wrapper is the reliable first-usable path.",
   ].join("\n");
@@ -500,6 +503,201 @@ function weekly(options) {
   };
 }
 
+function redactLocalPath(value) {
+  if (!value || typeof value !== "string") return value;
+  return {
+    local_path_redacted: true,
+    basename: basename(value),
+    note: "Local path is metadata only and is not included in the evidence pack.",
+  };
+}
+
+function sanitizeEvent(event) {
+  return {
+    event_id: event.event_id,
+    modality: event.modality,
+    learner_intent: event.learner_intent,
+    learner_output: event.learner_output,
+    trouble_source: event.trouble_source,
+    mediation_level: event.mediation_level,
+    repair_attempt: event.repair_attempt,
+    saved_phrase: event.saved_phrase,
+    transfer_targets: event.transfer_targets ?? [],
+    source_artifact: event.source_artifact
+      ? {
+          ...event.source_artifact,
+          path: redactLocalPath(event.source_artifact.path),
+        }
+      : undefined,
+  };
+}
+
+function collectSessionArtifacts(paths, progress) {
+  return (progress.sessions ?? [])
+    .map((session) => {
+      const artifactPath = resolve(paths.root, session.artifact ?? "");
+      if (!existsSync(artifactPath)) return null;
+      const artifact = JSON.parse(readFileSync(artifactPath, "utf8"));
+      const words = (artifact.learner_turns ?? []).join(" ").split(/\s+/).filter(Boolean).length;
+      return {
+        id: artifact.id,
+        date: artifact.date,
+        mode: artifact.mode,
+        artifact: session.artifact,
+        scenario: {
+          id: artifact.scenario?.id,
+          goal: artifact.scenario?.goal,
+          rescue_phrase: artifact.scenario?.rescue_phrase,
+        },
+        turn_count: artifact.learner_turns?.length ?? 0,
+        learner_word_count: words,
+        saved_phrase: artifact.mirror?.reviewPhrase ?? "",
+        repair_evidence: artifact.learner_model_evidence?.updated_skills?.includes("repair") ?? false,
+        interaction_events: (artifact.interaction_events ?? []).map(sanitizeEvent),
+      };
+    })
+    .filter(Boolean);
+}
+
+function collectWeeklyMirrors(paths) {
+  if (!existsSync(paths.weeklyMirrorDir)) return [];
+  return readdirSync(paths.weeklyMirrorDir)
+    .filter((entry) => entry.endsWith(".json"))
+    .sort()
+    .map((entry) => {
+      const mirror = JSON.parse(readFileSync(resolve(paths.weeklyMirrorDir, entry), "utf8"));
+      return {
+        file: relative(paths.root, resolve(paths.weeklyMirrorDir, entry)),
+        generated_at: mirror.generated_at,
+        window: mirror.window,
+        communicated_themes: mirror.communicated_themes ?? [],
+        saved_phrases: mirror.saved_phrases ?? [],
+        reused_phrases: mirror.reused_phrases ?? [],
+        repair_attempts: mirror.repair_attempts ?? [],
+        interaction_event_summary: mirror.interaction_event_summary,
+        next_focus: mirror.next_focus,
+        claim_boundary: mirror.claim_boundary,
+      };
+    });
+}
+
+function summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, learnerModel }) {
+  const modalities = [...new Set(sessions.flatMap((session) => session.interaction_events.map((event) => event.modality)))];
+  return {
+    session_count: sessions.length,
+    date_range: {
+      from: sessions[0]?.date ?? "",
+      to: sessions.at(-1)?.date ?? "",
+    },
+    total_learner_word_count: sessions.reduce((sum, session) => sum + session.learner_word_count, 0),
+    repair_session_count: sessions.filter((session) => session.repair_evidence).length,
+    interaction_event_count: sessions.reduce((sum, session) => sum + session.interaction_events.length, 0),
+    modalities,
+    saved_phrase_count: vocabulary.personal_phrases?.length ?? 0,
+    review_item_count: reviewQueue.items?.length ?? 0,
+    reused_review_item_count: (reviewQueue.items ?? []).filter((item) => (item.success_count ?? 0) > 0).length,
+    weekly_mirror_count: weeklyMirrors.length,
+    skill_evidence: learnerModel.interaction_skills,
+  };
+}
+
+function evidenceMarkdown(pack) {
+  return [
+    "# English Learning Harness Evidence Pack",
+    "",
+    `Generated: ${pack.generated_at}`,
+    `Protocol: ${pack.protocol}`,
+    "",
+    "## Summary",
+    "",
+    `- Sessions: ${pack.summary.session_count}`,
+    `- Date range: ${pack.summary.date_range.from || "n/a"} to ${pack.summary.date_range.to || "n/a"}`,
+    `- Learner words: ${pack.summary.total_learner_word_count}`,
+    `- Interaction events: ${pack.summary.interaction_event_count}`,
+    `- Modalities: ${pack.summary.modalities.join(", ") || "none"}`,
+    `- Saved phrases: ${pack.summary.saved_phrase_count}`,
+    `- Reused review items: ${pack.summary.reused_review_item_count}`,
+    "",
+    "## Sessions",
+    "",
+    ...pack.sessions.map(
+      (session) =>
+        `- ${session.date} ${session.mode}: ${session.learner_word_count} words, phrase "${session.saved_phrase}"`,
+    ),
+    "",
+    "## Weekly Mirrors",
+    "",
+    ...pack.weekly_mirrors.map(
+      (mirror) =>
+        `- ${mirror.file}: ${mirror.window.session_count} sessions, next focus ${mirror.next_focus?.skill ?? "n/a"}`,
+    ),
+    "",
+    "## Claim Boundary",
+    "",
+    pack.claim_boundary,
+    "",
+  ].join("\n");
+}
+
+function exportEvidence(options) {
+  const date = options.date || new Date();
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const progress = readProgress(paths.progress);
+  const learnerModel = readLearnerModel(paths.learnerModel);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const sessions = collectSessionArtifacts(paths, progress);
+  const weeklyMirrors = collectWeeklyMirrors(paths);
+  const validationDir = resolve(paths.root, "artifacts/validation");
+  mkdirSync(validationDir, { recursive: true });
+  const stamp = date.toISOString().slice(0, 10);
+  const pack = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    protocol: "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+    learner_root: redactLocalPath(paths.root),
+    source_files: {
+      profile: "profile.md",
+      progress: "progress.json",
+      learner_model: "learner-model.json",
+      vocabulary: "vocabulary.json",
+      review_queue: "review-queue.json",
+      learner_home: existsSync(paths.learnerHome) ? "home.html" : "",
+    },
+    profile_summary: readProfile(paths.profile)
+      .split(/\r?\n/)
+      .filter((line) => line.startsWith("- preferred_name") || line.startsWith("- primary_motivation")),
+    summary: summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, learnerModel }),
+    sessions,
+    weekly_mirrors: weeklyMirrors,
+    review_queue: {
+      item_count: reviewQueue.items.length,
+      items: reviewQueue.items.map((item) => ({
+        id: item.id,
+        text: item.text,
+        success_count: item.success_count ?? 0,
+        interval_days: item.interval_days ?? 0,
+        last_result: item.last_result ?? "",
+        next_due_at: item.next_due_at ?? "",
+      })),
+    },
+    claim_boundary:
+      "This evidence pack summarizes local practice artifacts for review. It does not prove learning improvement, fluency, or real-world speaking ability.",
+  };
+  const jsonPath = resolve(validationDir, `evidence-pack-${stamp}.json`);
+  const markdownPath = resolve(validationDir, `evidence-pack-${stamp}.md`);
+  writeFileSync(jsonPath, `${JSON.stringify(pack, null, 2)}\n`);
+  writeFileSync(markdownPath, evidenceMarkdown(pack));
+  return {
+    status: "pass",
+    learnerRoot: paths.root,
+    evidencePackPath: jsonPath,
+    evidenceMarkdownPath: markdownPath,
+    summary: pack.summary,
+    claimBoundary: pack.claim_boundary,
+  };
+}
+
 function run() {
   const { command, options } = parseArgs(process.argv);
 
@@ -553,6 +751,10 @@ function run() {
   }
   if (command === "weekly") {
     output(weekly(options), options.json);
+    return;
+  }
+  if (command === "export") {
+    output(exportEvidence(options), options.json);
     return;
   }
 
