@@ -32,6 +32,8 @@ Codex should install the skill surface, handle setup, run practice, save local p
 - asks one low-pressure question at a time
 - keeps correction gentle during practice
 - saves local session evidence
+- tracks concrete speaking weaknesses in a personal speaking backlog
+- turns the next session into a targeted drill and transfer test
 - remembers useful phrases and repair attempts
 - suggests due review and next scenarios
 - generates mini mirrors and weekly mirrors

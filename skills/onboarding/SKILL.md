@@ -16,6 +16,7 @@ Use this skill to create a low-pressure learner profile before daily practice.
 - If repository tools are available, run the local setup engine yourself to persist the profile.
 - Do not ask the learner to run `node` commands for ordinary onboarding.
 - If tool execution is unavailable, continue conversationally and clearly say persistence is not confirmed yet.
+- If the learner shares a real speaking sample, use the Speaking Skill OS diagnosis path so the first session starts from a concrete backlog item.
 
 ## Engine Discovery
 

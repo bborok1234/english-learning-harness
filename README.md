@@ -67,6 +67,8 @@ Codex가 skill 설치, 학습자 설정, 첫 연습, progress 저장, mini mirro
 - 말하는 중에는 과하게 문법 설명을 하지 않고 부드럽게 recast합니다.
 - 세션 증거를 로컬에 저장합니다.
 - 유용한 표현과 반복되는 막힘을 기억합니다.
+- speaking backlog를 만들어 “내가 실제로 못 하는 회화 행동”을 추적합니다.
+- 다음 세션에서 backlog item을 drill로 바꾸고 transfer test를 남깁니다.
 - 복습할 표현과 다음 상황 연습을 제안합니다.
 - 연습 후 mini mirror를 만듭니다.
 - 주간 mirror로 학습 흐름을 보여줍니다.
@@ -99,6 +101,7 @@ Codex가 skill 설치, 학습자 설정, 첫 연습, progress 저장, mini mirro
 - **낮은 부담의 output 반복:** 짧은 세션으로 완벽하지 않은 영어를 매일 꺼낼 수 있습니다.
 - **부드러운 correction:** 문법 강의보다 recast, repair prompt, next attempt를 우선합니다.
 - **개인 phrase memory:** 내가 실제로 쓴 표현과 고친 표현이 복습 재료가 됩니다.
+- **Speaking Skill OS:** 막히는 회화 행동을 `speaking-backlog.json`에 남기고, 다음 세션이 그 약점을 목표로 돌아갑니다.
 - **상황 기반 연습:** Codex가 learner model과 history를 바탕으로 오늘의 scenario를 제안합니다.
 - **Mini mirror:** 매 세션 후 무엇을 전달했고 다음에 무엇을 시도할지 짧게 남깁니다.
 - **Weekly mirror:** 여러 날의 연습을 묶어 반복 패턴과 다음 focus를 보여줍니다.
@@ -113,6 +116,7 @@ Codex가 skill 설치, 학습자 설정, 첫 연습, progress 저장, mini mirro
 ├── profile.md
 ├── progress.json
 ├── learner-model.json
+├── speaking-backlog.json
 ├── vocabulary.json
 ├── review-queue.json
 ├── home.html
@@ -208,6 +212,8 @@ Internal setup and practice commands:
 
 ```bash
 node scripts/english-learning-harness.mjs setup
+node scripts/english-learning-harness.mjs diagnose --say "I don't know how to say it, but coffee good." --json
+node scripts/english-learning-harness.mjs backlog --json
 node scripts/english-learning-harness.mjs daily --json
 node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
 node scripts/english-learning-harness.mjs weekly --json

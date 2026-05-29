@@ -14,11 +14,13 @@ This file defines the minimum data contracts needed before implementation can sc
 ├── profile.md
 ├── progress.json
 ├── learner-model.json
+├── speaking-backlog.json
 ├── vocabulary.json
 ├── review-queue.json
 ├── scenarios/
 ├── journal/
 └── artifacts/
+    ├── speaking-os/
     ├── sessions/
     └── weekly/
 ```
@@ -52,6 +54,39 @@ Required fields:
 ```
 
 Migration rule: if an existing learner store has `progress.json` v2 but no `learner-model.json`, setup/health/session/context commands create the default schema without changing existing progress totals.
+
+## `speaking-backlog.json`
+
+Required fields:
+
+```json
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "speaking-repair",
+      "skill": "repair",
+      "label": "Repair a stuck moment",
+      "status": "open|in_progress|passed|needs_review",
+      "priority": "high|medium|low",
+      "created_at": "ISO-8601",
+      "updated_at": "ISO-8601",
+      "source": "diagnose|manual|session",
+      "diagnosis": "Detected repair practice need from learner output.",
+      "target_behavior": "Keep speaking with a rescue phrase when a word is missing.",
+      "drill_prompt": "Use: I don't know how to say it, but + simple idea.",
+      "transfer_test": "Can you continue after getting stuck?",
+      "pass_criteria": "Learner uses a repair phrase.",
+      "evidence_count": 0,
+      "attempts": []
+    }
+  ]
+}
+```
+
+Speaking backlog items are the core Speaking Skill OS work units. `diagnose` creates or refreshes them from learner output. `daily` and `today` should prioritize open/needs-review items before generic scenarios. A session may mark an item `passed` only when the learner performs the target behavior in a transfer attempt.
+
+Migration rule: if an existing learner store has `progress.json` v2 but no `speaking-backlog.json`, setup/health/session/context commands create the default empty schema without changing existing progress totals.
 
 ## `vocabulary.json`
 
@@ -126,7 +161,7 @@ Required fields:
       "due_at": "ISO-8601"
     },
     "selection_reason": {
-      "source": "profile-memory|due-review|preferred",
+      "source": "profile-memory|due-review|speaking-backlog|preferred",
       "weak_skill": "repair",
       "mode": "easy|normal|stretch",
       "due_review_id": "phrase-id",
@@ -155,6 +190,15 @@ Required fields:
     "updated_skills": ["starts", "repair"],
     "average_utterance_words": 8,
     "repair_phrase_count": 1
+  },
+  "speaking_backlog_evidence": {
+    "item_id": "speaking-repair",
+    "skill": "repair",
+    "result": "pass|needs_review",
+    "status": "passed|needs_review",
+    "evidence_count": 1,
+    "transfer_test": "Can you continue after getting stuck?",
+    "pass_criteria": "Learner uses a repair phrase."
   },
   "interaction_events": []
 }

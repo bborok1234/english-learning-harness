@@ -95,6 +95,7 @@ What is complete:
 - M7-15 Codex-native user surface smoke verifies README natural-language prompts and Codex conversation appear before internal `node` engine commands; skill instructions now tell Codex not to ask learners to run `node` for ordinary practice.
 - M7-16 agent-installed harness onboarding adds `setup --host codex`, installs skills into `~/.codex/skills`, and strengthens README smoke so the first public path is paste-into-Codex installation rather than clone/download.
 - M7-17 Korean-primary README makes `README.md` the Korean public entry point, adds `README.en.md` as the secondary English surface, and updates public artifact/readiness smokes to verify the bilingual structure.
+- M8-1 Speaking Skill OS core adds `speaking-backlog.json`, `diagnose`, `backlog`, backlog-driven `daily`/`today`, transfer-test evidence, and smoke coverage so the harness is no longer just generic English chat.
 
 What is not started:
 - Real user validation.
@@ -272,6 +273,10 @@ Start from the verified/fallback Phase 0 constraints.
 
 - [x] M7-1: Prove unauthenticated public distribution path (#83). Public source clone-to-learn passes from the now-public repository.
 - [x] D4: Make Korean README the primary public surface (#124). `README.md` is Korean-first, `README.en.md` is secondary English, and bilingual README checks pass.
+
+### Phase 8 Speaking Skill OS
+
+- [x] M8-1: Implement diagnosis and speaking backlog loop (#128). `diagnose -> backlog -> daily/today target -> transfer evidence` passes in local smoke.
 
 ## SSOT Structure
 

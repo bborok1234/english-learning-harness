@@ -17,6 +17,7 @@ export const todayStamp = (date = new Date()) => date.toISOString().slice(0, 10)
 
 const learnerSkillKeys = ["starts", "follow_ups", "clarification", "repair", "soft_disagreement"];
 const reviewIntervals = [1, 3, 7, 14];
+const speakingBacklogStatuses = ["open", "in_progress", "passed", "needs_review"];
 const interactionEventModalities = ["text", "voice", "image", "video", "realtime"];
 const mediationLevels = ["prompt-first", "hint", "recast", "explicit-model", "retry"];
 const unsupportedEventClaims = [
@@ -35,10 +36,12 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     profile: resolve(root, "profile.md"),
     progress: resolve(root, "progress.json"),
     learnerModel: resolve(root, "learner-model.json"),
+    speakingBacklog: resolve(root, "speaking-backlog.json"),
     vocabulary: resolve(root, "vocabulary.json"),
     reviewQueue: resolve(root, "review-queue.json"),
     journalDir: resolve(root, "journal"),
     artifactDir: resolve(root, "artifacts/sessions"),
+    speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
   };
@@ -89,10 +92,18 @@ export function emptyReviewQueue() {
   };
 }
 
+export function emptySpeakingBacklog() {
+  return {
+    schema_version: 1,
+    items: [],
+  };
+}
+
 export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   const paths = learnerPaths(learnerRoot);
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
+  mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
   if (!existsSync(paths.profile)) {
@@ -125,6 +136,10 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
     writeLearnerModel(paths.learnerModel, emptyLearnerModel());
   }
 
+  if (!existsSync(paths.speakingBacklog)) {
+    writeSpeakingBacklog(paths.speakingBacklog, emptySpeakingBacklog());
+  }
+
   if (!existsSync(paths.vocabulary)) {
     writeVocabulary(paths.vocabulary, emptyVocabulary());
   }
@@ -141,6 +156,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
 
   readVocabulary(paths.vocabulary);
   readLearnerModel(paths.learnerModel);
+  readSpeakingBacklog(paths.speakingBacklog);
   readReviewQueue(paths.reviewQueue);
 
   return paths;
@@ -272,6 +288,57 @@ export function writeReviewQueue(reviewQueuePath, reviewQueue) {
     reviewQueuePath,
     `${JSON.stringify({ schema_version: 1, items: reviewQueue.items ?? [] }, null, 2)}\n`,
   );
+}
+
+function normalizeSpeakingBacklogItem(item, index = 0) {
+  const now = new Date().toISOString();
+  const normalized = {
+    id: item.id || `speaking-skill-${index + 1}`,
+    skill: item.skill || "starts",
+    label: item.label || "Start one small English turn",
+    status: item.status || "open",
+    priority: item.priority || "medium",
+    created_at: item.created_at || now,
+    updated_at: item.updated_at || now,
+    source: item.source || "manual",
+    diagnosis: item.diagnosis || "",
+    target_behavior: item.target_behavior || "",
+    drill_prompt: item.drill_prompt || "",
+    transfer_test: item.transfer_test || "",
+    pass_criteria: item.pass_criteria || "",
+    evidence_count: item.evidence_count ?? 0,
+    attempts: Array.isArray(item.attempts) ? item.attempts : [],
+  };
+  if (!learnerSkillKeys.includes(normalized.skill)) {
+    throw new Error(`speaking-backlog.json: invalid skill ${normalized.skill}`);
+  }
+  if (!speakingBacklogStatuses.includes(normalized.status)) {
+    throw new Error(`speaking-backlog.json: invalid status ${normalized.status}`);
+  }
+  return normalized;
+}
+
+export function readSpeakingBacklog(speakingBacklogPath) {
+  const backlog = JSON.parse(readFileSync(speakingBacklogPath, "utf8"));
+  if (backlog.schema_version !== 1) {
+    throw new Error(`${speakingBacklogPath}: schema_version must be 1`);
+  }
+  if (!Array.isArray(backlog.items)) {
+    throw new Error(`${speakingBacklogPath}: items must be an array`);
+  }
+  return {
+    schema_version: 1,
+    items: backlog.items.map(normalizeSpeakingBacklogItem),
+  };
+}
+
+export function writeSpeakingBacklog(speakingBacklogPath, speakingBacklog) {
+  const normalized = {
+    schema_version: 1,
+    items: (speakingBacklog.items ?? []).map(normalizeSpeakingBacklogItem),
+  };
+  writeFileSync(speakingBacklogPath, `${JSON.stringify(normalized, null, 2)}\n`);
+  readSpeakingBacklog(speakingBacklogPath);
 }
 
 export function readProfile(profilePath) {
@@ -526,6 +593,7 @@ export function buildSession(learnerTurns, options = {}) {
       rescue_phrase: scenario.rescue_phrase,
       retry_prompt: scenario.retry_prompt,
       due_review: scenario.due_review,
+      speaking_backlog: scenario.speaking_backlog,
       selection_reason: options.selectionReason || scenario.selection_reason || {
         source: "unspecified",
       },
@@ -687,6 +755,217 @@ export function phraseVault(learnerRoot = defaultLearnerRoot()) {
   });
 }
 
+function speakingBacklogItemId(skill) {
+  return `speaking-${skill.replaceAll("_", "-")}`;
+}
+
+function skillDiagnosisTemplate(skill) {
+  const templates = {
+    starts: {
+      label: "Start a useful English turn",
+      target_behavior: "Start with one complete low-pressure English sentence.",
+      drill_prompt: "Say one small thing about today in English.",
+      transfer_test: "Can you start without waiting for a model sentence?",
+      pass_criteria: "Learner produces at least one English turn.",
+      priority: "medium",
+    },
+    follow_ups: {
+      label: "Keep a follow-up going",
+      target_behavior: "Add one extra detail after the first answer.",
+      drill_prompt: "Answer, then add one because/when/where detail.",
+      transfer_test: "Can you add one extra detail without a new full prompt?",
+      pass_criteria: "Learner produces more than one turn or adds a clear detail.",
+      priority: "medium",
+    },
+    clarification: {
+      label: "Ask for clarification",
+      target_behavior: "Use a clarification phrase when meaning is unclear.",
+      drill_prompt: "Ask one clarification question before answering.",
+      transfer_test: "Can you ask what the other person means?",
+      pass_criteria: "Learner uses a question or clarification phrase.",
+      priority: "high",
+    },
+    repair: {
+      label: "Repair a stuck moment",
+      target_behavior: "Keep speaking with a rescue phrase when a word is missing.",
+      drill_prompt: "Use: I don't know how to say it, but + simple idea.",
+      transfer_test: "Can you continue after getting stuck?",
+      pass_criteria: "Learner uses a repair phrase such as I don't know how to say it, but / I mean / what I want to say is.",
+      priority: "high",
+    },
+    soft_disagreement: {
+      label: "Disagree softly",
+      target_behavior: "Disagree or qualify an opinion without sounding abrupt.",
+      drill_prompt: "Use: I see your point, but...",
+      transfer_test: "Can you soften a different opinion?",
+      pass_criteria: "Learner uses but/however/not really/I see your point.",
+      priority: "medium",
+    },
+  };
+  return templates[skill] || templates.starts;
+}
+
+function diagnoseSkill(learnerTurns) {
+  const text = learnerTurns.join(" ").trim();
+  const lower = text.toLowerCase();
+  const englishTokens = extractEnglishTokens(learnerTurns);
+  const hasKorean = /[가-힣]/.test(text);
+  if (hasKorean || /\b(i don't know how to say|dont know how to say|stuck|i mean|what i want to say)\b/i.test(text)) {
+    return "repair";
+  }
+  if (/\?|\b(could you repeat|what does|do you mean|can you explain)\b/i.test(text)) {
+    return "clarification";
+  }
+  if (/\b(but|however|not really|i see your point|i don't think|i dont think)\b/i.test(text)) {
+    return "soft_disagreement";
+  }
+  if (learnerTurns.length > 1 || /\b(because|when|where|also|and then)\b/i.test(text)) {
+    return "follow_ups";
+  }
+  if (englishTokens.length <= 6) {
+    return "starts";
+  }
+  return "follow_ups";
+}
+
+function upsertSpeakingBacklogItem(backlog, diagnosis, date) {
+  const template = skillDiagnosisTemplate(diagnosis.skill);
+  const id = speakingBacklogItemId(diagnosis.skill);
+  const existing = backlog.items.find((item) => item.id === id);
+  const timestamp = date.toISOString();
+  const base = {
+    id,
+    skill: diagnosis.skill,
+    ...template,
+    status: existing?.status === "passed" ? "needs_review" : existing?.status || "open",
+    created_at: existing?.created_at || timestamp,
+    updated_at: timestamp,
+    source: "diagnose",
+    diagnosis: diagnosis.reason,
+    evidence_count: existing?.evidence_count ?? 0,
+    attempts: existing?.attempts ?? [],
+  };
+  if (existing) {
+    return {
+      backlog: {
+        schema_version: 1,
+        items: backlog.items.map((item) => (item.id === id ? normalizeSpeakingBacklogItem(base) : item)),
+      },
+      item: normalizeSpeakingBacklogItem(base),
+      created: false,
+    };
+  }
+  return {
+    backlog: {
+      schema_version: 1,
+      items: [normalizeSpeakingBacklogItem(base), ...backlog.items],
+    },
+    item: normalizeSpeakingBacklogItem(base),
+    created: true,
+  };
+}
+
+export function diagnoseSpeakingSample(learnerRoot, learnerTurns, date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const backlog = readSpeakingBacklog(paths.speakingBacklog);
+  const skill = diagnoseSkill(learnerTurns);
+  const diagnosis = {
+    skill,
+    reason: `Detected ${skill.replaceAll("_", " ")} practice need from ${learnerTurns.length} learner turn(s).`,
+    sample: learnerTurns,
+  };
+  const updated = upsertSpeakingBacklogItem(backlog, diagnosis, date);
+  writeSpeakingBacklog(paths.speakingBacklog, updated.backlog);
+  const artifactPath = resolve(paths.speakingOsDir, `diagnosis-${todayStamp(date)}-${date.getTime()}.json`);
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    diagnosis,
+    backlog_item: updated.item,
+    created: updated.created,
+    claim_boundary:
+      "This is a local heuristic speaking-skill diagnosis. It assigns practice work; it does not measure real-world fluency.",
+  };
+  writeFileSync(artifactPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  return {
+    learnerRoot: paths.root,
+    backlogPath: paths.speakingBacklog,
+    artifactPath,
+    diagnosis,
+    backlogItem: updated.item,
+    created: updated.created,
+    claimBoundary: artifact.claim_boundary,
+  };
+}
+
+export function listSpeakingBacklog(learnerRoot = defaultLearnerRoot()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const backlog = readSpeakingBacklog(paths.speakingBacklog);
+  return backlog.items.sort((a, b) => {
+    const statusRank = { open: 0, needs_review: 1, in_progress: 2, passed: 3 };
+    return (statusRank[a.status] ?? 9) - (statusRank[b.status] ?? 9) || a.updated_at.localeCompare(b.updated_at);
+  });
+}
+
+export function nextSpeakingBacklogItem(learnerRoot = defaultLearnerRoot()) {
+  return listSpeakingBacklog(learnerRoot).find((item) => ["open", "needs_review", "in_progress"].includes(item.status)) || null;
+}
+
+function transferTestPassed(session, item) {
+  const text = learnerText(session);
+  if (!text.trim()) return false;
+  if (item.skill === "starts") return extractEnglishTokens(session.learner_turns).length > 0;
+  if (item.skill === "follow_ups") {
+    return (session.learner_turns ?? []).length > 1 || /\b(because|when|where|also|and then)\b/i.test(text);
+  }
+  if (item.skill === "clarification") {
+    return /\?|\b(could you repeat|what does|do you mean|can you explain|what do you mean)\b/i.test(text);
+  }
+  if (item.skill === "repair") {
+    return /\b(i don't know how to say|dont know how to say|i mean|what i want to say|let me try again)\b/i.test(text);
+  }
+  if (item.skill === "soft_disagreement") {
+    return /\b(but|however|not really|i see your point|i don't think|i dont think)\b/i.test(text);
+  }
+  return false;
+}
+
+function updateSpeakingBacklogFromSession(paths, session, date) {
+  const itemId = session.scenario?.selection_reason?.speaking_backlog_item_id;
+  if (!itemId) return null;
+  const backlog = readSpeakingBacklog(paths.speakingBacklog);
+  const item = backlog.items.find((entry) => entry.id === itemId);
+  if (!item) return null;
+  const passed = transferTestPassed(session, item);
+  const attempt = {
+    session_id: session.id,
+    at: date.toISOString(),
+    scenario_id: session.scenario?.id ?? "",
+    result: passed ? "pass" : "needs_review",
+    learner_turns: session.learner_turns ?? [],
+  };
+  const nextItem = normalizeSpeakingBacklogItem({
+    ...item,
+    status: passed ? "passed" : "needs_review",
+    updated_at: date.toISOString(),
+    evidence_count: item.evidence_count + (passed ? 1 : 0),
+    attempts: [...(item.attempts ?? []), attempt],
+  });
+  writeSpeakingBacklog(paths.speakingBacklog, {
+    schema_version: 1,
+    items: backlog.items.map((entry) => (entry.id === itemId ? nextItem : entry)),
+  });
+  return {
+    item_id: itemId,
+    skill: nextItem.skill,
+    result: attempt.result,
+    status: nextItem.status,
+    evidence_count: nextItem.evidence_count,
+    transfer_test: nextItem.transfer_test,
+    pass_criteria: nextItem.pass_criteria,
+  };
+}
+
 function learnerText(session) {
   return (session.learner_turns ?? []).join(" ").toLowerCase();
 }
@@ -792,6 +1071,7 @@ export function persistSession(learnerRoot, session, date = new Date()) {
     personalPhraseCount: vocabularyUpdate.vocabulary.personal_phrases.length,
   });
   session.learner_model_evidence = learnerModelUpdate.evidence;
+  session.speaking_backlog_evidence = updateSpeakingBacklogFromSession(paths, session, date);
 
   writeLearnerModel(paths.learnerModel, learnerModelUpdate.learnerModel);
   writeVocabulary(paths.vocabulary, vocabularyUpdate.vocabulary);
@@ -912,6 +1192,7 @@ export function buildWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new
   const learnerModel = readLearnerModel(paths.learnerModel);
   const vocabulary = readVocabulary(paths.vocabulary);
   const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const speakingBacklog = readSpeakingBacklog(paths.speakingBacklog);
   const artifacts = readSessionArtifacts(paths, progress).slice(-7);
   const interactionEvents = interactionEventsFromArtifacts(artifacts);
   const dueItems = listDueReviewItems(paths.root, date);
@@ -944,6 +1225,12 @@ export function buildWeeklyMirror(learnerRoot = defaultLearnerRoot(), date = new
     reused_phrases: uniqueRecent(reusedPhrases, 5),
     repair_attempts: repairAttempts,
     interaction_event_summary: buildInteractionEventSummary(interactionEvents),
+    speaking_os_summary: {
+      backlog_count: speakingBacklog.items.length,
+      open_count: speakingBacklog.items.filter((item) => ["open", "needs_review", "in_progress"].includes(item.status)).length,
+      passed_count: speakingBacklog.items.filter((item) => item.status === "passed").length,
+      next_item: nextSpeakingBacklogItem(paths.root),
+    },
     skill_evidence: Object.fromEntries(
       learnerSkillKeys.map((skill) => [skill, learnerModel.interaction_skills[skill].evidence_count]),
     ),
@@ -1046,11 +1333,13 @@ export function buildDailyCockpit(learnerRoot = defaultLearnerRoot(), date = new
   const learnerModel = readLearnerModel(paths.learnerModel);
   const vocabulary = readVocabulary(paths.vocabulary);
   const dueReviewItems = listDueReviewItems(paths.root, date);
+  const speakingBacklogItem = nextSpeakingBacklogItem(paths.root);
   const scenarioPlan = planScenario({
     profileText,
     learnerModel,
     vocabulary,
     dueReviewItems,
+    speakingBacklogItem,
   });
   const latestJournal = latestJournalPath(paths.root);
   const latestWeeklyMirror = latestWeeklyMirrorPath(paths.root);
@@ -1082,7 +1371,12 @@ export function buildDailyCockpit(learnerRoot = defaultLearnerRoot(), date = new
       goal: scenarioPlan.scenario.goal,
       rescue_phrase: scenarioPlan.scenario.rescue_phrase,
       due_review: scenarioPlan.scenario.due_review,
+      speaking_backlog: scenarioPlan.scenario.speaking_backlog,
       selection_reason: scenarioPlan.selectionReason,
+    },
+    speaking_os: {
+      backlog_count: listSpeakingBacklog(paths.root).length,
+      next_item: speakingBacklogItem,
     },
     learner_model_summary: {
       skill_evidence: skillEvidenceSummary(learnerModel),
@@ -1118,6 +1412,7 @@ function learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases }) {
   const weeklyPhrases = weeklyMirror?.saved_phrases ?? [];
   const nextFocus = weeklyMirror?.next_focus;
   const eventSummary = weeklyMirror?.interaction_event_summary;
+  const speakingOs = cockpit.speaking_os;
 
   return `<!doctype html>
 <html lang="ko">
@@ -1279,6 +1574,19 @@ function learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases }) {
           )}
         </section>
 
+        <section aria-labelledby="speaking-os">
+          <h2 id="speaking-os">Speaking Skill OS</h2>
+          ${
+            speakingOs?.next_item
+              ? `<div class="scenario">
+            <h3>${escapeHtml(speakingOs.next_item.label)}</h3>
+            <p>${escapeHtml(speakingOs.next_item.target_behavior)}</p>
+            <p class="subtle">Transfer test: ${escapeHtml(speakingOs.next_item.transfer_test)}</p>
+          </div>`
+              : '<p class="empty">아직 speaking backlog가 없습니다. diagnose로 첫 약점 카드를 만들 수 있습니다.</p>'
+          }
+        </section>
+
         <section aria-labelledby="weekly-mirror">
           <h2 id="weekly-mirror">최근 weekly mirror</h2>
           ${
@@ -1365,6 +1673,8 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
   const latestJournal = latestJournalPath(paths.root);
   const learnerModel = readLearnerModel(paths.learnerModel);
   const vocabulary = readVocabulary(paths.vocabulary);
+  const speakingBacklog = readSpeakingBacklog(paths.speakingBacklog);
+  const speakingBacklogNext = nextSpeakingBacklogItem(paths.root);
   const dueReviewCount = listDueReviewItems(paths.root).length;
   const skillSummary = learnerSkillKeys
     .map((skill) => `${skill}=${learnerModel.interaction_skills[skill].evidence_count}`)
@@ -1379,6 +1689,7 @@ export function buildAdditionalContext(learnerRoot = defaultLearnerRoot()) {
     `- Learner model: ${skillSummary}; average_utterance_words=${learnerModel.baseline.average_utterance_words}; energy=${learnerModel.affect.last_energy}`,
     `- Vocabulary: ${vocabulary.emerging_tokens.length} emerging tokens, ${vocabulary.personal_phrases.length} personal phrases`,
     `- Review queue: ${dueReviewCount} open items`,
+    `- Speaking Skill OS: ${speakingBacklog.items.length} backlog items; next=${speakingBacklogNext?.label ?? "none"}`,
     latestJournal ? `- Latest journal: ${relative(paths.root, latestJournal)}` : "- Latest journal: none",
     "",
     "Profile:",

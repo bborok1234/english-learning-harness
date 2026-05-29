@@ -82,6 +82,7 @@ const requiredFiles = [
   "scripts/phase7-publication-preflight.mjs",
   "scripts/phase7-learner-readme-smoke.mjs",
   "scripts/phase7-agent-install-smoke.mjs",
+  "scripts/phase8-speaking-skill-os-smoke.mjs",
 ];
 
 function readJson(path) {
