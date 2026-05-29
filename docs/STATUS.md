@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M4 Multimodal Interaction Lab implementation active / #52 next** state.
+The project is in **M4 Multimodal Interaction Lab implementation active / #54 next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -56,6 +56,7 @@ What is not started:
 - M4-1 is implemented on the PR branch: text-first sessions now write valid `interaction_events` and invalid event fixtures are rejected.
 - M4-2 is implemented on the PR branch: weekly mirror and learner home now summarize text interaction events with transfer targets.
 - M4-3 is implemented on the PR branch: `voice` imports transcript-first practice as validated `modality: voice` interaction events with local audio metadata.
+- M4-4 is implemented on the PR branch: `image` creates local image information-gap practice as validated `modality: image` interaction events with hidden-detail prompt context and local image metadata.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -93,6 +94,7 @@ Strategic reset:
 - Ralplan evidence: `docs/STARTUP-GRADE-PLAN.md` records options, ADR, architecture, execution stages, and critic-gate revisions.
 - Ralplan consensus evidence: `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md` records the durable Architect -> Critic approval handoff.
 - Multimodal evidence: `docs/MULTIMODAL-GENAI-PLAN.md` records voice, image, and video usage boundaries with SLA, conversation analysis, multimodal learning, and official OpenAI API references.
+- M4-4 evidence: `docs/phase-4-evidence/M4-4-image-information-gap.md` records image information-gap event import, hidden-detail/clarification prompt context, and weekly modality summary.
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
@@ -179,7 +181,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M4-1: Add interaction event graph schema (#50).
 - [x] M4-2: Persist text sessions as interaction events (#49).
 - [x] M4-3: Add transcription-first voice event import (#53).
-- [ ] M4-4: Add image information-gap event fixture (#52).
+- [x] M4-4: Add image information-gap event fixture (#52).
 - [ ] M4-5: Close multimodal-ready event graph gate (#54).
 
 ## SSOT Structure

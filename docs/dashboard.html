@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M4 Multimodal Interaction Lab implementation active",
-    "status": "Next: #52 image information-gap event fixture",
+    "status": "Next: #54 M4 multimodal-ready gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4-3 transcription-first voice event import is implemented and smoke-tested. Voice transcript practice now writes validated voice interaction events with local audio metadata only. Next is #52 image information-gap event fixture."
+    "summary": "M4-4 image information-gap practice is implemented and smoke-tested. Text, voice-transcript, and image-info-gap practice now write validated interaction events. Next is #54 M4 multimodal-ready gate."
   },
   "ssot": [
     {
@@ -506,19 +506,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "voice transcript events implemented",
+      "detail": "text/voice/image events implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M4 active",
-      "detail": "#50/#49/#53 implemented; #52 next",
+      "detail": "#50/#49/#53/#52 implemented; #54 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "#52 image information-gap fixture",
+      "detail": "#54 M4 multimodal-ready gate",
       "tone": "red"
     },
     {
@@ -1134,6 +1134,19 @@
             "scripts/phase4-voice-event-import-smoke.mjs",
             "docs/phase-4-evidence/M4-3-voice-event-import.md"
           ]
+        },
+        {
+          "id": "M4-4",
+          "title": "#52 Image information-gap event fixture를 구현함",
+          "why": "이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.",
+          "done": "`image` command가 local image path, hidden detail, clarification prompt를 받아 `mode=image-info-gap`, `modality=image` event를 저장한다.",
+          "verification": "`node scripts/phase4-image-information-gap-smoke.mjs`가 image event validation, source artifact metadata, weekly modality summary를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase4-image-information-gap-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-4-evidence/M4-4-image-information-gap.md"
+          ]
         }
       ]
     },
@@ -1141,24 +1154,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M4-4",
-          "title": "#52 Image information-gap event fixture",
-          "why": "이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.",
-          "done": "local image fixture가 hidden detail/clarification prompt를 포함하고 modality=image event를 만든다.",
-          "verification": "image information-gap smoke와 event validator가 통과해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/DATA-CONTRACTS.md"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M4-5",
@@ -1169,6 +1164,25 @@
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
+        {
+          "id": "M5",
+          "title": "After M4: adaptive roadmap review",
+          "why": "M4 gate 결과에 따라 realtime voice, public install, or learner validation 중 다음 milestone 우선순위를 다시 정해야 한다.",
+          "done": "M4 closeout 후 GitHub milestone 상태와 product readiness gap을 비교해 다음 executable issues를 생성/정리한다.",
+          "verification": "issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json",
+            "docs/ADAPTIVE-EXECUTION-PLAN.md"
           ]
         }
       ]
@@ -1386,6 +1400,11 @@
       "name": "M4-3",
       "status": "Pass",
       "detail": "voice event import smoke passes transcript-first voice modality, local audio metadata, and weekly modality summary"
+    },
+    {
+      "name": "M4-4",
+      "status": "Pass",
+      "detail": "image information-gap smoke passes image modality, source artifact metadata, hidden-detail prompt context, and weekly modality summary"
     }
   ],
   "commands": [
@@ -1478,6 +1497,10 @@
       "command": "node scripts/phase4-voice-event-import-smoke.mjs"
     },
     {
+      "label": "Run image information-gap smoke",
+      "command": "node scripts/phase4-image-information-gap-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1507,7 +1530,7 @@
     },
     {
       "label": "View next M4 issue",
-      "command": "gh issue view 52"
+      "command": "gh issue view 54"
     }
   ]
 }
@@ -1516,12 +1539,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M4-3 transcription-first voice event import is implemented and smoke-tested. Voice transcript practice now writes validated voice interaction events with local audio metadata only. Next is #52 image information-gap event fixture.</p>
+        <p class="summary">M4-4 image information-gap practice is implemented and smoke-tested. Text, voice-transcript, and image-info-gap practice now write validated interaction events. Next is #54 M4 multimodal-ready gate.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M4 Multimodal Interaction Lab implementation active<br>
-        Next: #52 image information-gap event fixture
+        Next: #54 M4 multimodal-ready gate
       </div>
     </header>
 
@@ -1530,17 +1553,17 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M4</div>
-          <p>voice transcript events implemented</p>
+          <p>text/voice/image events implemented</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M4 active</div>
-          <p>#50/#49/#53 implemented; #52 next</p>
+          <p>#50/#49/#53/#52 implemented; #54 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M4</div>
-          <p>#52 image information-gap fixture</p>
+          <p>#54 M4 multimodal-ready gate</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1577,16 +1600,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M4-4</strong>
-                <span>scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md</span>
-              </div>
-              <h3>#52 Image information-gap event fixture</h3>
-              <div class="card-row"><b>왜</b><p>이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>local image fixture가 hidden detail/clarification prompt를 포함하고 modality=image event를 만든다.</p></div>
-              <div class="card-row"><b>검증</b><p>image information-gap smoke와 event validator가 통과해야 한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M4-5</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
@@ -1594,6 +1607,16 @@
               <div class="card-row"><b>왜</b><p>M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>text, voice-transcript, image-info-gap events를 gate smoke로 검증하고 M4 milestone/epics를 close한다.</p></div>
               <div class="card-row"><b>검증</b><p>M4 gate smoke, dashboard render, GitHub milestone audit이 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5</strong>
+                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/ADAPTIVE-EXECUTION-PLAN.md</span>
+              </div>
+              <h3>After M4: adaptive roadmap review</h3>
+              <div class="card-row"><b>왜</b><p>M4 gate 결과에 따라 realtime voice, public install, or learner validation 중 다음 milestone 우선순위를 다시 정해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>M4 closeout 후 GitHub milestone 상태와 product readiness gap을 비교해 다음 executable issues를 생성/정리한다.</p></div>
+              <div class="card-row"><b>검증</b><p>issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1604,16 +1627,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-4</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/phase3-seven-day-simulation-smoke.mjs, docs/phase-3-evidence/M3-4-seven-day-simulation.md</span>
-              </div>
-              <h3>#40 Seven-day local return simulation을 구현함</h3>
-              <div class="card-row"><b>왜</b><p>개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.</p></div>
-              <div class="card-row"><b>완료</b><p>`phase3-seven-day-simulation-smoke`가 7일 동안 setup, daily, review, today, weekly, home 경로를 command-wrapper로 반복 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>7 sessions, 7 saved phrases, 7 review items, 6 reviewed due items, weekly mirror, learner home, skill evidence growth를 확인했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-5</strong>
@@ -1663,6 +1676,16 @@
               <div class="card-row"><b>왜</b><p>Realtime voice는 아직 기본 경로가 아니지만 voice transcript는 event graph에 들어올 수 있어야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`voice` command가 transcript와 optional local audio path를 받아 `mode=voice-transcript`, `modality=voice` event를 저장한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase4-voice-event-import-smoke.mjs`가 voice event validation, local audio metadata, weekly modality summary를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-4</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase4-image-information-gap-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-4-image-information-gap.md</span>
+              </div>
+              <h3>#52 Image information-gap event fixture를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>이미지는 장식이 아니라 situated speaking task와 clarification/repair evidence를 만들어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`image` command가 local image path, hidden detail, clarification prompt를 받아 `mode=image-info-gap`, `modality=image` event를 저장한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase4-image-information-gap-smoke.mjs`가 image event validation, source artifact metadata, weekly modality summary를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1817,10 +1840,6 @@
           <tbody>
 
             <tr>
-              <td>M3-2</td>
-              <td><strong>Pass</strong><span>learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render</span></td>
-            </tr>
-            <tr>
               <td>M3-3</td>
               <td><strong>Pass</strong><span>no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures</span></td>
             </tr>
@@ -1847,6 +1866,10 @@
             <tr>
               <td>M4-3</td>
               <td><strong>Pass</strong><span>voice event import smoke passes transcript-first voice modality, local audio metadata, and weekly modality summary</span></td>
+            </tr>
+            <tr>
+              <td>M4-4</td>
+              <td><strong>Pass</strong><span>image information-gap smoke passes image modality, source artifact metadata, hidden-detail prompt context, and weekly modality summary</span></td>
             </tr>
           </tbody>
         </table>
@@ -1892,7 +1915,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 38개 보기</summary>
+        <summary>완료 이력 39개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2275,10 +2298,20 @@
               <div class="card-row"><b>완료</b><p>`return_state`가 `gap_kind`와 `restart_action`을 제공한다. same-day, next-day, long-gap 모두 no-streak copy와 gentle restart action을 반환한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase3-no-streak-return-smoke.mjs`가 fresh/same-day/next-day/long-gap fixture를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-4</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase3-seven-day-simulation-smoke.mjs, docs/phase-3-evidence/M3-4-seven-day-simulation.md</span>
+              </div>
+              <h3>#40 Seven-day local return simulation을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>`phase3-seven-day-simulation-smoke`가 7일 동안 setup, daily, review, today, weekly, home 경로를 command-wrapper로 반복 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>7 sessions, 7 saved phrases, 7 review items, 6 reviewed due items, weekly mirror, learner home, skill evidence growth를 확인했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 34개 보기</summary>
+        <summary>전체 검증 35개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2419,12 +2452,16 @@
               <td>M4-3</td>
               <td><strong>Pass</strong><span>voice event import smoke passes transcript-first voice modality, local audio metadata, and weekly modality summary</span></td>
             </tr>
+            <tr>
+              <td>M4-4</td>
+              <td><strong>Pass</strong><span>image information-gap smoke passes image modality, source artifact metadata, hidden-detail prompt context, and weekly modality summary</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 30개 보기</summary>
+        <summary>전체 명령 31개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2516,6 +2553,10 @@
               <code>node scripts/phase4-voice-event-import-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run image information-gap smoke</span>
+              <code>node scripts/phase4-image-information-gap-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2545,7 +2586,7 @@
             </div>
             <div class="command">
               <span>View next M4 issue</span>
-              <code>gh issue view 52</code>
+              <code>gh issue view 54</code>
             </div>
         </div>
       </details>
