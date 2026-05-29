@@ -1452,6 +1452,18 @@
             "docs/phase-7-evidence/M7-5-public-release-url.md",
             "README.md"
           ]
+        },
+        {
+          "id": "M7-6",
+          "title": "#102 no-publish artifact repo workflow run을 검증함",
+          "why": "workflow가 별도 artifact_repo target으로 바뀐 뒤 GitHub Actions runner에서도 no-publication mode가 안전하게 통과하는지 증거가 필요하다.",
+          "done": "workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.",
+          "verification": "`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "docs/phase-7-evidence/M7-6-no-publish-workflow-run.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1464,11 +1476,11 @@
           "id": "M7-1",
           "title": "#83 real public artifact URL",
           "why": "artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
-          "done": "#90에서 배포면/권한을 결정한 뒤 manual workflow로 artifact를 publish하거나 별도 public URL에 업로드하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
-          "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
+          "done": "#90에서 배포면/권한을 결정한 뒤 artifact와 SHA256SUMS를 public URL에 게시하고 checksum-aware smoke를 실행한다.",
+          "verification": "public release URL smoke가 real non-local HTTPS artifact/SHA256SUMS URL에서 hostedAccessStatus=public_url_candidate, checksumVerified=true, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
             ".github/workflows/public-artifact.yml",
-            "scripts/phase7-hosted-artifact-smoke.mjs"
+            "scripts/phase7-public-release-url-smoke.mjs"
           ]
         }
       ]
@@ -1842,6 +1854,11 @@
       "name": "M7-5 checksum URL smoke",
       "status": "Pass",
       "detail": "public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist"
+    },
+    {
+      "name": "M7-6 no-publish workflow run",
+      "status": "Pass",
+      "detail": "GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication"
     }
   ],
   "commands": [
@@ -2094,12 +2111,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-1</strong>
-                <span>.github/workflows/public-artifact.yml, scripts/phase7-hosted-artifact-smoke.mjs</span>
+                <span>.github/workflows/public-artifact.yml, scripts/phase7-public-release-url-smoke.mjs</span>
               </div>
               <h3>#83 real public artifact URL</h3>
               <div class="card-row"><b>왜</b><p>artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.</p></div>
-              <div class="card-row"><b>완료</b><p>#90에서 배포면/권한을 결정한 뒤 manual workflow로 artifact를 publish하거나 별도 public URL에 업로드하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>#90에서 배포면/권한을 결정한 뒤 artifact와 SHA256SUMS를 public URL에 게시하고 checksum-aware smoke를 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>public release URL smoke가 real non-local HTTPS artifact/SHA256SUMS URL에서 hostedAccessStatus=public_url_candidate, checksumVerified=true, canClosePublicDistribution=true를 반환해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2130,16 +2147,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-D</strong>
-                <span>docs/distribution-policy.json, docs/ISSUE-INDEX.md, docs/project-state.json</span>
-              </div>
-              <h3>#90 public release surface 결정을 분리함</h3>
-              <div class="card-row"><b>왜</b><p>#83은 공개 URL 검증 이슈이고, 실제 배포면/권한 선택은 외부 release action을 수반하는 별도 결정이다.</p></div>
-              <div class="card-row"><b>완료</b><p>#90을 생성해 별도 public artifact repo release, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-D2</strong>
@@ -2189,6 +2196,16 @@
               <div class="card-row"><b>왜</b><p>public artifact repo README는 tarball과 SHA256SUMS를 함께 다운로드하므로 #83 proof도 checksum-aware 경로를 검증해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>artifact URL과 SHA256SUMS URL을 다운로드하고 shasum 검증 후 setup/daily/today를 실행하는 smoke를 추가했다. 기본은 local loopback으로 publication 없이 실행된다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-url-smoke.mjs`가 checksumVerified=true, hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false로 mechanics를 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-6</strong>
+                <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-6-no-publish-workflow-run.md, docs/project-state.json</span>
+              </div>
+              <h3>#102 no-publish artifact repo workflow run을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>workflow가 별도 artifact_repo target으로 바뀐 뒤 GitHub Actions runner에서도 no-publication mode가 안전하게 통과하는지 증거가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.</p></div>
             </article>
         </div>
       </section>
@@ -2367,10 +2384,6 @@
           <tbody>
 
             <tr>
-              <td>M7-1 hosted artifact</td>
-              <td><strong>Partial</strong><span>hosted-download mechanics pass through local loopback; real public URL remains unverified</span></td>
-            </tr>
-            <tr>
               <td>M7-1 release workflow</td>
               <td><strong>Pass</strong><span>manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload</span></td>
             </tr>
@@ -2397,6 +2410,10 @@
             <tr>
               <td>M7-5 checksum URL smoke</td>
               <td><strong>Pass</strong><span>public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist</span></td>
+            </tr>
+            <tr>
+              <td>M7-6 no-publish workflow run</td>
+              <td><strong>Pass</strong><span>GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication</span></td>
             </tr>
           </tbody>
         </table>
@@ -2442,7 +2459,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 61개 보기</summary>
+        <summary>완료 이력 62개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3055,10 +3072,20 @@
               <div class="card-row"><b>완료</b><p>workflow_dispatch run 26618527553이 publish_release=false로 성공했고 workflow artifact english-learning-harness-public을 업로드했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh run view 26618527553` shows conclusion=success; downloaded artifact exists under tmp/phase-7-gh-workflow-artifact.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-D</strong>
+                <span>docs/distribution-policy.json, docs/ISSUE-INDEX.md, docs/project-state.json</span>
+              </div>
+              <h3>#90 public release surface 결정을 분리함</h3>
+              <div class="card-row"><b>왜</b><p>#83은 공개 URL 검증 이슈이고, 실제 배포면/권한 선택은 외부 release action을 수반하는 별도 결정이다.</p></div>
+              <div class="card-row"><b>완료</b><p>#90을 생성해 별도 public artifact repo release, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 58개 보기</summary>
+        <summary>전체 검증 59개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3294,6 +3321,10 @@
             <tr>
               <td>M7-5 checksum URL smoke</td>
               <td><strong>Pass</strong><span>public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist</span></td>
+            </tr>
+            <tr>
+              <td>M7-6 no-publish workflow run</td>
+              <td><strong>Pass</strong><span>GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication</span></td>
             </tr>
             </tbody>
           </table>

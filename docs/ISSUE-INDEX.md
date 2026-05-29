@@ -202,6 +202,7 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #96 | M7-3: Prepare public artifact repository onboarding README | continue |
 | #98 | M7-4: Align release workflow with separate public artifact repository | continue |
 | #100 | M7-5: Verify public release URL with checksum handoff | continue |
+| #102 | M7-6: Record no-publish artifact repo workflow evidence | continue |
 
 M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
 
@@ -215,7 +216,8 @@ M7 remains open for a future public repository clone or separate public artifact
 - #96 adds a public artifact repository README to that handoff so the public repository URL can explain download, verification, extraction, setup, and first practice.
 - #98 aligns the manual workflow so optional publication targets `artifact_repo` with `PUBLIC_ARTIFACT_REPO_TOKEN`, not the private source repository.
 - #100 adds checksum-aware public release URL smoke for artifact plus `SHA256SUMS`.
-- after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... node scripts/phase7-hosted-artifact-smoke.mjs` against the real URL.
+- #102 records a successful no-publication GitHub Actions run for the artifact repo workflow.
+- after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL=... node scripts/phase7-public-release-url-smoke.mjs` against the real URLs.
 
 #94 evidence currently shows:
 
@@ -241,6 +243,15 @@ M7 remains open for a future public repository clone or separate public artifact
 - the extracted artifact can run setup, daily, and today.
 - local loopback mode reports `hostedAccessStatus=local_loopback_only` and `canClosePublicDistribution=false`.
 - real public URL mode requires both `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL` and `ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL`.
+
+#102 evidence currently shows:
+
+- GitHub Actions run `26619701714` completed successfully with `publish_release=false`.
+- `artifact_repo` input was set to `bborok1234/english-learning-harness-public`.
+- workflow artifact `english-learning-harness-public` was uploaded.
+- publish release asset step was skipped.
+- downloaded workflow artifact exists at `tmp/phase-7-artifact-repo-workflow-run/english-learning-harness-public/english-learning-harness-public.tar.gz` and is `317395` bytes.
+- this does not create a public repository, publish a release, prove a public URL, or close #83/#90.
 
 #83 evidence currently shows:
 

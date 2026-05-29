@@ -1050,6 +1050,18 @@
             "docs/phase-7-evidence/M7-5-public-release-url.md",
             "README.md"
           ]
+        },
+        {
+          "id": "M7-6",
+          "title": "#102 no-publish artifact repo workflow run을 검증함",
+          "why": "workflow가 별도 artifact_repo target으로 바뀐 뒤 GitHub Actions runner에서도 no-publication mode가 안전하게 통과하는지 증거가 필요하다.",
+          "done": "workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.",
+          "verification": "`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.",
+          "files": [
+            ".github/workflows/public-artifact.yml",
+            "docs/phase-7-evidence/M7-6-no-publish-workflow-run.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1062,11 +1074,11 @@
           "id": "M7-1",
           "title": "#83 real public artifact URL",
           "why": "artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
-          "done": "#90에서 배포면/권한을 결정한 뒤 manual workflow로 artifact를 publish하거나 별도 public URL에 업로드하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
-          "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
+          "done": "#90에서 배포면/권한을 결정한 뒤 artifact와 SHA256SUMS를 public URL에 게시하고 checksum-aware smoke를 실행한다.",
+          "verification": "public release URL smoke가 real non-local HTTPS artifact/SHA256SUMS URL에서 hostedAccessStatus=public_url_candidate, checksumVerified=true, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
             ".github/workflows/public-artifact.yml",
-            "scripts/phase7-hosted-artifact-smoke.mjs"
+            "scripts/phase7-public-release-url-smoke.mjs"
           ]
         }
       ]
@@ -1440,6 +1452,11 @@
       "name": "M7-5 checksum URL smoke",
       "status": "Pass",
       "detail": "public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist"
+    },
+    {
+      "name": "M7-6 no-publish workflow run",
+      "status": "Pass",
+      "detail": "GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication"
     }
   ],
   "commands": [
