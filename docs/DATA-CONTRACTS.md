@@ -155,9 +155,42 @@ Required fields:
     "updated_skills": ["starts", "repair"],
     "average_utterance_words": 8,
     "repair_phrase_count": 1
-  }
+  },
+  "interaction_events": []
 }
 ```
+
+## Interaction Event
+
+Required fields:
+
+```json
+{
+  "schema_version": 1,
+  "event_id": "session-id-event-1",
+  "modality": "text|voice|image|video|realtime",
+  "scenario_id": "stuck-repair",
+  "learner_intent": "Keep the conversation alive when you do not know a word.",
+  "learner_output": "I don't know how to say it, but the meeting was okay.",
+  "trouble_source": "missing word or stuck moment",
+  "mediation_level": "prompt-first|hint|recast|explicit-model|retry",
+  "repair_move": "Try the pattern: I don't know how to say it, but + simple idea",
+  "retry_output": "I don't know how to say it, but the meeting was okay.",
+  "saved_phrase": "I don't know how to say it, but the meeting was okay.",
+  "transfer_targets": ["stuck moment", "daily explanation", "work chat"],
+  "claim_boundary": "This event records local interaction evidence only. It does not prove real-world fluency."
+}
+```
+
+Interaction events are the required evidence bridge for all future modalities. Text, voice, image, video, and realtime paths may differ in input source, but they must write the same intention/output/trouble/mediation/retry/transfer shape before dashboard or learner home surfaces can claim multimodal readiness.
+
+Forbidden event claims:
+
+- native-speaker comparison,
+- guaranteed fluency,
+- level ranking,
+- pronunciation score from noisy signals,
+- real-world confidence transfer.
 
 ## Weekly Mirror Artifact
 
