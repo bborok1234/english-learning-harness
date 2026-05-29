@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M4 Multimodal Interaction Lab implementation active",
-    "status": "Next: #49 persist text sessions as interaction events",
+    "status": "Next: #53 transcription-first voice event import",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4-1 interaction event schema is implemented and smoke-tested. Text-first sessions now produce valid local interaction events; next work is #49 event-backed text session persistence and summaries."
+    "summary": "M4-2 text interaction events are persisted into learner reflection surfaces: weekly mirror summarizes event evidence and learner home renders interaction evidence and transfer targets. Next is #53 transcription-first voice event import."
   },
   "ssot": [
     {
@@ -506,19 +506,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "interaction event schema implemented",
+      "detail": "text event summaries implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M4 active",
-      "detail": "#50 implemented; #49 next",
+      "detail": "#50/#49 implemented; #53 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "#49 text event persistence",
+      "detail": "#53 transcription-first voice import",
       "tone": "red"
     },
     {
@@ -1108,6 +1108,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-4-evidence/M4-1-interaction-event-schema.md"
           ]
+        },
+        {
+          "id": "M4-2",
+          "title": "#49 Text sessions as interaction events를 구현함",
+          "why": "새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.",
+          "done": "Weekly mirror가 `interaction_event_summary`를 생성하고 learner home이 Interaction evidence/Transfer targets를 렌더링한다.",
+          "verification": "`node scripts/phase4-text-event-persistence-smoke.mjs`가 artifact event validation, weekly summary, learner home render를 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase4-text-event-persistence-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-4-evidence/M4-2-text-event-persistence.md"
+          ]
         }
       ]
     },
@@ -1115,24 +1128,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M4-2",
-          "title": "#49 Persist text sessions as interaction events",
-          "why": "새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.",
-          "done": "today artifacts가 valid text interaction events를 포함하고 weekly/home이 event-backed repair/transfer summary를 표시한다.",
-          "verification": "text event persistence smoke와 seven-day simulation regression이 통과해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "scripts/english-learning-harness.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M4-3",
@@ -1144,7 +1139,14 @@
             "scripts/english-learning-harness.mjs",
             "scripts/lib/english-learning-store.mjs"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M4-4",
           "title": "#52 Image information-gap event fixture",
@@ -1372,6 +1374,11 @@
       "name": "M4-1",
       "status": "Pass",
       "detail": "interaction event schema smoke passes valid text event and invalid fixture rejection"
+    },
+    {
+      "name": "M4-2",
+      "status": "Pass",
+      "detail": "text event persistence smoke passes weekly event summary and learner home transfer target rendering"
     }
   ],
   "commands": [
@@ -1456,6 +1463,10 @@
       "command": "node scripts/phase4-interaction-event-schema-smoke.mjs"
     },
     {
+      "label": "Run text event persistence smoke",
+      "command": "node scripts/phase4-text-event-persistence-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1485,7 +1496,7 @@
     },
     {
       "label": "View next M4 issue",
-      "command": "gh issue view 49"
+      "command": "gh issue view 53"
     }
   ]
 }
@@ -1494,12 +1505,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M4-1 interaction event schema is implemented and smoke-tested. Text-first sessions now produce valid local interaction events; next work is #49 event-backed text session persistence and summaries.</p>
+        <p class="summary">M4-2 text interaction events are persisted into learner reflection surfaces: weekly mirror summarizes event evidence and learner home renders interaction evidence and transfer targets. Next is #53 transcription-first voice event import.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M4 Multimodal Interaction Lab implementation active<br>
-        Next: #49 persist text sessions as interaction events
+        Next: #53 transcription-first voice event import
       </div>
     </header>
 
@@ -1508,17 +1519,17 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M4</div>
-          <p>interaction event schema implemented</p>
+          <p>text event summaries implemented</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M4 active</div>
-          <p>#50 implemented; #49 next</p>
+          <p>#50/#49 implemented; #53 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M4</div>
-          <p>#49 text event persistence</p>
+          <p>#53 transcription-first voice import</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1549,20 +1560,10 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>4</span>
+          <span>3</span>
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M4-2</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs</span>
-              </div>
-              <h3>#49 Persist text sessions as interaction events</h3>
-              <div class="card-row"><b>왜</b><p>새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.</p></div>
-              <div class="card-row"><b>완료</b><p>today artifacts가 valid text interaction events를 포함하고 weekly/home이 event-backed repair/transfer summary를 표시한다.</p></div>
-              <div class="card-row"><b>검증</b><p>text event persistence smoke와 seven-day simulation regression이 통과해야 한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M4-3</strong>
@@ -1602,16 +1603,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-2</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-learner-home-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-2-learner-home.md</span>
-              </div>
-              <h3>#38 Learner home HTML을 구현함</h3>
-              <div class="card-row"><b>왜</b><p>프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>`home` command가 learner root 아래 `home.html`을 생성한다. 페이지는 오늘 action, due review, saved phrases, weekly mirror, local journey counts, claim boundary를 보여준다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase3-learner-home-smoke.mjs`가 파일 생성과 Playwright render를 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-3</strong>
@@ -1661,6 +1652,16 @@
               <div class="card-row"><b>왜</b><p>voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.</p></div>
               <div class="card-row"><b>완료</b><p>`interaction_events` schema, validator, default text event builder를 추가했다. 기존 text-first `today` artifact가 modality=text event를 저장한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase4-interaction-event-schema-smoke.mjs`가 valid text event와 invalid fixture rejection을 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-2</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/phase4-text-event-persistence-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-2-text-event-persistence.md</span>
+              </div>
+              <h3>#49 Text sessions as interaction events를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>새 schema가 실제 daily session에서 쓰이지 않으면 multimodal-ready가 아니다.</p></div>
+              <div class="card-row"><b>완료</b><p>Weekly mirror가 `interaction_event_summary`를 생성하고 learner home이 Interaction evidence/Transfer targets를 렌더링한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase4-text-event-persistence-smoke.mjs`가 artifact event validation, weekly summary, learner home render를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1815,10 +1816,6 @@
           <tbody>
 
             <tr>
-              <td>M3-0</td>
-              <td><strong>Pass</strong><span>M1/M2 milestones closed and M3 execution issues #37-#41 created</span></td>
-            </tr>
-            <tr>
               <td>M3-1</td>
               <td><strong>Pass</strong><span>daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands</span></td>
             </tr>
@@ -1845,6 +1842,10 @@
             <tr>
               <td>M4-1</td>
               <td><strong>Pass</strong><span>interaction event schema smoke passes valid text event and invalid fixture rejection</span></td>
+            </tr>
+            <tr>
+              <td>M4-2</td>
+              <td><strong>Pass</strong><span>text event persistence smoke passes weekly event summary and learner home transfer target rendering</span></td>
             </tr>
           </tbody>
         </table>
@@ -1890,7 +1891,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 36개 보기</summary>
+        <summary>완료 이력 37개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2253,10 +2254,20 @@
               <div class="card-row"><b>완료</b><p>`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-2</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-learner-home-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-2-learner-home.md</span>
+              </div>
+              <h3>#38 Learner home HTML을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>`home` command가 learner root 아래 `home.html`을 생성한다. 페이지는 오늘 action, due review, saved phrases, weekly mirror, local journey counts, claim boundary를 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase3-learner-home-smoke.mjs`가 파일 생성과 Playwright render를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 32개 보기</summary>
+        <summary>전체 검증 33개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2389,12 +2400,16 @@
               <td>M4-1</td>
               <td><strong>Pass</strong><span>interaction event schema smoke passes valid text event and invalid fixture rejection</span></td>
             </tr>
+            <tr>
+              <td>M4-2</td>
+              <td><strong>Pass</strong><span>text event persistence smoke passes weekly event summary and learner home transfer target rendering</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 28개 보기</summary>
+        <summary>전체 명령 29개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2478,6 +2493,10 @@
               <code>node scripts/phase4-interaction-event-schema-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run text event persistence smoke</span>
+              <code>node scripts/phase4-text-event-persistence-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2507,7 +2526,7 @@
             </div>
             <div class="command">
               <span>View next M4 issue</span>
-              <code>gh issue view 49</code>
+              <code>gh issue view 53</code>
             </div>
         </div>
       </details>
