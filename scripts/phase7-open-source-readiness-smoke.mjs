@@ -98,8 +98,12 @@ function main() {
   }
 
   const readme = readFileSync(resolve(repoRoot, "README.md"), "utf8");
+  const englishReadme = readFileSync(resolve(repoRoot, "README.en.md"), "utf8");
   for (const required of [
-    "Open-source, local-first",
+    "[한국어](README.md) | [English](README.en.md)",
+    "한국인을 위한 Codex-native 영어 회화 학습 하네스.",
+    "이 제품은 학습자가 `node` 명령어를 직접 치는 CLI가 아닙니다.",
+    "Codex에 붙여넣기",
     "git clone https://github.com/bborok1234/english-learning-harness.git",
     "node scripts/phase6-public-clean-clone-smoke.mjs",
     "LICENSE",
@@ -109,6 +113,10 @@ function main() {
   ]) {
     assert(readme.includes(required), `README missing ${required}`);
   }
+  assert(
+    englishReadme.includes("Codex-native English conversation practice harness for Korean learners."),
+    "English README missing Korean learner positioning",
+  );
   assert(!readme.includes("From a fresh private beta / invited-user clone"), "README still frames quick start as private beta");
 
   const policy = JSON.parse(readFileSync(resolve(repoRoot, "docs/distribution-policy.json"), "utf8"));

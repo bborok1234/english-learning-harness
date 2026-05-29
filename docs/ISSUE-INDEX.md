@@ -335,6 +335,15 @@ M7 now targets the current source repository as the open-source public distribut
 - README now leads with a paste-into-Codex install prompt and rejects human clone/download as the primary path.
 - this does not publish an npm/binary installer or prove public Git-backed plugin install.
 
+#124 Korean-primary README evidence currently shows:
+
+- `README.md` is now Korean-first because the primary target learner is Korean.
+- `README.en.md` is the secondary English surface.
+- the first public path remains paste prompt into Codex, not human clone/download or learner-operated Node commands.
+- `scripts/phase7-learner-readme-smoke.mjs` verifies Korean-first target positioning, natural-language Codex onboarding, and maintainer commands below the learner surface.
+- public artifact packaging and open-source readiness smokes now verify the bilingual README surface.
+- this does not add realtime voice, accent scoring, a binary installer, or real multi-day learner outcome proof.
+
 #83 artifact fallback evidence currently shows:
 
 - `scripts/package-public-artifact.mjs` creates a tarball candidate.

@@ -51,12 +51,19 @@ function main() {
   for (const forbidden of [".git", ".omx", "tmp/", "node_modules"]) {
     assert(!listing.includes(`english-learning-harness/${forbidden}`), `artifact includes forbidden path: ${forbidden}`);
   }
-  for (const required of ["README.md", "setup", "docs/distribution-policy.json", "scripts/english-learning-harness.mjs"]) {
+  for (const required of [
+    "README.md",
+    "README.en.md",
+    "setup",
+    "docs/distribution-policy.json",
+    "scripts/english-learning-harness.mjs",
+  ]) {
     assert(listing.includes(`english-learning-harness/${required}`), `artifact missing ${required}`);
   }
 
   run("tar", ["-xzf", packaged.artifactPath, "-C", extractRoot]);
   assert(existsSync(resolve(artifactPackageRoot, "README.md")), "extracted README missing");
+  assert(existsSync(resolve(artifactPackageRoot, "README.en.md")), "extracted English README missing");
   assert(existsSync(resolve(artifactPackageRoot, "setup")), "extracted setup missing");
   assert(existsSync(resolve(artifactPackageRoot, "scripts/english-learning-harness.mjs")), "extracted command wrapper missing");
 

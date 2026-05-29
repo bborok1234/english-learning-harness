@@ -3,16 +3,28 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Public source live + agent-installed Codex onboarding",
-    "status": "Public clone-to-learn is verified; README now follows current harness pattern: paste prompt into Codex, Codex installs skills, learner practices by conversation",
+    "stage": "Korean-first public source live + agent-installed Codex onboarding",
+    "status": "Public clone-to-learn is verified; README is now Korean-first, with English as the secondary surface",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README now leads with a paste-into-Codex install prompt, and setup installs the skill surface into ~/.codex/skills."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README.md is now Korean-first for Korean learners, README.en.md is secondary, and setup installs the skill surface into ~/.codex/skills."
   },
   "ssot": [
     {
       "label": "DESIGN.md",
       "path": "../DESIGN.md",
       "role": "제품/UX/설계 기준",
+      "kind": "source"
+    },
+    {
+      "label": "README.md",
+      "path": "../README.md",
+      "role": "한국어 메인 공개 README",
+      "kind": "source"
+    },
+    {
+      "label": "README.en.md",
+      "path": "../README.en.md",
+      "role": "secondary English README",
       "kind": "source"
     },
     {
@@ -163,14 +175,14 @@
     },
     {
       "label": "GitHub plan",
-      "value": "46 issues",
-      "detail": "#122 adds setup --host codex and harness-trend benchmark",
+      "value": "47 issues",
+      "detail": "#124 makes Korean README the primary public surface",
       "tone": "green"
     },
     {
       "label": "README",
-      "value": "Agent-installed",
-      "detail": "paste prompt into Codex; setup installs skills into ~/.codex/skills",
+      "value": "Korean-first",
+      "detail": "main README targets Korean learners; English README is secondary",
       "tone": "green"
     }
   ],
@@ -1203,6 +1215,22 @@
             "scripts/phase7-learner-readme-smoke.mjs",
             "docs/phase-7-evidence/M7-16-agent-installed-harness-onboarding.md"
           ]
+        },
+        {
+          "id": "M7-17",
+          "title": "#124 한국어 README를 메인 공개 표면으로 전환함",
+          "why": "제품의 1차 타겟은 한국인 영어 회화 학습자다. 첫 방문자가 영어 README나 Node 명령 목록을 먼저 보면 제품 의도와 맞지 않는다.",
+          "done": "`README.md`를 한국어 메인 README로 바꾸고, `README.en.md`를 보조 영어 README로 추가했다. 배포 아티팩트와 readiness smoke도 bilingual README 구조를 검증한다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.",
+          "files": [
+            "README.md",
+            "README.en.md",
+            "scripts/phase7-learner-readme-smoke.mjs",
+            "scripts/phase7-open-source-readiness-smoke.mjs",
+            "scripts/package-public-artifact.mjs",
+            "scripts/phase7-public-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-17-korean-primary-readme.md"
+          ]
         }
       ]
     },
@@ -1213,14 +1241,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Agent-installed harness onboarding 정렬",
-          "why": "요즘 하네스는 사용자가 repo를 수동 clone해서 내부 명령을 치는 것이 아니라, agent에게 설치 prompt를 붙여넣고 agent가 설치/운영한다.",
-          "done": "`setup --host codex`와 paste-into-Codex README 경로를 추가했다.",
-          "verification": "`node scripts/phase7-agent-install-smoke.mjs`와 `node scripts/phase7-learner-readme-smoke.mjs`가 통과한다.",
+          "title": "한국어 메인 README 정렬",
+          "why": "이 제품의 핵심 사용자는 한국인 학습자이므로 공개 첫 화면은 한국어로 제품 가치, Codex 사용 방식, 매일 학습 루프를 설명해야 한다.",
+          "done": "`README.md`를 한국어 메인 표면으로 바꾸고 `README.en.md`를 보조 영어 표면으로 추가했다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.",
           "files": [
-            "setup",
             "README.md",
-            "docs/BENCHMARK-HARNESS-TRENDS.md",
+            "README.en.md",
             "scripts/phase7-learner-readme-smoke.mjs"
           ]
         }
@@ -1640,6 +1667,11 @@
       "name": "M7-16 agent-installed onboarding",
       "status": "Pass",
       "detail": "setup --host codex installs skills into Codex; README leads with paste-into-Codex install prompt"
+    },
+    {
+      "name": "M7-17 Korean-primary README",
+      "status": "Pass",
+      "detail": "README.md is Korean-first, README.en.md is secondary, and bilingual public artifact/readiness smokes pass"
     }
   ],
   "commands": [

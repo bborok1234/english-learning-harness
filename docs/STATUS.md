@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **Public source live with agent-installed Codex onboarding** state.
+The project is in **Korean-first public source live with agent-installed Codex onboarding** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -20,7 +20,7 @@ What is complete:
 - P0-1 is complete: current Codex CLI does not expose a stable realtime voice path; MVP should default to text-first or transcription-first conversation.
 - PH1-1 is complete: plugin manifest, skill skeletons, setup-owned/native hook registration path, progress schema validator, and local marketplace install smoke are in place.
 - PH1-2 is partially complete: first-run onboarding, text-first session persistence, mini mirror, journal/artifact persistence, and `progress.json` shape validation work in direct script smoke.
-- README setup guidance is now Codex-native: the first screen says the learner talks to Codex, while Codex uses the local engine internally for setup, practice, mini mirror, review memory, and progress files. `node` commands are maintainer/internal engine details, not the learner-facing product surface.
+- README setup guidance is now Korean-first and Codex-native: the first screen speaks to Korean learners, says the learner talks to Codex, while Codex uses the local engine internally for setup, practice, mini mirror, review memory, and progress files. `node` commands are maintainer/internal engine details, not the learner-facing product surface.
 - Current harness benchmark (`oh-my-openagent`, `gstack`) is captured in `docs/BENCHMARK-HARNESS-TRENDS.md`: the public path should be paste prompt into agent -> agent installs skills -> learner invokes workflows by natural language, not human clone/download -> manual command operation.
 - Product ambition has been reset from "local smoke tool" to a research-backed daily language-learning engine in `docs/LEARNING-ENGINE.md`.
 - Execution roadmap has been expanded in `docs/PRODUCT-ROADMAP.md`.
@@ -94,6 +94,7 @@ What is complete:
 - M7-14 learner-first README smoke verifies public onboarding leads with learner value and daily practice before maintainer verification, while preserving public clone and marketplace command audits.
 - M7-15 Codex-native user surface smoke verifies README natural-language prompts and Codex conversation appear before internal `node` engine commands; skill instructions now tell Codex not to ask learners to run `node` for ordinary practice.
 - M7-16 agent-installed harness onboarding adds `setup --host codex`, installs skills into `~/.codex/skills`, and strengthens README smoke so the first public path is paste-into-Codex installation rather than clone/download.
+- M7-17 Korean-primary README makes `README.md` the Korean public entry point, adds `README.en.md` as the secondary English surface, and updates public artifact/readiness smokes to verify the bilingual structure.
 
 What is not started:
 - Real user validation.
@@ -270,6 +271,7 @@ Start from the verified/fallback Phase 0 constraints.
 ### Phase 7 Public Distribution Release
 
 - [x] M7-1: Prove unauthenticated public distribution path (#83). Public source clone-to-learn passes from the now-public repository.
+- [x] D4: Make Korean README the primary public surface (#124). `README.md` is Korean-first, `README.en.md` is secondary English, and bilingual README checks pass.
 
 ## SSOT Structure
 

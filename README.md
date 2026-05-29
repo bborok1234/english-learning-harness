@@ -1,16 +1,18 @@
 # English Learning Harness
 
-Open-source, local-first Codex harness that turns Codex into a daily English speaking practice partner.
+[한국어](README.md) | [English](README.en.md)
+
+한국인을 위한 Codex-native 영어 회화 학습 하네스.
 
 North star: **AI 파트너와 편안하게 영어로 대화하는 능력.**
 
-This is not a learner-facing Node CLI product. The learner-facing surface is **Codex conversation**: you paste one install prompt into Codex, Codex installs the harness skills, and then your daily English practice happens through natural language.
+이 제품은 학습자가 `node` 명령어를 직접 치는 CLI가 아닙니다. 학습자가 보는 표면은 **Codex와의 대화**입니다. GitHub 주소를 Codex에 붙여넣으면 Codex가 하네스 skill을 설치하고, 그 다음부터 매일 영어 회화 연습은 자연어 대화로 진행됩니다.
 
-The first usable version is text/transcription-first. Realtime voice conversation is not the default path yet because the current local Codex CLI does not expose a stable realtime voice command.
+현재 1차 버전은 text/transcription-first입니다. 안정적인 realtime voice command가 아직 local Codex CLI에 없기 때문에 실시간 음성 대화는 기본 경로로 주장하지 않습니다.
 
-## Paste This Into Codex
+## Codex에 붙여넣기
 
-Open Codex and paste this:
+Codex를 열고 아래 프롬프트를 붙여넣으세요.
 
 ```text
 Install English Learning Harness from:
@@ -19,24 +21,22 @@ https://github.com/bborok1234/english-learning-harness
 Use the repo setup script to install the Codex skills, then start my first 5-minute English speaking practice.
 Do not ask me to clone the repo or run Node commands manually. You operate the harness and local engine for me.
 
-My name is Jieun.
-I freeze when I need to speak English.
-I want gentle corrections and practical phrases I can reuse.
+내 이름은 지은이야.
+영어로 말해야 할 때 자주 얼어붙어.
+부드럽게 고쳐주고, 실제로 다시 쓸 수 있는 표현을 남겨줘.
 ```
 
-Codex should install the skill surface, handle setup, run practice, save local progress, and finish with a mini mirror. The ordinary learner action is to answer Codex in English, not to operate scripts.
+Codex가 skill 설치, 학습자 설정, 첫 연습, progress 저장, mini mirror까지 처리해야 합니다. 학습자가 할 일은 스크립트를 조작하는 것이 아니라 Codex의 질문에 영어로 대답하는 것입니다.
 
-If you are already inside a checked-out copy of this repo, paste this shorter prompt:
+이미 이 repo 안에서 Codex를 쓰고 있다면 짧게 이렇게 말해도 됩니다.
 
 ```text
-Use this repository as my English Learning Harness.
-Install its Codex skills if needed, then run today's 5-minute practice.
-Keep me in conversation; use the local engine internally when you need to save progress.
+이 repository를 내 English Learning Harness로 사용해.
+필요하면 Codex skills를 설치하고, 오늘 5분 영어 회화 연습을 시작해줘.
+나는 대화만 할게. 진행 기록 저장이 필요하면 local engine은 네가 내부적으로 실행해.
 ```
 
-## Try These Prompts
-
-Use the harness by talking to Codex:
+## 이렇게 말하면 됩니다
 
 ```text
 오늘 5분 영어 회화 연습 시작하자. 너무 어렵게 하지 말고 한 질문씩 해줘.
@@ -58,57 +58,55 @@ Use the harness by talking to Codex:
 이번 주 내 영어 회화 진행 상황을 보여줘. 좋아진 점, 반복되는 막힘, 다음 focus를 알려줘.
 ```
 
-## What Codex Does For You
+## Codex가 해주는 일
 
-When the harness is used correctly, Codex is the tutor and operator:
+하네스가 제대로 작동하면 Codex는 튜터이자 운영자입니다.
 
-- starts or refreshes your learner profile
-- asks one low-pressure question at a time
-- keeps correction gentle while you are speaking
-- saves session evidence locally
-- remembers useful phrases and repair attempts
-- suggests due review and next scenarios
-- generates a mini mirror after practice
-- generates a weekly mirror from local evidence
-- can create a local learner home page for your journey
+- 학습자 프로필을 만들거나 갱신합니다.
+- 한 번에 한 가지 쉬운 질문만 던집니다.
+- 말하는 중에는 과하게 문법 설명을 하지 않고 부드럽게 recast합니다.
+- 세션 증거를 로컬에 저장합니다.
+- 유용한 표현과 반복되는 막힘을 기억합니다.
+- 복습할 표현과 다음 상황 연습을 제안합니다.
+- 연습 후 mini mirror를 만듭니다.
+- 주간 mirror로 학습 흐름을 보여줍니다.
+- 필요하면 learner home page를 로컬에 생성합니다.
 
-The scripts in this repo are the engine underneath that experience. They are for Codex, maintainers, setup, and verification. They are not the product surface a learner should have to operate by hand.
+이 repo의 스크립트는 그 경험 아래에서 움직이는 엔진입니다. Codex, maintainer, setup, verification을 위한 것이지 학습자가 직접 조작해야 하는 제품 표면이 아닙니다.
 
-## Who This Is For
+## 누구를 위한 제품인가
 
-- Learners who can read some English but freeze when they need to speak.
-- Korean speakers or other EFL learners who want low-pressure daily output practice.
-- Codex users curious whether an agent can become a focused language-learning harness instead of a generic chatbot.
-- Builders who want to inspect, fork, and improve an open-source AI-native learning loop.
+- 영어를 읽을 수는 있지만 막상 말하려면 얼어붙는 한국인 학습자
+- 학원/앱보다 더 자주, 더 낮은 부담으로 영어 output을 만들고 싶은 사람
+- Codex를 코딩뿐 아니라 영어 회화 파트너로 쓰고 싶은 사람
+- AI-native 언어 학습 하네스를 직접 고치고 확장하고 싶은 builder
 
-This is not a course catalog, a streak app, or a generic chat UI. It is a local practice harness that helps you produce English, keep the useful pieces, and return tomorrow with context.
+이건 강의 목록 앱, streak 앱, 일반 챗봇이 아닙니다. 매일 조금씩 영어로 말하고, 쓸만한 표현을 남기고, 내 진행 과정을 다시 보게 해주는 로컬 우선 학습 하네스입니다.
 
-## The Daily Learning Loop
+## 매일 학습 루프
 
-The harness is built around a small daily loop:
+1. Codex가 local learner memory를 읽고 오늘의 focus를 제안합니다.
+2. 학습자가 짧은 spoken-style English로 대답합니다.
+3. Codex가 한 번에 하나씩 부드러운 follow-up을 줍니다.
+4. 마지막에 mini mirror를 남깁니다: 전달한 것, 자연스러운 recast, 다음에 써볼 표현.
+5. 유용한 표현과 반복되는 막힘은 나중에 다시 복습됩니다.
+6. weekly mirror가 흩어진 세션을 하나의 학습 여정으로 보여줍니다.
 
-1. Codex checks your local learner memory and suggests today's focus.
-2. You answer a short, spoken-style prompt in English.
-3. Codex gives one gentle follow-up at a time.
-4. Codex ends with a mini mirror: what you communicated, one natural recast, one next phrase.
-5. Useful phrases and recurring trouble spots come back in later review.
-6. A weekly mirror shows the larger pattern of your practice.
+목표는 오늘 완벽한 영어를 하는 것이 아닙니다. 목표는 더 빨리 시작하고, 막혔을 때 수리하고, 질문을 이어가고, 내 표현을 다시 쓰며, 증거를 통해 나아지는 감각을 갖는 것입니다.
 
-The learning target is not "perfect English today." The target is more comfortable output: starting faster, repairing mistakes, asking follow-up questions, reusing phrases, and seeing your own progress from evidence.
+## 회화 능력에 도움이 되는 방식
 
-## How It Helps Conversation
+- **낮은 부담의 output 반복:** 짧은 세션으로 완벽하지 않은 영어를 매일 꺼낼 수 있습니다.
+- **부드러운 correction:** 문법 강의보다 recast, repair prompt, next attempt를 우선합니다.
+- **개인 phrase memory:** 내가 실제로 쓴 표현과 고친 표현이 복습 재료가 됩니다.
+- **상황 기반 연습:** Codex가 learner model과 history를 바탕으로 오늘의 scenario를 제안합니다.
+- **Mini mirror:** 매 세션 후 무엇을 전달했고 다음에 무엇을 시도할지 짧게 남깁니다.
+- **Weekly mirror:** 여러 날의 연습을 묶어 반복 패턴과 다음 focus를 보여줍니다.
+- **Multimodal-ready evidence:** text, transcript-backed voice, image information-gap event가 같은 interaction-event 구조를 공유합니다.
 
-- **Low-stakes output reps:** short sessions make it easy to speak or type imperfect English without waiting for a class.
-- **Gentle correction:** the tutor policy favors recasts, repair prompts, and next attempts instead of overwhelming grammar dumps.
-- **Personal phrase memory:** useful phrases and repaired patterns become review material.
-- **Scenario practice:** Codex suggests daily scenarios based on your learner model and history.
-- **Mini mirrors:** every session produces a concise reflection so you can see what improved and what to try next.
-- **Weekly mirrors:** the weekly view turns isolated sessions into a learning journey.
-- **Multimodal-ready evidence:** text, transcript-backed voice, and image information-gap events share a common interaction-event shape.
+## 무엇이 기록되나
 
-## What Gets Tracked
-
-Learner-owned files live locally by default:
+학습자 데이터는 기본적으로 로컬에 저장됩니다.
 
 ```text
 ~/english-learning/
@@ -124,56 +122,54 @@ Learner-owned files live locally by default:
     └── weekly/
 ```
 
-Tracked evidence includes:
+기록되는 것은 다음과 같습니다.
 
-- profile and motivation
-- session count, date, and MVP progress metrics
-- journal entries and session artifacts
-- vocabulary and phrase history
-- review queue state
-- learner model signals
-- weekly mirror summaries
-- local validation exports
+- 이름, 동기, 선호 correction style
+- session count, date, MVP progress metrics
+- journal과 session artifact
+- vocabulary와 phrase history
+- review queue 상태
+- learner model signal
+- weekly mirror
+- local validation export
 
-## What You Should Feel After The First Session
+## 첫 세션 후 기대하는 느낌
 
-After one Codex-led session, you should have:
+첫 Codex-led session 뒤에는 다음이 있어야 합니다.
 
-- a learner profile under your local learner root
-- a saved practice artifact
-- a progress file with updated session metrics
-- a mini mirror describing the session
-- a next practice suggestion
-- optional local `home.html` journey view
+- 로컬 learner root 아래 학습자 프로필
+- 저장된 practice artifact
+- 업데이트된 progress file
+- 세션을 설명하는 mini mirror
+- 다음 연습 제안
+- 선택적으로 열어볼 수 있는 `home.html` journey view
 
-The experience should feel like: speak or type a little, get a useful mirror, keep the phrase, return tomorrow.
+경험은 단순해야 합니다. 조금 말하고, 유용한 mirror를 받고, 표현 하나를 남기고, 내일 다시 돌아옵니다.
 
-## Privacy And Local Data
+## Privacy
 
-The default learning state is local to your machine under `~/english-learning/`. Source media paths are treated as local-only in exported validation packs.
+기본 학습 상태는 내 컴퓨터의 `~/english-learning/` 아래에 저장됩니다. 음성, transcript, journal, 개인 정보는 의도적으로 공유하기 전까지 GitHub issue에 올리지 마세요.
 
-Do not put private learner journals, audio, transcripts, or personal details in GitHub issues unless you intentionally redact and share them.
+## 현재 한계
 
-## Current Boundaries
-
-- Realtime voice conversation is not claimed as the default path yet.
-- Accent scoring is not implemented.
-- Image practice stores local prompt context and learner output; it does not perform full computer-vision tutoring by itself.
+- Realtime voice conversation은 아직 기본 경로로 주장하지 않습니다.
+- Accent scoring은 구현되어 있지 않습니다.
+- Image practice는 local prompt context와 learner output을 저장하지만, 완전한 computer-vision tutor라고 주장하지 않습니다.
 - Public Git-backed install remains unverified and should not be documented as the default install path yet.
-- Long-term real learner improvement still needs real multi-day human use, not only fixture smokes.
+- 실제 장기 회화 능력 향상은 fixture smoke가 아니라 real multi-day learner use로 검증해야 합니다.
 
 ## Codex Skill Surface
 
-This repository ships Codex skill instructions for:
+이 repo는 다음 Codex skill을 제공합니다.
 
 - `english-onboarding`
 - `english-daily-session`
 - `english-mini-mirror`
 - `english-picture-description`
 
-The skill contract is: keep the learner in conversation, use the local engine internally for durable state when available, and do not turn ordinary learning into a command-line chore.
+Skill contract: 학습자는 계속 대화 안에 두고, durable state가 필요하면 local engine은 Codex가 내부적으로 실행합니다. ordinary learning을 command-line chore로 만들지 않습니다.
 
-The setup script installs these skills into Codex:
+설치 후 Codex skill은 다음 위치에 놓입니다.
 
 ```text
 ~/.codex/skills/english-learning-onboarding
@@ -184,7 +180,7 @@ The setup script installs these skills into Codex:
 
 ## Agent Install Details
 
-The install prompt above should lead Codex to run the equivalent of:
+위 install prompt는 Codex가 내부적으로 아래와 같은 작업을 하도록 의도되어 있습니다.
 
 ```bash
 mkdir -p ~/.english-learning-harness
@@ -192,7 +188,7 @@ git clone --single-branch --depth 1 https://github.com/bborok1234/english-learni
 ~/.english-learning-harness/repo/setup --host codex
 ```
 
-If the repo already exists, Codex should update it instead of cloning a second copy:
+이미 repo가 있다면 두 번째 clone을 만들지 말고 업데이트합니다.
 
 ```bash
 cd ~/.english-learning-harness/repo
@@ -200,13 +196,13 @@ git pull --ff-only
 ./setup --host codex
 ```
 
-This is an agent-operated install path. A learner should not need to type it.
+이것은 agent-operated install path입니다. 학습자가 직접 타이핑할 필요가 없습니다.
 
-## Internal Engine For Maintainers
+## Maintainer용 내부 엔진
 
-The command wrapper is the local persistence and verification engine. It is useful for maintainers, smoke tests, and debugging. It is not the intended learner-facing product surface.
+Command wrapper는 local persistence와 verification engine입니다. maintainer, smoke test, debugging에는 유용하지만 학습자용 제품 표면은 아닙니다.
 
-For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learner-root`.
+별도 테스트 learner가 필요하면 `ENGLISH_LEARNING_HOME` 또는 `--learner-root`를 사용합니다.
 
 Internal setup and practice commands:
 
@@ -219,13 +215,13 @@ node scripts/english-learning-harness.mjs home --json
 node scripts/english-learning-harness.mjs export --json
 ```
 
-Run from a transcript file:
+Transcript file:
 
 ```bash
 node scripts/english-learning-harness.mjs today --transcript path/to/transcript.txt
 ```
 
-Import transcription-first voice practice:
+Transcription-first voice practice:
 
 ```bash
 node scripts/english-learning-harness.mjs voice \
@@ -234,7 +230,7 @@ node scripts/english-learning-harness.mjs voice \
   --json
 ```
 
-Run an image information-gap practice from a local image path:
+Image information-gap practice:
 
 ```bash
 node scripts/english-learning-harness.mjs image \
@@ -245,23 +241,18 @@ node scripts/english-learning-harness.mjs image \
   --json
 ```
 
-Review due personal phrases:
+Review and mirror:
 
 ```bash
 node scripts/english-learning-harness.mjs review --json
 node scripts/english-learning-harness.mjs review \
   --review-id phrase-i-like-drinking-coffee \
   --result success
-```
-
-Open the phrase vault and weekly mirror:
-
-```bash
 node scripts/english-learning-harness.mjs vault --json
 node scripts/english-learning-harness.mjs weekly --json
 ```
 
-Check health and status:
+Health:
 
 ```bash
 node scripts/english-learning-harness.mjs health --json
@@ -277,16 +268,12 @@ P0-2 did not prove automatic plugin-scoped hook execution for this plugin, and P
 
 Stop hook contract: the Stop hook records a marker and emits context only. Session finalization, journal writes, artifacts, metrics, vocabulary, and review queue updates are owned by the internal session engine.
 
-Print or install the hook config:
-
 ```bash
 node scripts/install-native-hooks.mjs --print
 node scripts/install-native-hooks.mjs --install --target /tmp/english-learning-hooks.json
 node scripts/install-native-hooks.mjs --install
 node scripts/install-native-hooks.mjs --uninstall
 ```
-
-The generated config wires `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `Stop`, and `PreCompact`.
 
 ## Local Marketplace Package
 
@@ -334,29 +321,6 @@ node scripts/english-learning-harness.mjs today --say "I want to practice today.
 
 This proves artifact mechanics only after `node scripts/phase7-public-artifact-smoke.mjs` passes. It does not prove public hosting or public download until the artifact is actually published.
 
-After the artifact is hosted at a public URL, verify the download-to-learning path:
-
-```bash
-ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harness-public.tar.gz" \
-  node scripts/phase7-hosted-artifact-smoke.mjs
-```
-
-To verify the public artifact repository path with checksum evidence:
-
-```bash
-ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harness-public.tar.gz" \
-ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL="https://example.com/SHA256SUMS" \
-  node scripts/phase7-public-release-url-smoke.mjs
-```
-
-The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload a release asset when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. This is secondary to the open-source repository path.
-
-For a separate public artifact repository handoff, generate the bundle locally:
-
-```bash
-node scripts/prepare-public-artifact-handoff.mjs --target tmp/public-artifact-handoff
-```
-
 ## Open Source
 
 - License: `LICENSE`
@@ -370,6 +334,7 @@ node scripts/prepare-public-artifact-handoff.mjs --target tmp/public-artifact-ha
 
 ```bash
 node scripts/phase7-learner-readme-smoke.mjs
+node scripts/phase7-agent-install-smoke.mjs
 node scripts/phase1-command-wrapper-smoke.mjs
 node scripts/phase6-public-clean-clone-smoke.mjs
 node scripts/phase6-marketplace-install-smoke.mjs

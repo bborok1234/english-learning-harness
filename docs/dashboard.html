@@ -405,16 +405,28 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Public source live + agent-installed Codex onboarding",
-    "status": "Public clone-to-learn is verified; README now follows current harness pattern: paste prompt into Codex, Codex installs skills, learner practices by conversation",
+    "stage": "Korean-first public source live + agent-installed Codex onboarding",
+    "status": "Public clone-to-learn is verified; README is now Korean-first, with English as the secondary surface",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README now leads with a paste-into-Codex install prompt, and setup installs the skill surface into ~/.codex/skills."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README.md is now Korean-first for Korean learners, README.en.md is secondary, and setup installs the skill surface into ~/.codex/skills."
   },
   "ssot": [
     {
       "label": "DESIGN.md",
       "path": "../DESIGN.md",
       "role": "제품/UX/설계 기준",
+      "kind": "source"
+    },
+    {
+      "label": "README.md",
+      "path": "../README.md",
+      "role": "한국어 메인 공개 README",
+      "kind": "source"
+    },
+    {
+      "label": "README.en.md",
+      "path": "../README.en.md",
+      "role": "secondary English README",
       "kind": "source"
     },
     {
@@ -565,14 +577,14 @@
     },
     {
       "label": "GitHub plan",
-      "value": "46 issues",
-      "detail": "#122 adds setup --host codex and harness-trend benchmark",
+      "value": "47 issues",
+      "detail": "#124 makes Korean README the primary public surface",
       "tone": "green"
     },
     {
       "label": "README",
-      "value": "Agent-installed",
-      "detail": "paste prompt into Codex; setup installs skills into ~/.codex/skills",
+      "value": "Korean-first",
+      "detail": "main README targets Korean learners; English README is secondary",
       "tone": "green"
     }
   ],
@@ -1605,6 +1617,22 @@
             "scripts/phase7-learner-readme-smoke.mjs",
             "docs/phase-7-evidence/M7-16-agent-installed-harness-onboarding.md"
           ]
+        },
+        {
+          "id": "M7-17",
+          "title": "#124 한국어 README를 메인 공개 표면으로 전환함",
+          "why": "제품의 1차 타겟은 한국인 영어 회화 학습자다. 첫 방문자가 영어 README나 Node 명령 목록을 먼저 보면 제품 의도와 맞지 않는다.",
+          "done": "`README.md`를 한국어 메인 README로 바꾸고, `README.en.md`를 보조 영어 README로 추가했다. 배포 아티팩트와 readiness smoke도 bilingual README 구조를 검증한다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.",
+          "files": [
+            "README.md",
+            "README.en.md",
+            "scripts/phase7-learner-readme-smoke.mjs",
+            "scripts/phase7-open-source-readiness-smoke.mjs",
+            "scripts/package-public-artifact.mjs",
+            "scripts/phase7-public-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-17-korean-primary-readme.md"
+          ]
         }
       ]
     },
@@ -1615,14 +1643,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Agent-installed harness onboarding 정렬",
-          "why": "요즘 하네스는 사용자가 repo를 수동 clone해서 내부 명령을 치는 것이 아니라, agent에게 설치 prompt를 붙여넣고 agent가 설치/운영한다.",
-          "done": "`setup --host codex`와 paste-into-Codex README 경로를 추가했다.",
-          "verification": "`node scripts/phase7-agent-install-smoke.mjs`와 `node scripts/phase7-learner-readme-smoke.mjs`가 통과한다.",
+          "title": "한국어 메인 README 정렬",
+          "why": "이 제품의 핵심 사용자는 한국인 학습자이므로 공개 첫 화면은 한국어로 제품 가치, Codex 사용 방식, 매일 학습 루프를 설명해야 한다.",
+          "done": "`README.md`를 한국어 메인 표면으로 바꾸고 `README.en.md`를 보조 영어 표면으로 추가했다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.",
           "files": [
-            "setup",
             "README.md",
-            "docs/BENCHMARK-HARNESS-TRENDS.md",
+            "README.en.md",
             "scripts/phase7-learner-readme-smoke.mjs"
           ]
         }
@@ -2042,6 +2069,11 @@
       "name": "M7-16 agent-installed onboarding",
       "status": "Pass",
       "detail": "setup --host codex installs skills into Codex; README leads with paste-into-Codex install prompt"
+    },
+    {
+      "name": "M7-17 Korean-primary README",
+      "status": "Pass",
+      "detail": "README.md is Korean-first, README.en.md is secondary, and bilingual public artifact/readiness smokes pass"
     }
   ],
   "commands": [
@@ -2256,12 +2288,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README now leads with a paste-into-Codex install prompt, and setup installs the skill surface into ~/.codex/skills.</p>
+        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README.md is now Korean-first for Korean learners, README.en.md is secondary, and setup installs the skill surface into ~/.codex/skills.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        Public source live + agent-installed Codex onboarding<br>
-        Public clone-to-learn is verified; README now follows current harness pattern: paste prompt into Codex, Codex installs skills, learner practices by conversation
+        Korean-first public source live + agent-installed Codex onboarding<br>
+        Public clone-to-learn is verified; README is now Korean-first, with English as the secondary surface
       </div>
     </header>
 
@@ -2284,13 +2316,13 @@
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">46 issues</div>
-          <p>#122 adds setup --host codex and harness-trend benchmark</p>
+          <div class="metric-value">47 issues</div>
+          <p>#124 makes Korean README the primary public surface</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>README</div>
-          <div class="metric-value">Agent-installed</div>
-          <p>paste prompt into Codex; setup installs skills into ~/.codex/skills</p>
+          <div class="metric-value">Korean-first</div>
+          <p>main README targets Korean learners; English README is secondary</p>
         </article>
     </section>
 
@@ -2318,12 +2350,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>setup, README.md, docs/BENCHMARK-HARNESS-TRENDS.md, scripts/phase7-learner-readme-smoke.mjs</span>
+                <span>README.md, README.en.md, scripts/phase7-learner-readme-smoke.mjs</span>
               </div>
-              <h3>Agent-installed harness onboarding 정렬</h3>
-              <div class="card-row"><b>왜</b><p>요즘 하네스는 사용자가 repo를 수동 clone해서 내부 명령을 치는 것이 아니라, agent에게 설치 prompt를 붙여넣고 agent가 설치/운영한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`setup --host codex`와 paste-into-Codex README 경로를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-agent-install-smoke.mjs`와 `node scripts/phase7-learner-readme-smoke.mjs`가 통과한다.</p></div>
+              <h3>한국어 메인 README 정렬</h3>
+              <div class="card-row"><b>왜</b><p>이 제품의 핵심 사용자는 한국인 학습자이므로 공개 첫 화면은 한국어로 제품 가치, Codex 사용 방식, 매일 학습 루프를 설명해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`README.md`를 한국어 메인 표면으로 바꾸고 `README.en.md`를 보조 영어 표면으로 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2344,16 +2376,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-11</strong>
-                <span>LICENSE, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, SUPPORT.md, GOVERNANCE.md, .github/ISSUE_TEMPLATE/, .github/PULL_REQUEST_TEMPLATE.md, scripts/phase7-open-source-readiness-smoke.mjs</span>
-              </div>
-              <h3>#112 open-source public launch 준비를 추가함</h3>
-              <div class="card-row"><b>왜</b><p>public repo로 열기 전에 license, contribution, conduct, security, support, governance, issue/PR template, README public clone framing이 갖춰져야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>MIT LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, SUPPORT, GOVERNANCE, GitHub issue templates, PR template, open-source readiness smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-readiness-smoke.mjs`가 required community files, README public clone path, policy alignment, local secret-file absence를 통과하고 visibilityReady=false는 repo가 아직 PRIVATE이기 때문이라고 보고한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-12</strong>
@@ -2403,6 +2425,16 @@
               <div class="card-row"><b>왜</b><p>oh-my-openagent와 gstack은 사용자가 repo를 수동 clone해서 내부 명령을 치는 방식이 아니라, agent에게 설치 prompt를 붙여넣고 agent가 skills/setup을 설치하는 방식이다.</p></div>
               <div class="card-row"><b>완료</b><p>`setup --host codex`가 네 개의 English Learning Harness skill을 `~/.codex/skills`에 설치하고, README 첫 경로를 paste-into-Codex install prompt로 바꿨다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-agent-install-smoke.mjs`가 isolated Codex skills dir에서 symlink/copy 설치를 검증하고, `node scripts/phase7-learner-readme-smoke.mjs`가 human clone/download primary path를 금지한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-17</strong>
+                <span>README.md, README.en.md, scripts/phase7-learner-readme-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, scripts/package-public-artifact.mjs, scripts/phase7-public-artifact-smoke.mjs, docs/phase-7-evidence/M7-17-korean-primary-readme.md</span>
+              </div>
+              <h3>#124 한국어 README를 메인 공개 표면으로 전환함</h3>
+              <div class="card-row"><b>왜</b><p>제품의 1차 타겟은 한국인 영어 회화 학습자다. 첫 방문자가 영어 README나 Node 명령 목록을 먼저 보면 제품 의도와 맞지 않는다.</p></div>
+              <div class="card-row"><b>완료</b><p>`README.md`를 한국어 메인 README로 바꾸고, `README.en.md`를 보조 영어 README로 추가했다. 배포 아티팩트와 readiness smoke도 bilingual README 구조를 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2492,6 +2524,14 @@
             <a class="link-card source" href="../DESIGN.md">
               <strong>DESIGN.md</strong>
               <span>제품/UX/설계 기준</span>
+            </a>
+            <a class="link-card source" href="../README.md">
+              <strong>README.md</strong>
+              <span>한국어 메인 공개 README</span>
+            </a>
+            <a class="link-card source" href="../README.en.md">
+              <strong>README.en.md</strong>
+              <span>secondary English README</span>
             </a>
             <a class="link-card source" href="./project-state.json">
               <strong>docs/project-state.json</strong>
@@ -2585,10 +2625,6 @@
           <tbody>
 
             <tr>
-              <td>M7-9 approval packet</td>
-              <td><strong>Pass</strong><span>owner approval packet is generated without changing repository visibility and includes public clone proof command</span></td>
-            </tr>
-            <tr>
               <td>M7-10 public-source policy</td>
               <td><strong>Pass</strong><span>distribution policy now recommends the source repository as the open-source public distribution surface</span></td>
             </tr>
@@ -2615,6 +2651,10 @@
             <tr>
               <td>M7-16 agent-installed onboarding</td>
               <td><strong>Pass</strong><span>setup --host codex installs skills into Codex; README leads with paste-into-Codex install prompt</span></td>
+            </tr>
+            <tr>
+              <td>M7-17 Korean-primary README</td>
+              <td><strong>Pass</strong><span>README.md is Korean-first, README.en.md is secondary, and bilingual public artifact/readiness smokes pass</span></td>
             </tr>
           </tbody>
         </table>
@@ -2660,7 +2700,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 72개 보기</summary>
+        <summary>완료 이력 73개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3383,10 +3423,20 @@
               <div class="card-row"><b>완료</b><p>distribution policy를 open-source-prep, public_source_repository, public-git-clone 기준으로 정렬하고 artifact release는 fallback으로 낮췄다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase6-distribution-policy-smoke.mjs`가 public source repo 경로에는 default public clone smoke, artifact fallback 경로에는 phase7-public-release-url-smoke가 있음을 검증한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-11</strong>
+                <span>LICENSE, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, SUPPORT.md, GOVERNANCE.md, .github/ISSUE_TEMPLATE/, .github/PULL_REQUEST_TEMPLATE.md, scripts/phase7-open-source-readiness-smoke.mjs</span>
+              </div>
+              <h3>#112 open-source public launch 준비를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>public repo로 열기 전에 license, contribution, conduct, security, support, governance, issue/PR template, README public clone framing이 갖춰져야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>MIT LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, SUPPORT, GOVERNANCE, GitHub issue templates, PR template, open-source readiness smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-readiness-smoke.mjs`가 required community files, README public clone path, policy alignment, local secret-file absence를 통과하고 visibilityReady=false는 repo가 아직 PRIVATE이기 때문이라고 보고한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 69개 보기</summary>
+        <summary>전체 검증 70개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3666,6 +3716,10 @@
             <tr>
               <td>M7-16 agent-installed onboarding</td>
               <td><strong>Pass</strong><span>setup --host codex installs skills into Codex; README leads with paste-into-Codex install prompt</span></td>
+            </tr>
+            <tr>
+              <td>M7-17 Korean-primary README</td>
+              <td><strong>Pass</strong><span>README.md is Korean-first, README.en.md is secondary, and bilingual public artifact/readiness smokes pass</span></td>
             </tr>
             </tbody>
           </table>
