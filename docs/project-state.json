@@ -134,7 +134,7 @@
     {
       "label": "Current stage",
       "value": "M6 active",
-      "detail": "#73 marketplace install passes; #78 blocks public claim",
+      "detail": "#73/#74 pass; #78 blocks public claim",
       "tone": "amber"
     },
     {
@@ -870,6 +870,19 @@
             "README.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M6-3",
+          "title": "#74 first-run onboarding/support diagnostics를 강화함",
+          "why": "새 사용자나 지인이 implementation docs 없이도 다음 행동, 복구 명령, support file 위치, native hook 경계를 이해해야 한다.",
+          "done": "setup/health/status JSON과 context text에 support diagnostics를 추가하고, setup next commands를 daily/today/weekly/home/export/health로 확장했다.",
+          "verification": "`node scripts/phase6-onboarding-diagnostics-smoke.mjs`가 setup/health/status/context support, corrupt progress recovery, setup --repair backup, progress v2 restore를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase6-onboarding-diagnostics-smoke.mjs",
+            "docs/phase-6-evidence/M6-3-onboarding-diagnostics.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1182,6 +1195,11 @@
       "name": "M6-2",
       "status": "Pass",
       "detail": "clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified"
+    },
+    {
+      "name": "M6-3",
+      "status": "Pass",
+      "detail": "setup/health/status/context support diagnostics and corrupt-store repair guidance pass"
     }
   ],
   "commands": [
@@ -1296,6 +1314,10 @@
     {
       "label": "Run M6 marketplace install smoke",
       "command": "node scripts/phase6-marketplace-install-smoke.mjs"
+    },
+    {
+      "label": "Run M6 onboarding diagnostics smoke",
+      "command": "node scripts/phase6-onboarding-diagnostics-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

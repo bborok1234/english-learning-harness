@@ -66,6 +66,8 @@ node scripts/english-learning-harness.mjs setup \
   --correction-style "gentle recast first"
 ```
 
+`setup`, `health`, and `status` return a `support` block in JSON mode. It lists the supported next commands, local support files, repair commands, and the native hook boundary. The first-use path remains the explicit command wrapper.
+
 If health reports a corrupt local store, run the repair form. It backs up broken local JSON files before recreating defaults:
 
 ```bash
@@ -413,6 +415,12 @@ Run the M6 local marketplace install smoke:
 
 ```bash
 node scripts/phase6-marketplace-install-smoke.mjs
+```
+
+Run the M6 onboarding diagnostics smoke:
+
+```bash
+node scripts/phase6-onboarding-diagnostics-smoke.mjs
 ```
 
 Run the full first-run smoke:

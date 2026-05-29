@@ -172,3 +172,10 @@ M6 remains open. Epic #10 has been split into executable issues #72-#75, and #78
 - clean clone can package a local marketplace root with `scripts/package-local-marketplace.mjs`.
 - isolated `CODEX_HOME` can add that marketplace and install `english-learning-harness@phase6-marketplace`.
 - README explicitly keeps public Git-backed install unverified and avoids unsupported URL/GitHub install commands.
+
+#74 evidence currently shows:
+
+- setup/health/status JSON outputs include support diagnostics.
+- context output includes a support diagnostics section.
+- corrupt local progress returns explicit `setup --repair` recovery.
+- repair backs up broken local JSON files and restores valid progress v2.
