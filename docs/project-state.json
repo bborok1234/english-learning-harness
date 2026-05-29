@@ -1038,6 +1038,18 @@
             "scripts/phase7-release-workflow-smoke.mjs",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-5",
+          "title": "#100 public release URL checksum smoke를 추가함",
+          "why": "public artifact repo README는 tarball과 SHA256SUMS를 함께 다운로드하므로 #83 proof도 checksum-aware 경로를 검증해야 한다.",
+          "done": "artifact URL과 SHA256SUMS URL을 다운로드하고 shasum 검증 후 setup/daily/today를 실행하는 smoke를 추가했다. 기본은 local loopback으로 publication 없이 실행된다.",
+          "verification": "`node scripts/phase7-public-release-url-smoke.mjs`가 checksumVerified=true, hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false로 mechanics를 통과한다.",
+          "files": [
+            "scripts/phase7-public-release-url-smoke.mjs",
+            "docs/phase-7-evidence/M7-5-public-release-url.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1423,6 +1435,11 @@
       "name": "M7-4 artifact repo workflow",
       "status": "Pass",
       "detail": "manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication"
+    },
+    {
+      "name": "M7-5 checksum URL smoke",
+      "status": "Pass",
+      "detail": "public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist"
     }
   ],
   "commands": [
@@ -1569,6 +1586,10 @@
     {
       "label": "Run M7 public artifact handoff smoke",
       "command": "node scripts/phase7-public-artifact-handoff-smoke.mjs"
+    },
+    {
+      "label": "Run M7 public release URL smoke",
+      "command": "node scripts/phase7-public-release-url-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

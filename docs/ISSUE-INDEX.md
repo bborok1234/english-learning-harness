@@ -201,6 +201,7 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #94 | M7-2: Prepare public artifact repository handoff bundle | continue |
 | #96 | M7-3: Prepare public artifact repository onboarding README | continue |
 | #98 | M7-4: Align release workflow with separate public artifact repository | continue |
+| #100 | M7-5: Verify public release URL with checksum handoff | continue |
 
 M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
 
@@ -213,6 +214,7 @@ M7 remains open for a future public repository clone or separate public artifact
 - #94 prepares a local handoff bundle for a separate public artifact repository without publishing.
 - #96 adds a public artifact repository README to that handoff so the public repository URL can explain download, verification, extraction, setup, and first practice.
 - #98 aligns the manual workflow so optional publication targets `artifact_repo` with `PUBLIC_ARTIFACT_REPO_TOKEN`, not the private source repository.
+- #100 adds checksum-aware public release URL smoke for artifact plus `SHA256SUMS`.
 - after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... node scripts/phase7-hosted-artifact-smoke.mjs` against the real URL.
 
 #94 evidence currently shows:
@@ -231,6 +233,14 @@ M7 remains open for a future public repository clone or separate public artifact
 - `gh release view/create/upload` commands target `--repo "$ARTIFACT_REPO"`.
 - source repository workflow permissions are read-only.
 - no publication is executed by the smoke or PR.
+
+#100 evidence currently shows:
+
+- `scripts/phase7-public-release-url-smoke.mjs` downloads `english-learning-harness-public.tar.gz` and `SHA256SUMS`.
+- the smoke verifies `shasum -a 256 -c SHA256SUMS` before extraction.
+- the extracted artifact can run setup, daily, and today.
+- local loopback mode reports `hostedAccessStatus=local_loopback_only` and `canClosePublicDistribution=false`.
+- real public URL mode requires both `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL` and `ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL`.
 
 #83 evidence currently shows:
 

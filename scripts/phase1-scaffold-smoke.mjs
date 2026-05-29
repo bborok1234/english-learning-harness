@@ -70,6 +70,7 @@ const requiredFiles = [
   "scripts/phase7-release-workflow-smoke.mjs",
   "scripts/phase7-public-release-decision-smoke.mjs",
   "scripts/phase7-public-artifact-handoff-smoke.mjs",
+  "scripts/phase7-public-release-url-smoke.mjs",
 ];
 
 function readJson(path) {
