@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience implementation active",
-    "status": "Next: #40 seven-day local return simulation",
+    "stage": "M3 Daily Return Experience gate closeout next",
+    "status": "Next: #41 clone-to-daily gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 daily cockpit, M3-2 learner home, and M3-3 no-streak return guidance are implemented and smoke-tested. The next work is #40 seven-day local return simulation."
+    "summary": "M3-1 through M3-4 are implemented and smoke-tested, including a seven-day local simulation. The next work is #41 clone-to-daily gate closeout."
   },
   "ssot": [
     {
@@ -98,19 +98,19 @@
     {
       "label": "Ultragoal",
       "value": "M3",
-      "detail": "daily return implementation active",
+      "detail": "daily return gate closeout next",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M3 active",
-      "detail": "#37/#38/#39 implemented; #40 next",
+      "value": "M3 closeout",
+      "detail": "#37-#40 implemented; #41 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#40 seven-day return simulation",
+      "detail": "#41 clone-to-daily gate",
       "tone": "red"
     },
     {
@@ -650,6 +650,18 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-3-evidence/M3-3-no-streak-return.md"
           ]
+        },
+        {
+          "id": "M3-4",
+          "title": "#40 Seven-day local return simulation을 구현함",
+          "why": "개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.",
+          "done": "`phase3-seven-day-simulation-smoke`가 7일 동안 setup, daily, review, today, weekly, home 경로를 command-wrapper로 반복 실행한다.",
+          "verification": "7 sessions, 7 saved phrases, 7 review items, 6 reviewed due items, weekly mirror, learner home, skill evidence growth를 확인했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase3-seven-day-simulation-smoke.mjs",
+            "docs/phase-3-evidence/M3-4-seven-day-simulation.md"
+          ]
         }
       ]
     },
@@ -657,23 +669,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-4",
-          "title": "#40 Seven-day local return simulation smoke",
-          "why": "개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.",
-          "done": "7일 fixture가 setup, daily/today, review updates, weekly mirror, learner home을 반복 실행한다.",
-          "verification": "review intervals, skill evidence growth, phrase reuse, unsupported claim absence를 검증한다.",
-          "files": [
-            "scripts/phase3-seven-day-return-smoke.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-5",
@@ -688,6 +683,12 @@
           ]
         }
       ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": []
     },
     {
       "id": "risks",
@@ -872,6 +873,11 @@
       "name": "M3-3",
       "status": "Pass",
       "detail": "no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures"
+    },
+    {
+      "name": "M3-4",
+      "status": "Pass",
+      "detail": "seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow"
     }
   ],
   "commands": [
@@ -944,6 +950,10 @@
       "command": "node scripts/phase3-no-streak-return-smoke.mjs"
     },
     {
+      "label": "Run seven-day simulation smoke",
+      "command": "node scripts/phase3-seven-day-simulation-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -973,7 +983,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 40"
+      "command": "gh issue view 41"
     }
   ]
 }

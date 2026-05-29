@@ -287,6 +287,12 @@ Run the no-streak return smoke:
 node scripts/phase3-no-streak-return-smoke.mjs
 ```
 
+Run the seven-day local simulation smoke:
+
+```bash
+node scripts/phase3-seven-day-simulation-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

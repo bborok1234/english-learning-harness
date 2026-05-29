@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M3 Daily Return Experience implementation active",
-    "status": "Next: #40 seven-day local return simulation",
+    "stage": "M3 Daily Return Experience gate closeout next",
+    "status": "Next: #41 clone-to-daily gate",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 daily cockpit, M3-2 learner home, and M3-3 no-streak return guidance are implemented and smoke-tested. The next work is #40 seven-day local return simulation."
+    "summary": "M3-1 through M3-4 are implemented and smoke-tested, including a seven-day local simulation. The next work is #41 clone-to-daily gate closeout."
   },
   "ssot": [
     {
@@ -500,19 +500,19 @@
     {
       "label": "Ultragoal",
       "value": "M3",
-      "detail": "daily return implementation active",
+      "detail": "daily return gate closeout next",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M3 active",
-      "detail": "#37/#38/#39 implemented; #40 next",
+      "value": "M3 closeout",
+      "detail": "#37-#40 implemented; #41 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#40 seven-day return simulation",
+      "detail": "#41 clone-to-daily gate",
       "tone": "red"
     },
     {
@@ -1052,6 +1052,18 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-3-evidence/M3-3-no-streak-return.md"
           ]
+        },
+        {
+          "id": "M3-4",
+          "title": "#40 Seven-day local return simulation을 구현함",
+          "why": "개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.",
+          "done": "`phase3-seven-day-simulation-smoke`가 7일 동안 setup, daily, review, today, weekly, home 경로를 command-wrapper로 반복 실행한다.",
+          "verification": "7 sessions, 7 saved phrases, 7 review items, 6 reviewed due items, weekly mirror, learner home, skill evidence growth를 확인했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase3-seven-day-simulation-smoke.mjs",
+            "docs/phase-3-evidence/M3-4-seven-day-simulation.md"
+          ]
         }
       ]
     },
@@ -1059,23 +1071,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-4",
-          "title": "#40 Seven-day local return simulation smoke",
-          "why": "개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.",
-          "done": "7일 fixture가 setup, daily/today, review updates, weekly mirror, learner home을 반복 실행한다.",
-          "verification": "review intervals, skill evidence growth, phrase reuse, unsupported claim absence를 검증한다.",
-          "files": [
-            "scripts/phase3-seven-day-return-smoke.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-5",
@@ -1090,6 +1085,12 @@
           ]
         }
       ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": []
     },
     {
       "id": "risks",
@@ -1274,6 +1275,11 @@
       "name": "M3-3",
       "status": "Pass",
       "detail": "no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures"
+    },
+    {
+      "name": "M3-4",
+      "status": "Pass",
+      "detail": "seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow"
     }
   ],
   "commands": [
@@ -1346,6 +1352,10 @@
       "command": "node scripts/phase3-no-streak-return-smoke.mjs"
     },
     {
+      "label": "Run seven-day simulation smoke",
+      "command": "node scripts/phase3-seven-day-simulation-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1375,7 +1385,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 40"
+      "command": "gh issue view 41"
     }
   ]
 }
@@ -1384,12 +1394,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M3-1 daily cockpit, M3-2 learner home, and M3-3 no-streak return guidance are implemented and smoke-tested. The next work is #40 seven-day local return simulation.</p>
+        <p class="summary">M3-1 through M3-4 are implemented and smoke-tested, including a seven-day local simulation. The next work is #41 clone-to-daily gate closeout.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M3 Daily Return Experience implementation active<br>
-        Next: #40 seven-day local return simulation
+        M3 Daily Return Experience gate closeout next<br>
+        Next: #41 clone-to-daily gate
       </div>
     </header>
 
@@ -1398,17 +1408,17 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M3</div>
-          <p>daily return implementation active</p>
+          <p>daily return gate closeout next</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M3 active</div>
-          <p>#37/#38/#39 implemented; #40 next</p>
+          <div class="metric-value">M3 closeout</div>
+          <p>#37-#40 implemented; #41 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M3</div>
-          <p>#40 seven-day return simulation</p>
+          <p>#41 clone-to-daily gate</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1439,20 +1449,10 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>2</span>
+          <span>1</span>
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-4</strong>
-                <span>scripts/phase3-seven-day-return-smoke.mjs</span>
-              </div>
-              <h3>#40 Seven-day local return simulation smoke</h3>
-              <div class="card-row"><b>왜</b><p>개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.</p></div>
-              <div class="card-row"><b>완료</b><p>7일 fixture가 setup, daily/today, review updates, weekly mirror, learner home을 반복 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>review intervals, skill evidence growth, phrase reuse, unsupported claim absence를 검증한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-5</strong>
@@ -1472,16 +1472,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M2-4</strong>
-                <span>docs/TUTOR-POLICY.md, scripts/lib/tutor-policy-rubric.mjs, scripts/phase2-tutor-policy-smoke.mjs, docs/phase-2-evidence/M2-4-tutor-policy-rubric.md</span>
-              </div>
-              <h3>#28 Tutor policy rubric enforcement</h3>
-              <div class="card-row"><b>왜</b><p>개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>실행 가능한 tutor policy rubric, negative fixtures, Korean bridge behavior, persona fixture integration을 구현했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase2-tutor-policy-smoke.mjs`가 prohibited claim, mini mirror, Korean dead-end, correction ladder, overcorrection violation을 모두 잡았다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M2-5</strong>
@@ -1531,6 +1521,16 @@
               <div class="card-row"><b>왜</b><p>매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.</p></div>
               <div class="card-row"><b>완료</b><p>`return_state`가 `gap_kind`와 `restart_action`을 제공한다. same-day, next-day, long-gap 모두 no-streak copy와 gentle restart action을 반환한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase3-no-streak-return-smoke.mjs`가 fresh/same-day/next-day/long-gap fixture를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-4</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase3-seven-day-simulation-smoke.mjs, docs/phase-3-evidence/M3-4-seven-day-simulation.md</span>
+              </div>
+              <h3>#40 Seven-day local return simulation을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>`phase3-seven-day-simulation-smoke`가 7일 동안 setup, daily, review, today, weekly, home 경로를 command-wrapper로 반복 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>7 sessions, 7 saved phrases, 7 review items, 6 reviewed due items, weekly mirror, learner home, skill evidence growth를 확인했다.</p></div>
             </article>
         </div>
       </section>
@@ -1681,10 +1681,6 @@
           <tbody>
 
             <tr>
-              <td>M2-2</td>
-              <td><strong>Pass</strong><span>review due list, success/fail interval, and phrase vault smoke pass</span></td>
-            </tr>
-            <tr>
               <td>M2-3</td>
               <td><strong>Pass</strong><span>due phrase planner, avoided topics, mode choice, and selection reason smoke pass</span></td>
             </tr>
@@ -1711,6 +1707,10 @@
             <tr>
               <td>M3-3</td>
               <td><strong>Pass</strong><span>no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures</span></td>
+            </tr>
+            <tr>
+              <td>M3-4</td>
+              <td><strong>Pass</strong><span>seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow</span></td>
             </tr>
           </tbody>
         </table>
@@ -1756,7 +1756,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 32개 보기</summary>
+        <summary>완료 이력 33개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2079,10 +2079,20 @@
               <div class="card-row"><b>완료</b><p>planner가 learner model, due review phrase, profile avoided topics를 읽고 scenario mode와 selection_reason을 기록하게 했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-scenario-planner-smoke.mjs`와 persona fixture 회귀 검증이 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-4</strong>
+                <span>docs/TUTOR-POLICY.md, scripts/lib/tutor-policy-rubric.mjs, scripts/phase2-tutor-policy-smoke.mjs, docs/phase-2-evidence/M2-4-tutor-policy-rubric.md</span>
+              </div>
+              <h3>#28 Tutor policy rubric enforcement</h3>
+              <div class="card-row"><b>왜</b><p>개인화 planner가 생기면 tutor output이 과한 교정, 레벨 판정, 금지 claim을 하지 않는지 자동으로 막아야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>실행 가능한 tutor policy rubric, negative fixtures, Korean bridge behavior, persona fixture integration을 구현했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-tutor-policy-smoke.mjs`가 prohibited claim, mini mirror, Korean dead-end, correction ladder, overcorrection violation을 모두 잡았다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 28개 보기</summary>
+        <summary>전체 검증 29개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2199,12 +2209,16 @@
               <td>M3-3</td>
               <td><strong>Pass</strong><span>no-streak return smoke passes fresh, same-day, next-day, and long-gap fixtures</span></td>
             </tr>
+            <tr>
+              <td>M3-4</td>
+              <td><strong>Pass</strong><span>seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 25개 보기</summary>
+        <summary>전체 명령 26개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2276,6 +2290,10 @@
               <code>node scripts/phase3-no-streak-return-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run seven-day simulation smoke</span>
+              <code>node scripts/phase3-seven-day-simulation-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2305,7 +2323,7 @@
             </div>
             <div class="command">
               <span>View next M3 issue</span>
-              <code>gh issue view 40</code>
+              <code>gh issue view 41</code>
             </div>
         </div>
       </details>
