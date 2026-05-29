@@ -536,7 +536,7 @@
     {
       "label": "Current stage",
       "value": "M6 active",
-      "detail": "#72 mechanics pass privately; #78 blocks public claim",
+      "detail": "#73 marketplace install passes; #78 blocks public claim",
       "tone": "amber"
     },
     {
@@ -1259,6 +1259,19 @@
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M6-2",
+          "title": "#73 local marketplace packaging/install path를 검증함",
+          "why": "friend/invited-user handoff에는 public Git-backed install을 과장하지 않고 실제 검증된 Codex plugin install 경로가 필요하다.",
+          "done": "clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.",
+          "verification": "`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.",
+          "files": [
+            "scripts/phase6-marketplace-install-smoke.mjs",
+            "docs/phase-6-evidence/M6-2-marketplace-install.md",
+            "README.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1566,6 +1579,11 @@
       "name": "M6-1",
       "status": "Blocked",
       "detail": "authenticated clone mechanics pass, but public clone smoke fails by design while repository visibility is PRIVATE"
+    },
+    {
+      "name": "M6-2",
+      "status": "Pass",
+      "detail": "clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified"
     }
   ],
   "commands": [
@@ -1678,6 +1696,10 @@
       "command": "ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs"
     },
     {
+      "label": "Run M6 marketplace install smoke",
+      "command": "node scripts/phase6-marketplace-install-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1735,7 +1757,7 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M6 active</div>
-          <p>#72 mechanics pass privately; #78 blocks public claim</p>
+          <p>#73 marketplace install passes; #78 blocks public claim</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
@@ -1806,16 +1828,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M5-0</strong>
-                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-5-evidence/M5-0-validation-issue-split.md</span>
-              </div>
-              <h3>#9 M5 validation epic을 실행 이슈로 분해함</h3>
-              <div class="card-row"><b>왜</b><p>실제 학습 효과 검증은 하나의 큰 epic으로 진행하면 프로토콜, export, rubric, persona validation, closeout 판단이 섞인다.</p></div>
-              <div class="card-row"><b>완료</b><p>#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.</p></div>
-              <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M5 Real Learning Validation&quot;`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M5-1</strong>
                 <span>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, docs/phase-5-evidence/M5-1-validation-protocol.md, docs/project-state.json</span>
               </div>
@@ -1863,6 +1875,16 @@
               <div class="card-row"><b>왜</b><p>M5는 tooling 완료가 아니라 claim을 계속/보류/다운그레이드할지 evidence로 판단해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>M5 gate smoke가 protocol, export, rubric, persona validation evidence를 재검증하고 M6 #72-#75를 생성했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase5-m5-gate-smoke.mjs`가 decision=continue_to_m6, personaCount=4, blocked real learner claims를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M6-2</strong>
+                <span>scripts/phase6-marketplace-install-smoke.mjs, docs/phase-6-evidence/M6-2-marketplace-install.md, README.md, docs/project-state.json</span>
+              </div>
+              <h3>#73 local marketplace packaging/install path를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>friend/invited-user handoff에는 public Git-backed install을 과장하지 않고 실제 검증된 Codex plugin install 경로가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -2033,10 +2055,6 @@
           <tbody>
 
             <tr>
-              <td>M4-5</td>
-              <td><strong>Pass</strong><span>multimodal gate smoke passes text, voice, and image events in one learner store with weekly event_count=3</span></td>
-            </tr>
-            <tr>
               <td>M5-0</td>
               <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66</span></td>
             </tr>
@@ -2063,6 +2081,10 @@
             <tr>
               <td>M6-1</td>
               <td><strong>Blocked</strong><span>authenticated clone mechanics pass, but public clone smoke fails by design while repository visibility is PRIVATE</span></td>
+            </tr>
+            <tr>
+              <td>M6-2</td>
+              <td><strong>Pass</strong><span>clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified</span></td>
             </tr>
           </tbody>
         </table>
@@ -2108,7 +2130,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 46개 보기</summary>
+        <summary>완료 이력 47개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2571,10 +2593,20 @@
               <div class="card-row"><b>완료</b><p>`phase4-multimodal-gate-smoke`가 한 learner store에서 text, voice, image event를 만들고 weekly mirror가 세 modality를 요약하는지 검증한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase4-multimodal-gate-smoke.mjs`가 event_count=3, modalities=text/voice/image, unsupported claim guard를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5-0</strong>
+                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-5-evidence/M5-0-validation-issue-split.md</span>
+              </div>
+              <h3>#9 M5 validation epic을 실행 이슈로 분해함</h3>
+              <div class="card-row"><b>왜</b><p>실제 학습 효과 검증은 하나의 큰 epic으로 진행하면 프로토콜, export, rubric, persona validation, closeout 판단이 섞인다.</p></div>
+              <div class="card-row"><b>완료</b><p>#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M5 Real Learning Validation&quot;`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 43개 보기</summary>
+        <summary>전체 검증 44개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2751,12 +2783,16 @@
               <td>M6-1</td>
               <td><strong>Blocked</strong><span>authenticated clone mechanics pass, but public clone smoke fails by design while repository visibility is PRIVATE</span></td>
             </tr>
+            <tr>
+              <td>M6-2</td>
+              <td><strong>Pass</strong><span>clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 35개 보기</summary>
+        <summary>전체 명령 36개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2866,6 +2902,10 @@
             <div class="command">
               <span>Run M6 authenticated clone mechanics smoke</span>
               <code>ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M6 marketplace install smoke</span>
+              <code>node scripts/phase6-marketplace-install-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
