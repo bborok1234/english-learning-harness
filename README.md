@@ -86,6 +86,17 @@ Run from a transcript file:
 node scripts/english-learning-harness.mjs today --transcript path/to/transcript.txt
 ```
 
+Import transcription-first voice practice:
+
+```bash
+node scripts/english-learning-harness.mjs voice \
+  --transcript path/to/voice-transcript.txt \
+  --audio-file path/to/local-audio.wav \
+  --json
+```
+
+The voice path stores transcript-backed interaction evidence. It does not score accent or prove realtime conversation.
+
 Review due personal phrases:
 
 ```bash
@@ -309,6 +320,12 @@ Run the text event persistence smoke:
 
 ```bash
 node scripts/phase4-text-event-persistence-smoke.mjs
+```
+
+Run the voice event import smoke:
+
+```bash
+node scripts/phase4-voice-event-import-smoke.mjs
 ```
 
 Run the full first-run smoke:

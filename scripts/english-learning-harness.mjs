@@ -59,6 +59,9 @@ function parseArgs(argv) {
     } else if (arg === "--transcript") {
       options.transcript = argv[index + 1];
       index += 1;
+    } else if (arg === "--audio-file") {
+      options.audioFile = argv[index + 1];
+      index += 1;
     } else if (arg === "--scenario") {
       options.scenario = argv[index + 1];
       index += 1;
@@ -121,6 +124,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
+    "  node scripts/english-learning-harness.mjs voice [--say TEXT ...] [--transcript FILE] [--audio-file FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs context [--learner-root DIR]",
@@ -286,6 +290,53 @@ function today(options) {
   };
 }
 
+function voice(options) {
+  const date = options.date || new Date();
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const profileText = readProfile(paths.profile);
+  const scenarioPlan = planScenario({
+    profileText,
+    preferredId: options.scenario,
+    learnerModel: readLearnerModel(paths.learnerModel),
+    vocabulary: readVocabulary(paths.vocabulary),
+    dueReviewItems: listDueReviewItems(paths.root, date),
+  });
+  const sourceArtifact = options.audioFile
+    ? {
+        type: "audio",
+        path: options.audioFile,
+        claim_boundary: "Audio path is local metadata only; no speech-quality judgment is inferred.",
+      }
+    : undefined;
+  const session = buildSession(transcriptInputs(options), {
+    sessionId: `${date.toISOString().slice(0, 10)}-${date.getTime()}-voice`,
+    mode: "voice-transcript",
+    modality: "voice",
+    sourceArtifact,
+    opening:
+      "Let's treat this as transcription-first voice practice. We will use the transcript as learning evidence.",
+    scenario: scenarioPlan.scenario,
+    selectionReason: scenarioPlan.selectionReason,
+  });
+  const persisted = persistSession(options.learnerRoot, session, date);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: persisted.learnerRoot,
+    sessionId: session.id,
+    mode: session.mode,
+    eventModality: "voice",
+    audioFile: options.audioFile || "",
+    scenario: session.scenario,
+    interactionEvents: session.interaction_events,
+    journalPath: persisted.journalPath,
+    artifactPath: persisted.artifactPath,
+    finalizesSession: true,
+    claimBoundary:
+      "This imports transcription-first voice evidence only. It does not prove live voice exchange or speech quality.",
+  };
+}
+
 function health(options) {
   let paths;
   try {
@@ -406,6 +457,10 @@ function run() {
   }
   if (command === "today") {
     output(today(options), options.json);
+    return;
+  }
+  if (command === "voice") {
+    output(voice(options), options.json);
     return;
   }
   if (command === "health") {

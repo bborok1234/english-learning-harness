@@ -374,16 +374,16 @@ function transferTargetsForScenario(scenario = {}) {
   return ["personal opinion", "recommendation", "casual conversation"];
 }
 
-export function buildInteractionEvents(session) {
+export function buildInteractionEvents(session, options = {}) {
   const learnerTurns = session.learner_turns ?? [];
   return learnerTurns.map((learnerOutput, index) => {
     const retryOutput = index === learnerTurns.length - 1
       ? session.mirror?.recast ?? learnerOutput
       : learnerTurns[index + 1];
-    return {
+    const event = {
       schema_version: 1,
       event_id: eventId(session.id, index),
-      modality: session.mode === "text-first" ? "text" : session.mode,
+      modality: options.modality || (session.mode === "text-first" ? "text" : session.mode),
       scenario_id: session.scenario?.id ?? "",
       learner_intent: session.scenario?.goal ?? "complete a small English interaction",
       learner_output: learnerOutput,
@@ -398,6 +398,10 @@ export function buildInteractionEvents(session) {
       claim_boundary:
         "This event records local interaction evidence only. It does not prove real-world fluency.",
     };
+    if (options.sourceArtifact) {
+      event.source_artifact = options.sourceArtifact;
+    }
+    return event;
   });
 }
 
@@ -511,7 +515,7 @@ export function buildSession(learnerTurns, options = {}) {
 
   const session = {
     id: options.sessionId || `${todayStamp()}-${Date.now()}`,
-    mode: "text-first",
+    mode: options.mode || "text-first",
     scenario: {
       id: scenario.id,
       title: scenario.title,
@@ -531,7 +535,10 @@ export function buildSession(learnerTurns, options = {}) {
     mirror,
     session_metrics: estimateSessionMetrics(learnerTurns),
   };
-  session.interaction_events = buildInteractionEvents(session);
+  session.interaction_events = buildInteractionEvents(session, {
+    modality: options.modality,
+    sourceArtifact: options.sourceArtifact,
+  });
   validateInteractionEvents(session.interaction_events, "session.interaction_events");
   return session;
 }

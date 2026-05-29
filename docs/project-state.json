@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M4 Multimodal Interaction Lab implementation active",
-    "status": "Next: #53 transcription-first voice event import",
+    "status": "Next: #52 image information-gap event fixture",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4-2 text interaction events are persisted into learner reflection surfaces: weekly mirror summarizes event evidence and learner home renders interaction evidence and transfer targets. Next is #53 transcription-first voice event import."
+    "summary": "M4-3 transcription-first voice event import is implemented and smoke-tested. Voice transcript practice now writes validated voice interaction events with local audio metadata only. Next is #52 image information-gap event fixture."
   },
   "ssot": [
     {
@@ -104,19 +104,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "text event summaries implemented",
+      "detail": "voice transcript events implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M4 active",
-      "detail": "#50/#49 implemented; #53 next",
+      "detail": "#50/#49/#53 implemented; #52 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M4",
-      "detail": "#53 transcription-first voice import",
+      "detail": "#52 image information-gap fixture",
       "tone": "red"
     },
     {
@@ -719,6 +719,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-4-evidence/M4-2-text-event-persistence.md"
           ]
+        },
+        {
+          "id": "M4-3",
+          "title": "#53 Transcription-first voice event import를 구현함",
+          "why": "Realtime voice는 아직 기본 경로가 아니지만 voice transcript는 event graph에 들어올 수 있어야 한다.",
+          "done": "`voice` command가 transcript와 optional local audio path를 받아 `mode=voice-transcript`, `modality=voice` event를 저장한다.",
+          "verification": "`node scripts/phase4-voice-event-import-smoke.mjs`가 voice event validation, local audio metadata, weekly modality summary를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase4-voice-event-import-smoke.mjs",
+            "docs/phase-4-evidence/M4-3-voice-event-import.md"
+          ]
         }
       ]
     },
@@ -726,24 +739,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M4-3",
-          "title": "#53 Transcription-first voice event import",
-          "why": "Realtime voice는 아직 기본 경로가 아니지만 voice transcript는 event graph에 들어올 수 있어야 한다.",
-          "done": "transcript-first voice import가 modality=voice event를 저장하고 optional audio metadata는 local path로만 남긴다.",
-          "verification": "voice event import smoke와 tutor policy smoke가 통과해야 한다.",
-          "files": [
-            "scripts/english-learning-harness.mjs",
-            "scripts/lib/english-learning-store.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M4-4",
@@ -755,7 +750,14 @@
             "scripts/lib/english-learning-store.mjs",
             "docs/DATA-CONTRACTS.md"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M4-5",
           "title": "#54 M4 multimodal-ready gate",
@@ -977,6 +979,11 @@
       "name": "M4-2",
       "status": "Pass",
       "detail": "text event persistence smoke passes weekly event summary and learner home transfer target rendering"
+    },
+    {
+      "name": "M4-3",
+      "status": "Pass",
+      "detail": "voice event import smoke passes transcript-first voice modality, local audio metadata, and weekly modality summary"
     }
   ],
   "commands": [
@@ -1065,6 +1072,10 @@
       "command": "node scripts/phase4-text-event-persistence-smoke.mjs"
     },
     {
+      "label": "Run voice event import smoke",
+      "command": "node scripts/phase4-voice-event-import-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1094,7 +1105,7 @@
     },
     {
       "label": "View next M4 issue",
-      "command": "gh issue view 53"
+      "command": "gh issue view 52"
     }
   ]
 }
