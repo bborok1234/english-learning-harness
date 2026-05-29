@@ -402,13 +402,13 @@
   <script type="application/json" id="project-state">
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-05-28",
+  "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M2 Pedagogical Learning Engine implemented on PR branch",
-    "status": "Next: create/execute M3 multimodal interaction event graph issues",
+    "stage": "M3 Daily Return Experience planning complete",
+    "status": "Next: #37 daily cockpit command",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1~M2-5는 PR 브랜치에서 구현/검증됐고, 다음 작업은 M3 multimodal interaction event graph 실행 이슈화와 구현이다."
+    "summary": "M1과 M2는 milestone/epic closeout까지 완료됐다. M3는 multimodal이 아니라 Daily Return Experience로 정렬됐고, #37-#41 실행 이슈가 생성됐다. 다음 구현은 #37 daily cockpit command다."
   },
   "ssot": [
     {
@@ -445,6 +445,12 @@
       "label": "docs/phase-2-evidence/",
       "path": "./phase-2-evidence/",
       "role": "Phase 2 학습 엔진 구현 증거",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-3-evidence/",
+      "path": "./phase-3-evidence/",
+      "role": "Phase 3 daily return 구현 증거",
       "kind": "source"
     },
     {
@@ -493,26 +499,26 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M2",
-      "detail": "pedagogical learning engine implemented",
+      "value": "M3",
+      "detail": "daily return experience planning complete",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M2 active",
-      "detail": "#25-#29 implemented on PR branches",
+      "value": "M3 active",
+      "detail": "#37-#41 created; #37 next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "multimodal interaction event graph issues",
+      "detail": "#37 daily cockpit command",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "17 issues",
-      "detail": "10 epics + 7 M1 execution issues",
+      "value": "27 issues",
+      "detail": "10 epics + M1/M2/M3 execution issues",
       "tone": "green"
     },
     {
@@ -993,6 +999,18 @@
             "scripts/phase2-weekly-mirror-smoke.mjs",
             "docs/phase-2-evidence/M2-5-weekly-mirror.md"
           ]
+        },
+        {
+          "id": "M3-0",
+          "title": "M3 Daily Return Experience 실행 이슈를 정렬함",
+          "why": "상위 Goal은 1차 제품 완성인데 dashboard는 M3를 multimodal로, GitHub milestone은 Daily Return으로 가리켜 진행판이 어긋났다.",
+          "done": "M1/M2 epics와 milestones를 evidence comment로 close하고, M3 실행 이슈 #37-#41을 생성했다. M4는 multimodal lab으로 유지했다.",
+          "verification": "`docs/ISSUE-INDEX.md`가 #37-#41을 기록하고 dashboard now가 #37 daily cockpit을 가리킨다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1002,15 +1020,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M3-PLAN",
-          "title": "M3 multimodal interaction event graph 실행 이슈화",
-          "why": "M2는 텍스트/로컬 evidence 기반 학습 엔진이다. 다음은 voice/image/video를 이벤트 그래프에 연결할 준비가 필요하다.",
-          "done": "M3 scope를 GitHub issues로 쪼개고 stable CLI/API 경로, local artifact schema, multimodal smoke 기준을 확정한다.",
-          "verification": "M3 issues와 test-spec가 dashboard/ISSUE-INDEX에 기록되어야 한다.",
+          "id": "M3-1",
+          "title": "#37 Daily cockpit command",
+          "why": "today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.",
+          "done": "`daily` command가 오늘의 계획, due phrases, suggested scenario, learner model summary, latest weekly mirror, exact next commands를 보여주게 한다.",
+          "verification": "fresh learner와 returning learner smoke에서 daily cockpit output이 통과해야 한다.",
           "files": [
-            "docs/MULTIMODAL-GENAI-PLAN.md",
-            "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "docs/DATA-CONTRACTS.md"
           ]
         }
       ]
@@ -1019,7 +1037,52 @@
       "id": "next",
       "title": "Next",
       "tone": "amber",
-      "cards": []
+      "cards": [
+        {
+          "id": "M3-2",
+          "title": "#38 Learner home HTML from local evidence",
+          "why": "프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.",
+          "done": "learner root 아래에 today action, due review, saved phrases, weekly mirror, next focus를 보여주는 HTML을 생성한다.",
+          "verification": "learner home smoke와 Playwright render smoke가 통과해야 한다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs"
+          ]
+        },
+        {
+          "id": "M3-3",
+          "title": "#39 No-streak return guidance",
+          "why": "매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.",
+          "done": "same-day, next-day, long-gap return copy가 gentle restart action을 보여주게 한다.",
+          "verification": "date fixture smoke에서 shame/streak punishment 문구가 없어야 한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "docs/TUTOR-POLICY.md"
+          ]
+        },
+        {
+          "id": "M3-4",
+          "title": "#40 Seven-day local return simulation smoke",
+          "why": "개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.",
+          "done": "7일 fixture가 setup, daily/today, review updates, weekly mirror, learner home을 반복 실행한다.",
+          "verification": "review intervals, skill evidence growth, phrase reuse, unsupported claim absence를 검증한다.",
+          "files": [
+            "scripts/phase3-seven-day-return-smoke.mjs"
+          ]
+        },
+        {
+          "id": "M3-5",
+          "title": "#41 M3 clone-to-daily gate",
+          "why": "M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.",
+          "done": "clean clone이 setup, daily cockpit, learner home, review/vault, weekly mirror, M3 smoke를 통과하게 한다.",
+          "verification": "M3 gate smoke, clean clone smoke, dashboard render smoke가 통과해야 한다.",
+          "files": [
+            "docs/project-state.json",
+            "docs/dashboard.html",
+            "scripts/phase1-clean-clone-smoke.mjs"
+          ]
+        }
+      ]
     },
     {
       "id": "risks",
@@ -1184,6 +1247,11 @@
       "name": "M2-5",
       "status": "Pass",
       "detail": "weekly mirror local evidence smoke and M2 regression smokes pass"
+    },
+    {
+      "name": "M3-0",
+      "status": "Pass",
+      "detail": "M1/M2 milestones closed and M3 execution issues #37-#41 created"
     }
   ],
   "commands": [
@@ -1270,6 +1338,10 @@
     {
       "label": "Open dashboard",
       "command": "open docs/dashboard.html"
+    },
+    {
+      "label": "View next M3 issue",
+      "command": "gh issue view 37"
     }
   ]
 }
@@ -1278,12 +1350,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M1 local command-wrapper first-usable gate가 fresh clone smoke까지 통과했다. M2-1~M2-5는 PR 브랜치에서 구현/검증됐고, 다음 작업은 M3 multimodal interaction event graph 실행 이슈화와 구현이다.</p>
+        <p class="summary">M1과 M2는 milestone/epic closeout까지 완료됐다. M3는 multimodal이 아니라 Daily Return Experience로 정렬됐고, #37-#41 실행 이슈가 생성됐다. 다음 구현은 #37 daily cockpit command다.</p>
       </div>
       <div class="stamp">
-        <strong>2026-05-28</strong>
-        M2 Pedagogical Learning Engine implemented on PR branch<br>
-        Next: create/execute M3 multimodal interaction event graph issues
+        <strong>2026-05-29</strong>
+        M3 Daily Return Experience planning complete<br>
+        Next: #37 daily cockpit command
       </div>
     </header>
 
@@ -1291,23 +1363,23 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M2</div>
-          <p>pedagogical learning engine implemented</p>
+          <div class="metric-value">M3</div>
+          <p>daily return experience planning complete</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M2 active</div>
-          <p>#25-#29 implemented on PR branches</p>
+          <div class="metric-value">M3 active</div>
+          <p>#37-#41 created; #37 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M3</div>
-          <p>multimodal interaction event graph issues</p>
+          <p>#37 daily cockpit command</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">17 issues</div>
-          <p>10 epics + 7 M1 execution issues</p>
+          <div class="metric-value">27 issues</div>
+          <p>10 epics + M1/M2/M3 execution issues</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -1333,19 +1405,59 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>1</span>
+          <span>5</span>
         </header>
         <div class="column-cards">
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M3-PLAN</strong>
-                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json</span>
+                <strong>M3-1</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, docs/DATA-CONTRACTS.md</span>
               </div>
-              <h3>M3 multimodal interaction event graph 실행 이슈화</h3>
-              <div class="card-row"><b>왜</b><p>M2는 텍스트/로컬 evidence 기반 학습 엔진이다. 다음은 voice/image/video를 이벤트 그래프에 연결할 준비가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>M3 scope를 GitHub issues로 쪼개고 stable CLI/API 경로, local artifact schema, multimodal smoke 기준을 확정한다.</p></div>
-              <div class="card-row"><b>검증</b><p>M3 issues와 test-spec가 dashboard/ISSUE-INDEX에 기록되어야 한다.</p></div>
+              <h3>#37 Daily cockpit command</h3>
+              <div class="card-row"><b>왜</b><p>today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`daily` command가 오늘의 계획, due phrases, suggested scenario, learner model summary, latest weekly mirror, exact next commands를 보여주게 한다.</p></div>
+              <div class="card-row"><b>검증</b><p>fresh learner와 returning learner smoke에서 daily cockpit output이 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-2</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs</span>
+              </div>
+              <h3>#38 Learner home HTML from local evidence</h3>
+              <div class="card-row"><b>왜</b><p>프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>learner root 아래에 today action, due review, saved phrases, weekly mirror, next focus를 보여주는 HTML을 생성한다.</p></div>
+              <div class="card-row"><b>검증</b><p>learner home smoke와 Playwright render smoke가 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-3</strong>
+                <span>scripts/lib/english-learning-store.mjs, docs/TUTOR-POLICY.md</span>
+              </div>
+              <h3>#39 No-streak return guidance</h3>
+              <div class="card-row"><b>왜</b><p>매일 쓰는 도구가 missed day를 실패처럼 만들면 학습 지속성을 해친다.</p></div>
+              <div class="card-row"><b>완료</b><p>same-day, next-day, long-gap return copy가 gentle restart action을 보여주게 한다.</p></div>
+              <div class="card-row"><b>검증</b><p>date fixture smoke에서 shame/streak punishment 문구가 없어야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-4</strong>
+                <span>scripts/phase3-seven-day-return-smoke.mjs</span>
+              </div>
+              <h3>#40 Seven-day local return simulation smoke</h3>
+              <div class="card-row"><b>왜</b><p>개별 command smoke만으로는 일주일 반복 사용 중 state drift를 잡기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>7일 fixture가 setup, daily/today, review updates, weekly mirror, learner home을 반복 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>review intervals, skill evidence growth, phrase reuse, unsupported claim absence를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-5</strong>
+                <span>docs/project-state.json, docs/dashboard.html, scripts/phase1-clean-clone-smoke.mjs</span>
+              </div>
+              <h3>#41 M3 clone-to-daily gate</h3>
+              <div class="card-row"><b>왜</b><p>M3 완료는 clean clone에서 daily return path까지 재현되어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>clean clone이 setup, daily cockpit, learner home, review/vault, weekly mirror, M3 smoke를 통과하게 한다.</p></div>
+              <div class="card-row"><b>검증</b><p>M3 gate smoke, clean clone smoke, dashboard render smoke가 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1356,16 +1468,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M2-ISSUES</strong>
-                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/STATUS.md</span>
-              </div>
-              <h3>M2 Pedagogical Learning Engine 실행 이슈를 생성함</h3>
-              <div class="card-row"><b>왜</b><p>M1은 사용 가능한 하네스 기반이고, M2는 실제 회화 향상을 강화하는 learner memory, tutor policy, fixture quality를 다룬다.</p></div>
-              <div class="card-row"><b>완료</b><p>GitHub issues #25-#29를 만들고 learner model, review command, memory-aware planner, tutor policy rubric, weekly mirror로 분해했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #25-#29를 기록하고 dashboard next work가 #25를 가리킨다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M2-1</strong>
@@ -1415,6 +1517,16 @@
               <div class="card-row"><b>왜</b><p>매일의 세션과 복습이 쌓여도 주간 단위 회고가 없으면 사용자가 여정을 관리하기 어렵다.</p></div>
               <div class="card-row"><b>완료</b><p>`weekly` command와 `artifacts/weekly/weekly-mirror-YYYY-MM-DD.json` 생성을 구현하고 local evidence 기반 요약만 남기게 했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-weekly-mirror-smoke.mjs`가 세션 3개에서 themes, saved/reused phrases, repair attempts, next focus를 생성했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-0</strong>
+                <span>docs/ISSUE-INDEX.md, docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md, docs/project-state.json</span>
+              </div>
+              <h3>M3 Daily Return Experience 실행 이슈를 정렬함</h3>
+              <div class="card-row"><b>왜</b><p>상위 Goal은 1차 제품 완성인데 dashboard는 M3를 multimodal로, GitHub milestone은 Daily Return으로 가리켜 진행판이 어긋났다.</p></div>
+              <div class="card-row"><b>완료</b><p>M1/M2 epics와 milestones를 evidence comment로 close하고, M3 실행 이슈 #37-#41을 생성했다. M4는 multimodal lab으로 유지했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #37-#41을 기록하고 dashboard now가 #37 daily cockpit을 가리킨다.</p></div>
             </article>
         </div>
       </section>
@@ -1525,6 +1637,10 @@
               <strong>docs/phase-2-evidence/</strong>
               <span>Phase 2 학습 엔진 구현 증거</span>
             </a>
+            <a class="link-card source" href="./phase-3-evidence/">
+              <strong>docs/phase-3-evidence/</strong>
+              <span>Phase 3 daily return 구현 증거</span>
+            </a>
             <a class="link-card source" href="./LEARNING-ENGINE.md">
               <strong>docs/LEARNING-ENGINE.md</strong>
               <span>학습 엔진 설계</span>
@@ -1561,10 +1677,6 @@
           <tbody>
 
             <tr>
-              <td>PH1-FIX-5</td>
-              <td><strong>Pass</strong><span>idempotent setup, health recovery guidance, and setup --repair smoke pass</span></td>
-            </tr>
-            <tr>
               <td>PH1-FIX-6</td>
               <td><strong>Pass</strong><span>First-Usable Gate rendered from structured state</span></td>
             </tr>
@@ -1591,6 +1703,10 @@
             <tr>
               <td>M2-5</td>
               <td><strong>Pass</strong><span>weekly mirror local evidence smoke and M2 regression smokes pass</span></td>
+            </tr>
+            <tr>
+              <td>M3-0</td>
+              <td><strong>Pass</strong><span>M1/M2 milestones closed and M3 execution issues #37-#41 created</span></td>
             </tr>
           </tbody>
         </table>
@@ -1636,7 +1752,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 28개 보기</summary>
+        <summary>완료 이력 29개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -1919,10 +2035,20 @@
               <div class="card-row"><b>완료</b><p>`origin`에서 fresh clone을 만들고 setup, today, health, progress validation, dashboard generation을 실행했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase1-clean-clone-smoke.mjs`가 pass했고 runtime tmp files가 git status에 나타나지 않았다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-ISSUES</strong>
+                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/STATUS.md</span>
+              </div>
+              <h3>M2 Pedagogical Learning Engine 실행 이슈를 생성함</h3>
+              <div class="card-row"><b>왜</b><p>M1은 사용 가능한 하네스 기반이고, M2는 실제 회화 향상을 강화하는 learner memory, tutor policy, fixture quality를 다룬다.</p></div>
+              <div class="card-row"><b>완료</b><p>GitHub issues #25-#29를 만들고 learner model, review command, memory-aware planner, tutor policy rubric, weekly mirror로 분해했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`docs/ISSUE-INDEX.md`가 #25-#29를 기록하고 dashboard next work가 #25를 가리킨다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 24개 보기</summary>
+        <summary>전체 검증 25개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2023,12 +2149,16 @@
               <td>M2-5</td>
               <td><strong>Pass</strong><span>weekly mirror local evidence smoke and M2 regression smokes pass</span></td>
             </tr>
+            <tr>
+              <td>M3-0</td>
+              <td><strong>Pass</strong><span>M1/M2 milestones closed and M3 execution issues #37-#41 created</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 21개 보기</summary>
+        <summary>전체 명령 22개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2114,6 +2244,10 @@
             <div class="command">
               <span>Open dashboard</span>
               <code>open docs/dashboard.html</code>
+            </div>
+            <div class="command">
+              <span>View next M3 issue</span>
+              <code>gh issue view 37</code>
             </div>
         </div>
       </details>
