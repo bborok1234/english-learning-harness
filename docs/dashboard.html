@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Public source live + learner-first onboarding",
-    "status": "Public clone-to-learn is verified; README now explains the learner value before maintainer evidence",
+    "stage": "Public source live + Codex-native onboarding",
+    "status": "Public clone-to-learn is verified; README now makes Codex conversation the learner-facing product surface",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. The README has been reframed for first-time learners: what this is, how to try it in five minutes, how daily practice works, what progress is tracked, and which claims remain unproven."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. The README now tells learners to open the repo in Codex and use natural-language practice prompts; node commands are documented as the internal engine for Codex, maintainers, and verification."
   },
   "ssot": [
     {
@@ -542,13 +542,13 @@
     {
       "label": "Ultragoal",
       "value": "Complete",
-      "detail": "public source clone-to-learn plus learner-first README",
+      "detail": "public source clone-to-learn plus Codex-native README",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "Public live",
-      "detail": "new visitors can clone, setup, practice, and understand the learning loop",
+      "detail": "new visitors can open the repo in Codex and start practice by talking to Codex",
       "tone": "green"
     },
     {
@@ -559,14 +559,14 @@
     },
     {
       "label": "GitHub plan",
-      "value": "44 issues",
-      "detail": "#117 adds learner-first README regression coverage",
+      "value": "45 issues",
+      "detail": "#120 pivots README and skills to Codex conversation surface",
       "tone": "green"
     },
     {
       "label": "README",
-      "value": "Learner-first",
-      "detail": "phase7-learner-readme-smoke passes",
+      "value": "Codex-native",
+      "detail": "node commands are internal engine details, not learner UX",
       "tone": "green"
     }
   ],
@@ -1560,12 +1560,29 @@
           "id": "M7-14",
           "title": "#117 README를 신규 학습자용으로 재구성함",
           "why": "기존 README는 구현/검증 보고서처럼 읽혀서 처음 온 학습자가 이 제품이 무엇이고 왜 영어 회화 실력 향상에 도움이 되는지 바로 알기 어려웠다.",
-          "done": "README 첫 화면을 제품 약속, 5분 체험, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.",
+          "done": "README를 제품 약속, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.",
           "verification": "`node scripts/phase7-learner-readme-smoke.mjs`, open-source readiness smoke, marketplace install smoke, public clean clone smoke가 모두 통과한다.",
           "files": [
             "README.md",
             "scripts/phase7-learner-readme-smoke.mjs",
             "docs/phase-7-evidence/M7-14-learner-first-readme.md"
+          ]
+        },
+        {
+          "id": "M7-15",
+          "title": "#120 사용자 표면을 Codex 대화로 되돌림",
+          "why": "학습자가 `node` 명령을 직접 치는 제품이면 애초 목표와 다르다. 사용자는 Codex에게 영어 연습을 요청하고, Codex가 내부 엔진을 실행해야 한다.",
+          "done": "README 첫 시작 경로를 자연어 Codex prompt로 바꾸고, `node` 명령은 Internal Engine For Maintainers 아래로 내렸다. skills와 plugin manifest도 Codex 대화 surface를 명시한다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`가 `node scripts/`가 internal engine section 이전에 나오면 실패하도록 강화됐고, public clean clone/open-source readiness/marketplace install smoke도 통과한다.",
+          "files": [
+            "README.md",
+            ".codex-plugin/plugin.json",
+            "skills/onboarding/SKILL.md",
+            "skills/daily-session/SKILL.md",
+            "skills/mini-mirror/SKILL.md",
+            "skills/picture-description/SKILL.md",
+            "scripts/phase7-learner-readme-smoke.mjs",
+            "docs/phase-7-evidence/M7-15-codex-native-user-surface.md"
           ]
         }
       ]
@@ -1577,12 +1594,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "공개 레포 첫인상과 실제 첫 세션을 점검하는 단계",
-          "why": "기능은 public clone-to-learn까지 왔지만, 공개 제품은 신규 방문자가 README만 보고 바로 시도하고 학습 루프를 이해할 수 있어야 한다.",
-          "done": "learner-first README와 회귀 smoke를 추가했다.",
-          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`가 README가 learner quick start를 maintainer verification보다 앞세우는지 검증한다.",
+          "title": "Codex-native product surface 점검",
+          "why": "사용자가 직접 `node`를 치는 순간 제품은 영어 학습 하네스가 아니라 개발자용 CLI가 된다.",
+          "done": "README와 skills는 Codex 대화를 제품 표면으로 선언하고, command wrapper는 내부 엔진/검증 도구로 격하시켰다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`가 natural-language prompt가 internal engine command보다 먼저 나오는지 검증한다.",
           "files": [
             "README.md",
+            "skills/",
             "scripts/phase7-learner-readme-smoke.mjs"
           ]
         }
@@ -1596,7 +1614,7 @@
         {
           "id": "NEXT-1",
           "title": "다음 제품 증거 선택: real learner pilot / realtime voice / Git-backed plugin install",
-          "why": "public clone과 learner-first README는 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.",
+          "why": "public clone과 Codex-native onboarding은 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.",
           "done": "아직 선택 전이다.",
           "verification": "후보별 검증 기준: real learner pilot은 7-day protocol, realtime voice는 stable command/API proof, Git-backed plugin install은 public install smoke.",
           "files": [
@@ -1992,6 +2010,11 @@
       "name": "M7-14 learner-first README",
       "status": "Pass",
       "detail": "README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries"
+    },
+    {
+      "name": "M7-15 Codex-native user surface",
+      "status": "Pass",
+      "detail": "README and skills now keep learners in Codex conversation; node commands are internal engine details"
     }
   ],
   "commands": [
@@ -2206,12 +2229,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. The README has been reframed for first-time learners: what this is, how to try it in five minutes, how daily practice works, what progress is tracked, and which claims remain unproven.</p>
+        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. The README now tells learners to open the repo in Codex and use natural-language practice prompts; node commands are documented as the internal engine for Codex, maintainers, and verification.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        Public source live + learner-first onboarding<br>
-        Public clone-to-learn is verified; README now explains the learner value before maintainer evidence
+        Public source live + Codex-native onboarding<br>
+        Public clone-to-learn is verified; README now makes Codex conversation the learner-facing product surface
       </div>
     </header>
 
@@ -2220,12 +2243,12 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">Complete</div>
-          <p>public source clone-to-learn plus learner-first README</p>
+          <p>public source clone-to-learn plus Codex-native README</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">Public live</div>
-          <p>new visitors can clone, setup, practice, and understand the learning loop</p>
+          <p>new visitors can open the repo in Codex and start practice by talking to Codex</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next decision</div>
@@ -2234,13 +2257,13 @@
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">44 issues</div>
-          <p>#117 adds learner-first README regression coverage</p>
+          <div class="metric-value">45 issues</div>
+          <p>#120 pivots README and skills to Codex conversation surface</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>README</div>
-          <div class="metric-value">Learner-first</div>
-          <p>phase7-learner-readme-smoke passes</p>
+          <div class="metric-value">Codex-native</div>
+          <p>node commands are internal engine details, not learner UX</p>
         </article>
     </section>
 
@@ -2268,12 +2291,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>README.md, scripts/phase7-learner-readme-smoke.mjs</span>
+                <span>README.md, skills/, scripts/phase7-learner-readme-smoke.mjs</span>
               </div>
-              <h3>공개 레포 첫인상과 실제 첫 세션을 점검하는 단계</h3>
-              <div class="card-row"><b>왜</b><p>기능은 public clone-to-learn까지 왔지만, 공개 제품은 신규 방문자가 README만 보고 바로 시도하고 학습 루프를 이해할 수 있어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>learner-first README와 회귀 smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`가 README가 learner quick start를 maintainer verification보다 앞세우는지 검증한다.</p></div>
+              <h3>Codex-native product surface 점검</h3>
+              <div class="card-row"><b>왜</b><p>사용자가 직접 `node`를 치는 순간 제품은 영어 학습 하네스가 아니라 개발자용 CLI가 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>README와 skills는 Codex 대화를 제품 표면으로 선언하고, command wrapper는 내부 엔진/검증 도구로 격하시켰다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`가 natural-language prompt가 internal engine command보다 먼저 나오는지 검증한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2281,7 +2304,7 @@
                 <span>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, docs/MULTIMODAL-GENAI-PLAN.md, scripts/phase6-marketplace-install-smoke.mjs</span>
               </div>
               <h3>다음 제품 증거 선택: real learner pilot / realtime voice / Git-backed plugin install</h3>
-              <div class="card-row"><b>왜</b><p>public clone과 learner-first README는 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.</p></div>
+              <div class="card-row"><b>왜</b><p>public clone과 Codex-native onboarding은 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>아직 선택 전이다.</p></div>
               <div class="card-row"><b>검증</b><p>후보별 검증 기준: real learner pilot은 7-day protocol, realtime voice는 stable command/API proof, Git-backed plugin install은 public install smoke.</p></div>
             </article>
@@ -2294,16 +2317,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-9</strong>
-                <span>scripts/prepare-public-release-approval.mjs, scripts/phase7-public-release-approval-smoke.mjs, docs/phase-7-evidence/M7-9-public-release-approval.md</span>
-              </div>
-              <h3>#108 public release approval packet을 준비함</h3>
-              <div class="card-row"><b>왜</b><p>#90 owner decision은 무엇을 승인하는지, 승인 후 어떤 명령과 증거가 필요한지 사람이 한눈에 확인할 수 있어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>PUBLIC-RELEASE-APPROVAL.md/json이 public source repository visibility change packet을 생성하도록 정렬했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-approval-smoke.mjs`가 approvalRequired=true, repositoryVisibilityChanged=false, canPublishNow=false, canClosePublicDistribution=false를 통과한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-10</strong>
@@ -2351,8 +2364,18 @@
               </div>
               <h3>#117 README를 신규 학습자용으로 재구성함</h3>
               <div class="card-row"><b>왜</b><p>기존 README는 구현/검증 보고서처럼 읽혀서 처음 온 학습자가 이 제품이 무엇이고 왜 영어 회화 실력 향상에 도움이 되는지 바로 알기 어려웠다.</p></div>
-              <div class="card-row"><b>완료</b><p>README 첫 화면을 제품 약속, 5분 체험, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.</p></div>
+              <div class="card-row"><b>완료</b><p>README를 제품 약속, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, open-source readiness smoke, marketplace install smoke, public clean clone smoke가 모두 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-15</strong>
+                <span>README.md, .codex-plugin/plugin.json, skills/onboarding/SKILL.md, skills/daily-session/SKILL.md, skills/mini-mirror/SKILL.md, skills/picture-description/SKILL.md, scripts/phase7-learner-readme-smoke.mjs, docs/phase-7-evidence/M7-15-codex-native-user-surface.md</span>
+              </div>
+              <h3>#120 사용자 표면을 Codex 대화로 되돌림</h3>
+              <div class="card-row"><b>왜</b><p>학습자가 `node` 명령을 직접 치는 제품이면 애초 목표와 다르다. 사용자는 Codex에게 영어 연습을 요청하고, Codex가 내부 엔진을 실행해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>README 첫 시작 경로를 자연어 Codex prompt로 바꾸고, `node` 명령은 Internal Engine For Maintainers 아래로 내렸다. skills와 plugin manifest도 Codex 대화 surface를 명시한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`가 `node scripts/`가 internal engine section 이전에 나오면 실패하도록 강화됐고, public clean clone/open-source readiness/marketplace install smoke도 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2531,10 +2554,6 @@
           <tbody>
 
             <tr>
-              <td>M7-7 publication preflight</td>
-              <td><strong>Pass</strong><span>preflight reports source repository PUBLIC with publicationReady=true and no blockers</span></td>
-            </tr>
-            <tr>
               <td>M7-8 public artifact install</td>
               <td><strong>Pass</strong><span>checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated CODEX_HOME</span></td>
             </tr>
@@ -2561,6 +2580,10 @@
             <tr>
               <td>M7-14 learner-first README</td>
               <td><strong>Pass</strong><span>README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries</span></td>
+            </tr>
+            <tr>
+              <td>M7-15 Codex-native user surface</td>
+              <td><strong>Pass</strong><span>README and skills now keep learners in Codex conversation; node commands are internal engine details</span></td>
             </tr>
           </tbody>
         </table>
@@ -2606,7 +2629,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 70개 보기</summary>
+        <summary>완료 이력 71개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3309,10 +3332,20 @@
               <div class="card-row"><b>완료</b><p>checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-9</strong>
+                <span>scripts/prepare-public-release-approval.mjs, scripts/phase7-public-release-approval-smoke.mjs, docs/phase-7-evidence/M7-9-public-release-approval.md</span>
+              </div>
+              <h3>#108 public release approval packet을 준비함</h3>
+              <div class="card-row"><b>왜</b><p>#90 owner decision은 무엇을 승인하는지, 승인 후 어떤 명령과 증거가 필요한지 사람이 한눈에 확인할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>PUBLIC-RELEASE-APPROVAL.md/json이 public source repository visibility change packet을 생성하도록 정렬했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-approval-smoke.mjs`가 approvalRequired=true, repositoryVisibilityChanged=false, canPublishNow=false, canClosePublicDistribution=false를 통과한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 67개 보기</summary>
+        <summary>전체 검증 68개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3584,6 +3617,10 @@
             <tr>
               <td>M7-14 learner-first README</td>
               <td><strong>Pass</strong><span>README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries</span></td>
+            </tr>
+            <tr>
+              <td>M7-15 Codex-native user surface</td>
+              <td><strong>Pass</strong><span>README and skills now keep learners in Codex conversation; node commands are internal engine details</span></td>
             </tr>
             </tbody>
           </table>

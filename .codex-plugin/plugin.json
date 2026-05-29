@@ -1,15 +1,15 @@
 {
   "name": "english-learning-harness",
   "version": "0.1.0",
-  "description": "Local-first English conversation harness for Korean adult learners.",
+  "description": "Codex-native English conversation harness for Korean adult learners.",
   "author": {
     "name": "English Learning Harness"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "English Learning Harness",
-    "shortDescription": "Run gentle text-first English practice with local learner memory.",
-    "longDescription": "English Learning Harness provides low-pressure English practice flows, local learner progress scaffolding, and setup-owned hook support. Phase 1 defaults to text/transcription-first sessions because realtime voice is not yet a stable CLI path.",
+    "shortDescription": "Turn Codex conversation into gentle English practice with local learner memory.",
+    "longDescription": "English Learning Harness keeps the learner in Codex conversation while the repository's local engine handles setup, evidence, review memory, and progress persistence internally. It defaults to text/transcription-first sessions because realtime voice is not yet a stable CLI path.",
     "developerName": "English Learning Harness",
     "category": "Education",
     "capabilities": [

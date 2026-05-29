@@ -316,11 +316,14 @@ M7 now targets the current source repository as the open-source public distribut
 - the smoke verifies public `git clone`, setup, daily, today, weekly, home, export, progress validation, and clean clone git status.
 - public Git-backed plugin install, realtime voice, and long-term learner outcomes remain unclaimed.
 
-#117 learner-first README evidence currently shows:
+#117/#120 Codex-native README evidence currently shows:
 
-- `README.md` now leads with the learner promise, five-minute quick start, target learner, daily practice loop, conversation-improvement mechanisms, progress tracking, privacy, and current boundaries.
+- `README.md` now leads with Codex as the learner-facing surface: open the repo in Codex, speak to Codex in natural language, and let Codex use the local engine internally.
+- the learner prompt examples no longer present `node scripts/...` as the product path.
+- `node` commands are moved under `Internal Engine For Maintainers`.
+- Codex skill instructions now explicitly say not to ask learners to run `node` commands for ordinary onboarding, daily practice, mini mirror, or picture-description practice.
 - maintainer verification and public distribution details are below learner onboarding instead of being the first thing a visitor sees.
-- `scripts/phase7-learner-readme-smoke.mjs` verifies the README keeps learner-facing sections before maintainer verification and preserves the public clone commands.
+- `scripts/phase7-learner-readme-smoke.mjs` verifies the README keeps Codex-native natural-language onboarding before internal engine commands and preserves the public clone commands.
 - existing public clone, open-source readiness, and local marketplace README audits still pass.
 - this improves first-time public understanding; it does not claim realtime voice, accent scoring, public Git-backed plugin install, or long-term learner outcomes.
 
