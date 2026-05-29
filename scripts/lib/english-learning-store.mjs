@@ -30,6 +30,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     journalDir: resolve(root, "journal"),
     artifactDir: resolve(root, "artifacts/sessions"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
+    learnerHome: resolve(root, "home.html"),
   };
 }
 
@@ -848,6 +849,22 @@ function commandLine(root, command, extraArgs = []) {
   ].join(" ");
 }
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function htmlList(items, renderItem, emptyText) {
+  if (!items.length) {
+    return `<p class="empty">${escapeHtml(emptyText)}</p>`;
+  }
+  return `<ul>${items.map((item) => `<li>${renderItem(item)}</li>`).join("")}</ul>`;
+}
+
 function skillEvidenceSummary(learnerModel) {
   return Object.fromEntries(
     learnerSkillKeys.map((skill) => [
@@ -911,11 +928,247 @@ export function buildDailyCockpit(learnerRoot = defaultLearnerRoot(), date = new
     next_commands: [
       ...(dueReviewItems.length ? [commandLine(paths.root, "review")] : []),
       commandLine(paths.root, "today", ["--say", JSON.stringify("I want to practice today.")]),
+      commandLine(paths.root, "home"),
       commandLine(paths.root, "weekly"),
       commandLine(paths.root, "vault"),
     ],
     claim_boundary:
       "This cockpit chooses the next local practice action from local files only. It does not measure long-term skill transfer.",
+  };
+}
+
+function readLatestWeeklyMirror(learnerRoot) {
+  const latestPath = latestWeeklyMirrorPath(learnerRoot);
+  if (!latestPath) return null;
+  return JSON.parse(readFileSync(latestPath, "utf8"));
+}
+
+function learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases }) {
+  const scenario = cockpit.suggested_scenario;
+  const nextCommand = cockpit.next_commands.find((command) => command.includes(" today ")) ?? cockpit.next_commands[0];
+  const weeklyThemes = weeklyMirror?.communicated_themes ?? [];
+  const weeklyPhrases = weeklyMirror?.saved_phrases ?? [];
+  const nextFocus = weeklyMirror?.next_focus;
+
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Home</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17201b;
+      --muted: #5d6b63;
+      --line: #d7ded8;
+      --paper: #f7f8f5;
+      --panel: #ffffff;
+      --accent: #2f6f5e;
+      --warm: #a85d32;
+      --soft: #e8f1ed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.5;
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+    header {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(30px, 5vw, 56px); line-height: 1; }
+    h2 { font-size: 18px; }
+    h3 { font-size: 15px; }
+    .subtle { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+      gap: 16px;
+      align-items: start;
+    }
+    section {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .stack { display: grid; gap: 16px; }
+    .hero {
+      display: grid;
+      gap: 16px;
+      border-left: 6px solid var(--accent);
+    }
+    .scenario {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+      background: var(--soft);
+      border-radius: 8px;
+    }
+    .label {
+      display: inline-flex;
+      width: fit-content;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    code {
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+      padding: 12px;
+      border-radius: 8px;
+      background: #17201b;
+      color: #f8fbf7;
+      font-size: 13px;
+    }
+    ul {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+    li strong { color: var(--accent); }
+    .empty {
+      margin-top: 10px;
+      color: var(--muted);
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfa;
+    }
+    .metric b {
+      display: block;
+      font-size: 22px;
+      color: var(--accent);
+    }
+    .boundary {
+      border-left: 6px solid var(--warm);
+    }
+    @media (max-width: 820px) {
+      main { width: min(100% - 24px, 720px); padding-top: 24px; }
+      .grid, .meta { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="label">Local learner home</p>
+      <h1>오늘의 영어 연습</h1>
+      <p class="subtle">${escapeHtml(cockpit.return_state.message)}</p>
+    </header>
+
+    <div class="grid">
+      <div class="stack">
+        <section class="hero" aria-labelledby="today-action">
+          <div>
+            <p class="label">Today</p>
+            <h2 id="today-action">${escapeHtml(scenario.title)}</h2>
+          </div>
+          <div class="scenario">
+            <h3>Goal</h3>
+            <p>${escapeHtml(scenario.goal)}</p>
+            <h3>Rescue phrase</h3>
+            <p>${escapeHtml(scenario.rescue_phrase)}</p>
+          </div>
+          <div>
+            <h3>Start command</h3>
+            <code>${escapeHtml(nextCommand)}</code>
+          </div>
+        </section>
+
+        <section aria-labelledby="due-review">
+          <h2 id="due-review">복습할 문장</h2>
+          ${htmlList(
+            cockpit.due_review.items,
+            (item) => `<strong>${escapeHtml(item.text)}</strong><br><span class="subtle">${escapeHtml(item.prompt)}</span>`,
+            "지금 due review는 없습니다. 오늘 문장 하나를 저장하면 다음 복습이 생깁니다.",
+          )}
+        </section>
+
+        <section aria-labelledby="weekly-mirror">
+          <h2 id="weekly-mirror">최근 weekly mirror</h2>
+          ${
+            weeklyMirror
+              ? `<p class="subtle">${escapeHtml(weeklyMirror.window.from || "start")} - ${escapeHtml(weeklyMirror.window.to || "now")}</p>
+          ${htmlList(weeklyThemes, (theme) => escapeHtml(theme), "아직 요약할 대화 주제가 없습니다.")}
+          ${
+            nextFocus
+              ? `<div class="scenario"><h3>Next focus</h3><p>${escapeHtml(nextFocus.prompt)}</p></div>`
+              : ""
+          }`
+              : '<p class="empty">아직 weekly mirror가 없습니다. 몇 번 연습한 뒤 weekly 명령을 실행하세요.</p>'
+          }
+        </section>
+      </div>
+
+      <aside class="stack">
+        <section aria-labelledby="journey">
+          <h2 id="journey">내 여정</h2>
+          <div class="meta">
+            <div class="metric"><span>Sessions</span><b>${escapeHtml(cockpit.return_state.session_count)}</b></div>
+            <div class="metric"><span>Due</span><b>${escapeHtml(cockpit.due_review.count)}</b></div>
+            <div class="metric"><span>Saved</span><b>${escapeHtml(cockpit.saved_phrase_count)}</b></div>
+          </div>
+        </section>
+
+        <section aria-labelledby="saved-phrases">
+          <h2 id="saved-phrases">최근 저장한 표현</h2>
+          ${htmlList(
+            savedPhrases,
+            (phrase) => `<strong>${escapeHtml(phrase.text)}</strong><br><span class="subtle">${escapeHtml(phrase.prompt)}</span>`,
+            "저장한 표현이 아직 없습니다.",
+          )}
+          ${weeklyPhrases.length ? `<p class="empty">Weekly mirror phrases: ${escapeHtml(weeklyPhrases.join(", "))}</p>` : ""}
+        </section>
+
+        <section class="boundary" aria-labelledby="boundary">
+          <h2 id="boundary">Claim boundary</h2>
+          <p>${escapeHtml(cockpit.claim_boundary)}</p>
+          <p class="subtle">This page is generated from your local learner files only.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
+`;
+}
+
+export function writeLearnerHome(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const cockpit = buildDailyCockpit(paths.root, date);
+  const weeklyMirror = readLatestWeeklyMirror(paths.root);
+  const savedPhrases = phraseVault(paths.root).slice(-5).reverse();
+  const html = learnerHomeHtml({ cockpit, weeklyMirror, savedPhrases });
+  writeFileSync(paths.learnerHome, html);
+  return {
+    homePath: paths.learnerHome,
+    homeUrl: `file://${paths.learnerHome}`,
+    cockpit,
   };
 }
 

@@ -243,6 +243,27 @@ Required fields:
 
 The cockpit may read `profile.md`, `progress.json`, `learner-model.json`, `vocabulary.json`, `review-queue.json`, latest journal, and latest weekly mirror. It must not punish missed days or claim measured long-term outcomes.
 
+## Learner Home HTML
+
+The `home` command writes `home.html` under the learner root. This file is a learner-facing local surface, not the project execution dashboard.
+
+Required content:
+
+- today's suggested scenario and start command,
+- due review phrase preview,
+- saved phrase preview,
+- latest weekly mirror themes and next focus when available,
+- small local journey counts for sessions, due phrases, and saved phrases,
+- claim boundary.
+
+Forbidden content:
+
+- GitHub issue/PR/process logs,
+- implementation progress claims,
+- native-speaker comparison,
+- guaranteed outcomes,
+- level ranking.
+
 ## Contract Rule
 
 The dashboard may not claim learning progress from a field unless that field has:

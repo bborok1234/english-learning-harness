@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M3 Daily Return Experience implementation active",
-    "status": "Next: #38 learner home HTML",
+    "status": "Next: #39 no-streak return guidance",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 daily cockpit command is implemented and smoke-tested. The shared dashboard now moves daily return from planning into implementation, and the next work is #38 learner home HTML from local evidence."
+    "summary": "M3-1 daily cockpit and M3-2 learner home are implemented and smoke-tested. The next work is #39 no-streak return guidance so missed days become a gentle restart path instead of a failure signal."
   },
   "ssot": [
     {
@@ -506,13 +506,13 @@
     {
       "label": "Current stage",
       "value": "M3 active",
-      "detail": "#37 implemented; #38 next",
+      "detail": "#37/#38 implemented; #39 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#38 learner home HTML",
+      "detail": "#39 no-streak return guidance",
       "tone": "red"
     },
     {
@@ -1025,6 +1025,20 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-3-evidence/M3-1-daily-cockpit.md"
           ]
+        },
+        {
+          "id": "M3-2",
+          "title": "#38 Learner home HTML을 구현함",
+          "why": "프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.",
+          "done": "`home` command가 learner root 아래 `home.html`을 생성한다. 페이지는 오늘 action, due review, saved phrases, weekly mirror, local journey counts, claim boundary를 보여준다.",
+          "verification": "`node scripts/phase3-learner-home-smoke.mjs`가 파일 생성과 Playwright render를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase3-learner-home-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-3-evidence/M3-2-learner-home.md"
+          ]
         }
       ]
     },
@@ -1032,24 +1046,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-2",
-          "title": "#38 Learner home HTML from local evidence",
-          "why": "프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.",
-          "done": "learner root 아래에 today action, due review, saved phrases, weekly mirror, next focus를 보여주는 HTML을 생성한다.",
-          "verification": "learner home smoke와 Playwright render smoke가 통과해야 한다.",
-          "files": [
-            "scripts/english-learning-harness.mjs",
-            "scripts/lib/english-learning-store.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-3",
@@ -1061,7 +1057,14 @@
             "scripts/lib/english-learning-store.mjs",
             "docs/TUTOR-POLICY.md"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M3-4",
           "title": "#40 Seven-day local return simulation smoke",
@@ -1259,6 +1262,11 @@
       "name": "M3-1",
       "status": "Pass",
       "detail": "daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands"
+    },
+    {
+      "name": "M3-2",
+      "status": "Pass",
+      "detail": "learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render"
     }
   ],
   "commands": [
@@ -1323,6 +1331,10 @@
       "command": "node scripts/phase3-daily-cockpit-smoke.mjs"
     },
     {
+      "label": "Run learner home smoke",
+      "command": "node scripts/phase3-learner-home-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1352,7 +1364,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 38"
+      "command": "gh issue view 39"
     }
   ]
 }
@@ -1361,12 +1373,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M3-1 daily cockpit command is implemented and smoke-tested. The shared dashboard now moves daily return from planning into implementation, and the next work is #38 learner home HTML from local evidence.</p>
+        <p class="summary">M3-1 daily cockpit and M3-2 learner home are implemented and smoke-tested. The next work is #39 no-streak return guidance so missed days become a gentle restart path instead of a failure signal.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M3 Daily Return Experience implementation active<br>
-        Next: #38 learner home HTML
+        Next: #39 no-streak return guidance
       </div>
     </header>
 
@@ -1380,12 +1392,12 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M3 active</div>
-          <p>#37 implemented; #38 next</p>
+          <p>#37/#38 implemented; #39 next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M3</div>
-          <p>#38 learner home HTML</p>
+          <p>#39 no-streak return guidance</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1416,20 +1428,10 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>4</span>
+          <span>3</span>
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M3-2</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs</span>
-              </div>
-              <h3>#38 Learner home HTML from local evidence</h3>
-              <div class="card-row"><b>왜</b><p>프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>learner root 아래에 today action, due review, saved phrases, weekly mirror, next focus를 보여주는 HTML을 생성한다.</p></div>
-              <div class="card-row"><b>검증</b><p>learner home smoke와 Playwright render smoke가 통과해야 한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M3-3</strong>
@@ -1469,16 +1471,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M2-2</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-review-vault-smoke.mjs, docs/phase-2-evidence/M2-2-review-vault.md</span>
-              </div>
-              <h3>#26 Due review queue command and phrase vault</h3>
-              <div class="card-row"><b>왜</b><p>개인 문장이 쌓여도 복습 명령과 phrase vault가 없으면 매일 다시 말하는 루프가 약하다.</p></div>
-              <div class="card-row"><b>완료</b><p>`review`/`vault` command, due item list, success/fail update, interval progression, phrase vault output을 구현했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase2-review-vault-smoke.mjs`에서 due listing, success 3-day interval, fail 1-day reset, vault phrase output이 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M2-3</strong>
@@ -1528,6 +1520,16 @@
               <div class="card-row"><b>왜</b><p>today/review/vault/weekly/context가 따로 있으면 사용자는 매일 무엇을 실행해야 할지 다시 판단해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`daily` command가 due review, suggested scenario, learner model summary, latest weekly mirror/journal, exact next commands를 반환한다. setup도 daily cockpit을 다음 명령으로 제안한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase3-daily-cockpit-smoke.mjs`가 fresh learner와 returning learner 경로를 모두 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M3-2</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase3-learner-home-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-3-evidence/M3-2-learner-home.md</span>
+              </div>
+              <h3>#38 Learner home HTML을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>`home` command가 learner root 아래 `home.html`을 생성한다. 페이지는 오늘 action, due review, saved phrases, weekly mirror, local journey counts, claim boundary를 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase3-learner-home-smoke.mjs`가 파일 생성과 Playwright render를 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -1678,10 +1680,6 @@
           <tbody>
 
             <tr>
-              <td>PH1-FIX-7</td>
-              <td><strong>Pass</strong><span>fresh clone setup/today/health/progress/dashboard smoke pass</span></td>
-            </tr>
-            <tr>
               <td>M2-1</td>
               <td><strong>Pass</strong><span>learner-model setup/migration/session update/context smoke pass</span></td>
             </tr>
@@ -1708,6 +1706,10 @@
             <tr>
               <td>M3-1</td>
               <td><strong>Pass</strong><span>daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands</span></td>
+            </tr>
+            <tr>
+              <td>M3-2</td>
+              <td><strong>Pass</strong><span>learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render</span></td>
             </tr>
           </tbody>
         </table>
@@ -1753,7 +1755,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 30개 보기</summary>
+        <summary>완료 이력 31개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2056,10 +2058,20 @@
               <div class="card-row"><b>완료</b><p>`learner-model.json` 생성/검증, setup migration, session skill evidence update, artifact evidence, context summary, setup repair 경로를 구현했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase2-learner-model-smoke.mjs`와 M1 회귀 smoke가 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M2-2</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/lib/english-learning-store.mjs, scripts/phase2-review-vault-smoke.mjs, docs/phase-2-evidence/M2-2-review-vault.md</span>
+              </div>
+              <h3>#26 Due review queue command and phrase vault</h3>
+              <div class="card-row"><b>왜</b><p>개인 문장이 쌓여도 복습 명령과 phrase vault가 없으면 매일 다시 말하는 루프가 약하다.</p></div>
+              <div class="card-row"><b>완료</b><p>`review`/`vault` command, due item list, success/fail update, interval progression, phrase vault output을 구현했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase2-review-vault-smoke.mjs`에서 due listing, success 3-day interval, fail 1-day reset, vault phrase output이 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 26개 보기</summary>
+        <summary>전체 검증 27개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2168,12 +2180,16 @@
               <td>M3-1</td>
               <td><strong>Pass</strong><span>daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands</span></td>
             </tr>
+            <tr>
+              <td>M3-2</td>
+              <td><strong>Pass</strong><span>learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 23개 보기</summary>
+        <summary>전체 명령 24개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -2237,6 +2253,10 @@
               <code>node scripts/phase3-daily-cockpit-smoke.mjs</code>
             </div>
             <div class="command">
+              <span>Run learner home smoke</span>
+              <code>node scripts/phase3-learner-home-smoke.mjs</code>
+            </div>
+            <div class="command">
               <span>Run full-flow smoke</span>
               <code>node scripts/phase1-full-flow-smoke.mjs</code>
             </div>
@@ -2266,7 +2286,7 @@
             </div>
             <div class="command">
               <span>View next M3 issue</span>
-              <code>gh issue view 38</code>
+              <code>gh issue view 39</code>
             </div>
         </div>
       </details>

@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M3 Daily Return Experience implementation active / #38 next** state.
+The project is in **M3 Daily Return Experience implementation active / #39 next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -45,9 +45,9 @@ What is complete:
 - M1 and M2 milestones are closed after completed evidence review.
 - M3 Daily Return Experience implementation issues #37-#41 are created.
 - M3-1 is implemented on the PR branch: `daily` returns due review, suggested scenario, learner model summary, latest weekly mirror/journal pointers, and exact next commands from local files.
+- M3-2 is implemented on the PR branch: `home` writes learner-owned `home.html` from local evidence and excludes project process logs.
 
 What is not started:
-- Learner home HTML.
 - No-streak return guidance.
 - Seven-day local return simulation.
 - Real user validation.
@@ -104,6 +104,7 @@ Strategic reset:
 - Weekly mirror evidence: `docs/phase-2-evidence/M2-5-weekly-mirror.md` records local-only weekly reflection generation, saved/reused phrase summaries, repair attempts, next focus, and M2 regression smoke verification.
 - M3 planning evidence: `docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md` records M1/M2 milestone closeout and M3 execution issues #37-#41.
 - Daily cockpit evidence: `docs/phase-3-evidence/M3-1-daily-cockpit.md` records `daily` command behavior and fresh/returning learner smoke verification.
+- Learner home evidence: `docs/phase-3-evidence/M3-2-learner-home.md` records `home.html` generation and Playwright render smoke verification.
 - Issue system evidence: `docs/ISSUE-INDEX.md` records epics #1-#10 and M1 issues #11-#17.
 - Process evidence: #11 was closed by commit `204dbec` without PR; future implementation issues must close through linked PRs.
 - Final review recommendation: APPROVE.
@@ -158,7 +159,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 - [x] M3-0: Align roadmap, close completed M1/M2 epics, and create M3 execution issues.
 - [x] M3-1: Add daily cockpit command (#37).
-- [ ] M3-2: Generate learner home HTML from local evidence (#38).
+- [x] M3-2: Generate learner home HTML from local evidence (#38).
 - [ ] M3-3: Add no-streak return and resume guidance (#39).
 - [ ] M3-4: Add seven-day local return simulation smoke (#40).
 - [ ] M3-5: Close M3 gate with clone-to-daily evidence (#41).

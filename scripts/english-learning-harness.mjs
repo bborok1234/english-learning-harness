@@ -24,6 +24,7 @@ import {
   writeProgress,
   writeReviewQueue,
   writeVocabulary,
+  writeLearnerHome,
   writeProfile,
 } from "./lib/english-learning-store.mjs";
 import { planScenario } from "./lib/scenario-engine.mjs";
@@ -111,6 +112,7 @@ function helpText() {
     "Usage:",
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--json]",
+    "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR]",
     "  node scripts/english-learning-harness.mjs health [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs status [--learner-root DIR] [--json]",
@@ -219,6 +221,21 @@ function daily(options) {
     learnerRoot: cockpit.learner_root,
     cockpit,
     claimBoundary: cockpit.claim_boundary,
+  };
+}
+
+function home(options) {
+  const result = writeLearnerHome(options.learnerRoot);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: result.cockpit.learner_root,
+    homePath: result.homePath,
+    homeUrl: result.homeUrl,
+    todayAction: result.cockpit.suggested_scenario,
+    dueReviewCount: result.cockpit.due_review.count,
+    claimBoundary:
+      "This generates a local learner HTML surface from local files only; it is not a hosted app.",
   };
 }
 
@@ -367,6 +384,10 @@ function run() {
   }
   if (command === "daily") {
     output(daily(options), options.json);
+    return;
+  }
+  if (command === "home") {
+    output(home(options), options.json);
     return;
   }
   if (command === "today") {
