@@ -33,6 +33,7 @@ const requiredFiles = [
   "scripts/lib/persona-fixtures.mjs",
   "scripts/package-local-marketplace.mjs",
   "scripts/package-public-artifact.mjs",
+  "scripts/prepare-public-artifact-handoff.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
   "scripts/phase1-vocabulary-history-smoke.mjs",
   "scripts/phase1-scenario-loop-smoke.mjs",
@@ -68,6 +69,7 @@ const requiredFiles = [
   "scripts/phase7-hosted-artifact-smoke.mjs",
   "scripts/phase7-release-workflow-smoke.mjs",
   "scripts/phase7-public-release-decision-smoke.mjs",
+  "scripts/phase7-public-artifact-handoff-smoke.mjs",
 ];
 
 function readJson(path) {
