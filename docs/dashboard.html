@@ -1536,7 +1536,7 @@
           "title": "#114 open-source git history audit을 추가함",
           "why": "repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.",
           "done": "전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.",
-          "verification": "`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=123, committedPathsScanned=184, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.",
+          "verification": "`node scripts/phase7-open-source-history-audit-smoke.mjs`가 forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다. revision/path scan counts는 merge마다 바뀌므로 dashboard 사실로 고정하지 않는다.",
           "files": [
             "scripts/phase7-open-source-history-audit-smoke.mjs",
             "docs/phase-7-evidence/M7-12-open-source-history-audit.md",
@@ -2332,7 +2332,7 @@
               <h3>#114 open-source git history audit을 추가함</h3>
               <div class="card-row"><b>왜</b><p>repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=123, committedPathsScanned=184, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-history-audit-smoke.mjs`가 forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다. revision/path scan counts는 merge마다 바뀌므로 dashboard 사실로 고정하지 않는다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
