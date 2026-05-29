@@ -19,6 +19,17 @@ Run a short, safe English contact session with the learner.
 - Do not ask the learner to run `node` commands for ordinary daily practice.
 - If persistence cannot be executed, still run the practice and disclose that durable saving was not confirmed.
 
+## Engine Discovery
+
+When persistence is needed, find the local engine in this order:
+
+1. `ENGLISH_LEARNING_HARNESS_REPO`
+2. `~/.english-learning-harness/repo`
+3. `repoRoot` in `~/.english-learning-harness/install.json`
+4. current workspace when `scripts/english-learning-harness.mjs` exists
+
+Use that engine yourself. Do not hand the command to the learner.
+
 ## Flow
 
 1. Read the available profile/progress context from the session prompt or hook-injected context.

@@ -18,7 +18,7 @@ function indexOfRequired(text) {
 const firstScreenMarkers = [
   "Open-source, local-first Codex harness",
   "This is not a learner-facing Node CLI product.",
-  "Start In Codex",
+  "Paste This Into Codex",
   "Try These Prompts",
   "What Codex Does For You",
   "Who This Is For",
@@ -31,10 +31,12 @@ for (const marker of firstScreenMarkers) {
   indexOfRequired(marker);
 }
 
-const startIndex = indexOfRequired("## Start In Codex");
+const startIndex = indexOfRequired("## Paste This Into Codex");
 const promptIndex = indexOfRequired("## Try These Prompts");
+const installDetailsIndex = indexOfRequired("## Agent Install Details");
 const engineIndex = indexOfRequired("## Internal Engine For Maintainers");
 const maintainerIndex = indexOfRequired("## Maintainer Verification");
+assert(installDetailsIndex < engineIndex, "agent install details should appear before maintainer engine internals");
 assert(startIndex < engineIndex, "Codex-first learner start must appear before internal engine commands");
 assert(promptIndex < engineIndex, "natural-language learner prompts must appear before internal engine commands");
 assert(engineIndex < maintainerIndex, "internal engine commands should stay in maintainer-facing area");
@@ -43,10 +45,13 @@ const firstNodeIndex = readme.indexOf("node scripts/");
 assert(firstNodeIndex > engineIndex, "README exposes node commands before the internal engine section");
 
 const learnerSignals = [
-  "Do not ask me to run Node commands",
-  "Codex should handle setup, practice, mini mirror, review memory, and progress files for you.",
+  "Install English Learning Harness from:",
+  "Do not ask me to clone the repo or run Node commands manually.",
+  "Codex should install the skill surface, handle setup, run practice, save local progress, and finish with a mini mirror.",
   "Codex is the tutor and operator",
   "not the product surface a learner should have to operate by hand",
+  "~/.codex/skills/english-learning-daily-session",
+  "This is an agent-operated install path. A learner should not need to type it.",
   "speak or type imperfect English",
   "Personal phrase memory",
   "mini mirror",
@@ -73,6 +78,7 @@ for (const requiredCommand of [
 }
 
 assert(!readme.includes("## What Works"), "README should not lead with implementation inventory");
+assert(!readme.includes("Clone or download this repository."), "README still uses human clone/download as the primary path");
 assert(!readme.includes("The most important first command is `today`."), "README still frames the CLI command as the learner's first command");
 assert(!readme.includes("From a fresh private beta / invited-user clone"), "README still frames quick start as private beta");
 
@@ -80,8 +86,8 @@ console.log(
   JSON.stringify(
     {
       status: "pass",
-      issue: "D2",
-      claim: "README leads with Codex-native conversation before internal engine commands",
+      issue: "D3",
+      claim: "README leads with paste-into-Codex install before internal engine commands",
       checkedMarkers: firstScreenMarkers.length + learnerSignals.length,
     },
     null,

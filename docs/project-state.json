@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Public source live + Codex-native onboarding",
-    "status": "Public clone-to-learn is verified; README now makes Codex conversation the learner-facing product surface",
+    "stage": "Public source live + agent-installed Codex onboarding",
+    "status": "Public clone-to-learn is verified; README now follows current harness pattern: paste prompt into Codex, Codex installs skills, learner practices by conversation",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. The README now tells learners to open the repo in Codex and use natural-language practice prompts; node commands are documented as the internal engine for Codex, maintainers, and verification."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. Benchmark review of oh-my-openagent and gstack showed the current harness pattern is agent-installed, not human clone/download. README now leads with a paste-into-Codex install prompt, and setup installs the skill surface into ~/.codex/skills."
   },
   "ssot": [
     {
@@ -118,6 +118,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/BENCHMARK-HARNESS-TRENDS.md",
+      "path": "./BENCHMARK-HARNESS-TRENDS.md",
+      "role": "agent-installed harness onboarding benchmark",
+      "kind": "source"
+    },
+    {
       "label": "docs/ISSUE-INDEX.md",
       "path": "./ISSUE-INDEX.md",
       "role": "GitHub 에픽/마일스톤/이슈 색인",
@@ -140,13 +146,13 @@
     {
       "label": "Ultragoal",
       "value": "Complete",
-      "detail": "public source clone-to-learn plus Codex-native README",
+      "detail": "public source clone-to-learn plus agent-installed Codex skills",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "Public live",
-      "detail": "new visitors can open the repo in Codex and start practice by talking to Codex",
+      "detail": "new visitors paste the GitHub install prompt into Codex and then practice by talking",
       "tone": "green"
     },
     {
@@ -157,14 +163,14 @@
     },
     {
       "label": "GitHub plan",
-      "value": "45 issues",
-      "detail": "#120 pivots README and skills to Codex conversation surface",
+      "value": "46 issues",
+      "detail": "#122 adds setup --host codex and harness-trend benchmark",
       "tone": "green"
     },
     {
       "label": "README",
-      "value": "Codex-native",
-      "detail": "node commands are internal engine details, not learner UX",
+      "value": "Agent-installed",
+      "detail": "paste prompt into Codex; setup installs skills into ~/.codex/skills",
       "tone": "green"
     }
   ],
@@ -1182,6 +1188,21 @@
             "scripts/phase7-learner-readme-smoke.mjs",
             "docs/phase-7-evidence/M7-15-codex-native-user-surface.md"
           ]
+        },
+        {
+          "id": "M7-16",
+          "title": "#122 agent-installed harness 패턴을 반영함",
+          "why": "oh-my-openagent와 gstack은 사용자가 repo를 수동 clone해서 내부 명령을 치는 방식이 아니라, agent에게 설치 prompt를 붙여넣고 agent가 skills/setup을 설치하는 방식이다.",
+          "done": "`setup --host codex`가 네 개의 English Learning Harness skill을 `~/.codex/skills`에 설치하고, README 첫 경로를 paste-into-Codex install prompt로 바꿨다.",
+          "verification": "`node scripts/phase7-agent-install-smoke.mjs`가 isolated Codex skills dir에서 symlink/copy 설치를 검증하고, `node scripts/phase7-learner-readme-smoke.mjs`가 human clone/download primary path를 금지한다.",
+          "files": [
+            "setup",
+            "README.md",
+            "docs/BENCHMARK-HARNESS-TRENDS.md",
+            "scripts/phase7-agent-install-smoke.mjs",
+            "scripts/phase7-learner-readme-smoke.mjs",
+            "docs/phase-7-evidence/M7-16-agent-installed-harness-onboarding.md"
+          ]
         }
       ]
     },
@@ -1192,13 +1213,14 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Codex-native product surface 점검",
-          "why": "사용자가 직접 `node`를 치는 순간 제품은 영어 학습 하네스가 아니라 개발자용 CLI가 된다.",
-          "done": "README와 skills는 Codex 대화를 제품 표면으로 선언하고, command wrapper는 내부 엔진/검증 도구로 격하시켰다.",
-          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`가 natural-language prompt가 internal engine command보다 먼저 나오는지 검증한다.",
+          "title": "Agent-installed harness onboarding 정렬",
+          "why": "요즘 하네스는 사용자가 repo를 수동 clone해서 내부 명령을 치는 것이 아니라, agent에게 설치 prompt를 붙여넣고 agent가 설치/운영한다.",
+          "done": "`setup --host codex`와 paste-into-Codex README 경로를 추가했다.",
+          "verification": "`node scripts/phase7-agent-install-smoke.mjs`와 `node scripts/phase7-learner-readme-smoke.mjs`가 통과한다.",
           "files": [
+            "setup",
             "README.md",
-            "skills/",
+            "docs/BENCHMARK-HARNESS-TRENDS.md",
             "scripts/phase7-learner-readme-smoke.mjs"
           ]
         }
@@ -1212,7 +1234,7 @@
         {
           "id": "NEXT-1",
           "title": "다음 제품 증거 선택: real learner pilot / realtime voice / Git-backed plugin install",
-          "why": "public clone과 Codex-native onboarding은 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.",
+          "why": "agent-installed onboarding은 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 npm/binary급 installer 중 어떤 리스크를 먼저 줄일지 선택해야 한다.",
           "done": "아직 선택 전이다.",
           "verification": "후보별 검증 기준: real learner pilot은 7-day protocol, realtime voice는 stable command/API proof, Git-backed plugin install은 public install smoke.",
           "files": [
@@ -1613,6 +1635,11 @@
       "name": "M7-15 Codex-native user surface",
       "status": "Pass",
       "detail": "README and skills now keep learners in Codex conversation; node commands are internal engine details"
+    },
+    {
+      "name": "M7-16 agent-installed onboarding",
+      "status": "Pass",
+      "detail": "setup --host codex installs skills into Codex; README leads with paste-into-Codex install prompt"
     }
   ],
   "commands": [
