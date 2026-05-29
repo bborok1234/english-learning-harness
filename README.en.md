@@ -10,6 +10,8 @@ This is not a learner-facing Node CLI. The learner-facing surface is Codex conve
 
 ## Paste Into Codex
 
+Replace the bracketed lines with your own details.
+
 ```text
 Install English Learning Harness from:
 https://github.com/bborok1234/english-learning-harness
@@ -17,9 +19,9 @@ https://github.com/bborok1234/english-learning-harness
 Use the repo setup script to install the Codex skills, then start my first 5-minute English speaking practice.
 Do not ask me to clone the repo or run Node commands manually. You operate the harness and local engine for me.
 
-My name is Jieun.
-I freeze when I need to speak English.
-I want gentle corrections and practical phrases I can reuse.
+My name is [your name].
+I struggle with [what feels hard when speaking English].
+Please help me with [correction style or learning goal].
 ```
 
 Codex should install the skill surface, handle setup, run practice, save local progress, and finish with a mini mirror. The learner answers Codex in English instead of operating scripts.
