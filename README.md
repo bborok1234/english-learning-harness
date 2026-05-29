@@ -279,6 +279,18 @@ Without `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`, the hosted-artifact smoke uses a
 
 The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a GitHub release when explicitly dispatched with `publish_release: true`. A release asset on a private repository is not automatically public evidence; verify the final URL with `phase7-hosted-artifact-smoke.mjs`.
 
+For a separate public artifact repository handoff, generate the bundle locally:
+
+```bash
+node scripts/prepare-public-artifact-handoff.mjs --target tmp/public-artifact-handoff
+```
+
+The handoff directory contains the tarball, `SHA256SUMS`, `PUBLIC-ARTIFACT-MANIFEST.json`, and `RELEASE-NOTES.md`. It includes a publication command as text only; it does not create a repository or publish a release. Verify the bundle before any owner-approved publication action:
+
+```bash
+node scripts/phase7-public-artifact-handoff-smoke.mjs
+```
+
 ## Verification
 
 Run the supported wrapper smoke:
@@ -484,6 +496,12 @@ Run the M7 public release decision gate smoke:
 
 ```bash
 node scripts/phase7-public-release-decision-smoke.mjs
+```
+
+Run the M7 public artifact repository handoff smoke:
+
+```bash
+node scripts/phase7-public-artifact-handoff-smoke.mjs
 ```
 
 Run the full first-run smoke:

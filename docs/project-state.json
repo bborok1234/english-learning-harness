@@ -1002,6 +1002,18 @@
             "docs/distribution-policy.json",
             "docs/phase-7-evidence/M7-D-public-release-decision.md"
           ]
+        },
+        {
+          "id": "M7-2",
+          "title": "#94 public artifact repo handoff bundle을 준비함",
+          "why": "별도 public artifact repository release를 선택하더라도 무엇을 게시할지 재현 가능한 bundle이 필요하다.",
+          "done": "tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.",
+          "verification": "`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.",
+          "files": [
+            "scripts/prepare-public-artifact-handoff.mjs",
+            "scripts/phase7-public-artifact-handoff-smoke.mjs",
+            "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
+          ]
         }
       ]
     },
@@ -1372,6 +1384,11 @@
       "name": "M7-D decision gate",
       "status": "Pass",
       "detail": "public release publication remains blocked until the issue 90 owner decision is recorded"
+    },
+    {
+      "name": "M7-2 handoff bundle",
+      "status": "Pass",
+      "detail": "public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing"
     }
   ],
   "commands": [
@@ -1514,6 +1531,10 @@
     {
       "label": "Run M7 release decision smoke",
       "command": "node scripts/phase7-public-release-decision-smoke.mjs"
+    },
+    {
+      "label": "Run M7 public artifact handoff smoke",
+      "command": "node scripts/phase7-public-artifact-handoff-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

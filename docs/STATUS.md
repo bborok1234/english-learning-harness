@@ -78,6 +78,7 @@ What is complete:
 - GitHub Actions run `26618527553` completed successfully with `publish_release=false` and uploaded workflow artifact `english-learning-harness-public`.
 - M7 decision issue #90 is created to choose the public release surface and publication authority before #83 can prove a real public URL.
 - M7 decision gate smoke is in place: public release publication remains blocked until #90 records owner approval.
+- M7-2 public artifact repository handoff is prepared locally with tarball, checksum, manifest, and release notes; it does not publish.
 
 What is not started:
 - Real user validation.
@@ -90,6 +91,7 @@ What failed review:
 - Public marketplace distribution, real learner validation, and native hook runtime are still outside the local first-usable claim.
 - Public release publication remains blocked on #90; Codex should not publish a release asset without explicit owner approval.
 - M7-D decision gate smoke verifies `owner_decision_required`, `public_artifact_repository_release`, and no Codex publication without explicit approval.
+- M7-2 handoff smoke verifies checksum, manifest, tarball contents, forbidden path exclusions, and no-publication boundary.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.

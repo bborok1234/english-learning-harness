@@ -198,6 +198,7 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #10 | E10: Public onboarding and distribution | split |
 | #83 | M7-1: Prove unauthenticated public distribution path | research |
 | #90 | M7-D: Decide public distribution surface and publish authority | research |
+| #94 | M7-2: Prepare public artifact repository handoff bundle | continue |
 
 M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
 
@@ -207,7 +208,15 @@ M7 remains open for a future public repository clone or separate public artifact
 - a release asset in this private source repository is not accepted as unauthenticated public evidence.
 - Codex must not execute `publish_release=true` or any public release publication without explicit owner approval.
 - `scripts/phase7-public-release-decision-smoke.mjs` verifies the decision gate and prevents public distribution completion from being claimed before owner approval.
+- #94 prepares a local handoff bundle for a separate public artifact repository without publishing.
 - after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... node scripts/phase7-hosted-artifact-smoke.mjs` against the real URL.
+
+#94 evidence currently shows:
+
+- `scripts/prepare-public-artifact-handoff.mjs` generates a handoff directory containing the tarball, `SHA256SUMS`, `PUBLIC-ARTIFACT-MANIFEST.json`, and `RELEASE-NOTES.md`.
+- `scripts/phase7-public-artifact-handoff-smoke.mjs` verifies checksum, manifest, tarball required files, forbidden path exclusions, and `publicationPerformed=false`.
+- the handoff manifest includes a publication command as text and the real public URL smoke command.
+- this does not create a public repository, publish a release, prove a public URL, or close #83/#90.
 
 #83 evidence currently shows:
 

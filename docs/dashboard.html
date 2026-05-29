@@ -1404,6 +1404,18 @@
             "docs/distribution-policy.json",
             "docs/phase-7-evidence/M7-D-public-release-decision.md"
           ]
+        },
+        {
+          "id": "M7-2",
+          "title": "#94 public artifact repo handoff bundle을 준비함",
+          "why": "별도 public artifact repository release를 선택하더라도 무엇을 게시할지 재현 가능한 bundle이 필요하다.",
+          "done": "tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.",
+          "verification": "`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.",
+          "files": [
+            "scripts/prepare-public-artifact-handoff.mjs",
+            "scripts/phase7-public-artifact-handoff-smoke.mjs",
+            "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
+          ]
         }
       ]
     },
@@ -1774,6 +1786,11 @@
       "name": "M7-D decision gate",
       "status": "Pass",
       "detail": "public release publication remains blocked until the issue 90 owner decision is recorded"
+    },
+    {
+      "name": "M7-2 handoff bundle",
+      "status": "Pass",
+      "detail": "public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing"
     }
   ],
   "commands": [
@@ -1918,6 +1935,10 @@
       "command": "node scripts/phase7-public-release-decision-smoke.mjs"
     },
     {
+      "label": "Run M7 public artifact handoff smoke",
+      "command": "node scripts/phase7-public-artifact-handoff-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -2056,16 +2077,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-1a</strong>
-                <span>scripts/package-public-artifact.mjs, scripts/phase7-public-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
-              </div>
-              <h3>#83 public artifact mechanics를 검증함</h3>
-              <div class="card-row"><b>왜</b><p>private repo를 public으로 바꾸지 않고도 public distribution artifact 경로를 준비해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>tarball candidate를 만들고 extract된 artifact root에서 setup, daily, today, weekly, home, export, progress validation을 통과시켰다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-smoke.mjs`가 artifact packaging/extraction/learner-loop를 통과했다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M7-1b</strong>
                 <span>scripts/phase7-hosted-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md, README.md</span>
               </div>
@@ -2113,6 +2124,16 @@
               <div class="card-row"><b>왜</b><p>release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=public_artifact_repository_release, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-2</strong>
+                <span>scripts/prepare-public-artifact-handoff.mjs, scripts/phase7-public-artifact-handoff-smoke.mjs, docs/phase-7-evidence/M7-2-public-artifact-handoff.md</span>
+              </div>
+              <h3>#94 public artifact repo handoff bundle을 준비함</h3>
+              <div class="card-row"><b>왜</b><p>별도 public artifact repository release를 선택하더라도 무엇을 게시할지 재현 가능한 bundle이 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2291,10 +2312,6 @@
           <tbody>
 
             <tr>
-              <td>M6-D</td>
-              <td><strong>Pass</strong><span>distribution policy smoke passes private-beta / invited-user clone-to-learn with public release deferred to M7</span></td>
-            </tr>
-            <tr>
               <td>M6 milestone</td>
               <td><strong>Closed</strong><span>GitHub milestone M6 Private Beta Clone-to-Learn Release is closed with open_issues=0 and closed_issues=5</span></td>
             </tr>
@@ -2321,6 +2338,10 @@
             <tr>
               <td>M7-D decision gate</td>
               <td><strong>Pass</strong><span>public release publication remains blocked until the issue 90 owner decision is recorded</span></td>
+            </tr>
+            <tr>
+              <td>M7-2 handoff bundle</td>
+              <td><strong>Pass</strong><span>public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing</span></td>
             </tr>
           </tbody>
         </table>
@@ -2366,7 +2387,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 57개 보기</summary>
+        <summary>완료 이력 58개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2939,10 +2960,20 @@
               <div class="card-row"><b>완료</b><p>authenticated clone에서 setup, daily, today, weekly, home, export, README command audit, clone git status check를 통과했다. public clone은 M7로 분리했다.</p></div>
               <div class="card-row"><b>검증</b><p>`ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`가 통과했고 default public smoke는 PRIVATE visibility를 정직하게 거부한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1a</strong>
+                <span>scripts/package-public-artifact.mjs, scripts/phase7-public-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+              </div>
+              <h3>#83 public artifact mechanics를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>private repo를 public으로 바꾸지 않고도 public distribution artifact 경로를 준비해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>tarball candidate를 만들고 extract된 artifact root에서 setup, daily, today, weekly, home, export, progress validation을 통과시켰다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-smoke.mjs`가 artifact packaging/extraction/learner-loop를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 54개 보기</summary>
+        <summary>전체 검증 55개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3163,12 +3194,16 @@
               <td>M7-D decision gate</td>
               <td><strong>Pass</strong><span>public release publication remains blocked until the issue 90 owner decision is recorded</span></td>
             </tr>
+            <tr>
+              <td>M7-2 handoff bundle</td>
+              <td><strong>Pass</strong><span>public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 43개 보기</summary>
+        <summary>전체 명령 44개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3310,6 +3345,10 @@
             <div class="command">
               <span>Run M7 release decision smoke</span>
               <code>node scripts/phase7-public-release-decision-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 public artifact handoff smoke</span>
+              <code>node scripts/phase7-public-artifact-handoff-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
