@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M5 Real Learning Validation active / #64 transcript rubric next** state.
+The project is in **M5 Real Learning Validation active / #65 persona validation next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -60,6 +60,7 @@ What is complete:
 - M5-0 is complete: #9 is split into executable validation issues #62-#66.
 - M5-1 is complete: the seven-day validation protocol defines pilot schedule, prompt set, evidence fields, thresholds, privacy handoff, and claim boundaries.
 - M5-2 is implemented on the PR branch: `export` writes a redacted JSON+Markdown evidence pack from a seven-day learner store.
+- M5-3 is implemented on the PR branch: before/after transcript rubric scores observable behavior and rejects unsupported claims.
 
 What is not started:
 - Real user validation.
@@ -103,6 +104,7 @@ Strategic reset:
 - M4-5 evidence: `docs/phase-4-evidence/M4-5-multimodal-gate.md` records text/voice/image event graph gate evidence and claim boundaries.
 - M5-1 evidence: `docs/phase-5-evidence/M5-1-validation-protocol.md` records the protocol definition and review criteria.
 - M5-2 evidence: `docs/phase-5-evidence/M5-2-evidence-export.md` records export pack behavior, redaction, and smoke verification.
+- M5-3 evidence: `docs/phase-5-evidence/M5-3-transcript-rubric.md` records before/after transcript rubric behavior and negative fixtures.
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
@@ -197,7 +199,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M5-0: Split #9 seven-day validation protocol into executable validation issues.
 - [x] M5-1: Define seven-day validation protocol (#62).
 - [x] M5-2: Export seven-day pilot evidence pack (#63).
-- [ ] M5-3: Add before-after transcript review rubric (#64).
+- [x] M5-3: Add before-after transcript review rubric (#64).
 - [ ] M5-4: Run target-persona seven-day validation fixture (#65).
 - [ ] M5-5: Close real learning validation gate (#66).
 
