@@ -205,6 +205,7 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #102 | M7-6: Record no-publish artifact repo workflow evidence | continue |
 | #104 | M7-7: Add public publication preflight | continue |
 | #106 | M7-8: Verify plugin install from downloaded public artifact | continue |
+| #108 | M7-9: Prepare owner approval packet for public artifact publication | continue |
 
 M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
 
@@ -221,6 +222,7 @@ M7 remains open for a future public repository clone or separate public artifact
 - #102 records a successful no-publication GitHub Actions run for the artifact repo workflow.
 - #104 adds a non-publishing preflight that reports owner decision and artifact repository readiness before any release action.
 - #106 verifies local Codex plugin install from a checksum-verified downloaded public artifact.
+- #108 prepares the non-publishing owner approval packet for #90, including approval-time commands and the required #83 proof command.
 - after #90 resolves, #83 can run `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=... ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL=... node scripts/phase7-public-release-url-smoke.mjs` against the real URLs.
 
 #94 evidence currently shows:
@@ -272,6 +274,13 @@ M7 remains open for a future public repository clone or separate public artifact
 - the extracted artifact packages a local marketplace.
 - isolated `CODEX_HOME` installs `english-learning-harness@phase7-public-artifact`.
 - public Git-backed plugin install remains unclaimed.
+
+#108 evidence currently shows:
+
+- `scripts/prepare-public-release-approval.mjs` generates `PUBLIC-RELEASE-APPROVAL.md` and `PUBLIC-RELEASE-APPROVAL.json` under `tmp/`.
+- `scripts/phase7-public-release-approval-smoke.mjs` verifies the packet keeps `approvalRequired=true`, `publicationPerformed=false`, `canPublishNow=false`, and `canClosePublicDistribution=false`.
+- the packet includes the approval-time workflow command for `publish_release=true`, the manual fallback command, forbidden-before-approval actions, and the checksum-aware real public URL proof command.
+- this does not create a public repository, publish a release, prove public URL access, or resolve #90/#83.
 
 #83 evidence currently shows:
 

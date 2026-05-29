@@ -526,6 +526,12 @@ Run the M7 public artifact plugin install smoke:
 node scripts/phase7-public-artifact-install-smoke.mjs
 ```
 
+Run the M7 public release approval packet smoke:
+
+```bash
+node scripts/phase7-public-release-approval-smoke.mjs
+```
+
 Run the M7 public publication preflight:
 
 ```bash
