@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M6 Private Beta Clone-to-Learn closeout",
-    "status": "M6 private beta release gate ready; public distribution deferred to #83",
+    "stage": "M6 Private Beta Clone-to-Learn closed",
+    "status": "Next: #83 M7 public distribution path",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 distribution policy selects private beta / invited-user clone-to-learn. Authenticated clone, local marketplace install, onboarding diagnostics, and release gate audit pass. Unauthenticated public distribution is deferred to M7 #83."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed with authenticated clone, local marketplace install, onboarding diagnostics, distribution policy, and release gate evidence. Unauthenticated public distribution remains open as M7 #83."
   },
   "ssot": [
     {
@@ -535,21 +535,21 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M6",
-      "detail": "M5 gate complete; M6 distribution gate active",
+      "value": "M7",
+      "detail": "M6 private beta closed; public distribution next",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M6 closeout",
-      "detail": "private beta gate ready; public release in M7",
-      "tone": "green"
+      "value": "M7 active",
+      "detail": "#83 public distribution path",
+      "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "M7",
-      "detail": "#83 public distribution path",
-      "tone": "amber"
+      "value": "#83",
+      "detail": "unauthenticated public distribution",
+      "tone": "red"
     },
     {
       "label": "GitHub plan",
@@ -1336,15 +1336,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M6-closeout",
-          "title": "M6 private beta closeout ready",
-          "why": "M6의 완료 claim이 public release가 아니라 invited-user clone-to-learn으로 재정의되었고 해당 evidence가 통과했다.",
-          "done": "#72/#75/#78을 private beta pivot으로 닫고 M6 milestone을 close할 준비가 됐다.",
-          "verification": "distribution policy smoke와 release gate smoke가 모두 pass해야 한다.",
+          "id": "M7-1",
+          "title": "#83 public distribution path",
+          "why": "M6는 private beta로 닫혔지만 original public clone-to-learn claim은 아직 검증되지 않았다.",
+          "done": "public repo 또는 별도 public artifact 중 하나를 선택하고 private access 없이 clone/download부터 first session까지 검증한다.",
+          "verification": "default public distribution smoke가 private access override 없이 통과해야 한다.",
           "files": [
             "docs/distribution-policy.json",
-            "docs/phase-6-evidence/M6-D-distribution-policy.md",
-            "docs/phase-6-evidence/M6-4-release-gate.md"
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
           ]
         }
       ]
@@ -1355,13 +1355,13 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "M7-1",
-          "title": "#83 public distribution path",
-          "why": "unauthenticated public clone/install claim은 private beta와 다른 release problem이다.",
-          "done": "public repo 또는 별도 public artifact 중 하나를 선택하고 default public clone/download smoke를 추가한다.",
-          "verification": "private access override 없이 public distribution smoke가 통과해야 한다.",
+          "id": "M7-followup",
+          "title": "Public install claim gate",
+          "why": "Git-backed plugin install은 아직 unverified이므로 public docs에 실으면 안 된다.",
+          "done": "public artifact가 정해진 뒤 public install smoke를 별도 추가한다.",
+          "verification": "public install smoke와 README command audit이 통과해야 한다.",
           "files": [
-            "docs/ISSUE-INDEX.md",
+            "README.md",
             "docs/distribution-policy.json"
           ]
         }
@@ -1652,6 +1652,16 @@
       "name": "M6-D",
       "status": "Pass",
       "detail": "distribution policy smoke passes private-beta / invited-user clone-to-learn with public release deferred to M7"
+    },
+    {
+      "name": "M6 milestone",
+      "status": "Closed",
+      "detail": "GitHub milestone M6 Private Beta Clone-to-Learn Release is closed with open_issues=0 and closed_issues=5"
+    },
+    {
+      "name": "M7-1",
+      "status": "Open",
+      "detail": "M7 #83 tracks unauthenticated public distribution path"
     }
   ],
   "commands": [
@@ -1818,12 +1828,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 distribution policy selects private beta / invited-user clone-to-learn. Authenticated clone, local marketplace install, onboarding diagnostics, and release gate audit pass. Unauthenticated public distribution is deferred to M7 #83.</p>
+        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed with authenticated clone, local marketplace install, onboarding diagnostics, distribution policy, and release gate evidence. Unauthenticated public distribution remains open as M7 #83.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M6 Private Beta Clone-to-Learn closeout<br>
-        M6 private beta release gate ready; public distribution deferred to #83
+        M6 Private Beta Clone-to-Learn closed<br>
+        Next: #83 M7 public distribution path
       </div>
     </header>
 
@@ -1831,18 +1841,18 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M6</div>
-          <p>M5 gate complete; M6 distribution gate active</p>
-        </article>
-        <article class="metric-card tone-green">
-          <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M6 closeout</div>
-          <p>private beta gate ready; public release in M7</p>
+          <div class="metric-value">M7</div>
+          <p>M6 private beta closed; public distribution next</p>
         </article>
         <article class="metric-card tone-amber">
-          <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">M7</div>
+          <div class="eyebrow"><span class="dot"></span>Current stage</div>
+          <div class="metric-value">M7 active</div>
           <p>#83 public distribution path</p>
+        </article>
+        <article class="metric-card tone-red">
+          <div class="eyebrow"><span class="dot"></span>Next block</div>
+          <div class="metric-value">#83</div>
+          <p>unauthenticated public distribution</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1879,23 +1889,23 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M6-closeout</strong>
-                <span>docs/distribution-policy.json, docs/phase-6-evidence/M6-D-distribution-policy.md, docs/phase-6-evidence/M6-4-release-gate.md</span>
+                <strong>M7-1</strong>
+                <span>docs/distribution-policy.json, docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>M6 private beta closeout ready</h3>
-              <div class="card-row"><b>왜</b><p>M6의 완료 claim이 public release가 아니라 invited-user clone-to-learn으로 재정의되었고 해당 evidence가 통과했다.</p></div>
-              <div class="card-row"><b>완료</b><p>#72/#75/#78을 private beta pivot으로 닫고 M6 milestone을 close할 준비가 됐다.</p></div>
-              <div class="card-row"><b>검증</b><p>distribution policy smoke와 release gate smoke가 모두 pass해야 한다.</p></div>
+              <h3>#83 public distribution path</h3>
+              <div class="card-row"><b>왜</b><p>M6는 private beta로 닫혔지만 original public clone-to-learn claim은 아직 검증되지 않았다.</p></div>
+              <div class="card-row"><b>완료</b><p>public repo 또는 별도 public artifact 중 하나를 선택하고 private access 없이 clone/download부터 first session까지 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>default public distribution smoke가 private access override 없이 통과해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-1</strong>
-                <span>docs/ISSUE-INDEX.md, docs/distribution-policy.json</span>
+                <strong>M7-followup</strong>
+                <span>README.md, docs/distribution-policy.json</span>
               </div>
-              <h3>#83 public distribution path</h3>
-              <div class="card-row"><b>왜</b><p>unauthenticated public clone/install claim은 private beta와 다른 release problem이다.</p></div>
-              <div class="card-row"><b>완료</b><p>public repo 또는 별도 public artifact 중 하나를 선택하고 default public clone/download smoke를 추가한다.</p></div>
-              <div class="card-row"><b>검증</b><p>private access override 없이 public distribution smoke가 통과해야 한다.</p></div>
+              <h3>Public install claim gate</h3>
+              <div class="card-row"><b>왜</b><p>Git-backed plugin install은 아직 unverified이므로 public docs에 실으면 안 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>public artifact가 정해진 뒤 public install smoke를 별도 추가한다.</p></div>
+              <div class="card-row"><b>검증</b><p>public install smoke와 README command audit이 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -2139,14 +2149,6 @@
           <tbody>
 
             <tr>
-              <td>M5-3</td>
-              <td><strong>Pass</strong><span>transcript rubric smoke passes positive before/after fixture and unsupported-claim, prompt-mismatch, missing-sample negatives</span></td>
-            </tr>
-            <tr>
-              <td>M5-4</td>
-              <td><strong>Pass</strong><span>persona validation smoke passes four target personas with seven sessions, evidence export, review reuse, and transcript rubric continue decisions</span></td>
-            </tr>
-            <tr>
               <td>M5-5</td>
               <td><strong>Pass</strong><span>M5 gate smoke passes continue_to_m6 while blocking real learner outcome claims</span></td>
             </tr>
@@ -2169,6 +2171,14 @@
             <tr>
               <td>M6-D</td>
               <td><strong>Pass</strong><span>distribution policy smoke passes private-beta / invited-user clone-to-learn with public release deferred to M7</span></td>
+            </tr>
+            <tr>
+              <td>M6 milestone</td>
+              <td><strong>Closed</strong><span>GitHub milestone M6 Private Beta Clone-to-Learn Release is closed with open_issues=0 and closed_issues=5</span></td>
+            </tr>
+            <tr>
+              <td>M7-1</td>
+              <td><strong>Open</strong><span>M7 #83 tracks unauthenticated public distribution path</span></td>
             </tr>
           </tbody>
         </table>
@@ -2730,7 +2740,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 47개 보기</summary>
+        <summary>전체 검증 49개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2922,6 +2932,14 @@
             <tr>
               <td>M6-D</td>
               <td><strong>Pass</strong><span>distribution policy smoke passes private-beta / invited-user clone-to-learn with public release deferred to M7</span></td>
+            </tr>
+            <tr>
+              <td>M6 milestone</td>
+              <td><strong>Closed</strong><span>GitHub milestone M6 Private Beta Clone-to-Learn Release is closed with open_issues=0 and closed_issues=5</span></td>
+            </tr>
+            <tr>
+              <td>M7-1</td>
+              <td><strong>Open</strong><span>M7 #83 tracks unauthenticated public distribution path</span></td>
             </tr>
             </tbody>
           </table>

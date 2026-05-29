@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M6 Private Beta Clone-to-Learn closeout / public distribution deferred to M7** state.
+The project is in **M6 Private Beta Clone-to-Learn closed / M7 public distribution next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -71,6 +71,7 @@ What is complete:
 - M6-3 onboarding diagnostics pass: setup/health/status/context expose next commands, support files, repair commands, and native-hook optionality.
 - M6-4 release gate audit passes with decision `ready_to_close_m6_private_beta`; M6 can close as private beta, while unauthenticated public distribution remains deferred.
 - M7 Public Distribution Release milestone and issue #83 are created for unauthenticated public clone/artifact work.
+- M6 Private Beta Clone-to-Learn Release milestone is closed with `open_issues=0`.
 
 What is not started:
 - Real user validation.
@@ -227,6 +228,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M6-2: Verify marketplace packaging and install docs (#73).
 - [x] M6-3: Harden first-run onboarding and support diagnostics (#74).
 - [x] M6-4: Close private beta clone-to-learn release gate (#75).
+- [x] Close M6 Private Beta Clone-to-Learn Release milestone.
 
 ### Phase 7 Public Distribution Release
 

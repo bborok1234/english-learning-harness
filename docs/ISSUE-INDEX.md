@@ -158,7 +158,7 @@ Current implementation target:
 gh issue view 75
 ```
 
-M6 remains open until #72/#75/#78 are closed with the private-beta pivot. Epic #10 has been moved to M7 for unauthenticated public distribution, and #78 resolves repository visibility by choosing private beta / invited-user clone-to-learn for M6.
+M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been moved to M7 for unauthenticated public distribution, and #78 resolved repository visibility by choosing private beta / invited-user clone-to-learn for M6.
 
 #78 evidence currently shows:
 
