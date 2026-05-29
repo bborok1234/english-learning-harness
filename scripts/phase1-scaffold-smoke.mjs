@@ -54,6 +54,7 @@ const requiredFiles = [
   "scripts/phase4-image-information-gap-smoke.mjs",
   "scripts/phase4-multimodal-gate-smoke.mjs",
   "scripts/phase5-evidence-export-smoke.mjs",
+  "scripts/phase5-transcript-rubric-smoke.mjs",
 ];
 
 function readJson(path) {

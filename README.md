@@ -367,6 +367,12 @@ Run the M5 evidence export smoke:
 node scripts/phase5-evidence-export-smoke.mjs
 ```
 
+Run the M5 before/after transcript rubric smoke:
+
+```bash
+node scripts/phase5-transcript-rubric-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

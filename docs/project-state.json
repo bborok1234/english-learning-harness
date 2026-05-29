@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M5 Real Learning Validation active",
-    "status": "Next: #64 M5 transcript rubric",
+    "status": "Next: #65 M5 persona validation fixture",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 evidence export is implemented. The next target is #64: define a before/after transcript review rubric that scores observable behavior without overclaiming fluency or guaranteed improvement."
+    "summary": "M5 transcript rubric is implemented. The next target is #65: run target-persona seven-day validation fixtures before any real learner impact claim."
   },
   "ssot": [
     {
@@ -70,6 +70,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/M5-TRANSCRIPT-REVIEW-RUBRIC.md",
+      "path": "./M5-TRANSCRIPT-REVIEW-RUBRIC.md",
+      "role": "M5 before/after transcript review rubric",
+      "kind": "source"
+    },
+    {
       "label": "docs/LEARNING-ENGINE.md",
       "path": "./LEARNING-ENGINE.md",
       "role": "학습 엔진 설계",
@@ -116,7 +122,7 @@
     {
       "label": "Ultragoal",
       "value": "M5",
-      "detail": "evidence export implemented",
+      "detail": "transcript rubric implemented",
       "tone": "green"
     },
     {
@@ -128,7 +134,7 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#64 transcript rubric",
+      "detail": "#65 persona validation fixture",
       "tone": "red"
     },
     {
@@ -807,6 +813,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-5-evidence/M5-2-evidence-export.md"
           ]
+        },
+        {
+          "id": "M5-3",
+          "title": "#64 M5 before/after transcript rubric을 구현함",
+          "why": "Day 0/Day 7 transcript는 같은 기준으로 읽어야 하며 fluency/level claim으로 번지면 안 된다.",
+          "done": "observable behavior rubric이 voluntary output, clarification, repair, phrase reuse, comfort proxy를 비교하고 unsupported claims를 거부한다.",
+          "verification": "`node scripts/phase5-transcript-rubric-smoke.mjs`가 positive fixture와 unsupported/mismatch/missing negative fixtures를 통과했다.",
+          "files": [
+            "scripts/lib/transcript-review-rubric.mjs",
+            "scripts/phase5-transcript-rubric-smoke.mjs",
+            "docs/M5-TRANSCRIPT-REVIEW-RUBRIC.md",
+            "docs/phase-5-evidence/M5-3-transcript-rubric.md"
+          ]
         }
       ]
     },
@@ -817,10 +836,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#64 M5 before-after transcript review rubric",
-          "why": "Evidence pack 다음에는 Day 0/Day 7 transcript를 같은 기준으로 읽어야 한다.",
-          "done": "voluntary output, clarification, repair, reuse, comfort proxy를 observable rubric으로 정의하고 overclaim fixtures를 막는다.",
-          "verification": "transcript rubric smoke와 negative claim fixture가 통과해야 한다.",
+          "title": "#65 M5 target-persona seven-day validation fixture",
+          "why": "Rubric 다음에는 네 target persona가 7일 validation protocol을 통과하는지 리허설해야 한다.",
+          "done": "지은/민호/수진/혜원 fixture를 7일 evidence loop로 실행하고 persona-specific risk를 기록한다.",
+          "verification": "persona seven-day validation smoke와 dashboard risk render가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -836,10 +855,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "#65 Target-persona seven-day validation fixture",
-          "why": "Rubric 다음에는 네 target persona가 7일 validation protocol을 통과하는지 리허설해야 한다.",
-          "done": "지은/민호/수진/혜원 fixture를 7일 evidence loop로 실행하고 persona-specific risk를 기록한다.",
-          "verification": "persona seven-day validation smoke와 dashboard risk render가 통과해야 한다.",
+          "title": "#66 M5 real learning validation gate",
+          "why": "Persona fixture 후에는 M5 evidence가 claim을 계속/피벗/다운그레이드할지 판단해야 한다.",
+          "done": "M5 evidence closeout note, dashboard, issue/milestone audit을 정리한다.",
+          "verification": "M5 gate smoke/evidence audit, dashboard render, GitHub milestone audit이 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1085,6 +1104,11 @@
       "name": "M5-2",
       "status": "Pass",
       "detail": "evidence export smoke passes seven-session pack generation, review reuse summary, path redaction, and claim guard"
+    },
+    {
+      "name": "M5-3",
+      "status": "Pass",
+      "detail": "transcript rubric smoke passes positive before/after fixture and unsupported-claim, prompt-mismatch, missing-sample negatives"
     }
   ],
   "commands": [
@@ -1214,7 +1238,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 64"
+      "command": "gh issue view 65"
     }
   ]
 }
