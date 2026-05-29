@@ -28,7 +28,7 @@ See `docs/ADAPTIVE-EXECUTION-PLAN.md`.
 | #7 | E7 Multimodal interaction event graph | multimodal | closed |
 | #8 | E8 Voice image video learning loops | multimodal | closed |
 | #9 | E9 Seven-day validation protocol | evaluation | closed |
-| #10 | E10 Public onboarding and distribution | distribution | open |
+| #10 | E10 Public onboarding and distribution | distribution | closed |
 
 ## M1 First-Usable Codex Harness
 
@@ -306,7 +306,7 @@ M7 now targets the current source repository as the open-source public distribut
 #114 evidence currently shows:
 
 - `scripts/phase7-open-source-history-audit-smoke.mjs` scans all git revisions and committed paths.
-- current output reports `revisionsScanned=119`, `committedPathsScanned=181`, `forbiddenPathFindings=0`, `secretContentFindings=0`, and `largeObjectFindings=0`.
+- current output reports `revisionsScanned=123`, `committedPathsScanned=184`, `forbiddenPathFindings=0`, `secretContentFindings=0`, and `largeObjectFindings=0`.
 - this does not change repository visibility or prove public clone access.
 
 #83/#90 final public source evidence currently shows:
@@ -316,7 +316,15 @@ M7 now targets the current source repository as the open-source public distribut
 - the smoke verifies public `git clone`, setup, daily, today, weekly, home, export, progress validation, and clean clone git status.
 - public Git-backed plugin install, realtime voice, and long-term learner outcomes remain unclaimed.
 
-#83 evidence currently shows:
+#117 learner-first README evidence currently shows:
+
+- `README.md` now leads with the learner promise, five-minute quick start, target learner, daily practice loop, conversation-improvement mechanisms, progress tracking, privacy, and current boundaries.
+- maintainer verification and public distribution details are below learner onboarding instead of being the first thing a visitor sees.
+- `scripts/phase7-learner-readme-smoke.mjs` verifies the README keeps learner-facing sections before maintainer verification and preserves the public clone commands.
+- existing public clone, open-source readiness, and local marketplace README audits still pass.
+- this improves first-time public understanding; it does not claim realtime voice, accent scoring, public Git-backed plugin install, or long-term learner outcomes.
+
+#83 artifact fallback evidence currently shows:
 
 - `scripts/package-public-artifact.mjs` creates a tarball candidate.
 - `scripts/phase7-public-artifact-smoke.mjs` extracts the tarball and verifies setup, daily, today, weekly, home, export, and progress validation from the extracted artifact.
@@ -324,4 +332,4 @@ M7 now targets the current source repository as the open-source public distribut
 - `.github/workflows/public-artifact.yml` can build and verify the artifact in GitHub Actions and optionally upload a release asset when manually dispatched.
 - GitHub Actions run `26618527553` passed with `publish_release=false` and uploaded workflow artifact `english-learning-harness-public`.
 - the tarball excludes `.git`, `.omx`, `tmp`, and `node_modules`.
-- public hosting/download is still unproven, so #83 remains open until hosted access reports `public_url_candidate`.
+- public artifact hosting/download remains optional fallback evidence; #83 closed through public source repository visibility plus public clone proof.
