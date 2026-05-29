@@ -1392,6 +1392,18 @@
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M7-D2",
+          "title": "#90 public release decision gate를 검증함",
+          "why": "release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.",
+          "done": "distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.",
+          "verification": "`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=manual_github_release_asset, codexMayPublishWithoutExplicitApproval=false를 통과한다.",
+          "files": [
+            "scripts/phase7-public-release-decision-smoke.mjs",
+            "docs/distribution-policy.json",
+            "docs/phase-7-evidence/M7-D-public-release-decision.md"
+          ]
         }
       ]
     },
@@ -1757,6 +1769,11 @@
       "name": "M7-1 workflow run",
       "status": "Pass",
       "detail": "GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public"
+    },
+    {
+      "name": "M7-D decision gate",
+      "status": "Pass",
+      "detail": "public release publication remains blocked until the issue 90 owner decision is recorded"
     }
   ],
   "commands": [
@@ -1897,6 +1914,10 @@
       "command": "node scripts/phase7-release-workflow-smoke.mjs"
     },
     {
+      "label": "Run M7 release decision smoke",
+      "command": "node scripts/phase7-public-release-decision-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -2035,16 +2056,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M6-1</strong>
-                <span>scripts/phase6-public-clean-clone-smoke.mjs, docs/phase-6-evidence/M6-1-public-clean-clone.md, README.md</span>
-              </div>
-              <h3>#72 private beta clone setup path를 검증함</h3>
-              <div class="card-row"><b>왜</b><p>친구/초대 사용자가 repository access를 가진 상태에서 clone 후 바로 학습할 수 있어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>authenticated clone에서 setup, daily, today, weekly, home, export, README command audit, clone git status check를 통과했다. public clone은 M7로 분리했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`가 통과했고 default public smoke는 PRIVATE visibility를 정직하게 거부한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M7-1a</strong>
                 <span>scripts/package-public-artifact.mjs, scripts/phase7-public-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
               </div>
@@ -2092,6 +2103,16 @@
               <div class="card-row"><b>왜</b><p>#83은 공개 URL 검증 이슈이고, 실제 배포면/권한 선택은 외부 release action을 수반하는 별도 결정이다.</p></div>
               <div class="card-row"><b>완료</b><p>#90을 생성해 GitHub Release asset, 별도 public repo, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-D2</strong>
+                <span>scripts/phase7-public-release-decision-smoke.mjs, docs/distribution-policy.json, docs/phase-7-evidence/M7-D-public-release-decision.md</span>
+              </div>
+              <h3>#90 public release decision gate를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=manual_github_release_asset, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2270,10 +2291,6 @@
           <tbody>
 
             <tr>
-              <td>M6-4</td>
-              <td><strong>Pass</strong><span>release gate audit passes with decision ready_to_close_m6_private_beta and canCloseM6=true</span></td>
-            </tr>
-            <tr>
               <td>M6-D</td>
               <td><strong>Pass</strong><span>distribution policy smoke passes private-beta / invited-user clone-to-learn with public release deferred to M7</span></td>
             </tr>
@@ -2300,6 +2317,10 @@
             <tr>
               <td>M7-1 workflow run</td>
               <td><strong>Pass</strong><span>GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public</span></td>
+            </tr>
+            <tr>
+              <td>M7-D decision gate</td>
+              <td><strong>Pass</strong><span>public release publication remains blocked until the issue 90 owner decision is recorded</span></td>
             </tr>
           </tbody>
         </table>
@@ -2345,7 +2366,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 56개 보기</summary>
+        <summary>완료 이력 57개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2908,10 +2929,20 @@
               <div class="card-row"><b>완료</b><p>M6 first-complete claim을 private beta / invited-user clone-to-learn으로 정하고 unauthenticated public release를 M7 #83으로 분리했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase6-distribution-policy-smoke.mjs`가 currentPolicy=private-beta, releaseClaim=invited-user clone-to-learn, publicReleaseStatus=deferred를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M6-1</strong>
+                <span>scripts/phase6-public-clean-clone-smoke.mjs, docs/phase-6-evidence/M6-1-public-clean-clone.md, README.md</span>
+              </div>
+              <h3>#72 private beta clone setup path를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>친구/초대 사용자가 repository access를 가진 상태에서 clone 후 바로 학습할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>authenticated clone에서 setup, daily, today, weekly, home, export, README command audit, clone git status check를 통과했다. public clone은 M7로 분리했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`가 통과했고 default public smoke는 PRIVATE visibility를 정직하게 거부한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 53개 보기</summary>
+        <summary>전체 검증 54개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3128,12 +3159,16 @@
               <td>M7-1 workflow run</td>
               <td><strong>Pass</strong><span>GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public</span></td>
             </tr>
+            <tr>
+              <td>M7-D decision gate</td>
+              <td><strong>Pass</strong><span>public release publication remains blocked until the issue 90 owner decision is recorded</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 42개 보기</summary>
+        <summary>전체 명령 43개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3271,6 +3306,10 @@
             <div class="command">
               <span>Run M7 release workflow smoke</span>
               <code>node scripts/phase7-release-workflow-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 release decision smoke</span>
+              <code>node scripts/phase7-public-release-decision-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

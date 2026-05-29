@@ -480,6 +480,12 @@ Run the M7 release workflow static smoke:
 node scripts/phase7-release-workflow-smoke.mjs
 ```
 
+Run the M7 public release decision gate smoke:
+
+```bash
+node scripts/phase7-public-release-decision-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash
