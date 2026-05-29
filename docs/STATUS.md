@@ -73,6 +73,7 @@ What is complete:
 - M7 Public Distribution Release milestone and issue #83 are created for unauthenticated public clone/artifact work.
 - M6 Private Beta Clone-to-Learn Release milestone is closed with `open_issues=0`.
 - M7 public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven.
+- M7 hosted-artifact smoke passes through local loopback and is ready to verify a real public URL via `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`.
 
 What is not started:
 - Real user validation.
@@ -234,7 +235,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 ### Phase 7 Public Distribution Release
 
-- [~] M7-1: Prove unauthenticated public distribution path (#83). Artifact mechanics pass; public hosting/download still needs a release path.
+- [~] M7-1: Prove unauthenticated public distribution path (#83). Artifact and hosted-download mechanics pass locally; public hosting/download still needs a real public URL.
 
 ## SSOT Structure
 

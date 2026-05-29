@@ -408,7 +408,7 @@
     "stage": "M6 Private Beta Clone-to-Learn closed",
     "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact mechanics now pass from a tarball candidate, but public hosting/download is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact and hosted-download mechanics now pass locally, but public hosting/download is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -548,13 +548,13 @@
     {
       "label": "Current stage",
       "value": "M7 active",
-      "detail": "#83 artifact mechanics pass; hosting next",
+      "detail": "#83 hosted mechanics pass locally; public URL next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "#83",
-      "detail": "public hosting/download evidence",
+      "detail": "real public artifact URL/download evidence",
       "tone": "red"
     },
     {
@@ -1345,6 +1345,18 @@
             "scripts/phase7-public-artifact-smoke.mjs",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-1b",
+          "title": "#83 hosted artifact mechanics를 검증함",
+          "why": "public artifact는 file extraction만이 아니라 URL download 후 학습 루프까지 견뎌야 한다.",
+          "done": "hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.",
+          "verification": "`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.",
+          "files": [
+            "scripts/phase7-hosted-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1355,13 +1367,13 @@
       "cards": [
         {
           "id": "M7-1",
-          "title": "#83 public hosting/download path",
-          "why": "artifact mechanics는 통과했지만 public user가 실제로 받을 수 있는 URL 또는 GitHub release가 아직 없다.",
-          "done": "public GitHub release asset 또는 public repository/artifact URL 중 하나를 선택하고 private access 없이 download smoke를 추가한다.",
-          "verification": "private credentials 없이 public download/extract/first-session smoke가 통과해야 한다.",
+          "title": "#83 real public artifact URL",
+          "why": "download mechanics는 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
+          "done": "GitHub release asset, public repo artifact, or another public URL을 정하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
+          "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
-            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
-            "docs/distribution-policy.json"
+            "scripts/phase7-hosted-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
         }
       ]
@@ -1391,10 +1403,10 @@
       "cards": [
         {
           "id": "R000",
-          "title": "Public hosting/download is still unproven",
-          "why": "Tarball artifact mechanics pass locally, but there is not yet a public URL or release asset for unauthenticated users.",
-          "done": "M7 #83 now separates artifact mechanics from public hosting evidence.",
-          "verification": "phase7 public artifact smoke passes, but #83 remains open until public download smoke passes."
+          "title": "Real public URL is still unproven",
+          "why": "Hosted-download mechanics pass locally, but no public artifact URL has been verified without private access.",
+          "done": "The smoke can verify a real URL through ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL when the artifact is hosted.",
+          "verification": "node scripts/phase7-hosted-artifact-smoke.mjs currently reports local_loopback_only; public_url_candidate is required to close #83."
         },
         {
           "id": "R001",
@@ -1684,6 +1696,11 @@
       "name": "M7-1 artifact",
       "status": "Partial",
       "detail": "public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven"
+    },
+    {
+      "name": "M7-1 hosted artifact",
+      "status": "Partial",
+      "detail": "hosted-download mechanics pass through local loopback; real public URL remains unverified"
     }
   ],
   "commands": [
@@ -1816,6 +1833,10 @@
       "command": "node scripts/phase7-public-artifact-smoke.mjs"
     },
     {
+      "label": "Run M7 hosted artifact smoke",
+      "command": "node scripts/phase7-hosted-artifact-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1854,7 +1875,7 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact mechanics now pass from a tarball candidate, but public hosting/download is still unproven and keeps #83 open.</p>
+        <p class="summary">M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact and hosted-download mechanics now pass locally, but public hosting/download is still unproven and keeps #83 open.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
@@ -1873,12 +1894,12 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M7 active</div>
-          <p>#83 artifact mechanics pass; hosting next</p>
+          <p>#83 hosted mechanics pass locally; public URL next</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">#83</div>
-          <p>public hosting/download evidence</p>
+          <p>real public artifact URL/download evidence</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1916,12 +1937,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-1</strong>
-                <span>docs/phase-7-evidence/M7-1-public-artifact-mechanics.md, docs/distribution-policy.json</span>
+                <span>scripts/phase7-hosted-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
               </div>
-              <h3>#83 public hosting/download path</h3>
-              <div class="card-row"><b>왜</b><p>artifact mechanics는 통과했지만 public user가 실제로 받을 수 있는 URL 또는 GitHub release가 아직 없다.</p></div>
-              <div class="card-row"><b>완료</b><p>public GitHub release asset 또는 public repository/artifact URL 중 하나를 선택하고 private access 없이 download smoke를 추가한다.</p></div>
-              <div class="card-row"><b>검증</b><p>private credentials 없이 public download/extract/first-session smoke가 통과해야 한다.</p></div>
+              <h3>#83 real public artifact URL</h3>
+              <div class="card-row"><b>왜</b><p>download mechanics는 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>GitHub release asset, public repo artifact, or another public URL을 정하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -1942,16 +1963,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M6-2</strong>
-                <span>scripts/phase6-marketplace-install-smoke.mjs, docs/phase-6-evidence/M6-2-marketplace-install.md, README.md, docs/project-state.json</span>
-              </div>
-              <h3>#73 local marketplace packaging/install path를 검증함</h3>
-              <div class="card-row"><b>왜</b><p>friend/invited-user handoff에는 public Git-backed install을 과장하지 않고 실제 검증된 Codex plugin install 경로가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M6-3</strong>
@@ -2002,6 +2013,16 @@
               <div class="card-row"><b>완료</b><p>tarball candidate를 만들고 extract된 artifact root에서 setup, daily, today, weekly, home, export, progress validation을 통과시켰다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-smoke.mjs`가 artifact packaging/extraction/learner-loop를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1b</strong>
+                <span>scripts/phase7-hosted-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md, README.md</span>
+              </div>
+              <h3>#83 hosted artifact mechanics를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact는 file extraction만이 아니라 URL download 후 학습 루프까지 견뎌야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.</p></div>
+            </article>
         </div>
       </section>
       <section class="board-column compact tone-red">
@@ -2015,10 +2036,10 @@
               <div class="work-meta">
                 <strong>R000</strong>
               </div>
-              <h3>Public hosting/download is still unproven</h3>
-              <div class="card-row"><b>왜</b><p>Tarball artifact mechanics pass locally, but there is not yet a public URL or release asset for unauthenticated users.</p></div>
-              <div class="card-row"><b>완료</b><p>M7 #83 now separates artifact mechanics from public hosting evidence.</p></div>
-              <div class="card-row"><b>검증</b><p>phase7 public artifact smoke passes, but #83 remains open until public download smoke passes.</p></div>
+              <h3>Real public URL is still unproven</h3>
+              <div class="card-row"><b>왜</b><p>Hosted-download mechanics pass locally, but no public artifact URL has been verified without private access.</p></div>
+              <div class="card-row"><b>완료</b><p>The smoke can verify a real URL through ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL when the artifact is hosted.</p></div>
+              <div class="card-row"><b>검증</b><p>node scripts/phase7-hosted-artifact-smoke.mjs currently reports local_loopback_only; public_url_candidate is required to close #83.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2179,10 +2200,6 @@
           <tbody>
 
             <tr>
-              <td>M6-1</td>
-              <td><strong>Pass</strong><span>authenticated clone mechanics pass under private beta policy; unauthenticated public clone deferred to M7</span></td>
-            </tr>
-            <tr>
               <td>M6-2</td>
               <td><strong>Pass</strong><span>clean clone local marketplace packaging and isolated CODEX_HOME install pass; public Git-backed install remains unverified</span></td>
             </tr>
@@ -2209,6 +2226,10 @@
             <tr>
               <td>M7-1 artifact</td>
               <td><strong>Partial</strong><span>public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven</span></td>
+            </tr>
+            <tr>
+              <td>M7-1 hosted artifact</td>
+              <td><strong>Partial</strong><span>hosted-download mechanics pass through local loopback; real public URL remains unverified</span></td>
             </tr>
           </tbody>
         </table>
@@ -2254,7 +2275,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 52개 보기</summary>
+        <summary>완료 이력 53개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2777,10 +2798,20 @@
               <div class="card-row"><b>완료</b><p>M5 gate smoke가 protocol, export, rubric, persona validation evidence를 재검증하고 M6 #72-#75를 생성했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase5-m5-gate-smoke.mjs`가 decision=continue_to_m6, personaCount=4, blocked real learner claims를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M6-2</strong>
+                <span>scripts/phase6-marketplace-install-smoke.mjs, docs/phase-6-evidence/M6-2-marketplace-install.md, README.md, docs/project-state.json</span>
+              </div>
+              <h3>#73 local marketplace packaging/install path를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>friend/invited-user handoff에는 public Git-backed install을 과장하지 않고 실제 검증된 Codex plugin install 경로가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>clean clone에서 local marketplace package를 만들고 isolated CODEX_HOME에 설치한 뒤 plugin list에서 installed/enabled 상태를 확인하는 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-marketplace-install-smoke.mjs`가 package, marketplace add, plugin add, plugin list, README command audit, clone git status clean을 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 50개 보기</summary>
+        <summary>전체 검증 51개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2985,12 +3016,16 @@
               <td>M7-1 artifact</td>
               <td><strong>Partial</strong><span>public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven</span></td>
             </tr>
+            <tr>
+              <td>M7-1 hosted artifact</td>
+              <td><strong>Partial</strong><span>hosted-download mechanics pass through local loopback; real public URL remains unverified</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 40개 보기</summary>
+        <summary>전체 명령 41개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3120,6 +3155,10 @@
             <div class="command">
               <span>Run M7 public artifact smoke</span>
               <code>node scripts/phase7-public-artifact-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 hosted artifact smoke</span>
+              <code>node scripts/phase7-hosted-artifact-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

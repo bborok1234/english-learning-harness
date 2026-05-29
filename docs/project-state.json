@@ -6,7 +6,7 @@
     "stage": "M6 Private Beta Clone-to-Learn closed",
     "status": "Next: publishable artifact hosting for #83 M7 public distribution",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact mechanics now pass from a tarball candidate, but public hosting/download is still unproven and keeps #83 open."
+    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 public artifact and hosted-download mechanics now pass locally, but public hosting/download is still unproven and keeps #83 open."
   },
   "ssot": [
     {
@@ -146,13 +146,13 @@
     {
       "label": "Current stage",
       "value": "M7 active",
-      "detail": "#83 artifact mechanics pass; hosting next",
+      "detail": "#83 hosted mechanics pass locally; public URL next",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "#83",
-      "detail": "public hosting/download evidence",
+      "detail": "real public artifact URL/download evidence",
       "tone": "red"
     },
     {
@@ -943,6 +943,18 @@
             "scripts/phase7-public-artifact-smoke.mjs",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-1b",
+          "title": "#83 hosted artifact mechanics를 검증함",
+          "why": "public artifact는 file extraction만이 아니라 URL download 후 학습 루프까지 견뎌야 한다.",
+          "done": "hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.",
+          "verification": "`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.",
+          "files": [
+            "scripts/phase7-hosted-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -953,13 +965,13 @@
       "cards": [
         {
           "id": "M7-1",
-          "title": "#83 public hosting/download path",
-          "why": "artifact mechanics는 통과했지만 public user가 실제로 받을 수 있는 URL 또는 GitHub release가 아직 없다.",
-          "done": "public GitHub release asset 또는 public repository/artifact URL 중 하나를 선택하고 private access 없이 download smoke를 추가한다.",
-          "verification": "private credentials 없이 public download/extract/first-session smoke가 통과해야 한다.",
+          "title": "#83 real public artifact URL",
+          "why": "download mechanics는 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
+          "done": "GitHub release asset, public repo artifact, or another public URL을 정하고 ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL로 hosted smoke를 실행한다.",
+          "verification": "hosted artifact smoke가 hostedAccessStatus=public_url_candidate, canClosePublicDistribution=true를 반환해야 한다.",
           "files": [
-            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md",
-            "docs/distribution-policy.json"
+            "scripts/phase7-hosted-artifact-smoke.mjs",
+            "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
         }
       ]
@@ -989,10 +1001,10 @@
       "cards": [
         {
           "id": "R000",
-          "title": "Public hosting/download is still unproven",
-          "why": "Tarball artifact mechanics pass locally, but there is not yet a public URL or release asset for unauthenticated users.",
-          "done": "M7 #83 now separates artifact mechanics from public hosting evidence.",
-          "verification": "phase7 public artifact smoke passes, but #83 remains open until public download smoke passes."
+          "title": "Real public URL is still unproven",
+          "why": "Hosted-download mechanics pass locally, but no public artifact URL has been verified without private access.",
+          "done": "The smoke can verify a real URL through ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL when the artifact is hosted.",
+          "verification": "node scripts/phase7-hosted-artifact-smoke.mjs currently reports local_loopback_only; public_url_candidate is required to close #83."
         },
         {
           "id": "R001",
@@ -1282,6 +1294,11 @@
       "name": "M7-1 artifact",
       "status": "Partial",
       "detail": "public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven"
+    },
+    {
+      "name": "M7-1 hosted artifact",
+      "status": "Partial",
+      "detail": "hosted-download mechanics pass through local loopback; real public URL remains unverified"
     }
   ],
   "commands": [
@@ -1412,6 +1429,10 @@
     {
       "label": "Run M7 public artifact smoke",
       "command": "node scripts/phase7-public-artifact-smoke.mjs"
+    },
+    {
+      "label": "Run M7 hosted artifact smoke",
+      "command": "node scripts/phase7-hosted-artifact-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

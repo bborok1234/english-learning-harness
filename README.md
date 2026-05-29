@@ -268,6 +268,15 @@ node scripts/english-learning-harness.mjs today --say "I want to practice today.
 
 This proves artifact mechanics only after `node scripts/phase7-public-artifact-smoke.mjs` passes. It does not prove public hosting or public download until the artifact is actually published.
 
+After the artifact is hosted at a public URL, verify the download-to-learning path:
+
+```bash
+ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harness-public.tar.gz" \
+  node scripts/phase7-hosted-artifact-smoke.mjs
+```
+
+Without `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`, the hosted-artifact smoke uses a local loopback server and proves mechanics only, not public access.
+
 ## Verification
 
 Run the supported wrapper smoke:
@@ -455,6 +464,12 @@ Run the M7 public artifact mechanics smoke:
 
 ```bash
 node scripts/phase7-public-artifact-smoke.mjs
+```
+
+Run the M7 hosted artifact smoke:
+
+```bash
+node scripts/phase7-hosted-artifact-smoke.mjs
 ```
 
 Run the full first-run smoke:
