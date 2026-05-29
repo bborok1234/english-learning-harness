@@ -1062,6 +1062,18 @@
             "docs/phase-7-evidence/M7-6-no-publish-workflow-run.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M7-7",
+          "title": "#104 public publication preflight를 추가함",
+          "why": "실제 공개 publish 전, owner decision/target repo/workflow/handoff가 준비됐는지 한 번에 보여주는 non-publishing readiness check가 필요하다.",
+          "done": "distribution policy, workflow artifact_repo/token boundary, handoff bundle, gh repo visibility를 검사하는 preflight를 추가했다. 현재 publicationReady=false다.",
+          "verification": "`node scripts/phase7-publication-preflight.mjs`가 decisionStatus=owner_decision_required, artifactRepoStatus=unavailable, publicationReady=false, canPublishNow=false를 반환한다.",
+          "files": [
+            "scripts/phase7-publication-preflight.mjs",
+            "docs/phase-7-evidence/M7-7-publication-preflight.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1092,11 +1104,11 @@
           "id": "M7-D",
           "title": "#90 public release surface decision",
           "why": "public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.",
-          "done": "권장안은 source repo를 private으로 유지해야 한다면 별도 public artifact repo release 또는 public static URL에 tarball을 게시하는 것이다.",
-          "verification": "결정 후 docs/distribution-policy.json이 선택된 surface와 Codex publish authority를 기록해야 한다.",
+          "done": "preflight 기준 현재 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.",
+          "verification": "publication preflight가 publicationReady=true가 되려면 #90 approval과 public artifact repo visibility가 필요하다.",
           "files": [
             "docs/distribution-policy.json",
-            ".github/workflows/public-artifact.yml"
+            "scripts/phase7-publication-preflight.mjs"
           ]
         },
         {
@@ -1457,6 +1469,11 @@
       "name": "M7-6 no-publish workflow run",
       "status": "Pass",
       "detail": "GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication"
+    },
+    {
+      "name": "M7-7 publication preflight",
+      "status": "Blocked",
+      "detail": "preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible"
     }
   ],
   "commands": [
@@ -1607,6 +1624,10 @@
     {
       "label": "Run M7 public release URL smoke",
       "command": "node scripts/phase7-public-release-url-smoke.mjs"
+    },
+    {
+      "label": "Run M7 publication preflight",
+      "command": "node scripts/phase7-publication-preflight.mjs"
     },
     {
       "label": "Run full-flow smoke",

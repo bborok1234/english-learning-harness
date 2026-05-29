@@ -83,6 +83,7 @@ What is complete:
 - M7-4 public artifact workflow is aligned to the separate artifact repository path: `publish_release=false` by default, `artifact_repo` input, and `PUBLIC_ARTIFACT_REPO_TOKEN` required for publication.
 - M7-5 public release URL smoke verifies artifact plus `SHA256SUMS` before setup/daily/today; current evidence is local loopback only until real public URLs exist.
 - M7-6 GitHub Actions run `26619701714` verifies the separate artifact repo workflow path in no-publication mode with artifact upload and skipped release publication.
+- M7-7 publication preflight is in place and currently reports `publicationReady=false`: owner decision is not approved and `bborok1234/english-learning-harness-public` is not visible to `gh repo view`.
 
 What is not started:
 - Real user validation.
@@ -100,6 +101,7 @@ What failed review:
 - M7-4 workflow smoke verifies separate artifact repo targeting, explicit token boundary, source repo read-only permission, and no-publication default.
 - M7-5 public release URL smoke verifies checksum-aware download-to-learning mechanics and keeps `canClosePublicDistribution=false` in local mode.
 - M7-6 no-publish workflow evidence verifies `publish_release=false`, `artifact_repo=bborok1234/english-learning-harness-public`, workflow artifact upload, and skipped publish step.
+- M7-7 preflight verifies policy/workflow/handoff readiness while keeping `canPublishNow=false` until owner approval and public artifact repo visibility exist.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.
