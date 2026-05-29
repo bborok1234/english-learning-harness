@@ -46,12 +46,24 @@ function main() {
   const repo = repoMetadata();
 
   assert(policy.schemaVersion === 1, "distribution policy schema mismatch");
-  assert(policy.currentPolicy === "private-beta", "M6 first-complete policy should be private-beta");
-  assert(policy.releaseClaim === "invited-user clone-to-learn", "release claim should be invited-user clone-to-learn");
-  assert(policy.publicReleaseStatus === "deferred", "public release should be explicitly deferred");
   assert(
-    policy.approvedClaims.some((claim) => claim.includes("invited GitHub collaborator")),
-    "approved claims should mention invited GitHub collaborator access",
+    ["private-beta", "open-source-prep"].includes(policy.currentPolicy),
+    "distribution policy should be private-beta or open-source-prep",
+  );
+  assert(
+    ["invited-user clone-to-learn", "public source clone-to-learn"].includes(policy.releaseClaim),
+    "release claim should be invited-user or public source clone-to-learn",
+  );
+  assert(
+    ["deferred", "preparing-public-source"].includes(policy.publicReleaseStatus),
+    "public release should be deferred or preparing-public-source",
+  );
+  assert(
+    policy.approvedClaims.some((claim) =>
+      claim.includes("invited GitHub collaborator") ||
+      claim.includes("intended public release surface is the source repository"),
+    ),
+    "approved claims should mention invited access or public source repository intent",
   );
   assert(
     policy.blockedClaims.some((claim) => claim.includes("Unauthenticated public HTTPS clone")),
@@ -61,6 +73,10 @@ function main() {
   assert(
     policy.publicReleaseRequirements.common.some((requirement) => requirement.includes("Resolve #90")),
     "common public release requirements should include #90 decision",
+  );
+  assert(
+    policy.publicReleaseDecision.recommendedSurface === "public_source_repository",
+    "recommended surface should be the public source repository for open-source launch",
   );
   assert(
     policy.publicReleaseRequirements.publicSourceRepository.some((requirement) =>
@@ -83,8 +99,8 @@ function main() {
 
   if (repo.isPrivate === true) {
     assert(
-      policy.currentPolicy === "private-beta",
-      "private repositories must not use a public release policy",
+      ["private-beta", "open-source-prep"].includes(policy.currentPolicy),
+      "private repositories must use private-beta or open-source-prep before public visibility changes",
     );
   }
 
@@ -102,7 +118,11 @@ function main() {
         approvedClaims: policy.approvedClaims,
         blockedClaims: policy.blockedClaims,
         recommendedSurface: policy.publicReleaseDecision.recommendedSurface,
-        publicArtifactProof:
+        publicSourceProof:
+          policy.publicReleaseRequirements.publicSourceRepository.find((requirement) =>
+            requirement.includes("default public clone smoke"),
+          ),
+        publicArtifactFallbackProof:
           policy.publicReleaseRequirements.publicArtifactRepositoryRelease.find((requirement) =>
             requirement.includes("phase7-public-release-url-smoke.mjs"),
           ),

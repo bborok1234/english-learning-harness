@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M7 Public Distribution active",
-    "status": "Next: decide public release surface in #90, then prove public URL in #83",
+    "status": "Next: open-source visibility change, then prove public clone in #83",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta / invited-user clone-to-learn release is closed. M7 artifact, hosted-download mechanics, release workflow wiring, no-publish Actions evidence, artifact plugin install, and owner approval packet pass. The next human decision is #90 public release surface/authority; #83 remains open until a real public URL passes smoke."
+    "summary": "M6 private beta is closed historically, but the product direction is now open source. M7 now targets this source repository as the public distribution surface. OSS community files and readiness smoke pass; #83 remains open until the repository is public and default public clone smoke passes."
   },
   "ssot": [
     {
@@ -140,25 +140,25 @@
     {
       "label": "Ultragoal",
       "value": "M7",
-      "detail": "M6 private beta closed; public distribution next",
+      "detail": "open-source prep active; public clone proof next",
       "tone": "green"
     },
     {
       "label": "Current stage",
       "value": "M7 active",
-      "detail": "#90 release surface decision; #83 public URL proof",
+      "detail": "#90 public source approved pending visibility; #83 public clone proof",
       "tone": "amber"
     },
     {
       "label": "Next block",
       "value": "#90",
-      "detail": "choose public release surface and publish authority",
+      "detail": "make source repo public after readiness audit",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "41 issues",
-      "detail": "M1-M5 closed; M6 private beta; M7 #83/#90 open; #110 aligned",
+      "value": "42 issues",
+      "detail": "OSS readiness #112 in progress; #83/#90 still open",
       "tone": "green"
     },
     {
@@ -1091,8 +1091,8 @@
           "id": "M7-9",
           "title": "#108 public release approval packet을 준비함",
           "why": "#90 owner decision은 무엇을 승인하는지, 승인 후 어떤 명령과 증거가 필요한지 사람이 한눈에 확인할 수 있어야 한다.",
-          "done": "PUBLIC-RELEASE-APPROVAL.md/json을 생성하는 non-publishing packet과 smoke를 추가했다. packet은 approval-time workflow command, manual fallback, forbidden-before-approval, #83 proof command를 포함한다.",
-          "verification": "`node scripts/phase7-public-release-approval-smoke.mjs`가 approvalRequired=true, publicationPerformed=false, canPublishNow=false, canClosePublicDistribution=false를 통과한다.",
+          "done": "PUBLIC-RELEASE-APPROVAL.md/json이 public source repository visibility change packet을 생성하도록 정렬했다.",
+          "verification": "`node scripts/phase7-public-release-approval-smoke.mjs`가 approvalRequired=true, repositoryVisibilityChanged=false, canPublishNow=false, canClosePublicDistribution=false를 통과한다.",
           "files": [
             "scripts/prepare-public-release-approval.mjs",
             "scripts/phase7-public-release-approval-smoke.mjs",
@@ -1101,14 +1101,32 @@
         },
         {
           "id": "M7-10",
-          "title": "#110 public release policy를 artifact-first 경로와 정렬함",
-          "why": "정책이 public source repo clone과 separate public artifact release를 같은 필수조건처럼 섞어 쓰면 #83의 다음 증거가 모호해진다.",
-          "done": "distribution policy를 common/publicSourceRepository/publicArtifactRepositoryRelease/publicStaticArtifactUrl 요구사항으로 분기했다.",
-          "verification": "`node scripts/phase6-distribution-policy-smoke.mjs`가 public source repo 경로에는 default public clone smoke, artifact-first 경로에는 phase7-public-release-url-smoke와 checksum-verified artifact install boundary가 있음을 검증한다.",
+          "title": "#110 public release policy를 public source 경로와 정렬함",
+          "why": "오픈소스 방향에서는 별도 artifact repo보다 현재 source repo 공개가 더 단순한 public distribution surface다.",
+          "done": "distribution policy를 open-source-prep, public_source_repository, public-git-clone 기준으로 정렬하고 artifact release는 fallback으로 낮췄다.",
+          "verification": "`node scripts/phase6-distribution-policy-smoke.mjs`가 public source repo 경로에는 default public clone smoke, artifact fallback 경로에는 phase7-public-release-url-smoke가 있음을 검증한다.",
           "files": [
             "docs/distribution-policy.json",
             "scripts/phase6-distribution-policy-smoke.mjs",
             "docs/phase-7-evidence/M7-10-artifact-first-policy.md"
+          ]
+        },
+        {
+          "id": "M7-11",
+          "title": "#112 open-source public launch 준비를 추가함",
+          "why": "public repo로 열기 전에 license, contribution, conduct, security, support, governance, issue/PR template, README public clone framing이 갖춰져야 한다.",
+          "done": "MIT LICENSE, CONTRIBUTING, CODE_OF_CONDUCT, SECURITY, SUPPORT, GOVERNANCE, GitHub issue templates, PR template, open-source readiness smoke를 추가했다.",
+          "verification": "`node scripts/phase7-open-source-readiness-smoke.mjs`가 required community files, README public clone path, policy alignment, local secret-file absence를 통과하고 visibilityReady=false는 repo가 아직 PRIVATE이기 때문이라고 보고한다.",
+          "files": [
+            "LICENSE",
+            "CONTRIBUTING.md",
+            "CODE_OF_CONDUCT.md",
+            "SECURITY.md",
+            "SUPPORT.md",
+            "GOVERNANCE.md",
+            ".github/ISSUE_TEMPLATE/",
+            ".github/PULL_REQUEST_TEMPLATE.md",
+            "scripts/phase7-open-source-readiness-smoke.mjs"
           ]
         }
       ]
@@ -1120,13 +1138,14 @@
       "cards": [
         {
           "id": "M7-1",
-          "title": "#83 real public artifact URL",
-          "why": "artifact build, hosted-download mechanics, release workflow wiring은 통과했지만 public user가 private access 없이 받을 수 있는 URL은 아직 없다.",
-          "done": "#90에서 배포면/권한을 결정한 뒤 artifact와 SHA256SUMS를 public URL에 게시하고 checksum-aware smoke를 실행한다.",
-          "verification": "public release URL smoke가 real non-local HTTPS artifact/SHA256SUMS URL에서 hostedAccessStatus=public_url_candidate, checksumVerified=true, canClosePublicDistribution=true를 반환해야 한다.",
+          "title": "#83 public source clone proof",
+          "why": "오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다. 아직 repo visibility가 PRIVATE이라 public clone proof가 없다.",
+          "done": "open-source readiness smoke가 통과했으므로 다음은 repo visibility를 public으로 바꾼 뒤 default public clone smoke를 실행하는 것이다.",
+          "verification": "`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 통과해야 한다.",
           "files": [
-            ".github/workflows/public-artifact.yml",
-            "scripts/phase7-public-release-url-smoke.mjs"
+            "README.md",
+            "scripts/phase6-public-clean-clone-smoke.mjs",
+            "scripts/phase7-open-source-readiness-smoke.mjs"
           ]
         }
       ]
@@ -1139,13 +1158,14 @@
         {
           "id": "M7-D",
           "title": "#90 public release surface decision",
-          "why": "public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.",
-          "done": "approval packet과 artifact-first policy는 준비됐다. 남은 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.",
-          "verification": "현재 권장 artifact-first 경로는 publication preflight가 publicationReady=true가 된 뒤 real artifact/SHA256SUMS URL smoke가 public_url_candidate를 반환해야 한다.",
+          "why": "public source repo 공개는 외부 공개 action이라, readiness audit 이후 visibility change와 public clone proof가 필요하다.",
+          "done": "open-source readiness files와 visibility-change approval packet은 준비됐다. 남은 blocker는 source repository visibility가 아직 PRIVATE인 것이다.",
+          "verification": "publication preflight가 sourceRepoVisibility=PUBLIC, publicationReady=true가 되려면 repo visibility change 후 public clone smoke가 필요하다.",
           "files": [
             "docs/distribution-policy.json",
             "scripts/phase7-publication-preflight.mjs",
-            "scripts/prepare-public-release-approval.mjs"
+            "scripts/prepare-public-release-approval.mjs",
+            "scripts/phase7-open-source-readiness-smoke.mjs"
           ]
         }
       ]
@@ -1499,7 +1519,7 @@
     {
       "name": "M7-7 publication preflight",
       "status": "Blocked",
-      "detail": "preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible"
+      "detail": "preflight passes but reports publicationReady=false because source repository visibility is still PRIVATE"
     },
     {
       "name": "M7-8 public artifact install",
@@ -1509,12 +1529,17 @@
     {
       "name": "M7-9 approval packet",
       "status": "Pass",
-      "detail": "owner approval packet is generated without publishing and includes the approval command plus #83 proof command"
+      "detail": "owner approval packet is generated without changing repository visibility and includes public clone proof command"
     },
     {
-      "name": "M7-10 artifact-first policy",
+      "name": "M7-10 public-source policy",
       "status": "Pass",
-      "detail": "distribution policy separates public source clone proof from artifact-first public URL proof"
+      "detail": "distribution policy now recommends the source repository as the open-source public distribution surface"
+    },
+    {
+      "name": "M7-11 open-source readiness",
+      "status": "Blocked",
+      "detail": "community files and policy pass; only blocker is repository visibility still PRIVATE"
     }
   ],
   "commands": [
@@ -1673,6 +1698,10 @@
     {
       "label": "Run M7 public release approval smoke",
       "command": "node scripts/phase7-public-release-approval-smoke.mjs"
+    },
+    {
+      "label": "Run M7 open-source readiness smoke",
+      "command": "node scripts/phase7-open-source-readiness-smoke.mjs"
     },
     {
       "label": "Run distribution policy smoke",

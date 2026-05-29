@@ -1,31 +1,33 @@
 {
   "schemaVersion": 1,
   "updatedAt": "2026-05-29",
-  "currentPolicy": "private-beta",
-  "releaseClaim": "invited-user clone-to-learn",
+  "currentPolicy": "open-source-prep",
+  "releaseClaim": "public source clone-to-learn",
   "publicReleaseDecision": {
     "issue": 90,
-    "status": "owner_decision_required",
-    "recommendedSurface": "public_artifact_repository_release",
-    "reason": "GitHub private repositories are only accessible to explicitly shared users, so a release asset in this private source repository should not be treated as unauthenticated public evidence. Use a separate public artifact repository release or another public static URL if the source repository stays private.",
-    "codexMayPublishWithoutExplicitApproval": false
+    "status": "approved_pending_visibility_change",
+    "recommendedSurface": "public_source_repository",
+    "reason": "The product direction is open source, so the simplest public distribution surface is this source repository. A separate artifact repository is unnecessary unless the source repository must remain private.",
+    "codexMayPublishWithoutExplicitApproval": false,
+    "codexMayChangeRepositoryVisibilityWithoutFinalAudit": false
   },
-  "repositoryVisibilityRequired": "private-or-public",
-  "cloneMode": "authenticated-git-clone",
-  "publicReleaseStatus": "deferred",
+  "repositoryVisibilityRequired": "public",
+  "cloneMode": "public-git-clone",
+  "publicReleaseStatus": "preparing-public-source",
   "approvedClaims": [
-    "An invited GitHub collaborator with repository access can clone the repository and start local learning through the explicit command wrapper.",
+    "The intended public release surface is the source repository itself.",
+    "A fresh clone can start local learning through the explicit command wrapper once repository visibility is public.",
     "Local marketplace packaging and isolated CODEX_HOME install are verified.",
     "First-run support diagnostics and non-destructive repair guidance are verified."
   ],
   "blockedClaims": [
-    "Unauthenticated public HTTPS clone is not verified while the repository is private.",
+    "Unauthenticated public HTTPS clone is not verified until repository visibility is public and the default public clone smoke passes.",
     "Public Git-backed plugin install is not verified.",
     "Realtime voice and real learner outcome claims remain outside the first-complete release claim."
   ],
   "publicReleaseRequirements": {
     "common": [
-      "Resolve #90 by choosing the public distribution surface and publication authority.",
+      "Resolve #90 by choosing the public source repository surface and publication authority.",
       "Run a smoke that proves the chosen surface is reachable without private source repository access.",
       "Update README, STATUS, ISSUE-INDEX, dashboard, and GitHub issue state."
     ],
@@ -35,6 +37,7 @@
       "Add a public Git-backed install smoke before documenting Git-backed plugin install."
     ],
     "publicArtifactRepositoryRelease": [
+      "Use this path only if the source repository must remain private.",
       "Publish the artifact and SHA256SUMS from a separate public artifact repository release after explicit owner approval.",
       "Run ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL and ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL through scripts/phase7-public-release-url-smoke.mjs until hostedAccessStatus=public_url_candidate, checksumVerified=true, and canClosePublicDistribution=true.",
       "Keep the verified install claim limited to local marketplace install from the checksum-verified downloaded artifact unless a separate public Git-backed install smoke passes."
@@ -45,5 +48,5 @@
       "Document the static URL host, retention owner, and update procedure before claiming public distribution."
     ]
   },
-  "claimBoundary": "This policy chooses private beta / invited-user clone-to-learn as the M6 first-complete distribution claim. It does not claim unauthenticated public release."
+  "claimBoundary": "This policy prepares an open-source public source repository release. It does not claim unauthenticated public release until repository visibility is public and the default public clone smoke passes."
 }

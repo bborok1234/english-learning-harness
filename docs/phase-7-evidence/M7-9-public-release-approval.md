@@ -5,7 +5,7 @@ Decision: continue
 
 ## Why
 
-M7 cannot complete until #90 records owner approval and #83 proves a real public artifact URL. Before asking for that approval, the project needs a compact packet that makes the decision auditable: target repository, release tag, files, checksum, commands, forbidden actions, and the exact proof command required after publication.
+M7 cannot complete until #90 records the public source repository decision and #83 proves a default public clone. Before changing repository visibility, the project needs a compact packet that makes the decision auditable: target repository, visibility command, forbidden actions, and the exact proof command required after visibility changes.
 
 ## What Changed
 
@@ -22,10 +22,10 @@ node scripts/phase7-public-release-approval-smoke.mjs
 It verifies:
 
 - generated `PUBLIC-RELEASE-APPROVAL.md` and `PUBLIC-RELEASE-APPROVAL.json` exist under `tmp/`.
-- the packet points to #90 for owner decision and #83 for public URL proof.
-- the packet preserves `approvalRequired=true`, `decisionStatus=owner_decision_required`, `publicationPerformed=false`, `canPublishNow=false`, and `canClosePublicDistribution=false`.
-- the packet includes the owner-approval-time workflow command, manual fallback command, forbidden-before-approval list, and checksum-aware real public URL proof command.
+- the packet points to #90 for owner decision and #83 for public clone proof.
+- the packet preserves `approvalRequired=true`, `repositoryVisibilityChanged=false`, `publicationPerformed=false`, `canPublishNow=false`, and `canClosePublicDistribution=false`.
+- the packet includes the owner-approval-time repository visibility command, forbidden-before-approval list, and default public clone proof command.
 
 ## Claim Boundary
 
-This is non-publishing preparation only. It does not approve publication, create a public repository, publish a release, prove public URL access, or complete #83/#90.
+This is non-publishing preparation only. It does not change repository visibility, prove public clone access, or complete #83/#90.

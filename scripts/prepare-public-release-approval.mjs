@@ -40,6 +40,105 @@ function main(options = {}) {
     "Codex publication authority boundary must remain explicit",
   );
 
+  if (decision.recommendedSurface === "public_source_repository") {
+    const visibilityChangeCommand =
+      "gh repo edit bborok1234/english-learning-harness --visibility public";
+    const proofCommand = "node scripts/phase6-public-clean-clone-smoke.mjs";
+    const packet = {
+      schemaVersion: 1,
+      issue: "M7-9",
+      decisionIssue: 90,
+      distributionIssue: 83,
+      generatedAt: new Date().toISOString(),
+      approvalRequired: true,
+      decisionStatus: decision.status,
+      recommendedSurface: decision.recommendedSurface,
+      sourceRepo: "bborok1234/english-learning-harness",
+      visibilityChangeCommand,
+      proofCommand,
+      requiredOwnerDecisions: [
+        "Approve the public source repository distribution surface in #90.",
+        "Confirm that the repository is ready to become public.",
+        "Run the open-source readiness smoke before changing visibility.",
+        "Run the default public clone smoke after changing visibility before claiming #83 complete.",
+      ],
+      forbiddenBeforeApproval: [
+        "Do not change repository visibility before open-source readiness smoke passes.",
+        "Do not claim unauthenticated public distribution before public clone smoke passes.",
+        "Do not claim public Git-backed plugin install.",
+      ],
+      publicationPerformed: false,
+      repositoryVisibilityChanged: false,
+      canPublishNow: false,
+      canClosePublicDistribution: false,
+      claimBoundary:
+        "This approval packet is non-publishing preparation only. It does not change repository visibility, prove public clone access, or complete #83/#90.",
+    };
+
+    const jsonPath = resolve(target, "PUBLIC-RELEASE-APPROVAL.json");
+    const markdownPath = resolve(target, "PUBLIC-RELEASE-APPROVAL.md");
+    writeFileSync(jsonPath, `${JSON.stringify(packet, null, 2)}\n`);
+    writeFileSync(
+      markdownPath,
+      [
+        "# Public Source Repository Approval Packet",
+        "",
+        "This packet is for the owner decision in #90. It does not change repository visibility.",
+        "",
+        "## Decision Requested",
+        "",
+        "- Approve or reject making `bborok1234/english-learning-harness` public.",
+        "- Confirm who is allowed to change repository visibility.",
+        "- Confirm the repository has passed open-source readiness checks.",
+        "",
+        "## Command After Explicit Approval",
+        "",
+        "Do not execute this command until #90 records explicit owner approval and open-source readiness smoke passes.",
+        "",
+        "```bash",
+        visibilityChangeCommand,
+        "```",
+        "",
+        "## Required Proof After Visibility Change",
+        "",
+        "Run this before claiming public distribution complete:",
+        "",
+        "```bash",
+        proofCommand,
+        "```",
+        "",
+        "Expected proof: default public clone succeeds without `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE`.",
+        "",
+        "## Forbidden Before Approval",
+        "",
+        ...packet.forbiddenBeforeApproval.map((item) => `- ${item}`),
+        "",
+        "## Claim Boundary",
+        "",
+        packet.claimBoundary,
+        "",
+      ].join("\n"),
+    );
+
+    return {
+      status: "pass",
+      issue: "M7-9",
+      target,
+      markdownPath,
+      jsonPath,
+      approvalRequired: packet.approvalRequired,
+      decisionStatus: packet.decisionStatus,
+      recommendedSurface: packet.recommendedSurface,
+      sourceRepo: packet.sourceRepo,
+      publicationPerformed: packet.publicationPerformed,
+      repositoryVisibilityChanged: packet.repositoryVisibilityChanged,
+      canPublishNow: packet.canPublishNow,
+      canClosePublicDistribution: packet.canClosePublicDistribution,
+      proofCommand: packet.proofCommand,
+      claimBoundary: packet.claimBoundary,
+    };
+  }
+
   const handoff = preparePublicArtifactHandoff({ target: resolve(target, "handoff") });
   const manifest = JSON.parse(readFileSync(handoff.manifestPath, "utf8"));
   const artifactUrl = manifest.latestReleaseDownloadUrl;
