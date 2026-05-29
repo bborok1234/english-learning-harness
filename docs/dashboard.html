@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M5 Real Learning Validation active",
-    "status": "Next: #62 M5 validation protocol",
+    "status": "Next: #63 M5 evidence export",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 has been split into executable issues #62-#66. The next target is #62: define the seven-day validation protocol before building evidence export or rubric tooling."
+    "summary": "M5 validation protocol is defined. The next target is #63: export a seven-day pilot evidence pack so a human can review the learner journey without hunting through local JSON files."
   },
   "ssot": [
     {
@@ -466,6 +466,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+      "path": "./M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+      "role": "M5 seven-day pilot protocol",
+      "kind": "source"
+    },
+    {
       "label": "docs/LEARNING-ENGINE.md",
       "path": "./LEARNING-ENGINE.md",
       "role": "학습 엔진 설계",
@@ -512,7 +518,7 @@
     {
       "label": "Ultragoal",
       "value": "M5",
-      "detail": "validation issue split created",
+      "detail": "validation protocol defined",
       "tone": "green"
     },
     {
@@ -524,7 +530,7 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#62 seven-day validation protocol",
+      "detail": "#63 evidence export",
       "tone": "red"
     },
     {
@@ -1178,6 +1184,18 @@
             "docs/project-state.json",
             "docs/phase-5-evidence/M5-0-validation-issue-split.md"
           ]
+        },
+        {
+          "id": "M5-1",
+          "title": "#62 M5 seven-day validation protocol을 정의함",
+          "why": "효과 검증은 protocol 없이 export나 rubric부터 만들면 claim 기준이 흔들린다.",
+          "done": "Day 0-7 schedule, comparable prompt set, evidence fields, continue/split/pivot/research/kill thresholds, privacy handoff를 문서화했다.",
+          "verification": "protocol이 LEARNING-ENGINE Gate D와 PRODUCT-ROADMAP seven-day pilot 기준을 충족하고, fluency/guarantee claim을 만들지 않는다.",
+          "files": [
+            "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+            "docs/phase-5-evidence/M5-1-validation-protocol.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1188,14 +1206,15 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#62 M5 seven-day validation protocol",
-          "why": "M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.",
-          "done": "7일 pilot schedule, before/after prompt set, comfort/repair/reuse evidence, privacy handoff, stop/pivot rules를 정의한다.",
-          "verification": "protocol doc, dashboard render, and roadmap/learning-engine alignment review가 통과해야 한다.",
+          "title": "#63 M5 seven-day pilot evidence export",
+          "why": "프로토콜이 생겼으므로 다음 병목은 흩어진 local artifacts를 사람이 검토 가능한 evidence pack으로 묶는 것이다.",
+          "done": "learner root에서 sessions, weekly mirrors, review/vault evidence, interaction summaries, learner home pointer를 export한다.",
+          "verification": "clean simulated seven-day learner store에서 export smoke가 통과해야 한다.",
           "files": [
+            "scripts/",
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
-            "docs/ADAPTIVE-EXECUTION-PLAN.md"
+            "docs/phase-5-evidence/"
           ]
         }
       ]
@@ -1207,10 +1226,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "#63 Seven-day pilot evidence export",
-          "why": "#62 protocol 다음에는 흩어진 local JSON을 사람이 검토 가능한 evidence pack으로 묶어야 한다.",
-          "done": "clean simulated seven-day learner store에서 evidence export command/script를 만든다.",
-          "verification": "seven-day export smoke와 existing seven-day simulation smoke가 통과해야 한다.",
+          "title": "#64 Before-after transcript review rubric",
+          "why": "Evidence pack 다음에는 before/after transcript를 같은 rubric으로 읽어야 한다.",
+          "done": "observable behavior rubric과 overclaim rejection fixtures를 추가한다.",
+          "verification": "transcript rubric smoke와 negative claim fixture가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1445,7 +1464,12 @@
     {
       "name": "M5-0",
       "status": "Pass",
-      "detail": "M5 epic #9 split into executable issues #62-#66; next target is #62 protocol"
+      "detail": "M5 epic #9 split into executable issues #62-#66"
+    },
+    {
+      "name": "M5-1",
+      "status": "Pass",
+      "detail": "seven-day validation protocol defines schedule, prompt set, evidence fields, thresholds, privacy, and claim boundary"
     }
   ],
   "commands": [
@@ -1575,7 +1599,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 62"
+      "command": "gh issue view 63"
     }
   ]
 }
@@ -1584,12 +1608,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M5 has been split into executable issues #62-#66. The next target is #62: define the seven-day validation protocol before building evidence export or rubric tooling.</p>
+        <p class="summary">M5 validation protocol is defined. The next target is #63: export a seven-day pilot evidence pack so a human can review the learner journey without hunting through local JSON files.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M5 Real Learning Validation active<br>
-        Next: #62 M5 validation protocol
+        Next: #63 M5 evidence export
       </div>
     </header>
 
@@ -1598,7 +1622,7 @@
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">M5</div>
-          <p>validation issue split created</p>
+          <p>validation protocol defined</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
@@ -1608,7 +1632,7 @@
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M5</div>
-          <p>#62 seven-day validation protocol</p>
+          <p>#63 evidence export</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
@@ -1646,22 +1670,22 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M5</strong>
-                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/ADAPTIVE-EXECUTION-PLAN.md</span>
+                <span>scripts/, docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-5-evidence/</span>
               </div>
-              <h3>#62 M5 seven-day validation protocol</h3>
-              <div class="card-row"><b>왜</b><p>M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.</p></div>
-              <div class="card-row"><b>완료</b><p>7일 pilot schedule, before/after prompt set, comfort/repair/reuse evidence, privacy handoff, stop/pivot rules를 정의한다.</p></div>
-              <div class="card-row"><b>검증</b><p>protocol doc, dashboard render, and roadmap/learning-engine alignment review가 통과해야 한다.</p></div>
+              <h3>#63 M5 seven-day pilot evidence export</h3>
+              <div class="card-row"><b>왜</b><p>프로토콜이 생겼으므로 다음 병목은 흩어진 local artifacts를 사람이 검토 가능한 evidence pack으로 묶는 것이다.</p></div>
+              <div class="card-row"><b>완료</b><p>learner root에서 sessions, weekly mirrors, review/vault evidence, interaction summaries, learner home pointer를 export한다.</p></div>
+              <div class="card-row"><b>검증</b><p>clean simulated seven-day learner store에서 export smoke가 통과해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M5-1</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>#63 Seven-day pilot evidence export</h3>
-              <div class="card-row"><b>왜</b><p>#62 protocol 다음에는 흩어진 local JSON을 사람이 검토 가능한 evidence pack으로 묶어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>clean simulated seven-day learner store에서 evidence export command/script를 만든다.</p></div>
-              <div class="card-row"><b>검증</b><p>seven-day export smoke와 existing seven-day simulation smoke가 통과해야 한다.</p></div>
+              <h3>#64 Before-after transcript review rubric</h3>
+              <div class="card-row"><b>왜</b><p>Evidence pack 다음에는 before/after transcript를 같은 rubric으로 읽어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>observable behavior rubric과 overclaim rejection fixtures를 추가한다.</p></div>
+              <div class="card-row"><b>검증</b><p>transcript rubric smoke와 negative claim fixture가 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1672,16 +1696,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M4-1</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/phase4-interaction-event-schema-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-1-interaction-event-schema.md</span>
-              </div>
-              <h3>#50 Interaction event graph schema를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.</p></div>
-              <div class="card-row"><b>완료</b><p>`interaction_events` schema, validator, default text event builder를 추가했다. 기존 text-first `today` artifact가 modality=text event를 저장한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase4-interaction-event-schema-smoke.mjs`가 valid text event와 invalid fixture rejection을 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M4-2</strong>
@@ -1731,6 +1745,16 @@
               <div class="card-row"><b>왜</b><p>실제 학습 효과 검증은 하나의 큰 epic으로 진행하면 프로토콜, export, rubric, persona validation, closeout 판단이 섞인다.</p></div>
               <div class="card-row"><b>완료</b><p>#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M5 Real Learning Validation&quot;`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5-1</strong>
+                <span>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, docs/phase-5-evidence/M5-1-validation-protocol.md, docs/project-state.json</span>
+              </div>
+              <h3>#62 M5 seven-day validation protocol을 정의함</h3>
+              <div class="card-row"><b>왜</b><p>효과 검증은 protocol 없이 export나 rubric부터 만들면 claim 기준이 흔들린다.</p></div>
+              <div class="card-row"><b>완료</b><p>Day 0-7 schedule, comparable prompt set, evidence fields, continue/split/pivot/research/kill thresholds, privacy handoff를 문서화했다.</p></div>
+              <div class="card-row"><b>검증</b><p>protocol이 LEARNING-ENGINE Gate D와 PRODUCT-ROADMAP seven-day pilot 기준을 충족하고, fluency/guarantee claim을 만들지 않는다.</p></div>
             </article>
         </div>
       </section>
@@ -1853,6 +1877,10 @@
               <strong>docs/phase-5-evidence/</strong>
               <span>Phase 5 validation evidence notes</span>
             </a>
+            <a class="link-card source" href="./M5-SEVEN-DAY-VALIDATION-PROTOCOL.md">
+              <strong>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md</strong>
+              <span>M5 seven-day pilot protocol</span>
+            </a>
             <a class="link-card source" href="./LEARNING-ENGINE.md">
               <strong>docs/LEARNING-ENGINE.md</strong>
               <span>학습 엔진 설계</span>
@@ -1889,10 +1917,6 @@
           <tbody>
 
             <tr>
-              <td>M3-5</td>
-              <td><strong>Pass</strong><span>clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0</span></td>
-            </tr>
-            <tr>
               <td>M4-0</td>
               <td><strong>Pass</strong><span>M4 execution issues #50/#49/#53/#52/#54 created from epics #7/#8 and multimodal plan</span></td>
             </tr>
@@ -1918,7 +1942,11 @@
             </tr>
             <tr>
               <td>M5-0</td>
-              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66; next target is #62 protocol</span></td>
+              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66</span></td>
+            </tr>
+            <tr>
+              <td>M5-1</td>
+              <td><strong>Pass</strong><span>seven-day validation protocol defines schedule, prompt set, evidence fields, thresholds, privacy, and claim boundary</span></td>
             </tr>
           </tbody>
         </table>
@@ -1954,7 +1982,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 62</code>
+              <code>gh issue view 63</code>
             </div>
         </div>
       </aside>
@@ -1964,7 +1992,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 41개 보기</summary>
+        <summary>완료 이력 42개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2377,10 +2405,20 @@
               <div class="card-row"><b>완료</b><p>Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;`가 #50/#49/#53/#52/#54를 보여준다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-1</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/phase4-interaction-event-schema-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-4-evidence/M4-1-interaction-event-schema.md</span>
+              </div>
+              <h3>#50 Interaction event graph schema를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>voice/image/video가 각자 다른 형식으로 저장되면 학습 증거가 분리되고 media feature가 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>`interaction_events` schema, validator, default text event builder를 추가했다. 기존 text-first `today` artifact가 modality=text event를 저장한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase4-interaction-event-schema-smoke.mjs`가 valid text event와 invalid fixture rejection을 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 37개 보기</summary>
+        <summary>전체 검증 38개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2531,7 +2569,11 @@
             </tr>
             <tr>
               <td>M5-0</td>
-              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66; next target is #62 protocol</span></td>
+              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66</span></td>
+            </tr>
+            <tr>
+              <td>M5-1</td>
+              <td><strong>Pass</strong><span>seven-day validation protocol defines schedule, prompt set, evidence fields, thresholds, privacy, and claim boundary</span></td>
             </tr>
             </tbody>
           </table>
@@ -2667,7 +2709,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 62</code>
+              <code>gh issue view 63</code>
             </div>
         </div>
       </details>

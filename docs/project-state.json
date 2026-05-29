@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M5 Real Learning Validation active",
-    "status": "Next: #62 M5 validation protocol",
+    "status": "Next: #63 M5 evidence export",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M5 has been split into executable issues #62-#66. The next target is #62: define the seven-day validation protocol before building evidence export or rubric tooling."
+    "summary": "M5 validation protocol is defined. The next target is #63: export a seven-day pilot evidence pack so a human can review the learner journey without hunting through local JSON files."
   },
   "ssot": [
     {
@@ -64,6 +64,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+      "path": "./M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+      "role": "M5 seven-day pilot protocol",
+      "kind": "source"
+    },
+    {
       "label": "docs/LEARNING-ENGINE.md",
       "path": "./LEARNING-ENGINE.md",
       "role": "학습 엔진 설계",
@@ -110,7 +116,7 @@
     {
       "label": "Ultragoal",
       "value": "M5",
-      "detail": "validation issue split created",
+      "detail": "validation protocol defined",
       "tone": "green"
     },
     {
@@ -122,7 +128,7 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#62 seven-day validation protocol",
+      "detail": "#63 evidence export",
       "tone": "red"
     },
     {
@@ -776,6 +782,18 @@
             "docs/project-state.json",
             "docs/phase-5-evidence/M5-0-validation-issue-split.md"
           ]
+        },
+        {
+          "id": "M5-1",
+          "title": "#62 M5 seven-day validation protocol을 정의함",
+          "why": "효과 검증은 protocol 없이 export나 rubric부터 만들면 claim 기준이 흔들린다.",
+          "done": "Day 0-7 schedule, comparable prompt set, evidence fields, continue/split/pivot/research/kill thresholds, privacy handoff를 문서화했다.",
+          "verification": "protocol이 LEARNING-ENGINE Gate D와 PRODUCT-ROADMAP seven-day pilot 기준을 충족하고, fluency/guarantee claim을 만들지 않는다.",
+          "files": [
+            "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+            "docs/phase-5-evidence/M5-1-validation-protocol.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -786,14 +804,15 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#62 M5 seven-day validation protocol",
-          "why": "M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.",
-          "done": "7일 pilot schedule, before/after prompt set, comfort/repair/reuse evidence, privacy handoff, stop/pivot rules를 정의한다.",
-          "verification": "protocol doc, dashboard render, and roadmap/learning-engine alignment review가 통과해야 한다.",
+          "title": "#63 M5 seven-day pilot evidence export",
+          "why": "프로토콜이 생겼으므로 다음 병목은 흩어진 local artifacts를 사람이 검토 가능한 evidence pack으로 묶는 것이다.",
+          "done": "learner root에서 sessions, weekly mirrors, review/vault evidence, interaction summaries, learner home pointer를 export한다.",
+          "verification": "clean simulated seven-day learner store에서 export smoke가 통과해야 한다.",
           "files": [
+            "scripts/",
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
-            "docs/ADAPTIVE-EXECUTION-PLAN.md"
+            "docs/phase-5-evidence/"
           ]
         }
       ]
@@ -805,10 +824,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "#63 Seven-day pilot evidence export",
-          "why": "#62 protocol 다음에는 흩어진 local JSON을 사람이 검토 가능한 evidence pack으로 묶어야 한다.",
-          "done": "clean simulated seven-day learner store에서 evidence export command/script를 만든다.",
-          "verification": "seven-day export smoke와 existing seven-day simulation smoke가 통과해야 한다.",
+          "title": "#64 Before-after transcript review rubric",
+          "why": "Evidence pack 다음에는 before/after transcript를 같은 rubric으로 읽어야 한다.",
+          "done": "observable behavior rubric과 overclaim rejection fixtures를 추가한다.",
+          "verification": "transcript rubric smoke와 negative claim fixture가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1043,7 +1062,12 @@
     {
       "name": "M5-0",
       "status": "Pass",
-      "detail": "M5 epic #9 split into executable issues #62-#66; next target is #62 protocol"
+      "detail": "M5 epic #9 split into executable issues #62-#66"
+    },
+    {
+      "name": "M5-1",
+      "status": "Pass",
+      "detail": "seven-day validation protocol defines schedule, prompt set, evidence fields, thresholds, privacy, and claim boundary"
     }
   ],
   "commands": [
@@ -1173,7 +1197,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 62"
+      "command": "gh issue view 63"
     }
   ]
 }
