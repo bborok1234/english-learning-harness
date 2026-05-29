@@ -6,8 +6,8 @@
   "publicReleaseDecision": {
     "issue": 90,
     "status": "owner_decision_required",
-    "recommendedSurface": "manual_github_release_asset",
-    "reason": "The GitHub Actions artifact path is already verified without publishing; a manual GitHub Release asset is the smallest public surface that keeps the repository private.",
+    "recommendedSurface": "public_artifact_repository_release",
+    "reason": "GitHub private repositories are only accessible to explicitly shared users, so a release asset in this private source repository should not be treated as unauthenticated public evidence. Use a separate public artifact repository release or another public static URL if the source repository stays private.",
     "codexMayPublishWithoutExplicitApproval": false
   },
   "repositoryVisibilityRequired": "private-or-public",
@@ -25,7 +25,7 @@
   ],
   "publicReleaseRequirements": [
     "Resolve #90 by choosing the public distribution surface and publication authority.",
-    "Make the repository public or publish a separate public distribution artifact.",
+    "Make the source repository public, publish a release asset from a separate public artifact repository, or publish the artifact to another public static URL.",
     "Run the default public clone smoke without ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE.",
     "Add a public install smoke before documenting Git-backed plugin install.",
     "Update README, STATUS, ISSUE-INDEX, dashboard, and GitHub issue state."

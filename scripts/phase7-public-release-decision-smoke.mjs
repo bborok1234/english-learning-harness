@@ -21,8 +21,8 @@ function main() {
     "public release decision status must be owner_decision_required or approved",
   );
   assert(
-    decision.recommendedSurface === "manual_github_release_asset",
-    "recommended public surface should remain the verified manual GitHub Release asset path",
+    decision.recommendedSurface === "public_artifact_repository_release",
+    "recommended public surface should be a separate public artifact repository release",
   );
   assert(
     decision.codexMayPublishWithoutExplicitApproval === false,
@@ -49,8 +49,8 @@ function main() {
         canPublishNow,
         nextGate:
           decision.status === "approved"
-            ? "Run the manually approved public publication path, then verify the real URL with phase7-hosted-artifact-smoke."
-            : "Resolve the public release surface and publication authority before running publish_release=true.",
+            ? "Run the manually approved public artifact repository or static URL publication path, then verify the real URL with phase7-hosted-artifact-smoke."
+            : "Resolve the public release surface and publication authority before publishing any release asset.",
         claimBoundary:
           "This proves the release decision gate is explicit. It does not publish or prove a public URL.",
       },

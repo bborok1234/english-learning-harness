@@ -89,7 +89,7 @@ What failed review:
 - PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
 - Public marketplace distribution, real learner validation, and native hook runtime are still outside the local first-usable claim.
 - Public release publication remains blocked on #90; Codex should not publish a release asset without explicit owner approval.
-- M7-D decision gate smoke verifies `owner_decision_required`, `manual_github_release_asset`, and no Codex publication without explicit approval.
+- M7-D decision gate smoke verifies `owner_decision_required`, `public_artifact_repository_release`, and no Codex publication without explicit approval.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.

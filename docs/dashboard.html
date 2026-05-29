@@ -1385,7 +1385,7 @@
           "id": "M7-D",
           "title": "#90 public release surface 결정을 분리함",
           "why": "#83은 공개 URL 검증 이슈이고, 실제 배포면/권한 선택은 외부 release action을 수반하는 별도 결정이다.",
-          "done": "#90을 생성해 GitHub Release asset, 별도 public repo, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.",
+          "done": "#90을 생성해 별도 public artifact repo release, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.",
           "verification": "`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.",
           "files": [
             "docs/distribution-policy.json",
@@ -1398,7 +1398,7 @@
           "title": "#90 public release decision gate를 검증함",
           "why": "release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.",
           "done": "distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.",
-          "verification": "`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=manual_github_release_asset, codexMayPublishWithoutExplicitApproval=false를 통과한다.",
+          "verification": "`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=public_artifact_repository_release, codexMayPublishWithoutExplicitApproval=false를 통과한다.",
           "files": [
             "scripts/phase7-public-release-decision-smoke.mjs",
             "docs/distribution-policy.json",
@@ -1434,7 +1434,7 @@
           "id": "M7-D",
           "title": "#90 public release surface decision",
           "why": "public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.",
-          "done": "권장안은 private repo를 유지한 채 verified workflow를 publish_release=true로 수동 실행해 GitHub Release asset을 만드는 것이다.",
+          "done": "권장안은 source repo를 private으로 유지해야 한다면 별도 public artifact repo release 또는 public static URL에 tarball을 게시하는 것이다.",
           "verification": "결정 후 docs/distribution-policy.json이 선택된 surface와 Codex publish authority를 기록해야 한다.",
           "files": [
             "docs/distribution-policy.json",
@@ -2032,7 +2032,7 @@
               </div>
               <h3>#90 public release surface decision</h3>
               <div class="card-row"><b>왜</b><p>public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.</p></div>
-              <div class="card-row"><b>완료</b><p>권장안은 private repo를 유지한 채 verified workflow를 publish_release=true로 수동 실행해 GitHub Release asset을 만드는 것이다.</p></div>
+              <div class="card-row"><b>완료</b><p>권장안은 source repo를 private으로 유지해야 한다면 별도 public artifact repo release 또는 public static URL에 tarball을 게시하는 것이다.</p></div>
               <div class="card-row"><b>검증</b><p>결정 후 docs/distribution-policy.json이 선택된 surface와 Codex publish authority를 기록해야 한다.</p></div>
             </article>
             <article class="work-card">
@@ -2101,7 +2101,7 @@
               </div>
               <h3>#90 public release surface 결정을 분리함</h3>
               <div class="card-row"><b>왜</b><p>#83은 공개 URL 검증 이슈이고, 실제 배포면/권한 선택은 외부 release action을 수반하는 별도 결정이다.</p></div>
-              <div class="card-row"><b>완료</b><p>#90을 생성해 GitHub Release asset, 별도 public repo, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.</p></div>
+              <div class="card-row"><b>완료</b><p>#90을 생성해 별도 public artifact repo release, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.</p></div>
             </article>
             <article class="work-card">
@@ -2112,7 +2112,7 @@
               <h3>#90 public release decision gate를 검증함</h3>
               <div class="card-row"><b>왜</b><p>release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=manual_github_release_asset, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=public_artifact_repository_release, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
             </article>
         </div>
       </section>
