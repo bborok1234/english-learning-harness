@@ -199,3 +199,10 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #83 | M7-1: Prove unauthenticated public distribution path | research |
 
 M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.
+
+#83 evidence currently shows:
+
+- `scripts/package-public-artifact.mjs` creates a tarball candidate.
+- `scripts/phase7-public-artifact-smoke.mjs` extracts the tarball and verifies setup, daily, today, weekly, home, export, and progress validation from the extracted artifact.
+- the tarball excludes `.git`, `.omx`, `tmp`, and `node_modules`.
+- public hosting/download is still unproven, so #83 remains open.
