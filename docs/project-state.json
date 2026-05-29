@@ -4,9 +4,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M3 Daily Return Experience implementation active",
-    "status": "Next: #38 learner home HTML",
+    "status": "Next: #39 no-streak return guidance",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M3-1 daily cockpit command is implemented and smoke-tested. The shared dashboard now moves daily return from planning into implementation, and the next work is #38 learner home HTML from local evidence."
+    "summary": "M3-1 daily cockpit and M3-2 learner home are implemented and smoke-tested. The next work is #39 no-streak return guidance so missed days become a gentle restart path instead of a failure signal."
   },
   "ssot": [
     {
@@ -104,13 +104,13 @@
     {
       "label": "Current stage",
       "value": "M3 active",
-      "detail": "#37 implemented; #38 next",
+      "detail": "#37/#38 implemented; #39 next",
       "tone": "green"
     },
     {
       "label": "Next block",
       "value": "M3",
-      "detail": "#38 learner home HTML",
+      "detail": "#39 no-streak return guidance",
       "tone": "red"
     },
     {
@@ -623,6 +623,20 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-3-evidence/M3-1-daily-cockpit.md"
           ]
+        },
+        {
+          "id": "M3-2",
+          "title": "#38 Learner home HTML을 구현함",
+          "why": "프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.",
+          "done": "`home` command가 learner root 아래 `home.html`을 생성한다. 페이지는 오늘 action, due review, saved phrases, weekly mirror, local journey counts, claim boundary를 보여준다.",
+          "verification": "`node scripts/phase3-learner-home-smoke.mjs`가 파일 생성과 Playwright render를 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase3-learner-home-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-3-evidence/M3-2-learner-home.md"
+          ]
         }
       ]
     },
@@ -630,24 +644,6 @@
       "id": "now",
       "title": "Now",
       "tone": "blue",
-      "cards": [
-        {
-          "id": "M3-2",
-          "title": "#38 Learner home HTML from local evidence",
-          "why": "프로젝트 dashboard는 builder용이다. 학습자에게는 본인의 여정을 보는 local home surface가 필요하다.",
-          "done": "learner root 아래에 today action, due review, saved phrases, weekly mirror, next focus를 보여주는 HTML을 생성한다.",
-          "verification": "learner home smoke와 Playwright render smoke가 통과해야 한다.",
-          "files": [
-            "scripts/english-learning-harness.mjs",
-            "scripts/lib/english-learning-store.mjs"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "title": "Next",
-      "tone": "amber",
       "cards": [
         {
           "id": "M3-3",
@@ -659,7 +655,14 @@
             "scripts/lib/english-learning-store.mjs",
             "docs/TUTOR-POLICY.md"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "title": "Next",
+      "tone": "amber",
+      "cards": [
         {
           "id": "M3-4",
           "title": "#40 Seven-day local return simulation smoke",
@@ -857,6 +860,11 @@
       "name": "M3-1",
       "status": "Pass",
       "detail": "daily cockpit fresh/returning learner smoke passes with due review scenario selection and next commands"
+    },
+    {
+      "name": "M3-2",
+      "status": "Pass",
+      "detail": "learner home HTML smoke passes file generation, key sections, claim filtering, and Playwright render"
     }
   ],
   "commands": [
@@ -921,6 +929,10 @@
       "command": "node scripts/phase3-daily-cockpit-smoke.mjs"
     },
     {
+      "label": "Run learner home smoke",
+      "command": "node scripts/phase3-learner-home-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -950,7 +962,7 @@
     },
     {
       "label": "View next M3 issue",
-      "command": "gh issue view 38"
+      "command": "gh issue view 39"
     }
   ]
 }

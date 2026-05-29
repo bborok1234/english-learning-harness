@@ -28,6 +28,7 @@ By default learner-owned files live here:
 ├── learner-model.json
 ├── vocabulary.json
 ├── review-queue.json
+├── home.html
 ├── journal/
 └── artifacts/
     ├── sessions/
@@ -70,6 +71,14 @@ node scripts/english-learning-harness.mjs daily --json
 ```
 
 The cockpit reads local files only and returns due review, suggested scenario, learner model summary, latest weekly mirror pointer, and exact next commands.
+
+Generate a local learner home page:
+
+```bash
+node scripts/english-learning-harness.mjs home --json
+```
+
+The generated `home.html` lives under the learner root and shows the learner-facing journey without project implementation logs.
 
 Run from a transcript file:
 
@@ -264,6 +273,12 @@ Run the daily cockpit smoke:
 
 ```bash
 node scripts/phase3-daily-cockpit-smoke.mjs
+```
+
+Run the learner home smoke:
+
+```bash
+node scripts/phase3-learner-home-smoke.mjs
 ```
 
 Run the full first-run smoke:
