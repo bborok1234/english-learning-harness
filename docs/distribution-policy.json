@@ -23,12 +23,27 @@
     "Public Git-backed plugin install is not verified.",
     "Realtime voice and real learner outcome claims remain outside the first-complete release claim."
   ],
-  "publicReleaseRequirements": [
-    "Resolve #90 by choosing the public distribution surface and publication authority.",
-    "Make the source repository public, publish a release asset from a separate public artifact repository, or publish the artifact to another public static URL.",
-    "Run the default public clone smoke without ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE.",
-    "Add a public install smoke before documenting Git-backed plugin install.",
-    "Update README, STATUS, ISSUE-INDEX, dashboard, and GitHub issue state."
-  ],
+  "publicReleaseRequirements": {
+    "common": [
+      "Resolve #90 by choosing the public distribution surface and publication authority.",
+      "Run a smoke that proves the chosen surface is reachable without private source repository access.",
+      "Update README, STATUS, ISSUE-INDEX, dashboard, and GitHub issue state."
+    ],
+    "publicSourceRepository": [
+      "Make the source repository public.",
+      "Run the default public clone smoke without ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE.",
+      "Add a public Git-backed install smoke before documenting Git-backed plugin install."
+    ],
+    "publicArtifactRepositoryRelease": [
+      "Publish the artifact and SHA256SUMS from a separate public artifact repository release after explicit owner approval.",
+      "Run ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL and ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL through scripts/phase7-public-release-url-smoke.mjs until hostedAccessStatus=public_url_candidate, checksumVerified=true, and canClosePublicDistribution=true.",
+      "Keep the verified install claim limited to local marketplace install from the checksum-verified downloaded artifact unless a separate public Git-backed install smoke passes."
+    ],
+    "publicStaticArtifactUrl": [
+      "Publish the artifact and SHA256SUMS to the approved public static URL after explicit owner approval.",
+      "Run ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL and ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL through scripts/phase7-public-release-url-smoke.mjs until hostedAccessStatus=public_url_candidate, checksumVerified=true, and canClosePublicDistribution=true.",
+      "Document the static URL host, retention owner, and update procedure before claiming public distribution."
+    ]
+  },
   "claimBoundary": "This policy chooses private beta / invited-user clone-to-learn as the M6 first-complete distribution claim. It does not claim unauthenticated public release."
 }
