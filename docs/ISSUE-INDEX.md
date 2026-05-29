@@ -208,6 +208,7 @@ M6 is closed as private beta / invited-user clone-to-learn. Epic #10 has been mo
 | #108 | M7-9: Prepare owner approval packet for public artifact publication | continue |
 | #110 | M7-10: Align public release policy with artifact-first path | continue |
 | #112 | M7-11: Prepare repository for open-source public launch | continue |
+| #114 | M7-12: Audit git history before public visibility change | continue |
 
 M7 now targets the current source repository as the open-source public distribution surface. Do not advertise public clone/install claims until the repository is public and public clone smoke passes.
 
@@ -227,6 +228,7 @@ M7 now targets the current source repository as the open-source public distribut
 - #108 now prepares the non-publishing owner approval packet for the source repository visibility change and required public clone proof.
 - #110 keeps artifact release as a fallback but makes public source clone the primary path.
 - #112 adds open-source community files and readiness smoke before repository visibility changes.
+- #114 adds git history audit before repository visibility changes.
 - after visibility changes to public, #83 can run `node scripts/phase6-public-clean-clone-smoke.mjs` without `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE`.
 
 #94 evidence currently shows:
@@ -299,6 +301,12 @@ M7 now targets the current source repository as the open-source public distribut
 - `.github` issue templates and pull request template exist.
 - `scripts/phase7-open-source-readiness-smoke.mjs` verifies README public clone framing, policy alignment, required community files, and absence of obvious local secret files.
 - current output reports `visibilityReady=false` only because `bborok1234/english-learning-harness` is still `PRIVATE`.
+- this does not change repository visibility or prove public clone access.
+
+#114 evidence currently shows:
+
+- `scripts/phase7-open-source-history-audit-smoke.mjs` scans all git revisions and committed paths.
+- current output reports `revisionsScanned=119`, `committedPathsScanned=181`, `forbiddenPathFindings=0`, `secretContentFindings=0`, and `largeObjectFindings=0`.
 - this does not change repository visibility or prove public clone access.
 
 #83 evidence currently shows:

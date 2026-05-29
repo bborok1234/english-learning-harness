@@ -157,8 +157,8 @@
     },
     {
       "label": "GitHub plan",
-      "value": "42 issues",
-      "detail": "OSS readiness #112 in progress; #83/#90 still open",
+      "value": "43 issues",
+      "detail": "OSS readiness #112 closed; history audit #114 in progress",
       "tone": "green"
     },
     {
@@ -1128,6 +1128,18 @@
             ".github/PULL_REQUEST_TEMPLATE.md",
             "scripts/phase7-open-source-readiness-smoke.mjs"
           ]
+        },
+        {
+          "id": "M7-12",
+          "title": "#114 open-source git history audit을 추가함",
+          "why": "repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.",
+          "done": "전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.",
+          "verification": "`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=119, committedPathsScanned=181, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.",
+          "files": [
+            "scripts/phase7-open-source-history-audit-smoke.mjs",
+            "docs/phase-7-evidence/M7-12-open-source-history-audit.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1540,6 +1552,11 @@
       "name": "M7-11 open-source readiness",
       "status": "Blocked",
       "detail": "community files and policy pass; only blocker is repository visibility still PRIVATE"
+    },
+    {
+      "name": "M7-12 git history audit",
+      "status": "Pass",
+      "detail": "git history audit reports zero forbidden paths, secret-like content findings, and oversized objects"
     }
   ],
   "commands": [
@@ -1702,6 +1719,10 @@
     {
       "label": "Run M7 open-source readiness smoke",
       "command": "node scripts/phase7-open-source-readiness-smoke.mjs"
+    },
+    {
+      "label": "Run M7 open-source history audit",
+      "command": "node scripts/phase7-open-source-history-audit-smoke.mjs"
     },
     {
       "label": "Run distribution policy smoke",
