@@ -145,6 +145,24 @@ function withDueReview(scenario, dueItem) {
   };
 }
 
+function withSpeakingBacklog(scenario, item) {
+  return {
+    ...scenario,
+    goal: `${item.target_behavior} Transfer test: ${item.transfer_test}`,
+    role_context: `${scenario.role_context} Today's Speaking Skill OS backlog item is "${item.label}".`,
+    follow_up_prompt: `${item.drill_prompt} ${scenario.follow_up_prompt}`,
+    retry_prompt: item.drill_prompt || scenario.retry_prompt,
+    speaking_backlog: {
+      id: item.id,
+      skill: item.skill,
+      label: item.label,
+      status: item.status,
+      transfer_test: item.transfer_test,
+      pass_criteria: item.pass_criteria,
+    },
+  };
+}
+
 export function chooseScenario({ profileText = "", preferredId = "" } = {}) {
   const topics = avoidedTopics(profileText);
   if (preferredId) {
@@ -172,6 +190,7 @@ export function planScenario({
   preferredId = "",
   learnerModel,
   dueReviewItems = [],
+  speakingBacklogItem = null,
 } = {}) {
   const topics = avoidedTopics(profileText);
   const selectionTopics = selectionAvoidedTopics(profileText);
@@ -199,6 +218,21 @@ export function planScenario({
       selectionReason: {
         source: "preferred",
         preferred_id: preferredId,
+        mode,
+        avoided_topics: selectionTopics,
+      },
+    };
+  }
+
+  if (speakingBacklogItem) {
+    const skillScenario = scenarioForSkill(speakingBacklogItem.skill);
+    const allowedSkillScenario = firstAllowedScenario([skillScenario, ...scenarios], topics) || defaultScenario();
+    return {
+      scenario: withSpeakingBacklog(withMode(allowedSkillScenario, mode), speakingBacklogItem),
+      selectionReason: {
+        source: "speaking-backlog",
+        speaking_backlog_item_id: speakingBacklogItem.id,
+        speaking_backlog_skill: speakingBacklogItem.skill,
         mode,
         avoided_topics: selectionTopics,
       },

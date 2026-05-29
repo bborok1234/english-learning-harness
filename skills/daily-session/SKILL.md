@@ -18,6 +18,7 @@ Run a short, safe English contact session with the learner.
 - If repository tools are available, run the local session engine yourself to persist practice evidence.
 - Do not ask the learner to run `node` commands for ordinary daily practice.
 - If persistence cannot be executed, still run the practice and disclose that durable saving was not confirmed.
+- Prefer the Speaking Skill OS loop when available: diagnose or read the local speaking backlog, target one backlog item, run the drill, test transfer, and save the evidence.
 
 ## Engine Discovery
 
@@ -33,9 +34,12 @@ Use that engine yourself. Do not hand the command to the learner.
 ## Flow
 
 1. Read the available profile/progress context from the session prompt or hook-injected context.
-2. Offer one easy opening question.
-3. Continue for 3-5 turns.
-4. End with a mini mirror:
+2. If no speaking backlog exists and the learner gives a sample, diagnose one speaking skill need.
+3. If a backlog item exists, make today's scenario target that item instead of drifting into generic chat.
+4. Offer one easy opening question.
+5. Continue for 3-5 turns.
+6. Ask for one transfer attempt tied to the backlog item.
+7. End with a mini mirror:
    - one thing the learner successfully communicated,
    - one natural recast,
    - one tiny next phrase.

@@ -353,3 +353,19 @@ M7 now targets the current source repository as the open-source public distribut
 - GitHub Actions run `26618527553` passed with `publish_release=false` and uploaded workflow artifact `english-learning-harness-public`.
 - the tarball excludes `.git`, `.omx`, `tmp`, and `node_modules`.
 - public artifact hosting/download remains optional fallback evidence; #83 closed through public source repository visibility plus public clone proof.
+
+## M8 Speaking Skill OS
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #128 | M8-1: Implement Speaking Skill OS diagnosis and backlog loop | continue |
+
+#128 evidence currently shows:
+
+- `speaking-backlog.json` is created in the learner store.
+- `diagnose` creates or refreshes a concrete speaking skill backlog item from learner output.
+- `backlog` lists open/passed speaking skill items.
+- `daily` and `today` prioritize an open backlog item before generic practice.
+- `today` records transfer-test evidence back to the backlog and session artifact.
+- `scripts/phase8-speaking-skill-os-smoke.mjs` proves diagnose -> backlog -> targeted practice -> pass evidence.
+- this proves local harness mechanics, not real-world fluency or long-term learner outcomes.

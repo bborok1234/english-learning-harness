@@ -5,26 +5,32 @@ import {
   buildAdditionalContext,
   buildDailyCockpit,
   buildSession,
+  diagnoseSpeakingSample,
   emptyLearnerModel,
   defaultLearnerRoot,
   emptyMetrics,
   emptyReviewQueue,
+  emptySpeakingBacklog,
   emptyVocabulary,
   ensureLearnerStore,
   learnerPaths,
   listDueReviewItems,
+  listSpeakingBacklog,
   markReviewItem,
+  nextSpeakingBacklogItem,
   persistSession,
   phraseVault,
   readLearnerModel,
   readProgress,
   readProfile,
   readReviewQueue,
+  readSpeakingBacklog,
   readVocabulary,
   writeWeeklyMirror,
   writeLearnerModel,
   writeProgress,
   writeReviewQueue,
+  writeSpeakingBacklog,
   writeVocabulary,
   writeLearnerHome,
   writeProfile,
@@ -134,6 +140,8 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs voice [--say TEXT ...] [--transcript FILE] [--audio-file FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs image [--image-file FILE] [--hidden-detail TEXT] [--clarification-prompt TEXT] [--say TEXT ...] [--scenario ID] [--learner-root DIR] [--date ISO]",
@@ -166,6 +174,7 @@ function supportDiagnostics(options, paths) {
         paths.profile,
         paths.progress,
         paths.learnerModel,
+        paths.speakingBacklog,
         paths.vocabulary,
         paths.reviewQueue,
         paths.journalDir,
@@ -180,6 +189,8 @@ function supportDiagnostics(options, paths) {
     nativeHooksStatus: "optional",
     nextCommands: [
       commandWithRoot("daily", learnerRoot, ["--json"]),
+      commandWithRoot("diagnose", learnerRoot, ["--say", JSON.stringify("I get stuck when I speak."), "--json"]),
+      commandWithRoot("backlog", learnerRoot, ["--json"]),
       commandWithRoot("today", learnerRoot, ["--say", JSON.stringify("I want to practice today."), "--json"]),
       commandWithRoot("weekly", learnerRoot, ["--json"]),
       commandWithRoot("home", learnerRoot, ["--json"]),
@@ -209,11 +220,13 @@ function repairLearnerStore(learnerRoot) {
   mkdirSync(paths.root, { recursive: true });
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
+  mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
   const backups = [
     backupIfExists(paths.progress, stamp),
     backupIfExists(paths.learnerModel, stamp),
+    backupIfExists(paths.speakingBacklog, stamp),
     backupIfExists(paths.vocabulary, stamp),
     backupIfExists(paths.reviewQueue, stamp),
   ].filter(Boolean);
@@ -225,6 +238,7 @@ function repairLearnerStore(learnerRoot) {
     sessions: [],
   });
   writeLearnerModel(paths.learnerModel, emptyLearnerModel());
+  writeSpeakingBacklog(paths.speakingBacklog, emptySpeakingBacklog());
   writeVocabulary(paths.vocabulary, emptyVocabulary());
   writeReviewQueue(paths.reviewQueue, emptyReviewQueue());
   return backups;
@@ -302,6 +316,42 @@ function home(options) {
   };
 }
 
+function diagnose(options) {
+  const date = options.date || new Date();
+  const result = diagnoseSpeakingSample(options.learnerRoot, transcriptInputs(options), date);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: result.learnerRoot,
+    action: "speaking-diagnosis",
+    diagnosis: result.diagnosis,
+    backlogItem: result.backlogItem,
+    backlogPath: result.backlogPath,
+    artifactPath: result.artifactPath,
+    created: result.created,
+    nextCommand: commandWithRoot("today", result.learnerRoot, ["--say", JSON.stringify(result.backlogItem.drill_prompt), "--json"]),
+    claimBoundary: result.claimBoundary,
+  };
+}
+
+function backlog(options) {
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const items = listSpeakingBacklog(paths.root);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: paths.root,
+    backlogPath: paths.speakingBacklog,
+    itemCount: items.length,
+    openCount: items.filter((item) => ["open", "needs_review", "in_progress"].includes(item.status)).length,
+    passedCount: items.filter((item) => item.status === "passed").length,
+    nextItem: nextSpeakingBacklogItem(paths.root),
+    items,
+    claimBoundary:
+      "This is a local speaking skill backlog. It tracks practice targets and transfer attempts, not certified fluency.",
+  };
+}
+
 function today(options) {
   const date = options.date || new Date();
   const paths = ensureLearnerStore(options.learnerRoot);
@@ -312,6 +362,7 @@ function today(options) {
     learnerModel: readLearnerModel(paths.learnerModel),
     vocabulary: readVocabulary(paths.vocabulary),
     dueReviewItems: listDueReviewItems(paths.root, date),
+    speakingBacklogItem: options.scenario ? null : nextSpeakingBacklogItem(paths.root),
   });
   const session = buildSession(transcriptInputs(options), {
     sessionId: `${date.toISOString().slice(0, 10)}-${date.getTime()}`,
@@ -331,6 +382,7 @@ function today(options) {
     scenarioSelection: session.scenario.selection_reason,
     sessionMetrics: session.session_metrics,
     learnerModelEvidence: session.learner_model_evidence,
+    speakingBacklogEvidence: session.speaking_backlog_evidence,
     mirror: session.mirror,
     journalPath: persisted.journalPath,
     artifactPath: persisted.artifactPath,
@@ -352,6 +404,7 @@ function voice(options) {
     learnerModel: readLearnerModel(paths.learnerModel),
     vocabulary: readVocabulary(paths.vocabulary),
     dueReviewItems: listDueReviewItems(paths.root, date),
+    speakingBacklogItem: options.scenario ? null : nextSpeakingBacklogItem(paths.root),
   });
   const sourceArtifact = options.audioFile
     ? {
@@ -399,6 +452,7 @@ function image(options) {
     learnerModel: readLearnerModel(paths.learnerModel),
     vocabulary: readVocabulary(paths.vocabulary),
     dueReviewItems: listDueReviewItems(paths.root, date),
+    speakingBacklogItem: null,
   });
   const sourceArtifact = {
     type: "image",
@@ -466,6 +520,7 @@ function health(options) {
       { name: "profile", status: profile.includes("preferred_name") ? "pass" : "warn" },
       { name: "progress", status: "pass" },
       { name: "learnerModel", status: existsSync(paths.learnerModel) ? "pass" : "fail" },
+      { name: "speakingBacklog", status: existsSync(paths.speakingBacklog) ? "pass" : "fail" },
       { name: "vocabulary", status: existsSync(paths.vocabulary) ? "pass" : "fail" },
       { name: "reviewQueue", status: existsSync(paths.reviewQueue) ? "pass" : "fail" },
     ],
@@ -486,6 +541,7 @@ function status(options) {
     profile: readProfile(paths.profile),
     progress: readProgress(paths.progress),
     learnerModel: readLearnerModel(paths.learnerModel),
+    speakingBacklog: readSpeakingBacklog(paths.speakingBacklog),
     support: supportDiagnostics(options, paths),
   };
 }
@@ -607,6 +663,7 @@ function collectSessionArtifacts(paths, progress) {
         learner_word_count: words,
         saved_phrase: artifact.mirror?.reviewPhrase ?? "",
         repair_evidence: artifact.learner_model_evidence?.updated_skills?.includes("repair") ?? false,
+        speaking_backlog_evidence: artifact.speaking_backlog_evidence,
         interaction_events: (artifact.interaction_events ?? []).map(sanitizeEvent),
       };
     })
@@ -635,7 +692,7 @@ function collectWeeklyMirrors(paths) {
     });
 }
 
-function summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, learnerModel }) {
+function summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, learnerModel, speakingBacklog }) {
   const modalities = [...new Set(sessions.flatMap((session) => session.interaction_events.map((event) => event.modality)))];
   return {
     session_count: sessions.length,
@@ -650,6 +707,8 @@ function summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, l
     saved_phrase_count: vocabulary.personal_phrases?.length ?? 0,
     review_item_count: reviewQueue.items?.length ?? 0,
     reused_review_item_count: (reviewQueue.items ?? []).filter((item) => (item.success_count ?? 0) > 0).length,
+    speaking_backlog_count: speakingBacklog.items?.length ?? 0,
+    speaking_backlog_passed_count: (speakingBacklog.items ?? []).filter((item) => item.status === "passed").length,
     weekly_mirror_count: weeklyMirrors.length,
     skill_evidence: learnerModel.interaction_skills,
   };
@@ -671,6 +730,7 @@ function evidenceMarkdown(pack) {
     `- Modalities: ${pack.summary.modalities.join(", ") || "none"}`,
     `- Saved phrases: ${pack.summary.saved_phrase_count}`,
     `- Reused review items: ${pack.summary.reused_review_item_count}`,
+    `- Speaking backlog: ${pack.summary.speaking_backlog_passed_count}/${pack.summary.speaking_backlog_count} passed`,
     "",
     "## Sessions",
     "",
@@ -698,6 +758,7 @@ function exportEvidence(options) {
   const paths = ensureLearnerStore(options.learnerRoot);
   const progress = readProgress(paths.progress);
   const learnerModel = readLearnerModel(paths.learnerModel);
+  const speakingBacklog = readSpeakingBacklog(paths.speakingBacklog);
   const vocabulary = readVocabulary(paths.vocabulary);
   const reviewQueue = readReviewQueue(paths.reviewQueue);
   const sessions = collectSessionArtifacts(paths, progress);
@@ -714,6 +775,7 @@ function exportEvidence(options) {
       profile: "profile.md",
       progress: "progress.json",
       learner_model: "learner-model.json",
+      speaking_backlog: "speaking-backlog.json",
       vocabulary: "vocabulary.json",
       review_queue: "review-queue.json",
       learner_home: existsSync(paths.learnerHome) ? "home.html" : "",
@@ -721,7 +783,7 @@ function exportEvidence(options) {
     profile_summary: readProfile(paths.profile)
       .split(/\r?\n/)
       .filter((line) => line.startsWith("- preferred_name") || line.startsWith("- primary_motivation")),
-    summary: summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, learnerModel }),
+    summary: summarizeEvidence({ sessions, weeklyMirrors, vocabulary, reviewQueue, learnerModel, speakingBacklog }),
     sessions,
     weekly_mirrors: weeklyMirrors,
     review_queue: {
@@ -733,6 +795,19 @@ function exportEvidence(options) {
         interval_days: item.interval_days ?? 0,
         last_result: item.last_result ?? "",
         next_due_at: item.next_due_at ?? "",
+      })),
+    },
+    speaking_backlog: {
+      item_count: speakingBacklog.items.length,
+      open_count: speakingBacklog.items.filter((item) => ["open", "needs_review", "in_progress"].includes(item.status)).length,
+      passed_count: speakingBacklog.items.filter((item) => item.status === "passed").length,
+      items: speakingBacklog.items.map((item) => ({
+        id: item.id,
+        skill: item.skill,
+        label: item.label,
+        status: item.status,
+        evidence_count: item.evidence_count,
+        transfer_test: item.transfer_test,
       })),
     },
     claim_boundary:
@@ -769,6 +844,14 @@ function run() {
   }
   if (command === "home") {
     output(home(options), options.json);
+    return;
+  }
+  if (command === "diagnose") {
+    output(diagnose(options), options.json);
+    return;
+  }
+  if (command === "backlog") {
+    output(backlog(options), options.json);
     return;
   }
   if (command === "today") {
