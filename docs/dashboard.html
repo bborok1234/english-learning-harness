@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M7 Public Distribution active",
-    "status": "Public source clone-to-learn is verified; close #83/#90",
+    "stage": "Public source live + learner-first onboarding",
+    "status": "Public clone-to-learn is verified; README now explains the learner value before maintainer evidence",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta is closed historically, and M7 now verifies the open-source public source repository path. The repository is PUBLIC, OSS readiness/history audits pass, and default public clone-to-learn smoke passes. #83/#90 can close; remaining unclaimed areas are public Git-backed plugin install, realtime voice, and real learner outcomes."
+    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. The README has been reframed for first-time learners: what this is, how to try it in five minutes, how daily practice works, what progress is tracked, and which claims remain unproven."
   },
   "ssot": [
     {
@@ -541,32 +541,32 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M7",
-      "detail": "open-source prep active; public clone proof next",
+      "value": "Complete",
+      "detail": "public source clone-to-learn plus learner-first README",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M7 active",
-      "detail": "public source clone proof passed; close #83/#90",
+      "value": "Public live",
+      "detail": "new visitors can clone, setup, practice, and understand the learning loop",
+      "tone": "green"
+    },
+    {
+      "label": "Next decision",
+      "value": "Pilot / voice / plugin",
+      "detail": "choose the next proof: real learner pilot, realtime voice, or Git-backed plugin install",
       "tone": "amber"
     },
     {
-      "label": "Next block",
-      "value": "#83/#90",
-      "detail": "close public distribution issues after evidence update",
-      "tone": "green"
-    },
-    {
       "label": "GitHub plan",
-      "value": "43 issues",
-      "detail": "OSS readiness/history audit done; public clone proof passed",
+      "value": "44 issues",
+      "detail": "#117 adds learner-first README regression coverage",
       "tone": "green"
     },
     {
-      "label": "Review",
-      "value": "Ralplan OKAY",
-      "detail": "Architect APPROVE / Critic OKAY",
+      "label": "README",
+      "value": "Learner-first",
+      "detail": "phase7-learner-readme-smoke passes",
       "tone": "green"
     }
   ],
@@ -1536,11 +1536,36 @@
           "title": "#114 open-source git history audit을 추가함",
           "why": "repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.",
           "done": "전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.",
-          "verification": "`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=119, committedPathsScanned=181, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.",
+          "verification": "`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=123, committedPathsScanned=184, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.",
           "files": [
             "scripts/phase7-open-source-history-audit-smoke.mjs",
             "docs/phase-7-evidence/M7-12-open-source-history-audit.md",
             "README.md"
+          ]
+        },
+        {
+          "id": "M7-13",
+          "title": "#83/#90 public source clone-to-learn을 검증함",
+          "why": "오픈소스 방향에서는 현재 source repo 자체가 public distribution surface이므로, 공개 repo에서 신규 사용자가 바로 clone하고 학습을 시작할 수 있어야 한다.",
+          "done": "repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.",
+          "verification": "`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.",
+          "files": [
+            "README.md",
+            "scripts/phase6-public-clean-clone-smoke.mjs",
+            "scripts/phase7-open-source-readiness-smoke.mjs",
+            "docs/phase-7-evidence/M7-13-public-source-release.md"
+          ]
+        },
+        {
+          "id": "M7-14",
+          "title": "#117 README를 신규 학습자용으로 재구성함",
+          "why": "기존 README는 구현/검증 보고서처럼 읽혀서 처음 온 학습자가 이 제품이 무엇이고 왜 영어 회화 실력 향상에 도움이 되는지 바로 알기 어려웠다.",
+          "done": "README 첫 화면을 제품 약속, 5분 체험, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`, open-source readiness smoke, marketplace install smoke, public clean clone smoke가 모두 통과한다.",
+          "files": [
+            "README.md",
+            "scripts/phase7-learner-readme-smoke.mjs",
+            "docs/phase-7-evidence/M7-14-learner-first-readme.md"
           ]
         }
       ]
@@ -1551,16 +1576,14 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M7-1",
-          "title": "#83 public source clone proof",
-          "why": "오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다.",
-          "done": "repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.",
-          "verification": "`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.",
+          "id": "NOW-1",
+          "title": "공개 레포 첫인상과 실제 첫 세션을 점검하는 단계",
+          "why": "기능은 public clone-to-learn까지 왔지만, 공개 제품은 신규 방문자가 README만 보고 바로 시도하고 학습 루프를 이해할 수 있어야 한다.",
+          "done": "learner-first README와 회귀 smoke를 추가했다.",
+          "verification": "`node scripts/phase7-learner-readme-smoke.mjs`가 README가 learner quick start를 maintainer verification보다 앞세우는지 검증한다.",
           "files": [
             "README.md",
-            "scripts/phase6-public-clean-clone-smoke.mjs",
-            "scripts/phase7-open-source-readiness-smoke.mjs",
-            "docs/phase-7-evidence/M7-13-public-source-release.md"
+            "scripts/phase7-learner-readme-smoke.mjs"
           ]
         }
       ]
@@ -1571,16 +1594,15 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "M7-D",
-          "title": "#90 public release surface decision",
-          "why": "public source repo 공개는 외부 공개 action이라, readiness audit 이후 visibility change와 public clone proof가 필요하다.",
-          "done": "public source repository surface가 선택됐고 repository visibility가 PUBLIC으로 전환됐다.",
-          "verification": "`node scripts/phase7-publication-preflight.mjs`가 sourceRepoVisibility=PUBLIC, publicationReady=true, canPublishNow=true, blockers=[]를 반환한다.",
+          "id": "NEXT-1",
+          "title": "다음 제품 증거 선택: real learner pilot / realtime voice / Git-backed plugin install",
+          "why": "public clone과 learner-first README는 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.",
+          "done": "아직 선택 전이다.",
+          "verification": "후보별 검증 기준: real learner pilot은 7-day protocol, realtime voice는 stable command/API proof, Git-backed plugin install은 public install smoke.",
           "files": [
-            "docs/distribution-policy.json",
-            "scripts/phase7-publication-preflight.mjs",
-            "scripts/prepare-public-release-approval.mjs",
-            "scripts/phase7-open-source-readiness-smoke.mjs"
+            "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+            "docs/MULTIMODAL-GENAI-PLAN.md",
+            "scripts/phase6-marketplace-install-smoke.mjs"
           ]
         }
       ]
@@ -1965,6 +1987,11 @@
       "name": "M7-13 public source clone",
       "status": "Pass",
       "detail": "public clone smoke passes from the now-public source repository"
+    },
+    {
+      "name": "M7-14 learner-first README",
+      "status": "Pass",
+      "detail": "README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries"
     }
   ],
   "commands": [
@@ -2179,12 +2206,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 private beta is closed historically, and M7 now verifies the open-source public source repository path. The repository is PUBLIC, OSS readiness/history audits pass, and default public clone-to-learn smoke passes. #83/#90 can close; remaining unclaimed areas are public Git-backed plugin install, realtime voice, and real learner outcomes.</p>
+        <p class="summary">The repository is PUBLIC and the default public clone-to-learn smoke passes. The README has been reframed for first-time learners: what this is, how to try it in five minutes, how daily practice works, what progress is tracked, and which claims remain unproven.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M7 Public Distribution active<br>
-        Public source clone-to-learn is verified; close #83/#90
+        Public source live + learner-first onboarding<br>
+        Public clone-to-learn is verified; README now explains the learner value before maintainer evidence
       </div>
     </header>
 
@@ -2192,28 +2219,28 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M7</div>
-          <p>open-source prep active; public clone proof next</p>
-        </article>
-        <article class="metric-card tone-amber">
-          <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M7 active</div>
-          <p>public source clone proof passed; close #83/#90</p>
+          <div class="metric-value">Complete</div>
+          <p>public source clone-to-learn plus learner-first README</p>
         </article>
         <article class="metric-card tone-green">
-          <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">#83/#90</div>
-          <p>close public distribution issues after evidence update</p>
+          <div class="eyebrow"><span class="dot"></span>Current stage</div>
+          <div class="metric-value">Public live</div>
+          <p>new visitors can clone, setup, practice, and understand the learning loop</p>
+        </article>
+        <article class="metric-card tone-amber">
+          <div class="eyebrow"><span class="dot"></span>Next decision</div>
+          <div class="metric-value">Pilot / voice / plugin</div>
+          <p>choose the next proof: real learner pilot, realtime voice, or Git-backed plugin install</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">43 issues</div>
-          <p>OSS readiness/history audit done; public clone proof passed</p>
+          <div class="metric-value">44 issues</div>
+          <p>#117 adds learner-first README regression coverage</p>
         </article>
         <article class="metric-card tone-green">
-          <div class="eyebrow"><span class="dot"></span>Review</div>
-          <div class="metric-value">Ralplan OKAY</div>
-          <p>Architect APPROVE / Critic OKAY</p>
+          <div class="eyebrow"><span class="dot"></span>README</div>
+          <div class="metric-value">Learner-first</div>
+          <p>phase7-learner-readme-smoke passes</p>
         </article>
     </section>
 
@@ -2240,23 +2267,23 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-1</strong>
-                <span>README.md, scripts/phase6-public-clean-clone-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, docs/phase-7-evidence/M7-13-public-source-release.md</span>
+                <strong>NOW-1</strong>
+                <span>README.md, scripts/phase7-learner-readme-smoke.mjs</span>
               </div>
-              <h3>#83 public source clone proof</h3>
-              <div class="card-row"><b>왜</b><p>오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다.</p></div>
-              <div class="card-row"><b>완료</b><p>repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.</p></div>
+              <h3>공개 레포 첫인상과 실제 첫 세션을 점검하는 단계</h3>
+              <div class="card-row"><b>왜</b><p>기능은 public clone-to-learn까지 왔지만, 공개 제품은 신규 방문자가 README만 보고 바로 시도하고 학습 루프를 이해할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>learner-first README와 회귀 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`가 README가 learner quick start를 maintainer verification보다 앞세우는지 검증한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-D</strong>
-                <span>docs/distribution-policy.json, scripts/phase7-publication-preflight.mjs, scripts/prepare-public-release-approval.mjs, scripts/phase7-open-source-readiness-smoke.mjs</span>
+                <strong>NEXT-1</strong>
+                <span>docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md, docs/MULTIMODAL-GENAI-PLAN.md, scripts/phase6-marketplace-install-smoke.mjs</span>
               </div>
-              <h3>#90 public release surface decision</h3>
-              <div class="card-row"><b>왜</b><p>public source repo 공개는 외부 공개 action이라, readiness audit 이후 visibility change와 public clone proof가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>public source repository surface가 선택됐고 repository visibility가 PUBLIC으로 전환됐다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-publication-preflight.mjs`가 sourceRepoVisibility=PUBLIC, publicationReady=true, canPublishNow=true, blockers=[]를 반환한다.</p></div>
+              <h3>다음 제품 증거 선택: real learner pilot / realtime voice / Git-backed plugin install</h3>
+              <div class="card-row"><b>왜</b><p>public clone과 learner-first README는 입구를 만들었다. 다음에는 실제 학습 효과, 음성 경험, 또는 설치 경험 중 어떤 리스크를 먼저 줄일지 선택해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>아직 선택 전이다.</p></div>
+              <div class="card-row"><b>검증</b><p>후보별 검증 기준: real learner pilot은 7-day protocol, realtime voice는 stable command/API proof, Git-backed plugin install은 public install smoke.</p></div>
             </article>
         </div>
       </section>
@@ -2267,26 +2294,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-7</strong>
-                <span>scripts/phase7-publication-preflight.mjs, docs/phase-7-evidence/M7-7-publication-preflight.md, docs/project-state.json</span>
-              </div>
-              <h3>#104 public publication preflight를 추가함</h3>
-              <div class="card-row"><b>왜</b><p>실제 공개 publish 전, owner decision/target repo/workflow/handoff가 준비됐는지 한 번에 보여주는 non-publishing readiness check가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>distribution policy, workflow artifact_repo/token boundary, handoff bundle, gh repo visibility를 검사하는 preflight를 추가했다. 현재 publicationReady=false다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-publication-preflight.mjs`가 decisionStatus=owner_decision_required, artifactRepoStatus=unavailable, publicationReady=false, canPublishNow=false를 반환한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-8</strong>
-                <span>scripts/phase7-public-artifact-install-smoke.mjs, scripts/prepare-public-artifact-handoff.mjs, docs/phase-7-evidence/M7-8-public-artifact-install.md</span>
-              </div>
-              <h3>#106 public artifact에서 plugin install을 검증함</h3>
-              <div class="card-row"><b>왜</b><p>public artifact 사용자가 direct script 학습뿐 아니라 Codex plugin install까지 할 수 있는지 M7-install gate를 검증해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-9</strong>
@@ -2325,7 +2332,27 @@
               <h3>#114 open-source git history audit을 추가함</h3>
               <div class="card-row"><b>왜</b><p>repo를 public으로 전환하면 현재 tree뿐 아니라 전체 git history도 공개되므로, obvious secret/path/large object audit이 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>전체 revision/path history를 스캔하는 phase7-open-source-history-audit-smoke를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=119, committedPathsScanned=181, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-open-source-history-audit-smoke.mjs`가 revisionsScanned=123, committedPathsScanned=184, forbiddenPathFindings=0, secretContentFindings=0, largeObjectFindings=0을 반환한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-13</strong>
+                <span>README.md, scripts/phase6-public-clean-clone-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, docs/phase-7-evidence/M7-13-public-source-release.md</span>
+              </div>
+              <h3>#83/#90 public source clone-to-learn을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>오픈소스 방향에서는 현재 source repo 자체가 public distribution surface이므로, 공개 repo에서 신규 사용자가 바로 clone하고 학습을 시작할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-14</strong>
+                <span>README.md, scripts/phase7-learner-readme-smoke.mjs, docs/phase-7-evidence/M7-14-learner-first-readme.md</span>
+              </div>
+              <h3>#117 README를 신규 학습자용으로 재구성함</h3>
+              <div class="card-row"><b>왜</b><p>기존 README는 구현/검증 보고서처럼 읽혀서 처음 온 학습자가 이 제품이 무엇이고 왜 영어 회화 실력 향상에 도움이 되는지 바로 알기 어려웠다.</p></div>
+              <div class="card-row"><b>완료</b><p>README 첫 화면을 제품 약속, 5분 체험, 대상 학습자, daily loop, 회화 향상 메커니즘, 진행 기록, privacy, current boundaries 순서로 재배치했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, open-source readiness smoke, marketplace install smoke, public clean clone smoke가 모두 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2504,10 +2531,6 @@
           <tbody>
 
             <tr>
-              <td>M7-6 no-publish workflow run</td>
-              <td><strong>Pass</strong><span>GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication</span></td>
-            </tr>
-            <tr>
               <td>M7-7 publication preflight</td>
               <td><strong>Pass</strong><span>preflight reports source repository PUBLIC with publicationReady=true and no blockers</span></td>
             </tr>
@@ -2534,6 +2557,10 @@
             <tr>
               <td>M7-13 public source clone</td>
               <td><strong>Pass</strong><span>public clone smoke passes from the now-public source repository</span></td>
+            </tr>
+            <tr>
+              <td>M7-14 learner-first README</td>
+              <td><strong>Pass</strong><span>README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries</span></td>
             </tr>
           </tbody>
         </table>
@@ -2579,7 +2606,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 68개 보기</summary>
+        <summary>완료 이력 70개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3262,10 +3289,30 @@
               <div class="card-row"><b>완료</b><p>workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-7</strong>
+                <span>scripts/phase7-publication-preflight.mjs, docs/phase-7-evidence/M7-7-publication-preflight.md, docs/project-state.json</span>
+              </div>
+              <h3>#104 public publication preflight를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>실제 공개 publish 전, owner decision/target repo/workflow/handoff가 준비됐는지 한 번에 보여주는 non-publishing readiness check가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>distribution policy, workflow artifact_repo/token boundary, handoff bundle, gh repo visibility를 검사하는 preflight를 추가했다. 현재 publicationReady=false다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-publication-preflight.mjs`가 decisionStatus=owner_decision_required, artifactRepoStatus=unavailable, publicationReady=false, canPublishNow=false를 반환한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-8</strong>
+                <span>scripts/phase7-public-artifact-install-smoke.mjs, scripts/prepare-public-artifact-handoff.mjs, docs/phase-7-evidence/M7-8-public-artifact-install.md</span>
+              </div>
+              <h3>#106 public artifact에서 plugin install을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact 사용자가 direct script 학습뿐 아니라 Codex plugin install까지 할 수 있는지 M7-install gate를 검증해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>checksum 검증된 downloaded artifact에서 local marketplace를 package하고 isolated CODEX_HOME에 english-learning-harness@phase7-public-artifact를 설치하는 smoke를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-install-smoke.mjs`가 checksumVerified=true, installedPlugin=english-learning-harness@phase7-public-artifact를 통과한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 66개 보기</summary>
+        <summary>전체 검증 67개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3533,6 +3580,10 @@
             <tr>
               <td>M7-13 public source clone</td>
               <td><strong>Pass</strong><span>public clone smoke passes from the now-public source repository</span></td>
+            </tr>
+            <tr>
+              <td>M7-14 learner-first README</td>
+              <td><strong>Pass</strong><span>README now leads with learner value, five-minute practice, progress tracking, and explicit boundaries</span></td>
             </tr>
             </tbody>
           </table>

@@ -77,6 +77,7 @@ const requiredFiles = [
   "scripts/phase7-open-source-readiness-smoke.mjs",
   "scripts/phase7-open-source-history-audit-smoke.mjs",
   "scripts/phase7-publication-preflight.mjs",
+  "scripts/phase7-learner-readme-smoke.mjs",
 ];
 
 function readJson(path) {

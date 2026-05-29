@@ -1,43 +1,14 @@
 # English Learning Harness
 
-Open-source, local-first Codex plugin/harness for gentle English practice.
+Open-source, local-first Codex harness that turns a cloned repository into a daily English speaking practice partner.
 
 North star: **AI 파트너와 편안하게 영어로 대화하는 능력.**
 
-This first usable version is text/transcription-first. Realtime voice is not a default path because the current local Codex CLI does not expose a stable realtime voice command.
+If you already use Codex for coding, this project asks a simple question: can the same agentic loop help you practice English every day, remember what you said, and show whether your spoken English is becoming easier, clearer, and more reusable?
 
-## What Works
+This first usable version is text/transcription-first. It is designed for real daily practice, transcript-backed voice import, personal phrase review, and visible progress tracking. Realtime voice conversation is not the default path yet because the current local Codex CLI does not expose a stable realtime voice command.
 
-- Onboarding/profile setup under a local learner directory.
-- Supported command-wrapper path for setup, daily cockpit, daily session, health, status, and context.
-- Daily English session runner with text input or transcript file input.
-- Mini mirror after each session.
-- `progress.json` v2 updates for the five MVP session metrics.
-- Journal and session artifact persistence.
-- Optional setup-owned/native hook config generation.
-- Local marketplace packaging and install smoke.
-
-## Learner Data
-
-By default learner-owned files live here:
-
-```text
-~/english-learning/
-├── profile.md
-├── progress.json
-├── learner-model.json
-├── vocabulary.json
-├── review-queue.json
-├── home.html
-├── journal/
-└── artifacts/
-    ├── sessions/
-    └── weekly/
-```
-
-For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learner-root`.
-
-## Quick Start
+## Try It In 5 Minutes
 
 From a fresh clone:
 
@@ -55,28 +26,7 @@ node scripts/english-learning-harness.mjs home --json
 node scripts/english-learning-harness.mjs export --json
 ```
 
-The intended public release surface is this open-source repository. Public clone-to-learn is claimed only after repository visibility is public and `node scripts/phase6-public-clean-clone-smoke.mjs` passes without `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE`.
-
-The supported first-use path is the explicit command wrapper. It does not require native Codex hooks.
-
-One command prepares the learner directory and returns health plus the next command to run:
-
-```bash
-node scripts/english-learning-harness.mjs setup \
-  --name "Jieun" \
-  --motivation "I want to feel less frozen when speaking English." \
-  --correction-style "gentle recast first"
-```
-
-`setup`, `health`, and `status` return a `support` block in JSON mode. It lists the supported next commands, local support files, repair commands, and the native hook boundary. The first-use path remains the explicit command wrapper.
-
-If health reports a corrupt local store, run the repair form. It backs up broken local JSON files before recreating defaults:
-
-```bash
-node scripts/english-learning-harness.mjs setup --repair
-```
-
-Run today's text-first daily session:
+The most important first command is `today`. Give it one or more English sentences and it creates a practice session, saves a mini mirror, updates your progress, and feeds future review.
 
 ```bash
 node scripts/english-learning-harness.mjs today \
@@ -84,21 +34,94 @@ node scripts/english-learning-harness.mjs today \
   --say "Today morning coffee."
 ```
 
-Ask the daily cockpit what to do next:
+Ask the cockpit what to do next:
 
 ```bash
 node scripts/english-learning-harness.mjs daily --json
 ```
 
-The cockpit reads local files only and returns due review, suggested scenario, learner model summary, latest weekly mirror pointer, and exact next commands.
-
-Generate a local learner home page:
+Generate your learner home page:
 
 ```bash
 node scripts/english-learning-harness.mjs home --json
 ```
 
-The generated `home.html` lives under the learner root and shows the learner-facing journey without project implementation logs.
+## Who This Is For
+
+- Learners who can read some English but freeze when they need to speak.
+- Korean speakers or other EFL learners who want low-pressure daily output practice.
+- Codex users curious whether an agent can become a focused language-learning harness instead of a generic chatbot.
+- Builders who want to inspect, fork, and improve an open-source AI-native learning loop.
+
+This is not a course catalog, a streak app, or a generic chat UI. It is a local practice harness that helps you produce English, keep the useful pieces, and return tomorrow with context.
+
+## What You Practice
+
+The harness is built around a small daily loop:
+
+1. Run `daily` to see what is due, what scenario fits you, and what command to run.
+2. Run `today` with short spoken-style English or a transcript.
+3. Read the mini mirror: what you tried, what worked, what to repair next.
+4. Review saved phrases so usable language comes back later.
+5. Run `weekly` to see the larger pattern of your practice.
+
+The learning target is not "perfect English today." The target is more comfortable output: starting faster, repairing mistakes, asking follow-up questions, reusing phrases, and seeing your own progress from evidence.
+
+## How It Helps Conversation
+
+- **Low-stakes output reps:** short sessions make it easy to speak or type imperfect English without waiting for a class.
+- **Gentle correction:** the tutor policy favors recasts, repair prompts, and next attempts instead of overwhelming grammar dumps.
+- **Personal phrase memory:** useful phrases and repaired patterns become review material.
+- **Scenario practice:** the harness suggests daily scenarios based on your learner model and history.
+- **Mini mirrors:** every session produces a concise reflection so you can see what improved and what to try next.
+- **Weekly mirrors:** the weekly view turns isolated sessions into a learning journey.
+- **Multimodal-ready evidence:** text, transcript-backed voice, and image information-gap events share a common interaction-event shape.
+
+## What Gets Tracked
+
+By default learner-owned files live here:
+
+```text
+~/english-learning/
+├── profile.md
+├── progress.json
+├── learner-model.json
+├── vocabulary.json
+├── review-queue.json
+├── home.html
+├── journal/
+└── artifacts/
+    ├── sessions/
+    └── weekly/
+```
+
+For testing, demos, or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learner-root`.
+
+Tracked evidence includes:
+
+- profile and motivation
+- session count, date, and MVP progress metrics
+- journal entries and session artifacts
+- vocabulary and phrase history
+- review queue state
+- learner model signals
+- weekly mirror summaries
+- local validation exports
+
+## Daily Commands
+
+Set up or repair the local learner directory:
+
+```bash
+node scripts/english-learning-harness.mjs setup
+node scripts/english-learning-harness.mjs setup --repair
+```
+
+Run today's text-first daily session:
+
+```bash
+node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
+```
 
 Run from a transcript file:
 
@@ -130,63 +153,66 @@ node scripts/english-learning-harness.mjs image \
 
 The image path is local prompt context only; the learner output is the learning evidence.
 
-Export a local evidence pack for M5 review:
-
-```bash
-node scripts/english-learning-harness.mjs export --json
-```
-
-The export writes JSON and Markdown packs under `artifacts/validation/`. Local learner roots and source media paths are redacted or marked local-only inside the pack.
-
 Review due personal phrases:
 
 ```bash
 node scripts/english-learning-harness.mjs review --json
-```
-
-Mark a reviewed phrase:
-
-```bash
 node scripts/english-learning-harness.mjs review \
   --review-id phrase-i-like-drinking-coffee \
   --result success
 ```
 
-Open the phrase vault:
+Open the phrase vault and weekly mirror:
 
 ```bash
 node scripts/english-learning-harness.mjs vault --json
-```
-
-Generate a weekly mirror from local evidence:
-
-```bash
 node scripts/english-learning-harness.mjs weekly --json
 ```
 
-Check health:
+Export a local evidence pack:
+
+```bash
+node scripts/english-learning-harness.mjs export --json
+```
+
+Check health and status:
 
 ```bash
 node scripts/english-learning-harness.mjs health --json
-```
-
-Inspect detailed status:
-
-```bash
 node scripts/english-learning-harness.mjs status --json
-```
-
-Validate progress:
-
-```bash
 node scripts/validate-progress.mjs ~/english-learning/progress.json
 ```
 
-## Native Hook Setup
+## What You Should Feel After The First Run
 
-Native hooks are optional.
+After setup and one `today` session, you should have:
 
-P0-2 did not prove automatic plugin-scoped hook execution for this plugin, and PH1-FIX-1 found Codex hook trust-state limitations. The reliable first-usable path is:
+- a learner profile under your local learner root
+- a saved practice artifact
+- a progress file with updated session metrics
+- a mini mirror describing the session
+- a next-step command from the daily cockpit
+- a generated `home.html` view you can open locally
+
+The experience is intentionally small at first: speak or type a little, get a mirror, keep the phrase, return tomorrow.
+
+## Privacy And Local Data
+
+The default learning state is local to your machine under `~/english-learning/`. Source media paths are treated as local-only in exported validation packs.
+
+Do not put private learner journals, audio, transcripts, or personal details in GitHub issues unless you intentionally redact and share them. Use `ENGLISH_LEARNING_HOME` when you want a disposable learner root for testing.
+
+## Current Boundaries
+
+- Realtime voice conversation is not claimed as the default path yet.
+- Accent scoring is not implemented.
+- Image practice stores local prompt context and learner output; it does not perform full computer-vision tutoring by itself.
+- Public Git-backed install remains unverified and should not be documented as the default install path yet.
+- Long-term real learner improvement still needs real multi-day human use, not only fixture smokes.
+
+## Native Codex Hooks
+
+Native hooks are optional. The reliable first-use path is the explicit command wrapper:
 
 ```bash
 node scripts/english-learning-harness.mjs setup
@@ -194,75 +220,47 @@ node scripts/english-learning-harness.mjs today --say "I want to practice today.
 node scripts/english-learning-harness.mjs health
 ```
 
-Use native hooks only after accepting that hook trust-state may require manual intervention in the local Codex environment.
+P0-2 did not prove automatic plugin-scoped hook execution for this plugin, and PH1-FIX-1 found Codex hook trust-state limitations. Use native hooks only after accepting that hook trust-state may require manual intervention in the local Codex environment.
 
-Stop hook contract: the Stop hook records a marker and emits context only. Session finalization, journal writes, artifacts, metrics, vocabulary, and review queue updates are owned by:
+Stop hook contract: the Stop hook records a marker and emits context only. Session finalization, journal writes, artifacts, metrics, vocabulary, and review queue updates are owned by `today`.
 
-```bash
-node scripts/english-learning-harness.mjs today
-```
-
-Print the hook config:
+Print or install the hook config:
 
 ```bash
 node scripts/install-native-hooks.mjs --print
-```
-
-Write a hook config to a chosen path:
-
-```bash
 node scripts/install-native-hooks.mjs --install --target /tmp/english-learning-hooks.json
-```
-
-Install into your default Codex hook config with an automatic backup:
-
-```bash
 node scripts/install-native-hooks.mjs --install
-```
-
-Remove the English Learning Harness hooks later:
-
-```bash
 node scripts/install-native-hooks.mjs --uninstall
 ```
 
-The generated config wires:
-
-- `SessionStart`
-- `UserPromptSubmit`
-- `PreToolUse`
-- `Stop`
-- `PreCompact`
+The generated config wires `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `Stop`, and `PreCompact`.
 
 ## Local Marketplace Package
 
-Create a local marketplace package:
+The default learner path is the public source clone above. Local marketplace packaging is available for isolated plugin install testing:
 
 ```bash
 node scripts/package-local-marketplace.mjs --target tmp/english-learning-marketplace
-```
-
-Install from that local marketplace with an isolated Codex home:
-
-```bash
 CODEX_HOME="$PWD/tmp/codex-home" codex plugin marketplace add "$PWD/tmp/english-learning-marketplace"
 CODEX_HOME="$PWD/tmp/codex-home" codex plugin add english-learning-harness@english-learning-local
 CODEX_HOME="$PWD/tmp/codex-home" codex plugin list
 ```
 
-Public Git-backed install remains unverified and should not be documented as the default install path yet.
-
-The verified install claim is local marketplace packaging only: a clean repository can package the plugin into a local marketplace root, install that marketplace into an isolated `CODEX_HOME`, and list the plugin as installed/enabled. Do not replace this with a GitHub-backed install command until a separate smoke proves that path.
+The verified install claim is local marketplace packaging only: a clean repository can package the plugin into a local marketplace root, install that marketplace into an isolated `CODEX_HOME`, and list the plugin as installed/enabled.
 
 ## Public Distribution
 
-The primary open-source distribution path is the source repository:
+The primary open-source distribution path is this source repository:
 
 ```bash
 git clone https://github.com/bborok1234/english-learning-harness.git
 cd english-learning-harness
 node scripts/english-learning-harness.mjs setup --json
+node scripts/english-learning-harness.mjs daily --json
 node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
+node scripts/english-learning-harness.mjs weekly --json
+node scripts/english-learning-harness.mjs home --json
+node scripts/english-learning-harness.mjs export --json
 ```
 
 Before claiming public distribution, verify a default public clone:
@@ -290,8 +288,6 @@ ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harne
   node scripts/phase7-hosted-artifact-smoke.mjs
 ```
 
-Without `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`, the hosted-artifact smoke uses a local loopback server and proves mechanics only, not public access.
-
 To verify the public artifact repository path with checksum evidence:
 
 ```bash
@@ -299,8 +295,6 @@ ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harne
 ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL="https://example.com/SHA256SUMS" \
   node scripts/phase7-public-release-url-smoke.mjs
 ```
-
-Without both public URL variables, this smoke uses local loopback and proves mechanics only.
 
 The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a release when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. This is secondary to the open-source repository path.
 
@@ -310,281 +304,37 @@ For a separate public artifact repository handoff, generate the bundle locally:
 node scripts/prepare-public-artifact-handoff.mjs --target tmp/public-artifact-handoff
 ```
 
-The handoff directory contains a public artifact repository `README.md`, the tarball, `SHA256SUMS`, `PUBLIC-ARTIFACT-MANIFEST.json`, and `RELEASE-NOTES.md`. It includes a publication command as text only; it does not create a repository or publish a release. Verify the bundle before any owner-approved publication action:
-
-```bash
-node scripts/phase7-public-artifact-handoff-smoke.mjs
-```
-
 ## Open Source
 
-- License: MIT. See `LICENSE`.
-- Contributing guide: `CONTRIBUTING.md`.
-- Code of conduct: `CODE_OF_CONDUCT.md`.
-- Security policy: `SECURITY.md`.
-- Support guidance: `SUPPORT.md`.
-- Governance notes: `GOVERNANCE.md`.
+- License: `LICENSE`
+- Contributing guide: `CONTRIBUTING.md`
+- Code of conduct: `CODE_OF_CONDUCT.md`
+- Security policy: `SECURITY.md`
+- Support guidance: `SUPPORT.md`
+- Governance notes: `GOVERNANCE.md`
 
-For open-source release checks, run:
+## Maintainer Verification
+
+Run the learner-facing README audit:
 
 ```bash
-node scripts/phase7-open-source-readiness-smoke.mjs
-node scripts/phase7-open-source-history-audit-smoke.mjs
+node scripts/phase7-learner-readme-smoke.mjs
 ```
 
-## Verification
-
-Run the supported wrapper smoke:
+Run the core wrapper smoke:
 
 ```bash
 node scripts/phase1-command-wrapper-smoke.mjs
 ```
 
-Run the vocabulary history smoke:
-
-```bash
-node scripts/phase1-vocabulary-history-smoke.mjs
-```
-
-Run the scenario loop and persona fixture smoke:
-
-```bash
-node scripts/phase1-scenario-loop-smoke.mjs
-node scripts/phase1-persona-fixture-smoke.mjs
-```
-
-Run the Stop/finalization contract smoke:
-
-```bash
-node scripts/phase1-stop-finalization-smoke.mjs
-```
-
-Run the setup recovery smoke:
-
-```bash
-node scripts/phase1-setup-recovery-smoke.mjs
-```
-
-Run the clean clone first-use smoke:
-
-```bash
-node scripts/phase1-clean-clone-smoke.mjs
-```
-
-Run the learner model and skill memory smoke:
-
-```bash
-node scripts/phase2-learner-model-smoke.mjs
-```
-
-Run the review queue and phrase vault smoke:
-
-```bash
-node scripts/phase2-review-vault-smoke.mjs
-```
-
-Run the memory-aware scenario planner smoke:
-
-```bash
-node scripts/phase2-scenario-planner-smoke.mjs
-```
-
-Run the tutor policy rubric smoke:
-
-```bash
-node scripts/phase2-tutor-policy-smoke.mjs
-```
-
-Run the weekly mirror smoke:
-
-```bash
-node scripts/phase2-weekly-mirror-smoke.mjs
-```
-
-Run the daily cockpit smoke:
-
-```bash
-node scripts/phase3-daily-cockpit-smoke.mjs
-```
-
-Run the learner home smoke:
-
-```bash
-node scripts/phase3-learner-home-smoke.mjs
-```
-
-Run the no-streak return smoke:
-
-```bash
-node scripts/phase3-no-streak-return-smoke.mjs
-```
-
-Run the seven-day local simulation smoke:
-
-```bash
-node scripts/phase3-seven-day-simulation-smoke.mjs
-```
-
-Run the M3 clone-to-daily gate smoke:
-
-```bash
-node scripts/phase3-m3-gate-smoke.mjs
-```
-
-Run the interaction event schema smoke:
-
-```bash
-node scripts/phase4-interaction-event-schema-smoke.mjs
-```
-
-Run the text event persistence smoke:
-
-```bash
-node scripts/phase4-text-event-persistence-smoke.mjs
-```
-
-Run the voice event import smoke:
-
-```bash
-node scripts/phase4-voice-event-import-smoke.mjs
-```
-
-Run the image information-gap smoke:
-
-```bash
-node scripts/phase4-image-information-gap-smoke.mjs
-```
-
-Run the M4 multimodal gate smoke:
-
-```bash
-node scripts/phase4-multimodal-gate-smoke.mjs
-```
-
-Run the M5 evidence export smoke:
-
-```bash
-node scripts/phase5-evidence-export-smoke.mjs
-```
-
-Run the M5 before/after transcript rubric smoke:
-
-```bash
-node scripts/phase5-transcript-rubric-smoke.mjs
-```
-
-Run the M5 target-persona validation smoke:
-
-```bash
-node scripts/phase5-persona-validation-smoke.mjs
-```
-
-Run the M5 validation gate smoke:
-
-```bash
-node scripts/phase5-m5-gate-smoke.mjs
-```
-
-Run the M6 public clean clone smoke:
+Run the current public release checks:
 
 ```bash
 node scripts/phase6-public-clean-clone-smoke.mjs
-```
-
-Run the M6 distribution policy smoke:
-
-```bash
-node scripts/phase6-distribution-policy-smoke.mjs
-```
-
-Run the M6 local marketplace install smoke:
-
-```bash
 node scripts/phase6-marketplace-install-smoke.mjs
-```
-
-Run the M6 onboarding diagnostics smoke:
-
-```bash
-node scripts/phase6-onboarding-diagnostics-smoke.mjs
-```
-
-Run the M6 release gate audit:
-
-```bash
-node scripts/phase6-release-gate-smoke.mjs
-```
-
-Run the M7 public artifact mechanics smoke:
-
-```bash
-node scripts/phase7-public-artifact-smoke.mjs
-```
-
-Run the M7 hosted artifact smoke:
-
-```bash
-node scripts/phase7-hosted-artifact-smoke.mjs
-```
-
-Run the M7 release workflow static smoke:
-
-```bash
-node scripts/phase7-release-workflow-smoke.mjs
-```
-
-Run the M7 public release decision gate smoke:
-
-```bash
-node scripts/phase7-public-release-decision-smoke.mjs
-```
-
-Run the M7 public artifact repository handoff smoke:
-
-```bash
-node scripts/phase7-public-artifact-handoff-smoke.mjs
-```
-
-Run the M7 public release URL checksum smoke:
-
-```bash
-node scripts/phase7-public-release-url-smoke.mjs
-```
-
-Run the M7 public artifact plugin install smoke:
-
-```bash
-node scripts/phase7-public-artifact-install-smoke.mjs
-```
-
-Run the M7 public release approval packet smoke:
-
-```bash
-node scripts/phase7-public-release-approval-smoke.mjs
-```
-
-Run the M7 open-source readiness smoke:
-
-```bash
 node scripts/phase7-open-source-readiness-smoke.mjs
-```
-
-Run the M7 open-source git history audit:
-
-```bash
 node scripts/phase7-open-source-history-audit-smoke.mjs
-```
-
-Run the M7 public publication preflight:
-
-```bash
 node scripts/phase7-publication-preflight.mjs
-```
-
-Run the full first-run smoke:
-
-```bash
-node scripts/phase1-full-flow-smoke.mjs
 ```
 
 Run scaffold/package smoke:
@@ -593,7 +343,7 @@ Run scaffold/package smoke:
 node scripts/phase1-scaffold-smoke.mjs
 ```
 
-Regenerate the shared dashboard:
+Regenerate the shared dashboard after changing `docs/project-state.json`:
 
 ```bash
 node scripts/generate-dashboard.mjs

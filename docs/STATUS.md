@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M7 Public Distribution active** state.
+The project is in **Public source live with learner onboarding polish** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -20,7 +20,7 @@ What is complete:
 - P0-1 is complete: current Codex CLI does not expose a stable realtime voice path; MVP should default to text-first or transcription-first conversation.
 - PH1-1 is complete: plugin manifest, skill skeletons, setup-owned/native hook registration path, progress schema validator, and local marketplace install smoke are in place.
 - PH1-2 is partially complete: first-run onboarding, text-first session persistence, mini mirror, journal/artifact persistence, and `progress.json` shape validation work in direct script smoke.
-- README setup guidance exists, but it is still developer-oriented and does not yet provide a safe one-command native hook install/merge path.
+- README setup guidance is now learner-first: the first screen explains what the harness is, who it is for, how to try it in five minutes, what conversation ability it targets, and how progress is tracked. Native hook setup remains optional and explicitly bounded.
 - Product ambition has been reset from "local smoke tool" to a research-backed daily language-learning engine in `docs/LEARNING-ENGINE.md`.
 - Execution roadmap has been expanded in `docs/PRODUCT-ROADMAP.md`.
 - Startup-grade Ralplan draft now includes `docs/STARTUP-GRADE-PLAN.md`, `docs/TUTOR-POLICY.md`, `docs/PERSONA-FIXTURE-SPEC.md`, and `docs/DATA-CONTRACTS.md`.
@@ -90,6 +90,7 @@ What is complete:
 - M7-11 open-source readiness smoke verifies MIT license, contribution docs, code of conduct, security/support/governance docs, issue templates, PR template, README public clone framing, policy alignment, and absence of obvious local secret files.
 - M7-12 git history audit smoke scans committed history for obvious secret patterns, forbidden local/runtime paths, and oversized accidental artifacts before repository visibility changes.
 - M7-13 public source clone smoke verifies unauthenticated clone from `https://github.com/bborok1234/english-learning-harness.git` plus setup, daily, today, weekly, home, and export from a disposable clone.
+- M7-14 learner-first README smoke verifies public onboarding leads with learner value and daily practice before maintainer verification, while preserving public clone and marketplace command audits.
 
 What is not started:
 - Real user validation.
