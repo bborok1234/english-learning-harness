@@ -27,6 +27,7 @@ function main() {
   assert(existsSync(resolve(result.handoffRoot, "SHA256SUMS")), "handoff checksum missing");
   assert(existsSync(resolve(result.handoffRoot, "PUBLIC-ARTIFACT-MANIFEST.json")), "handoff manifest missing");
   assert(existsSync(resolve(result.handoffRoot, "RELEASE-NOTES.md")), "handoff release notes missing");
+  assert(existsSync(resolve(result.handoffRoot, "README.md")), "handoff public README missing");
 
   const manifest = JSON.parse(readFileSync(resolve(result.handoffRoot, "PUBLIC-ARTIFACT-MANIFEST.json"), "utf8"));
   assert(manifest.schemaVersion === 1, "manifest schema mismatch");
@@ -34,7 +35,9 @@ function main() {
   assert(manifest.publicationPerformed === false, "manifest should record that no publication happened");
   assert(manifest.artifactSha256 === result.artifactSha256, "manifest checksum mismatch");
   assert(manifest.files.includes(result.artifactName), "manifest missing artifact file");
+  assert(manifest.files.includes("README.md"), "manifest missing public README");
   assert(manifest.files.includes("SHA256SUMS"), "manifest missing SHA256SUMS");
+  assert(manifest.latestReleaseDownloadUrl?.includes(result.artifactName), "manifest missing latest release URL");
   assert(manifest.publishCommand.includes("--repo"), "manifest publish command missing repo target");
   assert(
     manifest.publicUrlSmokeCommand.includes("phase7-hosted-artifact-smoke.mjs"),
@@ -44,6 +47,21 @@ function main() {
     manifest.claimBoundary.includes("does not create a repository"),
     "manifest claim boundary should avoid publication claims",
   );
+
+  const publicReadme = readFileSync(resolve(result.handoffRoot, "README.md"), "utf8");
+  for (const required of [
+    "curl -L -o english-learning-harness-public.tar.gz",
+    "shasum -a 256 -c SHA256SUMS",
+    "tar -xzf english-learning-harness-public.tar.gz",
+    "node scripts/english-learning-harness.mjs setup --json",
+    "node scripts/english-learning-harness.mjs daily --json",
+    "node scripts/english-learning-harness.mjs today --say",
+    "ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=",
+    "phase7-hosted-artifact-smoke.mjs",
+    "does not prove",
+  ]) {
+    assert(publicReadme.includes(required), `handoff public README missing ${required}`);
+  }
 
   run("shasum", ["-a", "256", "-c", "SHA256SUMS"], { cwd: result.handoffRoot });
   const listing = run("tar", ["-tzf", result.artifactName], { cwd: result.handoffRoot });

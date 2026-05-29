@@ -38,6 +38,10 @@ function sha256(path) {
   return createHash("sha256").update(readFileSync(path)).digest("hex");
 }
 
+function latestReleaseDownloadUrl(artifactRepo, artifactName) {
+  return `https://github.com/${artifactRepo}/releases/latest/download/${artifactName}`;
+}
+
 function main(options = {}) {
   const target = resolve(options.target || defaultTarget);
   const artifactRepo = options.artifactRepo || defaultArtifactRepo;
@@ -53,12 +57,50 @@ function main(options = {}) {
   const artifactName = basename(packaged.artifactPath);
   const artifactBytes = statSync(packaged.artifactPath).size;
   const artifactSha256 = sha256(packaged.artifactPath);
+  const artifactUrl = latestReleaseDownloadUrl(artifactRepo, artifactName);
   const artifactTarget = resolve(handoffRoot, artifactName);
 
   writeFileSync(artifactTarget, readFileSync(packaged.artifactPath));
 
   const checksumsPath = resolve(handoffRoot, "SHA256SUMS");
   writeFileSync(checksumsPath, `${artifactSha256}  ${artifactName}\n`);
+
+  const publicReadmePath = resolve(handoffRoot, "README.md");
+  writeFileSync(
+    publicReadmePath,
+    [
+      "# English Learning Harness Public Artifact",
+      "",
+      "This repository hosts the downloadable English Learning Harness artifact. Use it when the source repository is private but you want to start local English practice from a public URL.",
+      "",
+      "## Start",
+      "",
+      "```bash",
+      `curl -L -o ${artifactName} ${artifactUrl}`,
+      "curl -L -o SHA256SUMS https://github.com/" + artifactRepo + "/releases/latest/download/SHA256SUMS",
+      "shasum -a 256 -c SHA256SUMS",
+      "mkdir -p english-learning-harness-public",
+      `tar -xzf ${artifactName} -C english-learning-harness-public`,
+      "cd english-learning-harness-public/english-learning-harness",
+      "node scripts/english-learning-harness.mjs setup --json",
+      "node scripts/english-learning-harness.mjs daily --json",
+      "node scripts/english-learning-harness.mjs today --say \"I want to practice today.\" --json",
+      "```",
+      "",
+      "## Verify The Public URL",
+      "",
+      "The source project can claim public distribution only after the real artifact URL passes the hosted artifact smoke:",
+      "",
+      "```bash",
+      `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL=\"${artifactUrl}\" node scripts/phase7-hosted-artifact-smoke.mjs`,
+      "```",
+      "",
+      "## Claim Boundary",
+      "",
+      "This README is a publication handoff file. It does not prove that the artifact is already public, current, or reachable. Verify the final release URL before claiming public distribution.",
+      "",
+    ].join("\n"),
+  );
 
   const releaseNotesPath = resolve(handoffRoot, "RELEASE-NOTES.md");
   writeFileSync(
@@ -109,11 +151,14 @@ function main(options = {}) {
     artifactBytes,
     artifactSha256,
     files: [
+      "README.md",
       artifactName,
       "SHA256SUMS",
       "PUBLIC-ARTIFACT-MANIFEST.json",
       "RELEASE-NOTES.md",
     ],
+    publicReadmePath: "README.md",
+    latestReleaseDownloadUrl: artifactUrl,
     publishCommand,
     publicUrlSmokeCommand:
       'ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://..." node scripts/phase7-hosted-artifact-smoke.mjs',
@@ -135,6 +180,8 @@ function main(options = {}) {
     manifestPath,
     checksumsPath,
     releaseNotesPath,
+    publicReadmePath,
+    latestReleaseDownloadUrl: artifactUrl,
     publishCommand,
     publicationPerformed: false,
     claimBoundary: manifest.claimBoundary,

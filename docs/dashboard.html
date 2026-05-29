@@ -1416,6 +1416,18 @@
             "scripts/phase7-public-artifact-handoff-smoke.mjs",
             "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
           ]
+        },
+        {
+          "id": "M7-3",
+          "title": "#96 public artifact repo README를 준비함",
+          "why": "public artifact repository 주소만 본 사용자가 private source repo를 몰라도 다운로드, 검증, 시작까지 진행할 수 있어야 한다.",
+          "done": "handoff bundle에 top-level README.md를 추가해 latest release download, SHA256 검증, extract, setup/daily/today, public URL smoke boundary를 문서화했다.",
+          "verification": "`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 public README의 download/checksum/setup/today/public URL smoke 문구를 검증한다.",
+          "files": [
+            "scripts/prepare-public-artifact-handoff.mjs",
+            "scripts/phase7-public-artifact-handoff-smoke.mjs",
+            "docs/phase-7-evidence/M7-2-public-artifact-handoff.md"
+          ]
         }
       ]
     },
@@ -1791,6 +1803,11 @@
       "name": "M7-2 handoff bundle",
       "status": "Pass",
       "detail": "public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing"
+    },
+    {
+      "name": "M7-3 public artifact README",
+      "status": "Pass",
+      "detail": "handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance"
     }
   ],
   "commands": [
@@ -2077,16 +2094,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-1b</strong>
-                <span>scripts/phase7-hosted-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md, README.md</span>
-              </div>
-              <h3>#83 hosted artifact mechanics를 검증함</h3>
-              <div class="card-row"><b>왜</b><p>public artifact는 file extraction만이 아니라 URL download 후 학습 루프까지 견뎌야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M7-1c</strong>
                 <span>.github/workflows/public-artifact.yml, scripts/phase7-release-workflow-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
               </div>
@@ -2134,6 +2141,16 @@
               <div class="card-row"><b>왜</b><p>별도 public artifact repository release를 선택하더라도 무엇을 게시할지 재현 가능한 bundle이 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>tarball, SHA256SUMS, PUBLIC-ARTIFACT-MANIFEST.json, RELEASE-NOTES.md를 만드는 handoff 스크립트와 smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 checksum, manifest, tarball contents, forbidden paths, no-publication boundary를 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-3</strong>
+                <span>scripts/prepare-public-artifact-handoff.mjs, scripts/phase7-public-artifact-handoff-smoke.mjs, docs/phase-7-evidence/M7-2-public-artifact-handoff.md</span>
+              </div>
+              <h3>#96 public artifact repo README를 준비함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact repository 주소만 본 사용자가 private source repo를 몰라도 다운로드, 검증, 시작까지 진행할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>handoff bundle에 top-level README.md를 추가해 latest release download, SHA256 검증, extract, setup/daily/today, public URL smoke boundary를 문서화했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-handoff-smoke.mjs`가 public README의 download/checksum/setup/today/public URL smoke 문구를 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -2312,10 +2329,6 @@
           <tbody>
 
             <tr>
-              <td>M6 milestone</td>
-              <td><strong>Closed</strong><span>GitHub milestone M6 Private Beta Clone-to-Learn Release is closed with open_issues=0 and closed_issues=5</span></td>
-            </tr>
-            <tr>
               <td>M7-1</td>
               <td><strong>Open</strong><span>M7 #83 tracks unauthenticated public distribution path</span></td>
             </tr>
@@ -2342,6 +2355,10 @@
             <tr>
               <td>M7-2 handoff bundle</td>
               <td><strong>Pass</strong><span>public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing</span></td>
+            </tr>
+            <tr>
+              <td>M7-3 public artifact README</td>
+              <td><strong>Pass</strong><span>handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance</span></td>
             </tr>
           </tbody>
         </table>
@@ -2387,7 +2404,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 58개 보기</summary>
+        <summary>완료 이력 59개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2970,10 +2987,20 @@
               <div class="card-row"><b>완료</b><p>tarball candidate를 만들고 extract된 artifact root에서 setup, daily, today, weekly, home, export, progress validation을 통과시켰다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-artifact-smoke.mjs`가 artifact packaging/extraction/learner-loop를 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1b</strong>
+                <span>scripts/phase7-hosted-artifact-smoke.mjs, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md, README.md</span>
+              </div>
+              <h3>#83 hosted artifact mechanics를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact는 file extraction만이 아니라 URL download 후 학습 루프까지 견뎌야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>hosted artifact smoke가 local loopback URL에서 tarball을 다운로드하고 extract된 harness로 setup/today/daily/weekly/home/export를 통과했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-hosted-artifact-smoke.mjs`가 hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false를 보고하며 mechanics를 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 55개 보기</summary>
+        <summary>전체 검증 56개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3197,6 +3224,10 @@
             <tr>
               <td>M7-2 handoff bundle</td>
               <td><strong>Pass</strong><span>public artifact repository handoff bundle is generated with tarball, checksum, manifest, and release notes without publishing</span></td>
+            </tr>
+            <tr>
+              <td>M7-3 public artifact README</td>
+              <td><strong>Pass</strong><span>handoff bundle includes public repo README with download, checksum, setup, today, and public URL smoke guidance</span></td>
             </tr>
             </tbody>
           </table>

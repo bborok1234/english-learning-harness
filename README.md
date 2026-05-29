@@ -285,7 +285,7 @@ For a separate public artifact repository handoff, generate the bundle locally:
 node scripts/prepare-public-artifact-handoff.mjs --target tmp/public-artifact-handoff
 ```
 
-The handoff directory contains the tarball, `SHA256SUMS`, `PUBLIC-ARTIFACT-MANIFEST.json`, and `RELEASE-NOTES.md`. It includes a publication command as text only; it does not create a repository or publish a release. Verify the bundle before any owner-approved publication action:
+The handoff directory contains a public artifact repository `README.md`, the tarball, `SHA256SUMS`, `PUBLIC-ARTIFACT-MANIFEST.json`, and `RELEASE-NOTES.md`. It includes a publication command as text only; it does not create a repository or publish a release. Verify the bundle before any owner-approved publication action:
 
 ```bash
 node scripts/phase7-public-artifact-handoff-smoke.mjs
