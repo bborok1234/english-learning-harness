@@ -50,7 +50,9 @@ function main() {
           decision.codexMayPublishWithoutExplicitApproval,
         canPublishNow,
         nextGate:
-          decision.status === "approved" || decision.status === "approved_pending_visibility_change"
+          decision.status === "approved"
+            ? "Verify public clone smoke and close the public distribution issues."
+            : decision.status === "approved_pending_visibility_change"
             ? "Run the open-source readiness audit, make the repository public with owner approval, then verify public clone smoke."
             : "Resolve the public release surface and publication authority before changing repository visibility.",
         claimBoundary:

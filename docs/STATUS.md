@@ -76,19 +76,20 @@ What is complete:
 - M7 hosted-artifact smoke passes through local loopback and is ready to verify a real public URL via `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`.
 - M7 manual GitHub Actions workflow is wired to package/verify the artifact and optionally upload a release asset when explicitly dispatched.
 - GitHub Actions run `26618527553` completed successfully with `publish_release=false` and uploaded workflow artifact `english-learning-harness-public`.
-- M7 decision issue #90 is created to choose the public release surface and publication authority before #83 can prove a real public URL.
-- M7 decision gate smoke is in place: public release publication remains blocked until #90 records owner approval.
+- M7 decision issue #90 selected the current source repository as the open-source public release surface.
+- M7 decision gate smoke is in place: public release completion requires repository visibility public plus public clone proof.
 - M7-2 public artifact repository handoff is prepared locally with tarball, checksum, manifest, and release notes; it does not publish.
 - M7-3 public artifact repository README is prepared in the handoff bundle so a public repo visitor can download, verify, extract, setup, and start practice.
 - M7-4 public artifact workflow is aligned to the separate artifact repository path: `publish_release=false` by default, `artifact_repo` input, and `PUBLIC_ARTIFACT_REPO_TOKEN` required for publication.
 - M7-5 public release URL smoke verifies artifact plus `SHA256SUMS` before setup/daily/today; current evidence is local loopback only until real public URLs exist.
 - M7-6 GitHub Actions run `26619701714` verifies the separate artifact repo workflow path in no-publication mode with artifact upload and skipped release publication.
-- M7-7 publication preflight is in place and currently reports `publicationReady=false`: owner decision is not approved and `bborok1234/english-learning-harness-public` is not visible to `gh repo view`.
+- M7-7 publication preflight now reports the source repository is `PUBLIC`, `publicationReady=true`, and the next proof is public clone smoke.
 - M7-8 public artifact install smoke verifies a checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated `CODEX_HOME`.
 - M7-9 owner approval packet smoke now prepares a non-publishing public source repository visibility-change packet and the required #83 public clone proof command.
 - M7-10 distribution policy branches public release requirements by chosen surface: public source repo requires public clone smoke, while artifact release remains a fallback path.
 - M7-11 open-source readiness smoke verifies MIT license, contribution docs, code of conduct, security/support/governance docs, issue templates, PR template, README public clone framing, policy alignment, and absence of obvious local secret files.
 - M7-12 git history audit smoke scans committed history for obvious secret patterns, forbidden local/runtime paths, and oversized accidental artifacts before repository visibility changes.
+- M7-13 public source clone smoke verifies unauthenticated clone from `https://github.com/bborok1234/english-learning-harness.git` plus setup, daily, today, weekly, home, and export from a disposable clone.
 
 What is not started:
 - Real user validation.
@@ -99,7 +100,7 @@ What failed review:
 - Native hook runtime is not proven end-to-end through Codex; direct hook invocation is not enough.
 - PH1-FIX-1 native hook proof remains blocked, but the product no longer depends on it for first use because the explicit command-wrapper path is implemented and verified.
 - Public marketplace distribution, real learner validation, and native hook runtime are still outside the local first-usable claim.
-- Public release publication remains blocked on #90; Codex should not publish a release asset without explicit owner approval.
+- Public source release visibility is now live; artifact release remains optional and secondary.
 - M7-D decision gate smoke verifies `owner_decision_required`, `public_artifact_repository_release`, and no Codex publication without explicit approval.
 - M7-2 handoff smoke verifies checksum, manifest, tarball contents, forbidden path exclusions, and no-publication boundary.
 - M7-3 handoff smoke verifies public README download, checksum, setup, daily, today, and public URL smoke guidance.
@@ -110,8 +111,9 @@ What failed review:
 - M7-8 install smoke verifies local marketplace plugin install from the downloaded public artifact path; public Git-backed plugin install remains unclaimed.
 - M7-9 approval smoke verifies repository visibility remains unchanged while giving the owner the exact public-source visibility command and required #83 public clone proof.
 - M7-10 policy smoke verifies the default public clone smoke is required for the public source repository path, while artifact release is optional fallback.
-- M7-11 readiness smoke reports `visibilityReady=false` only because GitHub repository visibility is still `PRIVATE`.
+- M7-11 readiness smoke now reports `visibilityReady=true` after the repository was made public.
 - M7-12 history audit reports zero forbidden historical paths, zero secret-like historical content findings, and zero large historical objects.
+- M7-13 public clone smoke verifies `publicAccessStatus=public` and `cloneGitStatusClean=true`.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.
@@ -263,7 +265,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 ### Phase 7 Public Distribution Release
 
-- [~] M7-1: Prove unauthenticated public distribution path (#83). Artifact, hosted-download mechanics, and release workflow wiring pass; public hosting/download still needs a real public URL.
+- [x] M7-1: Prove unauthenticated public distribution path (#83). Public source clone-to-learn passes from the now-public repository.
 
 ## SSOT Structure
 

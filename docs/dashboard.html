@@ -406,9 +406,9 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "M7 Public Distribution active",
-    "status": "Next: open-source visibility change, then prove public clone in #83",
+    "status": "Public source clone-to-learn is verified; close #83/#90",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M6 private beta is closed historically, but the product direction is now open source. M7 now targets this source repository as the public distribution surface. OSS community files and readiness smoke pass; #83 remains open until the repository is public and default public clone smoke passes."
+    "summary": "M6 private beta is closed historically, and M7 now verifies the open-source public source repository path. The repository is PUBLIC, OSS readiness/history audits pass, and default public clone-to-learn smoke passes. #83/#90 can close; remaining unclaimed areas are public Git-backed plugin install, realtime voice, and real learner outcomes."
   },
   "ssot": [
     {
@@ -548,19 +548,19 @@
     {
       "label": "Current stage",
       "value": "M7 active",
-      "detail": "#90 public source approved pending visibility; #83 public clone proof",
+      "detail": "public source clone proof passed; close #83/#90",
       "tone": "amber"
     },
     {
       "label": "Next block",
-      "value": "#90",
-      "detail": "make source repo public after readiness audit",
-      "tone": "red"
+      "value": "#83/#90",
+      "detail": "close public distribution issues after evidence update",
+      "tone": "green"
     },
     {
       "label": "GitHub plan",
       "value": "43 issues",
-      "detail": "OSS readiness #112 closed; history audit #114 in progress",
+      "detail": "OSS readiness/history audit done; public clone proof passed",
       "tone": "green"
     },
     {
@@ -1553,13 +1553,14 @@
         {
           "id": "M7-1",
           "title": "#83 public source clone proof",
-          "why": "오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다. 아직 repo visibility가 PRIVATE이라 public clone proof가 없다.",
-          "done": "open-source readiness smoke가 통과했으므로 다음은 repo visibility를 public으로 바꾼 뒤 default public clone smoke를 실행하는 것이다.",
-          "verification": "`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 통과해야 한다.",
+          "why": "오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다.",
+          "done": "repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.",
+          "verification": "`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.",
           "files": [
             "README.md",
             "scripts/phase6-public-clean-clone-smoke.mjs",
-            "scripts/phase7-open-source-readiness-smoke.mjs"
+            "scripts/phase7-open-source-readiness-smoke.mjs",
+            "docs/phase-7-evidence/M7-13-public-source-release.md"
           ]
         }
       ]
@@ -1573,8 +1574,8 @@
           "id": "M7-D",
           "title": "#90 public release surface decision",
           "why": "public source repo 공개는 외부 공개 action이라, readiness audit 이후 visibility change와 public clone proof가 필요하다.",
-          "done": "open-source readiness files와 visibility-change approval packet은 준비됐다. 남은 blocker는 source repository visibility가 아직 PRIVATE인 것이다.",
-          "verification": "publication preflight가 sourceRepoVisibility=PUBLIC, publicationReady=true가 되려면 repo visibility change 후 public clone smoke가 필요하다.",
+          "done": "public source repository surface가 선택됐고 repository visibility가 PUBLIC으로 전환됐다.",
+          "verification": "`node scripts/phase7-publication-preflight.mjs`가 sourceRepoVisibility=PUBLIC, publicationReady=true, canPublishNow=true, blockers=[]를 반환한다.",
           "files": [
             "docs/distribution-policy.json",
             "scripts/phase7-publication-preflight.mjs",
@@ -1591,10 +1592,10 @@
       "cards": [
         {
           "id": "R000",
-          "title": "Real public URL is still unproven",
-          "why": "Hosted-download mechanics pass locally, but no public artifact URL has been verified without private access.",
-          "done": "#90 must select and authorize a public distribution surface before #83 can run against a real URL.",
-          "verification": "node scripts/phase7-hosted-artifact-smoke.mjs currently reports local_loopback_only; public_url_candidate is required to close #83."
+          "title": "Public Git-backed plugin install remains unproven",
+          "why": "Open-source clone-to-learn is proven, but Codex Git-backed plugin install is a separate claim.",
+          "done": "Keep local marketplace install as the documented plugin path until a separate public Git-backed install smoke exists.",
+          "verification": "phase6-marketplace-install-smoke and public artifact install smoke cover local marketplace only."
         },
         {
           "id": "R001",
@@ -1932,8 +1933,8 @@
     },
     {
       "name": "M7-7 publication preflight",
-      "status": "Blocked",
-      "detail": "preflight passes but reports publicationReady=false because source repository visibility is still PRIVATE"
+      "status": "Pass",
+      "detail": "preflight reports source repository PUBLIC with publicationReady=true and no blockers"
     },
     {
       "name": "M7-8 public artifact install",
@@ -1952,13 +1953,18 @@
     },
     {
       "name": "M7-11 open-source readiness",
-      "status": "Blocked",
-      "detail": "community files and policy pass; only blocker is repository visibility still PRIVATE"
+      "status": "Pass",
+      "detail": "community files, policy, and repository visibility pass for open-source launch"
     },
     {
       "name": "M7-12 git history audit",
       "status": "Pass",
       "detail": "git history audit reports zero forbidden paths, secret-like content findings, and oversized objects"
+    },
+    {
+      "name": "M7-13 public source clone",
+      "status": "Pass",
+      "detail": "public clone smoke passes from the now-public source repository"
     }
   ],
   "commands": [
@@ -2173,12 +2179,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M6 private beta is closed historically, but the product direction is now open source. M7 now targets this source repository as the public distribution surface. OSS community files and readiness smoke pass; #83 remains open until the repository is public and default public clone smoke passes.</p>
+        <p class="summary">M6 private beta is closed historically, and M7 now verifies the open-source public source repository path. The repository is PUBLIC, OSS readiness/history audits pass, and default public clone-to-learn smoke passes. #83/#90 can close; remaining unclaimed areas are public Git-backed plugin install, realtime voice, and real learner outcomes.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
         M7 Public Distribution active<br>
-        Next: open-source visibility change, then prove public clone in #83
+        Public source clone-to-learn is verified; close #83/#90
       </div>
     </header>
 
@@ -2192,17 +2198,17 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
           <div class="metric-value">M7 active</div>
-          <p>#90 public source approved pending visibility; #83 public clone proof</p>
+          <p>public source clone proof passed; close #83/#90</p>
         </article>
-        <article class="metric-card tone-red">
+        <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
-          <div class="metric-value">#90</div>
-          <p>make source repo public after readiness audit</p>
+          <div class="metric-value">#83/#90</div>
+          <p>close public distribution issues after evidence update</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
           <div class="metric-value">43 issues</div>
-          <p>OSS readiness #112 closed; history audit #114 in progress</p>
+          <p>OSS readiness/history audit done; public clone proof passed</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -2235,12 +2241,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-1</strong>
-                <span>README.md, scripts/phase6-public-clean-clone-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs</span>
+                <span>README.md, scripts/phase6-public-clean-clone-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, docs/phase-7-evidence/M7-13-public-source-release.md</span>
               </div>
               <h3>#83 public source clone proof</h3>
-              <div class="card-row"><b>왜</b><p>오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다. 아직 repo visibility가 PRIVATE이라 public clone proof가 없다.</p></div>
-              <div class="card-row"><b>완료</b><p>open-source readiness smoke가 통과했으므로 다음은 repo visibility를 public으로 바꾼 뒤 default public clone smoke를 실행하는 것이다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 통과해야 한다.</p></div>
+              <div class="card-row"><b>왜</b><p>오픈소스 방향에서는 현재 source repo 자체가 public distribution surface다.</p></div>
+              <div class="card-row"><b>완료</b><p>repo visibility를 PUBLIC으로 전환했고 default public clone smoke가 setup/daily/today/weekly/home/export를 disposable clone에서 통과했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase6-public-clean-clone-smoke.mjs`가 ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE 없이 repositoryVisibility=PUBLIC, publicAccessStatus=public, cloneGitStatusClean=true를 반환한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2249,8 +2255,8 @@
               </div>
               <h3>#90 public release surface decision</h3>
               <div class="card-row"><b>왜</b><p>public source repo 공개는 외부 공개 action이라, readiness audit 이후 visibility change와 public clone proof가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>open-source readiness files와 visibility-change approval packet은 준비됐다. 남은 blocker는 source repository visibility가 아직 PRIVATE인 것이다.</p></div>
-              <div class="card-row"><b>검증</b><p>publication preflight가 sourceRepoVisibility=PUBLIC, publicationReady=true가 되려면 repo visibility change 후 public clone smoke가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>public source repository surface가 선택됐고 repository visibility가 PUBLIC으로 전환됐다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-publication-preflight.mjs`가 sourceRepoVisibility=PUBLIC, publicationReady=true, canPublishNow=true, blockers=[]를 반환한다.</p></div>
             </article>
         </div>
       </section>
@@ -2334,10 +2340,10 @@
               <div class="work-meta">
                 <strong>R000</strong>
               </div>
-              <h3>Real public URL is still unproven</h3>
-              <div class="card-row"><b>왜</b><p>Hosted-download mechanics pass locally, but no public artifact URL has been verified without private access.</p></div>
-              <div class="card-row"><b>완료</b><p>#90 must select and authorize a public distribution surface before #83 can run against a real URL.</p></div>
-              <div class="card-row"><b>검증</b><p>node scripts/phase7-hosted-artifact-smoke.mjs currently reports local_loopback_only; public_url_candidate is required to close #83.</p></div>
+              <h3>Public Git-backed plugin install remains unproven</h3>
+              <div class="card-row"><b>왜</b><p>Open-source clone-to-learn is proven, but Codex Git-backed plugin install is a separate claim.</p></div>
+              <div class="card-row"><b>완료</b><p>Keep local marketplace install as the documented plugin path until a separate public Git-backed install smoke exists.</p></div>
+              <div class="card-row"><b>검증</b><p>phase6-marketplace-install-smoke and public artifact install smoke cover local marketplace only.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2498,16 +2504,12 @@
           <tbody>
 
             <tr>
-              <td>M7-5 checksum URL smoke</td>
-              <td><strong>Pass</strong><span>public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist</span></td>
-            </tr>
-            <tr>
               <td>M7-6 no-publish workflow run</td>
               <td><strong>Pass</strong><span>GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication</span></td>
             </tr>
             <tr>
               <td>M7-7 publication preflight</td>
-              <td><strong>Blocked</strong><span>preflight passes but reports publicationReady=false because source repository visibility is still PRIVATE</span></td>
+              <td><strong>Pass</strong><span>preflight reports source repository PUBLIC with publicationReady=true and no blockers</span></td>
             </tr>
             <tr>
               <td>M7-8 public artifact install</td>
@@ -2523,11 +2525,15 @@
             </tr>
             <tr>
               <td>M7-11 open-source readiness</td>
-              <td><strong>Blocked</strong><span>community files and policy pass; only blocker is repository visibility still PRIVATE</span></td>
+              <td><strong>Pass</strong><span>community files, policy, and repository visibility pass for open-source launch</span></td>
             </tr>
             <tr>
               <td>M7-12 git history audit</td>
               <td><strong>Pass</strong><span>git history audit reports zero forbidden paths, secret-like content findings, and oversized objects</span></td>
+            </tr>
+            <tr>
+              <td>M7-13 public source clone</td>
+              <td><strong>Pass</strong><span>public clone smoke passes from the now-public source repository</span></td>
             </tr>
           </tbody>
         </table>
@@ -3259,7 +3265,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 65개 보기</summary>
+        <summary>전체 검증 66개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3502,7 +3508,7 @@
             </tr>
             <tr>
               <td>M7-7 publication preflight</td>
-              <td><strong>Blocked</strong><span>preflight passes but reports publicationReady=false because source repository visibility is still PRIVATE</span></td>
+              <td><strong>Pass</strong><span>preflight reports source repository PUBLIC with publicationReady=true and no blockers</span></td>
             </tr>
             <tr>
               <td>M7-8 public artifact install</td>
@@ -3518,11 +3524,15 @@
             </tr>
             <tr>
               <td>M7-11 open-source readiness</td>
-              <td><strong>Blocked</strong><span>community files and policy pass; only blocker is repository visibility still PRIVATE</span></td>
+              <td><strong>Pass</strong><span>community files, policy, and repository visibility pass for open-source launch</span></td>
             </tr>
             <tr>
               <td>M7-12 git history audit</td>
               <td><strong>Pass</strong><span>git history audit reports zero forbidden paths, secret-like content findings, and oversized objects</span></td>
+            </tr>
+            <tr>
+              <td>M7-13 public source clone</td>
+              <td><strong>Pass</strong><span>public clone smoke passes from the now-public source repository</span></td>
             </tr>
             </tbody>
           </table>

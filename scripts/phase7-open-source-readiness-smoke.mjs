@@ -112,7 +112,10 @@ function main() {
   assert(!readme.includes("From a fresh private beta / invited-user clone"), "README still frames quick start as private beta");
 
   const policy = JSON.parse(readFileSync(resolve(repoRoot, "docs/distribution-policy.json"), "utf8"));
-  assert(policy.currentPolicy === "open-source-prep", "policy should be open-source-prep");
+  assert(
+    ["open-source-prep", "open-source-public"].includes(policy.currentPolicy),
+    "policy should be open-source-prep or open-source-public",
+  );
   assert(policy.releaseClaim === "public source clone-to-learn", "release claim should be public source clone-to-learn");
   assert(policy.publicReleaseDecision.recommendedSurface === "public_source_repository", "recommended surface should be public source repository");
   assert(policy.repositoryVisibilityRequired === "public", "repository visibility requirement should be public");
