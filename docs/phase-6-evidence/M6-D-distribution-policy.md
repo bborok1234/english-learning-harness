@@ -21,12 +21,14 @@ This means an invited GitHub collaborator with repository access can clone the r
 
 Unauthenticated public distribution is deferred to M7 issue #83.
 
-M7 must prove one of:
+M7 must prove one chosen public surface:
 
 - public repository clone, or
 - separate public distribution artifact.
 
-It must also add a public install smoke before documenting Git-backed plugin install.
+For a public source repository path, M7 must run the default public clone smoke without `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE`.
+
+For the current artifact-first recommendation, M7 must publish the artifact and `SHA256SUMS` only after #90 owner approval, then run `scripts/phase7-public-release-url-smoke.mjs` with real `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL` and `ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL`. Git-backed plugin install remains unclaimed unless a separate public Git-backed install smoke passes.
 
 ## Verification
 
@@ -36,7 +38,9 @@ It must also add a public install smoke before documenting Git-backed plugin ins
 - release claim is `invited-user clone-to-learn`.
 - public release status is `deferred`.
 - blocked claims include unauthenticated public HTTPS clone.
-- public release requirements include the default public clone smoke.
+- public release requirements are grouped by chosen surface.
+- public source repository requirements include the default public clone smoke.
+- public artifact repository requirements include the checksum-aware public release URL smoke and preserve the local marketplace install boundary.
 
 ## Claim Boundary
 

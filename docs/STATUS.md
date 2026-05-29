@@ -86,6 +86,7 @@ What is complete:
 - M7-7 publication preflight is in place and currently reports `publicationReady=false`: owner decision is not approved and `bborok1234/english-learning-harness-public` is not visible to `gh repo view`.
 - M7-8 public artifact install smoke verifies a checksum-verified downloaded artifact can package a local marketplace and install the plugin into isolated `CODEX_HOME`.
 - M7-9 owner approval packet smoke prepares a non-publishing packet with the exact approval-time workflow command, manual fallback, forbidden-before-approval list, and checksum-aware #83 proof command.
+- M7-10 distribution policy now branches public release requirements by chosen surface: public source repo requires public clone smoke, while the current artifact-first path requires real artifact + `SHA256SUMS` URL smoke.
 
 What is not started:
 - Real user validation.
@@ -106,6 +107,7 @@ What failed review:
 - M7-7 preflight verifies policy/workflow/handoff readiness while keeping `canPublishNow=false` until owner approval and public artifact repo visibility exist.
 - M7-8 install smoke verifies local marketplace plugin install from the downloaded public artifact path; public Git-backed plugin install remains unclaimed.
 - M7-9 approval smoke verifies publication remains non-authorized while giving the owner a concrete approval packet for #90 and the required post-publication proof for #83.
+- M7-10 policy smoke verifies the default public clone smoke is required only for the public source repository path, not the artifact-first path.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.

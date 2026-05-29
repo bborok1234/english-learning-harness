@@ -57,9 +57,28 @@ function main() {
     policy.blockedClaims.some((claim) => claim.includes("Unauthenticated public HTTPS clone")),
     "blocked claims should include unauthenticated public clone",
   );
+  assert(policy.publicReleaseRequirements?.common, "public release requirements should be grouped by surface");
   assert(
-    policy.publicReleaseRequirements.some((requirement) => requirement.includes("default public clone smoke")),
-    "public release requirements should include default public clone smoke",
+    policy.publicReleaseRequirements.common.some((requirement) => requirement.includes("Resolve #90")),
+    "common public release requirements should include #90 decision",
+  );
+  assert(
+    policy.publicReleaseRequirements.publicSourceRepository.some((requirement) =>
+      requirement.includes("default public clone smoke"),
+    ),
+    "public source repository requirements should include default public clone smoke",
+  );
+  assert(
+    policy.publicReleaseRequirements.publicArtifactRepositoryRelease.some((requirement) =>
+      requirement.includes("phase7-public-release-url-smoke.mjs"),
+    ),
+    "public artifact repository requirements should include checksum-aware public release URL smoke",
+  );
+  assert(
+    policy.publicReleaseRequirements.publicArtifactRepositoryRelease.some((requirement) =>
+      requirement.includes("checksum-verified downloaded artifact"),
+    ),
+    "public artifact repository requirements should preserve local marketplace install boundary",
   );
 
   if (repo.isPrivate === true) {
@@ -82,6 +101,11 @@ function main() {
         repositoryIsPrivate: repo.isPrivate,
         approvedClaims: policy.approvedClaims,
         blockedClaims: policy.blockedClaims,
+        recommendedSurface: policy.publicReleaseDecision.recommendedSurface,
+        publicArtifactProof:
+          policy.publicReleaseRequirements.publicArtifactRepositoryRelease.find((requirement) =>
+            requirement.includes("phase7-public-release-url-smoke.mjs"),
+          ),
         claimBoundary: policy.claimBoundary,
       },
       null,
