@@ -130,7 +130,8 @@ M4 Multimodal Interaction Lab milestone is closed with `open_issues=0`.
 Current implementation target:
 
 ```bash
-gh issue view 62
+gh issue view 63
 ```
 
 M5 remains open. Epic #9 has been split into executable issues #62-#66.
+M5-1 is implemented on the PR branch and waits for PR review/merge evidence before closing #62.
