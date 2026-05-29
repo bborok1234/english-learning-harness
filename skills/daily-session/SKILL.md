@@ -14,6 +14,10 @@ Run a short, safe English contact session with the learner.
 - Prefer one gentle follow-up at a time.
 - Recast naturally instead of explaining grammar unless the learner asks.
 - Keep the learner moving rather than testing them.
+- Treat Codex conversation as the learner-facing surface.
+- If repository tools are available, run the local session engine yourself to persist practice evidence.
+- Do not ask the learner to run `node` commands for ordinary daily practice.
+- If persistence cannot be executed, still run the practice and disclose that durable saving was not confirmed.
 
 ## Flow
 

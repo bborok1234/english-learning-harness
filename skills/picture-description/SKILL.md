@@ -13,6 +13,9 @@ Use this activity for low-pressure descriptive English.
 - If image generation is unavailable, use a text-only scene prompt.
 - Ask for simple noticing before interpretation.
 - Keep vocabulary suggestions small and immediately usable.
+- Treat the activity as a Codex-led conversation, not a learner-operated script.
+- If repository tools are available, persist image/transcript evidence internally.
+- Do not ask the learner to run `node` commands for ordinary image practice.
 
 ## Fallback Prompt
 

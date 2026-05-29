@@ -1,50 +1,70 @@
 # English Learning Harness
 
-Open-source, local-first Codex harness that turns a cloned repository into a daily English speaking practice partner.
+Open-source, local-first Codex harness that turns Codex into a daily English speaking practice partner.
 
 North star: **AI 파트너와 편안하게 영어로 대화하는 능력.**
 
-If you already use Codex for coding, this project asks a simple question: can the same agentic loop help you practice English every day, remember what you said, and show whether your spoken English is becoming easier, clearer, and more reusable?
+This is not a learner-facing Node CLI product. The learner-facing surface is **Codex conversation inside this repository**: you talk to Codex, Codex runs the local learning engine internally, and your practice history stays on your machine.
 
-This first usable version is text/transcription-first. It is designed for real daily practice, transcript-backed voice import, personal phrase review, and visible progress tracking. Realtime voice conversation is not the default path yet because the current local Codex CLI does not expose a stable realtime voice command.
+The first usable version is text/transcription-first. Realtime voice conversation is not the default path yet because the current local Codex CLI does not expose a stable realtime voice command.
 
-## Try It In 5 Minutes
+## Start In Codex
 
-From a fresh clone:
+1. Clone or download this repository.
+2. Open the folder in Codex.
+3. Tell Codex:
 
-```bash
-git clone https://github.com/bborok1234/english-learning-harness.git
-cd english-learning-harness
-node scripts/english-learning-harness.mjs setup \
-  --name "Jieun" \
-  --motivation "I want to feel less frozen when speaking English." \
-  --correction-style "gentle recast first"
-node scripts/english-learning-harness.mjs daily --json
-node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
-node scripts/english-learning-harness.mjs weekly --json
-node scripts/english-learning-harness.mjs home --json
-node scripts/english-learning-harness.mjs export --json
+```text
+Use this repository as my English Learning Harness.
+Set me up as a learner, then run today's 5-minute speaking practice.
+Do not ask me to run Node commands; use the repo's local engine internally when you need to save progress.
+
+My name is Jieun.
+I freeze when I need to speak English.
+I want gentle corrections and practical phrases I can reuse.
 ```
 
-The most important first command is `today`. Give it one or more English sentences and it creates a practice session, saves a mini mirror, updates your progress, and feeds future review.
+Codex should handle setup, practice, mini mirror, review memory, and progress files for you. The ordinary learner action is to answer Codex in English, not to operate scripts.
 
-```bash
-node scripts/english-learning-harness.mjs today \
-  --say "I like coffee." \
-  --say "Today morning coffee."
+## Try These Prompts
+
+Use the harness by talking to Codex:
+
+```text
+오늘 5분 영어 회화 연습 시작하자. 너무 어렵게 하지 말고 한 질문씩 해줘.
 ```
 
-Ask the cockpit what to do next:
-
-```bash
-node scripts/english-learning-harness.mjs daily --json
+```text
+어제 내가 틀렸던 표현을 하나만 다시 연습시켜줘.
 ```
 
-Generate your learner home page:
-
-```bash
-node scripts/english-learning-harness.mjs home --json
+```text
+카페에서 주문하는 상황으로 연습하자. 내가 막히면 쓸 수 있는 rescue phrase도 줘.
 ```
+
+```text
+방금 연습한 걸 mini mirror로 정리해줘. 내가 실제로 다음에 써볼 한 문장만 남겨줘.
+```
+
+```text
+이번 주 내 영어 회화 진행 상황을 보여줘. 좋아진 점, 반복되는 막힘, 다음 focus를 알려줘.
+```
+
+## What Codex Does For You
+
+When the harness is used correctly, Codex is the tutor and operator:
+
+- starts or refreshes your learner profile
+- asks one low-pressure question at a time
+- keeps correction gentle while you are speaking
+- saves session evidence locally
+- remembers useful phrases and repair attempts
+- suggests due review and next scenarios
+- generates a mini mirror after practice
+- generates a weekly mirror from local evidence
+- can create a local learner home page for your journey
+
+The scripts in this repo are the engine underneath that experience. They are for Codex, maintainers, and verification. They are not the product surface a learner should have to operate by hand.
 
 ## Who This Is For
 
@@ -55,15 +75,16 @@ node scripts/english-learning-harness.mjs home --json
 
 This is not a course catalog, a streak app, or a generic chat UI. It is a local practice harness that helps you produce English, keep the useful pieces, and return tomorrow with context.
 
-## What You Practice
+## The Daily Learning Loop
 
 The harness is built around a small daily loop:
 
-1. Run `daily` to see what is due, what scenario fits you, and what command to run.
-2. Run `today` with short spoken-style English or a transcript.
-3. Read the mini mirror: what you tried, what worked, what to repair next.
-4. Review saved phrases so usable language comes back later.
-5. Run `weekly` to see the larger pattern of your practice.
+1. Codex checks your local learner memory and suggests today's focus.
+2. You answer a short, spoken-style prompt in English.
+3. Codex gives one gentle follow-up at a time.
+4. Codex ends with a mini mirror: what you communicated, one natural recast, one next phrase.
+5. Useful phrases and recurring trouble spots come back in later review.
+6. A weekly mirror shows the larger pattern of your practice.
 
 The learning target is not "perfect English today." The target is more comfortable output: starting faster, repairing mistakes, asking follow-up questions, reusing phrases, and seeing your own progress from evidence.
 
@@ -72,14 +93,14 @@ The learning target is not "perfect English today." The target is more comfortab
 - **Low-stakes output reps:** short sessions make it easy to speak or type imperfect English without waiting for a class.
 - **Gentle correction:** the tutor policy favors recasts, repair prompts, and next attempts instead of overwhelming grammar dumps.
 - **Personal phrase memory:** useful phrases and repaired patterns become review material.
-- **Scenario practice:** the harness suggests daily scenarios based on your learner model and history.
+- **Scenario practice:** Codex suggests daily scenarios based on your learner model and history.
 - **Mini mirrors:** every session produces a concise reflection so you can see what improved and what to try next.
 - **Weekly mirrors:** the weekly view turns isolated sessions into a learning journey.
 - **Multimodal-ready evidence:** text, transcript-backed voice, and image information-gap events share a common interaction-event shape.
 
 ## What Gets Tracked
 
-By default learner-owned files live here:
+Learner-owned files live locally by default:
 
 ```text
 ~/english-learning/
@@ -95,8 +116,6 @@ By default learner-owned files live here:
     └── weekly/
 ```
 
-For testing, demos, or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learner-root`.
-
 Tracked evidence includes:
 
 - profile and motivation
@@ -108,19 +127,59 @@ Tracked evidence includes:
 - weekly mirror summaries
 - local validation exports
 
-## Daily Commands
+## What You Should Feel After The First Session
 
-Set up or repair the local learner directory:
+After one Codex-led session, you should have:
+
+- a learner profile under your local learner root
+- a saved practice artifact
+- a progress file with updated session metrics
+- a mini mirror describing the session
+- a next practice suggestion
+- optional local `home.html` journey view
+
+The experience should feel like: speak or type a little, get a useful mirror, keep the phrase, return tomorrow.
+
+## Privacy And Local Data
+
+The default learning state is local to your machine under `~/english-learning/`. Source media paths are treated as local-only in exported validation packs.
+
+Do not put private learner journals, audio, transcripts, or personal details in GitHub issues unless you intentionally redact and share them.
+
+## Current Boundaries
+
+- Realtime voice conversation is not claimed as the default path yet.
+- Accent scoring is not implemented.
+- Image practice stores local prompt context and learner output; it does not perform full computer-vision tutoring by itself.
+- Public Git-backed install remains unverified and should not be documented as the default install path yet.
+- Long-term real learner improvement still needs real multi-day human use, not only fixture smokes.
+
+## Codex Skill Surface
+
+This repository ships Codex skill instructions for:
+
+- `english-onboarding`
+- `english-daily-session`
+- `english-mini-mirror`
+- `english-picture-description`
+
+The skill contract is: keep the learner in conversation, use the local engine internally for durable state when available, and do not turn ordinary learning into a command-line chore.
+
+## Internal Engine For Maintainers
+
+The command wrapper is the local persistence and verification engine. It is useful for maintainers, smoke tests, and debugging. It is not the intended learner-facing product surface.
+
+For testing or a separate learner, set `ENGLISH_LEARNING_HOME` or pass `--learner-root`.
+
+Internal setup and practice commands:
 
 ```bash
 node scripts/english-learning-harness.mjs setup
-node scripts/english-learning-harness.mjs setup --repair
-```
-
-Run today's text-first daily session:
-
-```bash
+node scripts/english-learning-harness.mjs daily --json
 node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
+node scripts/english-learning-harness.mjs weekly --json
+node scripts/english-learning-harness.mjs home --json
+node scripts/english-learning-harness.mjs export --json
 ```
 
 Run from a transcript file:
@@ -138,8 +197,6 @@ node scripts/english-learning-harness.mjs voice \
   --json
 ```
 
-The voice path stores transcript-backed interaction evidence. It does not score accent or prove realtime conversation.
-
 Run an image information-gap practice from a local image path:
 
 ```bash
@@ -150,8 +207,6 @@ node scripts/english-learning-harness.mjs image \
   --say "The cup is on the left." \
   --json
 ```
-
-The image path is local prompt context only; the learner output is the learning evidence.
 
 Review due personal phrases:
 
@@ -169,12 +224,6 @@ node scripts/english-learning-harness.mjs vault --json
 node scripts/english-learning-harness.mjs weekly --json
 ```
 
-Export a local evidence pack:
-
-```bash
-node scripts/english-learning-harness.mjs export --json
-```
-
 Check health and status:
 
 ```bash
@@ -183,46 +232,13 @@ node scripts/english-learning-harness.mjs status --json
 node scripts/validate-progress.mjs ~/english-learning/progress.json
 ```
 
-## What You Should Feel After The First Run
-
-After setup and one `today` session, you should have:
-
-- a learner profile under your local learner root
-- a saved practice artifact
-- a progress file with updated session metrics
-- a mini mirror describing the session
-- a next-step command from the daily cockpit
-- a generated `home.html` view you can open locally
-
-The experience is intentionally small at first: speak or type a little, get a mirror, keep the phrase, return tomorrow.
-
-## Privacy And Local Data
-
-The default learning state is local to your machine under `~/english-learning/`. Source media paths are treated as local-only in exported validation packs.
-
-Do not put private learner journals, audio, transcripts, or personal details in GitHub issues unless you intentionally redact and share them. Use `ENGLISH_LEARNING_HOME` when you want a disposable learner root for testing.
-
-## Current Boundaries
-
-- Realtime voice conversation is not claimed as the default path yet.
-- Accent scoring is not implemented.
-- Image practice stores local prompt context and learner output; it does not perform full computer-vision tutoring by itself.
-- Public Git-backed install remains unverified and should not be documented as the default install path yet.
-- Long-term real learner improvement still needs real multi-day human use, not only fixture smokes.
-
 ## Native Codex Hooks
 
-Native hooks are optional. The reliable first-use path is the explicit command wrapper:
-
-```bash
-node scripts/english-learning-harness.mjs setup
-node scripts/english-learning-harness.mjs today --say "I want to practice today."
-node scripts/english-learning-harness.mjs health
-```
+Native hooks are optional and not required for the learner-facing Codex conversation path.
 
 P0-2 did not prove automatic plugin-scoped hook execution for this plugin, and PH1-FIX-1 found Codex hook trust-state limitations. Use native hooks only after accepting that hook trust-state may require manual intervention in the local Codex environment.
 
-Stop hook contract: the Stop hook records a marker and emits context only. Session finalization, journal writes, artifacts, metrics, vocabulary, and review queue updates are owned by `today`.
+Stop hook contract: the Stop hook records a marker and emits context only. Session finalization, journal writes, artifacts, metrics, vocabulary, and review queue updates are owned by the internal session engine.
 
 Print or install the hook config:
 
@@ -237,7 +253,7 @@ The generated config wires `SessionStart`, `UserPromptSubmit`, `PreToolUse`, `St
 
 ## Local Marketplace Package
 
-The default learner path is the public source clone above. Local marketplace packaging is available for isolated plugin install testing:
+Local marketplace packaging is available for isolated plugin install testing:
 
 ```bash
 node scripts/package-local-marketplace.mjs --target tmp/english-learning-marketplace
@@ -296,7 +312,7 @@ ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL="https://example.com/SHA256SUMS" \
   node scripts/phase7-public-release-url-smoke.mjs
 ```
 
-The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a release when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. This is secondary to the open-source repository path.
+The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload a release asset when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. This is secondary to the open-source repository path.
 
 For a separate public artifact repository handoff, generate the bundle locally:
 
@@ -315,36 +331,14 @@ node scripts/prepare-public-artifact-handoff.mjs --target tmp/public-artifact-ha
 
 ## Maintainer Verification
 
-Run the learner-facing README audit:
-
 ```bash
 node scripts/phase7-learner-readme-smoke.mjs
-```
-
-Run the core wrapper smoke:
-
-```bash
 node scripts/phase1-command-wrapper-smoke.mjs
-```
-
-Run the current public release checks:
-
-```bash
 node scripts/phase6-public-clean-clone-smoke.mjs
 node scripts/phase6-marketplace-install-smoke.mjs
 node scripts/phase7-open-source-readiness-smoke.mjs
 node scripts/phase7-open-source-history-audit-smoke.mjs
 node scripts/phase7-publication-preflight.mjs
-```
-
-Run scaffold/package smoke:
-
-```bash
 node scripts/phase1-scaffold-smoke.mjs
-```
-
-Regenerate the shared dashboard after changing `docs/project-state.json`:
-
-```bash
 node scripts/generate-dashboard.mjs
 ```

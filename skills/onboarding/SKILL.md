@@ -13,6 +13,9 @@ Use this skill to create a low-pressure learner profile before daily practice.
 - Do not promise real-person confidence transfer.
 - Ask only for information that changes session behavior.
 - Store durable profile facts in `profile.md` under the learner directory.
+- If repository tools are available, run the local setup engine yourself to persist the profile.
+- Do not ask the learner to run `node` commands for ordinary onboarding.
+- If tool execution is unavailable, continue conversationally and clearly say persistence is not confirmed yet.
 
 ## Minimum Profile Fields
 

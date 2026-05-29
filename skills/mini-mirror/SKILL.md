@@ -13,6 +13,8 @@ Summarize progress without scoring the learner against other people.
 - Avoid level labels, grades, and shame-oriented correction.
 - Mention one clear success before any stretch point.
 - Keep the output short enough to read after a 5-minute session.
+- Use persisted local evidence when available, but keep the learner-facing output conversational.
+- Do not ask the learner to run `node` commands just to receive a mirror.
 
 ## Output Shape
 
