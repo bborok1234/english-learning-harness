@@ -93,4 +93,18 @@ M3 epic #6 is closed. M3 milestone is closed.
 
 ## M4 Multimodal Interaction Lab
 
-M4 remains open. Before implementation, reconcile epics #7 and #8 into executable tasks tied to `docs/MULTIMODAL-GENAI-PLAN.md`.
+| Issue | Work | Default Decision |
+|---|---|---|
+| #50 | M4-1: Add interaction event graph schema | continue |
+| #49 | M4-2: Persist text sessions as interaction events | continue |
+| #53 | M4-3: Add transcription-first voice event import | continue |
+| #52 | M4-4: Add image information-gap event fixture | continue |
+| #54 | M4-5: Close multimodal-ready event graph gate | continue |
+
+Current implementation target:
+
+```bash
+gh issue view 50
+```
+
+M4 remains open. Epics #7 and #8 are now split into executable issues #50, #49, #53, #52, and #54 tied to `docs/MULTIMODAL-GENAI-PLAN.md`.
