@@ -121,3 +121,16 @@ M4 Multimodal Interaction Lab milestone is closed with `open_issues=0`.
 | Issue | Work | Default Decision |
 |---|---|---|
 | #9 | E9: Seven-day validation protocol | split |
+| #62 | M5-1: Define seven-day validation protocol | continue |
+| #63 | M5-2: Export seven-day pilot evidence pack | continue |
+| #64 | M5-3: Add before-after transcript review rubric | continue |
+| #65 | M5-4: Run target-persona seven-day validation fixture | continue |
+| #66 | M5-5: Close real learning validation gate | continue |
+
+Current implementation target:
+
+```bash
+gh issue view 62
+```
+
+M5 remains open. Epic #9 has been split into executable issues #62-#66.

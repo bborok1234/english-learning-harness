@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M4 Multimodal Interaction Lab closed",
-    "status": "Next: #9 M5 validation protocol split",
+    "stage": "M5 Real Learning Validation active",
+    "status": "Next: #62 M5 validation protocol",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4 is closed: text, voice-transcript, and image-info-gap practice all write validated interaction events into one weekly summary. The next product decision is splitting M5 real learner validation from epic #9."
+    "summary": "M5 has been split into executable issues #62-#66. The next target is #62: define the seven-day validation protocol before building evidence export or rubric tooling."
   },
   "ssot": [
     {
@@ -58,6 +58,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/phase-5-evidence/",
+      "path": "./phase-5-evidence/",
+      "role": "Phase 5 validation evidence notes",
+      "kind": "source"
+    },
+    {
       "label": "docs/LEARNING-ENGINE.md",
       "path": "./LEARNING-ENGINE.md",
       "role": "학습 엔진 설계",
@@ -103,8 +109,8 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M4",
-      "detail": "multimodal event gate implemented",
+      "value": "M5",
+      "detail": "validation issue split created",
       "tone": "green"
     },
     {
@@ -116,13 +122,13 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#9 seven-day validation protocol split",
+      "detail": "#62 seven-day validation protocol",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "27 issues",
-      "detail": "M1/M2/M3/M4 closed; M5 #9 next",
+      "value": "32 issues",
+      "detail": "M1-M4 closed; M5 #62-#66 created",
       "tone": "green"
     },
     {
@@ -758,6 +764,18 @@
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M5-0",
+          "title": "#9 M5 validation epic을 실행 이슈로 분해함",
+          "why": "실제 학습 효과 검증은 하나의 큰 epic으로 진행하면 프로토콜, export, rubric, persona validation, closeout 판단이 섞인다.",
+          "done": "#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.",
+          "verification": "`gh issue list --milestone \"M5 Real Learning Validation\"`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json",
+            "docs/phase-5-evidence/M5-0-validation-issue-split.md"
+          ]
         }
       ]
     },
@@ -768,10 +786,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#9 M5 seven-day validation protocol split",
+          "title": "#62 M5 seven-day validation protocol",
           "why": "M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.",
-          "done": "#9 epic을 executable validation issues로 쪼개고 real learner/persona validation criteria를 dashboard에 올린다.",
-          "verification": "issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.",
+          "done": "7일 pilot schedule, before/after prompt set, comfort/repair/reuse evidence, privacy handoff, stop/pivot rules를 정의한다.",
+          "verification": "protocol doc, dashboard render, and roadmap/learning-engine alignment review가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -787,10 +805,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "First M5 validation executable issue",
-          "why": "#9를 쪼갠 뒤에는 실제 7일 로컬 사용을 검증하는 첫 executable issue가 필요하다.",
-          "done": "M5 issue split 결과에 맞춰 첫 validation smoke or study protocol issue를 선택한다.",
-          "verification": "dashboard current target과 GitHub issue index가 같은 issue number를 가리켜야 한다.",
+          "title": "#63 Seven-day pilot evidence export",
+          "why": "#62 protocol 다음에는 흩어진 local JSON을 사람이 검토 가능한 evidence pack으로 묶어야 한다.",
+          "done": "clean simulated seven-day learner store에서 evidence export command/script를 만든다.",
+          "verification": "seven-day export smoke와 existing seven-day simulation smoke가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1021,6 +1039,11 @@
       "name": "M4-5",
       "status": "Pass",
       "detail": "multimodal gate smoke passes text, voice, and image events in one learner store with weekly event_count=3"
+    },
+    {
+      "name": "M5-0",
+      "status": "Pass",
+      "detail": "M5 epic #9 split into executable issues #62-#66; next target is #62 protocol"
     }
   ],
   "commands": [
@@ -1150,7 +1173,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 9"
+      "command": "gh issue view 62"
     }
   ]
 }

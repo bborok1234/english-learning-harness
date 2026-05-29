@@ -405,10 +405,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M4 Multimodal Interaction Lab closed",
-    "status": "Next: #9 M5 validation protocol split",
+    "stage": "M5 Real Learning Validation active",
+    "status": "Next: #62 M5 validation protocol",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4 is closed: text, voice-transcript, and image-info-gap practice all write validated interaction events into one weekly summary. The next product decision is splitting M5 real learner validation from epic #9."
+    "summary": "M5 has been split into executable issues #62-#66. The next target is #62: define the seven-day validation protocol before building evidence export or rubric tooling."
   },
   "ssot": [
     {
@@ -460,6 +460,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/phase-5-evidence/",
+      "path": "./phase-5-evidence/",
+      "role": "Phase 5 validation evidence notes",
+      "kind": "source"
+    },
+    {
       "label": "docs/LEARNING-ENGINE.md",
       "path": "./LEARNING-ENGINE.md",
       "role": "학습 엔진 설계",
@@ -505,8 +511,8 @@
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "M4",
-      "detail": "multimodal event gate implemented",
+      "value": "M5",
+      "detail": "validation issue split created",
       "tone": "green"
     },
     {
@@ -518,13 +524,13 @@
     {
       "label": "Next block",
       "value": "M5",
-      "detail": "#9 seven-day validation protocol split",
+      "detail": "#62 seven-day validation protocol",
       "tone": "red"
     },
     {
       "label": "GitHub plan",
-      "value": "27 issues",
-      "detail": "M1/M2/M3/M4 closed; M5 #9 next",
+      "value": "32 issues",
+      "detail": "M1-M4 closed; M5 #62-#66 created",
       "tone": "green"
     },
     {
@@ -1160,6 +1166,18 @@
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M5-0",
+          "title": "#9 M5 validation epic을 실행 이슈로 분해함",
+          "why": "실제 학습 효과 검증은 하나의 큰 epic으로 진행하면 프로토콜, export, rubric, persona validation, closeout 판단이 섞인다.",
+          "done": "#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.",
+          "verification": "`gh issue list --milestone \"M5 Real Learning Validation\"`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.",
+          "files": [
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json",
+            "docs/phase-5-evidence/M5-0-validation-issue-split.md"
+          ]
         }
       ]
     },
@@ -1170,10 +1188,10 @@
       "cards": [
         {
           "id": "M5",
-          "title": "#9 M5 seven-day validation protocol split",
+          "title": "#62 M5 seven-day validation protocol",
           "why": "M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.",
-          "done": "#9 epic을 executable validation issues로 쪼개고 real learner/persona validation criteria를 dashboard에 올린다.",
-          "verification": "issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.",
+          "done": "7일 pilot schedule, before/after prompt set, comfort/repair/reuse evidence, privacy handoff, stop/pivot rules를 정의한다.",
+          "verification": "protocol doc, dashboard render, and roadmap/learning-engine alignment review가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json",
@@ -1189,10 +1207,10 @@
       "cards": [
         {
           "id": "M5-1",
-          "title": "First M5 validation executable issue",
-          "why": "#9를 쪼갠 뒤에는 실제 7일 로컬 사용을 검증하는 첫 executable issue가 필요하다.",
-          "done": "M5 issue split 결과에 맞춰 첫 validation smoke or study protocol issue를 선택한다.",
-          "verification": "dashboard current target과 GitHub issue index가 같은 issue number를 가리켜야 한다.",
+          "title": "#63 Seven-day pilot evidence export",
+          "why": "#62 protocol 다음에는 흩어진 local JSON을 사람이 검토 가능한 evidence pack으로 묶어야 한다.",
+          "done": "clean simulated seven-day learner store에서 evidence export command/script를 만든다.",
+          "verification": "seven-day export smoke와 existing seven-day simulation smoke가 통과해야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
@@ -1423,6 +1441,11 @@
       "name": "M4-5",
       "status": "Pass",
       "detail": "multimodal gate smoke passes text, voice, and image events in one learner store with weekly event_count=3"
+    },
+    {
+      "name": "M5-0",
+      "status": "Pass",
+      "detail": "M5 epic #9 split into executable issues #62-#66; next target is #62 protocol"
     }
   ],
   "commands": [
@@ -1552,7 +1575,7 @@
     },
     {
       "label": "View next M5 issue",
-      "command": "gh issue view 9"
+      "command": "gh issue view 62"
     }
   ]
 }
@@ -1561,12 +1584,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">M4 is closed: text, voice-transcript, and image-info-gap practice all write validated interaction events into one weekly summary. The next product decision is splitting M5 real learner validation from epic #9.</p>
+        <p class="summary">M5 has been split into executable issues #62-#66. The next target is #62: define the seven-day validation protocol before building evidence export or rubric tooling.</p>
       </div>
       <div class="stamp">
         <strong>2026-05-29</strong>
-        M4 Multimodal Interaction Lab closed<br>
-        Next: #9 M5 validation protocol split
+        M5 Real Learning Validation active<br>
+        Next: #62 M5 validation protocol
       </div>
     </header>
 
@@ -1574,8 +1597,8 @@
 
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
-          <div class="metric-value">M4</div>
-          <p>multimodal event gate implemented</p>
+          <div class="metric-value">M5</div>
+          <p>validation issue split created</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
@@ -1585,12 +1608,12 @@
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Next block</div>
           <div class="metric-value">M5</div>
-          <p>#9 seven-day validation protocol split</p>
+          <p>#62 seven-day validation protocol</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">27 issues</div>
-          <p>M1/M2/M3/M4 closed; M5 #9 next</p>
+          <div class="metric-value">32 issues</div>
+          <p>M1-M4 closed; M5 #62-#66 created</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Review</div>
@@ -1625,20 +1648,20 @@
                 <strong>M5</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/ADAPTIVE-EXECUTION-PLAN.md</span>
               </div>
-              <h3>#9 M5 seven-day validation protocol split</h3>
+              <h3>#62 M5 seven-day validation protocol</h3>
               <div class="card-row"><b>왜</b><p>M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.</p></div>
-              <div class="card-row"><b>완료</b><p>#9 epic을 executable validation issues로 쪼개고 real learner/persona validation criteria를 dashboard에 올린다.</p></div>
-              <div class="card-row"><b>검증</b><p>issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>7일 pilot schedule, before/after prompt set, comfort/repair/reuse evidence, privacy handoff, stop/pivot rules를 정의한다.</p></div>
+              <div class="card-row"><b>검증</b><p>protocol doc, dashboard render, and roadmap/learning-engine alignment review가 통과해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M5-1</strong>
                 <span>docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
-              <h3>First M5 validation executable issue</h3>
-              <div class="card-row"><b>왜</b><p>#9를 쪼갠 뒤에는 실제 7일 로컬 사용을 검증하는 첫 executable issue가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>M5 issue split 결과에 맞춰 첫 validation smoke or study protocol issue를 선택한다.</p></div>
-              <div class="card-row"><b>검증</b><p>dashboard current target과 GitHub issue index가 같은 issue number를 가리켜야 한다.</p></div>
+              <h3>#63 Seven-day pilot evidence export</h3>
+              <div class="card-row"><b>왜</b><p>#62 protocol 다음에는 흩어진 local JSON을 사람이 검토 가능한 evidence pack으로 묶어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>clean simulated seven-day learner store에서 evidence export command/script를 만든다.</p></div>
+              <div class="card-row"><b>검증</b><p>seven-day export smoke와 existing seven-day simulation smoke가 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -1649,16 +1672,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M4-0</strong>
-                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md</span>
-              </div>
-              <h3>M4 multimodal event graph 실행 이슈를 정렬함</h3>
-              <div class="card-row"><b>왜</b><p>M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;`가 #50/#49/#53/#52/#54를 보여준다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M4-1</strong>
@@ -1708,6 +1721,16 @@
               <div class="card-row"><b>왜</b><p>M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`phase4-multimodal-gate-smoke`가 한 learner store에서 text, voice, image event를 만들고 weekly mirror가 세 modality를 요약하는지 검증한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase4-multimodal-gate-smoke.mjs`가 event_count=3, modalities=text/voice/image, unsupported claim guard를 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M5-0</strong>
+                <span>docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-5-evidence/M5-0-validation-issue-split.md</span>
+              </div>
+              <h3>#9 M5 validation epic을 실행 이슈로 분해함</h3>
+              <div class="card-row"><b>왜</b><p>실제 학습 효과 검증은 하나의 큰 epic으로 진행하면 프로토콜, export, rubric, persona validation, closeout 판단이 섞인다.</p></div>
+              <div class="card-row"><b>완료</b><p>#62 protocol, #63 evidence export, #64 transcript rubric, #65 persona validation, #66 M5 gate로 나눴고 #9에 child list를 남겼다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M5 Real Learning Validation&quot;`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.</p></div>
             </article>
         </div>
       </section>
@@ -1826,6 +1849,10 @@
               <strong>docs/phase-4-evidence/</strong>
               <span>Phase 4 multimodal evidence notes</span>
             </a>
+            <a class="link-card source" href="./phase-5-evidence/">
+              <strong>docs/phase-5-evidence/</strong>
+              <span>Phase 5 validation evidence notes</span>
+            </a>
             <a class="link-card source" href="./LEARNING-ENGINE.md">
               <strong>docs/LEARNING-ENGINE.md</strong>
               <span>학습 엔진 설계</span>
@@ -1862,10 +1889,6 @@
           <tbody>
 
             <tr>
-              <td>M3-4</td>
-              <td><strong>Pass</strong><span>seven-day local simulation smoke passes repeated setup/daily/review/today/weekly/home flow</span></td>
-            </tr>
-            <tr>
               <td>M3-5</td>
               <td><strong>Pass</strong><span>clone-to-daily gate smoke passes and GitHub M3 milestone/epic are closed with open_issues=0</span></td>
             </tr>
@@ -1892,6 +1915,10 @@
             <tr>
               <td>M4-5</td>
               <td><strong>Pass</strong><span>multimodal gate smoke passes text, voice, and image events in one learner store with weekly event_count=3</span></td>
+            </tr>
+            <tr>
+              <td>M5-0</td>
+              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66; next target is #62 protocol</span></td>
             </tr>
           </tbody>
         </table>
@@ -1927,7 +1954,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 9</code>
+              <code>gh issue view 62</code>
             </div>
         </div>
       </aside>
@@ -1937,7 +1964,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 40개 보기</summary>
+        <summary>완료 이력 41개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -2340,10 +2367,20 @@
               <div class="card-row"><b>완료</b><p>`phase3-m3-gate-smoke`가 clean clone에서 setup, daily, today, review, vault, weekly, home, seven-day simulation, dashboard generation을 검증했다. #41, epic #6, M3 milestone도 닫혔다.</p></div>
               <div class="card-row"><b>검증</b><p>clean clone dailyGap=next-day, dueCount=1, vaultPhraseCount=1, sevenDaySessionCount=7, runtimeTmpIgnored=true; GitHub M3 open_issues=0.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M4-0</strong>
+                <span>docs/MULTIMODAL-GENAI-PLAN.md, docs/ISSUE-INDEX.md, docs/project-state.json, docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md</span>
+              </div>
+              <h3>M4 multimodal event graph 실행 이슈를 정렬함</h3>
+              <div class="card-row"><b>왜</b><p>M3는 daily return local path를 닫았다. 다음은 voice/image/video를 feature gimmick이 아니라 Interaction Event Graph와 학습 루프에 연결하는 실행 이슈로 쪼개야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>Epics #7/#8을 #50 event schema, #49 text events, #53 voice transcript import, #52 image information-gap, #54 M4 gate로 분해했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh issue list --milestone &quot;M4 Multimodal Interaction Lab&quot;`가 #50/#49/#53/#52/#54를 보여준다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 36개 보기</summary>
+        <summary>전체 검증 37개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -2492,6 +2529,10 @@
               <td>M4-5</td>
               <td><strong>Pass</strong><span>multimodal gate smoke passes text, voice, and image events in one learner store with weekly event_count=3</span></td>
             </tr>
+            <tr>
+              <td>M5-0</td>
+              <td><strong>Pass</strong><span>M5 epic #9 split into executable issues #62-#66; next target is #62 protocol</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -2626,7 +2667,7 @@
             </div>
             <div class="command">
               <span>View next M5 issue</span>
-              <code>gh issue view 9</code>
+              <code>gh issue view 62</code>
             </div>
         </div>
       </details>
