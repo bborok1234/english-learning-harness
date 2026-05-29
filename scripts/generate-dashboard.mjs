@@ -73,7 +73,7 @@ const visibleVerification = state.verification.slice(-8).map((item) => `
 
 const visibleCommands = state.commands
   .filter((item) =>
-    /generate-dashboard|clean-clone|phase2-|ISSUE-INDEX|dashboard/.test(item.command),
+    /generate-dashboard|clean-clone|phase2-|phase4-|ISSUE-INDEX|dashboard|gh issue view/.test(item.command),
   )
   .slice(-8)
   .map((item) => `

@@ -3,10 +3,10 @@
   "updatedAt": "2026-05-29",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M4 Multimodal Interaction Lab implementation active",
-    "status": "Next: #54 M4 multimodal-ready gate",
+    "stage": "M4 Multimodal Interaction Lab gate complete on PR branch",
+    "status": "Next: #9 M5 validation protocol split",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "M4-4 image information-gap practice is implemented and smoke-tested. Text, voice-transcript, and image-info-gap practice now write validated interaction events. Next is #54 M4 multimodal-ready gate."
+    "summary": "M4 gate smoke now proves text, voice-transcript, and image-info-gap practice all write validated interaction events into one weekly summary. After #54 merges, the next product decision is splitting M5 real learner validation from epic #9."
   },
   "ssot": [
     {
@@ -104,19 +104,19 @@
     {
       "label": "Ultragoal",
       "value": "M4",
-      "detail": "text/voice/image events implemented",
+      "detail": "multimodal event gate implemented",
       "tone": "green"
     },
     {
       "label": "Current stage",
-      "value": "M4 active",
-      "detail": "#50/#49/#53/#52 implemented; #54 next",
+      "value": "M4 gate",
+      "detail": "#50/#49/#53/#52 merged; #54 on PR branch",
       "tone": "green"
     },
     {
       "label": "Next block",
-      "value": "M4",
-      "detail": "#54 M4 multimodal-ready gate",
+      "value": "M5",
+      "detail": "#9 seven-day validation protocol split",
       "tone": "red"
     },
     {
@@ -745,6 +745,19 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-4-evidence/M4-4-image-information-gap.md"
           ]
+        },
+        {
+          "id": "M4-5",
+          "title": "#54 M4 multimodal-ready gate를 구현함",
+          "why": "M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.",
+          "done": "`phase4-multimodal-gate-smoke`가 한 learner store에서 text, voice, image event를 만들고 weekly mirror가 세 modality를 요약하는지 검증한다.",
+          "verification": "`node scripts/phase4-multimodal-gate-smoke.mjs`가 event_count=3, modalities=text/voice/image, unsupported claim guard를 통과했다.",
+          "files": [
+            "scripts/phase4-multimodal-gate-smoke.mjs",
+            "docs/phase-4-evidence/M4-5-multimodal-gate.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -754,14 +767,15 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "M4-5",
-          "title": "#54 M4 multimodal-ready gate",
-          "why": "M4 완료는 schema와 각 modality path가 같은 evidence contract를 쓰는지 확인해야 한다.",
-          "done": "text, voice-transcript, image-info-gap events를 gate smoke로 검증하고 M4 milestone/epics를 close한다.",
-          "verification": "M4 gate smoke, dashboard render, GitHub milestone audit이 통과해야 한다.",
+          "id": "M5",
+          "title": "#9 M5 seven-day validation protocol split",
+          "why": "M4는 multimodal evidence substrate이고, 다음 제품 리스크는 실제 7일 사용에서 회화 루프가 유지되는지 검증하는 것이다.",
+          "done": "#9 epic을 executable validation issues로 쪼개고 real learner/persona validation criteria를 dashboard에 올린다.",
+          "verification": "issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/project-state.json",
+            "docs/ADAPTIVE-EXECUTION-PLAN.md"
           ]
         }
       ]
@@ -772,15 +786,14 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "M5",
-          "title": "After M4: adaptive roadmap review",
-          "why": "M4 gate 결과에 따라 realtime voice, public install, or learner validation 중 다음 milestone 우선순위를 다시 정해야 한다.",
-          "done": "M4 closeout 후 GitHub milestone 상태와 product readiness gap을 비교해 다음 executable issues를 생성/정리한다.",
-          "verification": "issue index, dashboard, and milestone audit이 같은 다음 실행 대상을 가리켜야 한다.",
+          "id": "M5-1",
+          "title": "First M5 validation executable issue",
+          "why": "#9를 쪼갠 뒤에는 실제 7일 로컬 사용을 검증하는 첫 executable issue가 필요하다.",
+          "done": "M5 issue split 결과에 맞춰 첫 validation smoke or study protocol issue를 선택한다.",
+          "verification": "dashboard current target과 GitHub issue index가 같은 issue number를 가리켜야 한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json",
-            "docs/ADAPTIVE-EXECUTION-PLAN.md"
+            "docs/project-state.json"
           ]
         }
       ]
@@ -1003,6 +1016,11 @@
       "name": "M4-4",
       "status": "Pass",
       "detail": "image information-gap smoke passes image modality, source artifact metadata, hidden-detail prompt context, and weekly modality summary"
+    },
+    {
+      "name": "M4-5",
+      "status": "Pass",
+      "detail": "multimodal gate smoke passes text, voice, and image events in one learner store with weekly event_count=3"
     }
   ],
   "commands": [
@@ -1099,6 +1117,10 @@
       "command": "node scripts/phase4-image-information-gap-smoke.mjs"
     },
     {
+      "label": "Run M4 multimodal gate smoke",
+      "command": "node scripts/phase4-multimodal-gate-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -1127,8 +1149,8 @@
       "command": "open docs/dashboard.html"
     },
     {
-      "label": "View next M4 issue",
-      "command": "gh issue view 54"
+      "label": "View next M5 issue",
+      "command": "gh issue view 9"
     }
   ]
 }

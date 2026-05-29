@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M4 Multimodal Interaction Lab implementation active / #54 next** state.
+The project is in **M4 Multimodal Interaction Lab gate complete on PR branch / #9 next after merge** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -57,6 +57,7 @@ What is not started:
 - M4-2 is implemented on the PR branch: weekly mirror and learner home now summarize text interaction events with transfer targets.
 - M4-3 is implemented on the PR branch: `voice` imports transcript-first practice as validated `modality: voice` interaction events with local audio metadata.
 - M4-4 is implemented on the PR branch: `image` creates local image information-gap practice as validated `modality: image` interaction events with hidden-detail prompt context and local image metadata.
+- M4-5 is implemented on the PR branch: one gate smoke proves text, voice, and image events share the same interaction-event contract and weekly event summary.
 - Real user validation.
 - Realtime voice path.
 - Public Git-backed marketplace install.
@@ -95,6 +96,7 @@ Strategic reset:
 - Ralplan consensus evidence: `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md` records the durable Architect -> Critic approval handoff.
 - Multimodal evidence: `docs/MULTIMODAL-GENAI-PLAN.md` records voice, image, and video usage boundaries with SLA, conversation analysis, multimodal learning, and official OpenAI API references.
 - M4-4 evidence: `docs/phase-4-evidence/M4-4-image-information-gap.md` records image information-gap event import, hidden-detail/clarification prompt context, and weekly modality summary.
+- M4-5 evidence: `docs/phase-4-evidence/M4-5-multimodal-gate.md` records text/voice/image event graph gate evidence and claim boundaries.
 - Execution governance evidence: `docs/ADAPTIVE-EXECUTION-PLAN.md` defines review lanes, research triggers, backlog mutation rules, milestones, and stop conditions.
 - Hook evidence: `docs/phase-1-evidence/PH1-FIX-1-hook-install-proof.md` records installer improvements and the remaining Codex trust-state blocker.
 - Command-wrapper evidence: `docs/phase-1-evidence/PH1-FIX-1-command-wrapper-fallback.md` records the supported fallback path and smoke verification.
@@ -182,7 +184,11 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M4-2: Persist text sessions as interaction events (#49).
 - [x] M4-3: Add transcription-first voice event import (#53).
 - [x] M4-4: Add image information-gap event fixture (#52).
-- [ ] M4-5: Close multimodal-ready event graph gate (#54).
+- [x] M4-5: Close multimodal-ready event graph gate (#54).
+
+### Phase 5 Real Learning Validation
+
+- [ ] M5-0: Split #9 seven-day validation protocol into executable validation issues.
 
 ## SSOT Structure
 

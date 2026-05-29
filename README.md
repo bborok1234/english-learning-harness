@@ -347,6 +347,12 @@ Run the image information-gap smoke:
 node scripts/phase4-image-information-gap-smoke.mjs
 ```
 
+Run the M4 multimodal gate smoke:
+
+```bash
+node scripts/phase4-multimodal-gate-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash
