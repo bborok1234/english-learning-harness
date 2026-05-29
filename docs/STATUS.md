@@ -81,6 +81,7 @@ What is complete:
 - M7-2 public artifact repository handoff is prepared locally with tarball, checksum, manifest, and release notes; it does not publish.
 - M7-3 public artifact repository README is prepared in the handoff bundle so a public repo visitor can download, verify, extract, setup, and start practice.
 - M7-4 public artifact workflow is aligned to the separate artifact repository path: `publish_release=false` by default, `artifact_repo` input, and `PUBLIC_ARTIFACT_REPO_TOKEN` required for publication.
+- M7-5 public release URL smoke verifies artifact plus `SHA256SUMS` before setup/daily/today; current evidence is local loopback only until real public URLs exist.
 
 What is not started:
 - Real user validation.
@@ -96,6 +97,7 @@ What failed review:
 - M7-2 handoff smoke verifies checksum, manifest, tarball contents, forbidden path exclusions, and no-publication boundary.
 - M7-3 handoff smoke verifies public README download, checksum, setup, daily, today, and public URL smoke guidance.
 - M7-4 workflow smoke verifies separate artifact repo targeting, explicit token boundary, source repo read-only permission, and no-publication default.
+- M7-5 public release URL smoke verifies checksum-aware download-to-learning mechanics and keeps `canClosePublicDistribution=false` in local mode.
 
 Strategic reset:
 - This is now treated as a language-learning product/engine, not a small plugin script.

@@ -1440,6 +1440,18 @@
             "scripts/phase7-release-workflow-smoke.mjs",
             "docs/phase-7-evidence/M7-1-public-artifact-mechanics.md"
           ]
+        },
+        {
+          "id": "M7-5",
+          "title": "#100 public release URL checksum smoke를 추가함",
+          "why": "public artifact repo README는 tarball과 SHA256SUMS를 함께 다운로드하므로 #83 proof도 checksum-aware 경로를 검증해야 한다.",
+          "done": "artifact URL과 SHA256SUMS URL을 다운로드하고 shasum 검증 후 setup/daily/today를 실행하는 smoke를 추가했다. 기본은 local loopback으로 publication 없이 실행된다.",
+          "verification": "`node scripts/phase7-public-release-url-smoke.mjs`가 checksumVerified=true, hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false로 mechanics를 통과한다.",
+          "files": [
+            "scripts/phase7-public-release-url-smoke.mjs",
+            "docs/phase-7-evidence/M7-5-public-release-url.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1825,6 +1837,11 @@
       "name": "M7-4 artifact repo workflow",
       "status": "Pass",
       "detail": "manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication"
+    },
+    {
+      "name": "M7-5 checksum URL smoke",
+      "status": "Pass",
+      "detail": "public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist"
     }
   ],
   "commands": [
@@ -1973,6 +1990,10 @@
       "command": "node scripts/phase7-public-artifact-handoff-smoke.mjs"
     },
     {
+      "label": "Run M7 public release URL smoke",
+      "command": "node scripts/phase7-public-release-url-smoke.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -2111,16 +2132,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M7-1d</strong>
-                <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
-              </div>
-              <h3>#83 GitHub Actions artifact run을 검증함</h3>
-              <div class="card-row"><b>왜</b><p>release workflow wiring만으로는 GitHub runner에서 artifact가 실제 생성되는지 알 수 없다.</p></div>
-              <div class="card-row"><b>완료</b><p>workflow_dispatch run 26618527553이 publish_release=false로 성공했고 workflow artifact english-learning-harness-public을 업로드했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`gh run view 26618527553` shows conclusion=success; downloaded artifact exists under tmp/phase-7-gh-workflow-artifact.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M7-D</strong>
                 <span>docs/distribution-policy.json, docs/ISSUE-INDEX.md, docs/project-state.json</span>
               </div>
@@ -2168,6 +2179,16 @@
               <div class="card-row"><b>왜</b><p>private source repo의 release asset은 public proof가 아니므로 optional publish workflow도 별도 artifact repo를 명시해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>workflow_dispatch에 artifact_repo input을 추가하고, publish step이 PUBLIC_ARTIFACT_REPO_TOKEN과 --repo ARTIFACT_REPO를 사용하도록 변경했다. 기본 publish_release=false는 유지한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 artifact_repo input, token boundary, source repo read-only permission, --repo target을 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-5</strong>
+                <span>scripts/phase7-public-release-url-smoke.mjs, docs/phase-7-evidence/M7-5-public-release-url.md, README.md</span>
+              </div>
+              <h3>#100 public release URL checksum smoke를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>public artifact repo README는 tarball과 SHA256SUMS를 함께 다운로드하므로 #83 proof도 checksum-aware 경로를 검증해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>artifact URL과 SHA256SUMS URL을 다운로드하고 shasum 검증 후 setup/daily/today를 실행하는 smoke를 추가했다. 기본은 local loopback으로 publication 없이 실행된다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-url-smoke.mjs`가 checksumVerified=true, hostedAccessStatus=local_loopback_only, canClosePublicDistribution=false로 mechanics를 통과한다.</p></div>
             </article>
         </div>
       </section>
@@ -2346,10 +2367,6 @@
           <tbody>
 
             <tr>
-              <td>M7-1 artifact</td>
-              <td><strong>Partial</strong><span>public artifact mechanics pass from a tarball candidate; public hosting/download remains unproven</span></td>
-            </tr>
-            <tr>
               <td>M7-1 hosted artifact</td>
               <td><strong>Partial</strong><span>hosted-download mechanics pass through local loopback; real public URL remains unverified</span></td>
             </tr>
@@ -2376,6 +2393,10 @@
             <tr>
               <td>M7-4 artifact repo workflow</td>
               <td><strong>Pass</strong><span>manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication</span></td>
+            </tr>
+            <tr>
+              <td>M7-5 checksum URL smoke</td>
+              <td><strong>Pass</strong><span>public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist</span></td>
             </tr>
           </tbody>
         </table>
@@ -2421,7 +2442,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 60개 보기</summary>
+        <summary>완료 이력 61개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3024,10 +3045,20 @@
               <div class="card-row"><b>완료</b><p>manual GitHub Actions workflow가 artifact를 package/verify하고 publish_release=true일 때 release asset upload까지 수행하도록 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-release-workflow-smoke.mjs`가 workflow_dispatch, package command, artifact upload, optional gh release upload wiring을 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-1d</strong>
+                <span>.github/workflows/public-artifact.yml, docs/phase-7-evidence/M7-1-public-artifact-mechanics.md</span>
+              </div>
+              <h3>#83 GitHub Actions artifact run을 검증함</h3>
+              <div class="card-row"><b>왜</b><p>release workflow wiring만으로는 GitHub runner에서 artifact가 실제 생성되는지 알 수 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>workflow_dispatch run 26618527553이 publish_release=false로 성공했고 workflow artifact english-learning-harness-public을 업로드했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`gh run view 26618527553` shows conclusion=success; downloaded artifact exists under tmp/phase-7-gh-workflow-artifact.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 57개 보기</summary>
+        <summary>전체 검증 58개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3260,12 +3291,16 @@
               <td>M7-4 artifact repo workflow</td>
               <td><strong>Pass</strong><span>manual workflow targets a separate artifact repo with explicit token boundary while defaulting to no publication</span></td>
             </tr>
+            <tr>
+              <td>M7-5 checksum URL smoke</td>
+              <td><strong>Pass</strong><span>public release URL smoke verifies artifact and SHA256SUMS download before setup/daily/today, local loopback only until real URLs exist</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 44개 보기</summary>
+        <summary>전체 명령 45개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3411,6 +3446,10 @@
             <div class="command">
               <span>Run M7 public artifact handoff smoke</span>
               <code>node scripts/phase7-public-artifact-handoff-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 public release URL smoke</span>
+              <code>node scripts/phase7-public-release-url-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>

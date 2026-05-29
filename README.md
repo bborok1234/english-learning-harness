@@ -277,6 +277,16 @@ ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harne
 
 Without `ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL`, the hosted-artifact smoke uses a local loopback server and proves mechanics only, not public access.
 
+To verify the public artifact repository path with checksum evidence:
+
+```bash
+ENGLISH_LEARNING_PUBLIC_ARTIFACT_URL="https://example.com/english-learning-harness-public.tar.gz" \
+ENGLISH_LEARNING_PUBLIC_SHA256SUMS_URL="https://example.com/SHA256SUMS" \
+  node scripts/phase7-public-release-url-smoke.mjs
+```
+
+Without both public URL variables, this smoke uses local loopback and proves mechanics only.
+
 The manual GitHub Actions workflow `.github/workflows/public-artifact.yml` can build the same artifact and optionally upload it to a separate public artifact repository release when explicitly dispatched with `publish_release: true`, `artifact_repo`, and a `PUBLIC_ARTIFACT_REPO_TOKEN` secret. A release asset on this private source repository is not public evidence; verify the final URL with `phase7-hosted-artifact-smoke.mjs`.
 
 For a separate public artifact repository handoff, generate the bundle locally:
@@ -502,6 +512,12 @@ Run the M7 public artifact repository handoff smoke:
 
 ```bash
 node scripts/phase7-public-artifact-handoff-smoke.mjs
+```
+
+Run the M7 public release URL checksum smoke:
+
+```bash
+node scripts/phase7-public-release-url-smoke.mjs
 ```
 
 Run the full first-run smoke:
