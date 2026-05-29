@@ -179,3 +179,9 @@ M6 remains open. Epic #10 has been split into executable issues #72-#75, and #78
 - context output includes a support diagnostics section.
 - corrupt local progress returns explicit `setup --repair` recovery.
 - repair backs up broken local JSON files and restores valid progress v2.
+
+#75 gate audit currently shows:
+
+- M6 release gate audit returns `blocked_by_distribution_policy`.
+- #73 and #74 are complete.
+- #72 and #78 must be resolved before #75, #10, or the M6 milestone can close.

@@ -134,7 +134,7 @@
     {
       "label": "Current stage",
       "value": "M6 active",
-      "detail": "#73/#74 pass; #78 blocks public claim",
+      "detail": "#73/#74 pass; #75 gate blocked by #78",
       "tone": "amber"
     },
     {
@@ -883,6 +883,18 @@
             "docs/phase-6-evidence/M6-3-onboarding-diagnostics.md",
             "README.md"
           ]
+        },
+        {
+          "id": "M6-4",
+          "title": "#75 M6 release gate audit을 추가함",
+          "why": "M6 closeout은 개별 smoke 통과가 아니라 public clone claim, install docs, diagnostics, claim boundary를 함께 판단해야 한다.",
+          "done": "release gate smoke가 M6 evidence를 재검증하고 decision=blocked_by_distribution_policy, canCloseM6=false를 반환한다.",
+          "verification": "`node scripts/phase6-release-gate-smoke.mjs`가 authenticated clone, marketplace install, onboarding diagnostics를 검증하고 #72/#78 blockers를 보고했다.",
+          "files": [
+            "scripts/phase6-release-gate-smoke.mjs",
+            "docs/phase-6-evidence/M6-4-release-gate.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1200,6 +1212,11 @@
       "name": "M6-3",
       "status": "Pass",
       "detail": "setup/health/status/context support diagnostics and corrupt-store repair guidance pass"
+    },
+    {
+      "name": "M6-4",
+      "status": "Blocked",
+      "detail": "release gate audit passes with decision blocked_by_distribution_policy; #72/#78 prevent M6 closeout"
     }
   ],
   "commands": [
@@ -1318,6 +1335,10 @@
     {
       "label": "Run M6 onboarding diagnostics smoke",
       "command": "node scripts/phase6-onboarding-diagnostics-smoke.mjs"
+    },
+    {
+      "label": "Run M6 release gate audit",
+      "command": "node scripts/phase6-release-gate-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",

@@ -423,6 +423,12 @@ Run the M6 onboarding diagnostics smoke:
 node scripts/phase6-onboarding-diagnostics-smoke.mjs
 ```
 
+Run the M6 release gate audit:
+
+```bash
+node scripts/phase6-release-gate-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash

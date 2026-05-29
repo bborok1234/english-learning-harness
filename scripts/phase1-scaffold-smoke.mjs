@@ -60,6 +60,7 @@ const requiredFiles = [
   "scripts/phase6-public-clean-clone-smoke.mjs",
   "scripts/phase6-marketplace-install-smoke.mjs",
   "scripts/phase6-onboarding-diagnostics-smoke.mjs",
+  "scripts/phase6-release-gate-smoke.mjs",
 ];
 
 function readJson(path) {
