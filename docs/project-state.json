@@ -990,6 +990,18 @@
             "docs/ISSUE-INDEX.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M7-D2",
+          "title": "#90 public release decision gate를 검증함",
+          "why": "release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.",
+          "done": "distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.",
+          "verification": "`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=manual_github_release_asset, codexMayPublishWithoutExplicitApproval=false를 통과한다.",
+          "files": [
+            "scripts/phase7-public-release-decision-smoke.mjs",
+            "docs/distribution-policy.json",
+            "docs/phase-7-evidence/M7-D-public-release-decision.md"
+          ]
         }
       ]
     },
@@ -1355,6 +1367,11 @@
       "name": "M7-1 workflow run",
       "status": "Pass",
       "detail": "GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public"
+    },
+    {
+      "name": "M7-D decision gate",
+      "status": "Pass",
+      "detail": "public release publication remains blocked until the issue 90 owner decision is recorded"
     }
   ],
   "commands": [
@@ -1493,6 +1510,10 @@
     {
       "label": "Run M7 release workflow smoke",
       "command": "node scripts/phase7-release-workflow-smoke.mjs"
+    },
+    {
+      "label": "Run M7 release decision smoke",
+      "command": "node scripts/phase7-public-release-decision-smoke.mjs"
     },
     {
       "label": "Run full-flow smoke",
