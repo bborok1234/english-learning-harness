@@ -55,6 +55,7 @@ const requiredFiles = [
   "scripts/phase4-multimodal-gate-smoke.mjs",
   "scripts/phase5-evidence-export-smoke.mjs",
   "scripts/phase5-transcript-rubric-smoke.mjs",
+  "scripts/phase5-persona-validation-smoke.mjs",
 ];
 
 function readJson(path) {

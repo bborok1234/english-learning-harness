@@ -373,6 +373,12 @@ Run the M5 before/after transcript rubric smoke:
 node scripts/phase5-transcript-rubric-smoke.mjs
 ```
 
+Run the M5 target-persona validation smoke:
+
+```bash
+node scripts/phase5-persona-validation-smoke.mjs
+```
+
 Run the full first-run smoke:
 
 ```bash
