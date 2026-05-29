@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-05-29",
+  "currentPolicy": "private-beta",
+  "releaseClaim": "invited-user clone-to-learn",
+  "repositoryVisibilityRequired": "private-or-public",
+  "cloneMode": "authenticated-git-clone",
+  "publicReleaseStatus": "deferred",
+  "approvedClaims": [
+    "An invited GitHub collaborator with repository access can clone the repository and start local learning through the explicit command wrapper.",
+    "Local marketplace packaging and isolated CODEX_HOME install are verified.",
+    "First-run support diagnostics and non-destructive repair guidance are verified."
+  ],
+  "blockedClaims": [
+    "Unauthenticated public HTTPS clone is not verified while the repository is private.",
+    "Public Git-backed plugin install is not verified.",
+    "Realtime voice and real learner outcome claims remain outside the first-complete release claim."
+  ],
+  "publicReleaseRequirements": [
+    "Make the repository public or publish a separate public distribution artifact.",
+    "Run the default public clone smoke without ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE.",
+    "Add a public install smoke before documenting Git-backed plugin install.",
+    "Update README, STATUS, ISSUE-INDEX, dashboard, and GitHub issue state."
+  ],
+  "claimBoundary": "This policy chooses private beta / invited-user clone-to-learn as the M6 first-complete distribution claim. It does not claim unauthenticated public release."
+}

@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M6 Public Clone-to-Learn active / #78 repository visibility decision blocks #72 public clone claim** state.
+The project is in **M6 Private Beta Clone-to-Learn closeout / public distribution deferred to M7** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -65,11 +65,12 @@ What is complete:
 - M5-5 is merged: M5 gate smoke approves continuing to M6 while blocking real learner outcome claims.
 - M5 epic #9 and the M5 Real Learning Validation milestone are closed.
 - M6 is split into executable issues #72-#75.
-- M6-D issue #78 is created: #72 cannot honestly pass as a public clone-to-learn release gate while the GitHub repository is `PRIVATE`.
+- M6-D issue #78 is resolved by policy: M6 first-complete release claim is private beta / invited-user clone-to-learn; unauthenticated public release is deferred to M7 #83.
 - M6-1 authenticated clone mechanics pass from a disposable clone, but the default public clone smoke fails by design until repository visibility or distribution policy is resolved.
 - M6-2 local marketplace packaging/install path passes from a disposable clone with isolated `CODEX_HOME`; public Git-backed install remains unverified.
 - M6-3 onboarding diagnostics pass: setup/health/status/context expose next commands, support files, repair commands, and native-hook optionality.
-- M6-4 release gate audit passes with decision `blocked_by_distribution_policy`; M6 cannot close until #78 resolves the public/private distribution policy.
+- M6-4 release gate audit passes with decision `ready_to_close_m6_private_beta`; M6 can close as private beta, while unauthenticated public distribution remains deferred.
+- M7 Public Distribution Release milestone and issue #83 are created for unauthenticated public clone/artifact work.
 
 What is not started:
 - Real user validation.
@@ -117,6 +118,7 @@ Strategic reset:
 - M5-4 evidence: `docs/phase-5-evidence/M5-4-persona-validation.md` records target-persona seven-day fixture behavior and claim boundaries.
 - M5-5 evidence: `docs/phase-5-evidence/M5-5-validation-gate.md` records M5 closeout decision, approved claims, blocked claims, and M6 split.
 - M6-1 evidence: `docs/phase-6-evidence/M6-1-public-clean-clone.md` records authenticated clone mechanics, README command audit, clone git status cleanliness, and the private-repository blocker for public clone readiness.
+- M6-D evidence: `docs/phase-6-evidence/M6-D-distribution-policy.md` and `docs/distribution-policy.json` record the private-beta policy and M7 public release deferral.
 - M6-2 evidence: `docs/phase-6-evidence/M6-2-marketplace-install.md` records clean-clone local marketplace packaging, isolated `CODEX_HOME` install, README command audit, and the public Git-backed install boundary.
 - M6-3 evidence: `docs/phase-6-evidence/M6-3-onboarding-diagnostics.md` records support diagnostics, next-step clarity, non-destructive repair guidance, and corrupt-store recovery verification.
 - M6-4 evidence: `docs/phase-6-evidence/M6-4-release-gate.md` records the M6 gate audit and the blockers that prevent closing M6.
@@ -220,16 +222,21 @@ Start from the verified/fallback Phase 0 constraints.
 
 ### Phase 6 Public Clone-to-Learn Release
 
-- [~] M6-1: Verify public clean clone setup path (#72). Authenticated clone mechanics pass; public clone is blocked by private repository visibility.
-- [ ] M6-D: Decide repository visibility for public clone-to-learn (#78).
+- [x] M6-1: Verify private beta / invited-user clean clone setup path (#72). Authenticated clone mechanics pass; unauthenticated public clone deferred to M7.
+- [x] M6-D: Decide repository visibility for public clone-to-learn (#78). Policy: private beta now, public distribution later.
 - [x] M6-2: Verify marketplace packaging and install docs (#73).
 - [x] M6-3: Harden first-run onboarding and support diagnostics (#74).
-- [~] M6-4: Close public clone-to-learn release gate (#75). Gate audit exists, but closeout is blocked by #72/#78.
+- [x] M6-4: Close private beta clone-to-learn release gate (#75).
+
+### Phase 7 Public Distribution Release
+
+- [ ] M7-1: Prove unauthenticated public distribution path (#83).
 
 ## SSOT Structure
 
 - `DESIGN.md` — product/design/UX source of truth.
 - `docs/project-state.json` — structured execution/status state for generated dashboards.
+- `docs/distribution-policy.json` — current private-beta/public distribution policy.
 - `docs/PHASE-0-SPIKE.md` — Phase 0 execution plan and pass/fail criteria.
 - `docs/ISSUE-INDEX.md` — GitHub epics, milestones, and first-usable issue index.
 - `docs/phase-0-evidence/` — Phase 0 spike evidence notes.

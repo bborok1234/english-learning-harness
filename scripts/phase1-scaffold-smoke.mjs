@@ -58,6 +58,7 @@ const requiredFiles = [
   "scripts/phase5-persona-validation-smoke.mjs",
   "scripts/phase5-m5-gate-smoke.mjs",
   "scripts/phase6-public-clean-clone-smoke.mjs",
+  "scripts/phase6-distribution-policy-smoke.mjs",
   "scripts/phase6-marketplace-install-smoke.mjs",
   "scripts/phase6-onboarding-diagnostics-smoke.mjs",
   "scripts/phase6-release-gate-smoke.mjs",

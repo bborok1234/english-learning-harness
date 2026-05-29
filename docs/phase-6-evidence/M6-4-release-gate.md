@@ -1,37 +1,32 @@
 # M6-4 Public Clone-to-Learn Release Gate
 
 Issue: #75
-Decision: blocked-by-distribution-policy
+Decision: ready-to-close-private-beta
 
 ## Why
 
-M6 should close only when clone, install/setup docs, diagnostics, and claim boundaries are verified together. The local mechanics are strong, but public clone readiness depends on repository visibility and distribution policy.
+M6 should close only when clone, install/setup docs, diagnostics, and claim boundaries are verified together. The release claim has been narrowed to private beta / invited-user clone-to-learn because the repository is currently private.
 
 ## Current Gate Result
 
 `node scripts/phase6-release-gate-smoke.mjs` passes as an audit and returns:
 
-- `decision`: `blocked_by_distribution_policy`
-- `canCloseM6`: `false`
-- blocker: #72 public clone smoke is not passing in default mode
-- blocker: #78 repository visibility / distribution policy is unresolved
+- `decision`: `ready_to_close_m6_private_beta`
+- `canCloseM6`: `true`
+- public release status: `deferred`
+- current policy: `private-beta`
 
 ## Evidence Reviewed
 
+- M6-D distribution policy selects private beta / invited-user clone-to-learn for M6 and defers unauthenticated public distribution to M7.
 - M6-1 authenticated clone mechanics pass; default public clone remains blocked while the repo is private.
 - M6-2 local marketplace packaging and isolated `CODEX_HOME` install pass.
 - M6-3 onboarding/support diagnostics pass.
 
-## Required Before Closing M6
+## Required Before Public Release
 
-Resolve #78 with one of these policies:
-
-1. Make the repository public and rerun the default public clone smoke.
-2. Keep the repository private and pivot M6 wording to private beta / invited-user clone-to-learn.
-3. Publish a separate public distribution artifact and add a smoke for that artifact.
-
-Then rerun the release gate and update #72/#75/#10/milestone state.
+M7 issue #83 tracks unauthenticated public distribution. It must either make the repository public or publish a separate public artifact, then rerun a default public clone/download smoke and public install smoke before public-facing claims are allowed.
 
 ## Claim Boundary
 
-This is a release-readiness audit. It does not change repository visibility, prove public distribution, or guarantee learning outcomes.
+This is a private beta release-readiness audit. It does not change repository visibility, prove unauthenticated public distribution, or guarantee learning outcomes.

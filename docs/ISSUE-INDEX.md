@@ -142,30 +142,35 @@ M5-5 is merged through PR #76 and closed #66.
 M5 epic #9 is closed with evidence comments.
 M5 Real Learning Validation milestone is closed with `open_issues=0`.
 
-## M6 Public Clone-to-Learn Release
+## M6 Private Beta Clone-to-Learn Release
 
 | Issue | Work | Default Decision |
 |---|---|---|
-| #10 | E10: Public onboarding and distribution | split |
-| #72 | M6-1: Verify public clean clone setup path | research |
+| #72 | M6-1: Verify private beta / invited-user clean clone setup path | pivot |
 | #73 | M6-2: Verify marketplace packaging and install docs | continue |
 | #74 | M6-3: Harden first-run onboarding and support diagnostics | continue |
-| #75 | M6-4: Close public clone-to-learn release gate | continue |
-| #78 | M6-D: Decide repository visibility for public clone-to-learn | research |
+| #75 | M6-4: Close private beta clone-to-learn release gate | continue |
+| #78 | M6-D: Decide repository visibility for clone-to-learn | pivot |
 
 Current implementation target:
 
 ```bash
-gh issue view 78
+gh issue view 75
 ```
 
-M6 remains open. Epic #10 has been split into executable issues #72-#75, and #78 now blocks the public clone claim because the repository is currently private.
+M6 remains open until #72/#75/#78 are closed with the private-beta pivot. Epic #10 has been moved to M7 for unauthenticated public distribution, and #78 resolves repository visibility by choosing private beta / invited-user clone-to-learn for M6.
+
+#78 evidence currently shows:
+
+- `docs/distribution-policy.json` sets `currentPolicy=private-beta`.
+- M6 release claim is `invited-user clone-to-learn`.
+- unauthenticated public release is deferred to M7 #83.
 
 #72 evidence currently shows:
 
 - authenticated clone mechanics pass with `ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE=1 node scripts/phase6-public-clean-clone-smoke.mjs`.
 - default public clone smoke fails by design while repository visibility is `PRIVATE`.
-- public-facing clone-to-learn readiness cannot be claimed until #78 is resolved.
+- M6 may claim private beta / invited-user clone-to-learn, not unauthenticated public clone-to-learn.
 
 #73 evidence currently shows:
 
@@ -182,6 +187,15 @@ M6 remains open. Epic #10 has been split into executable issues #72-#75, and #78
 
 #75 gate audit currently shows:
 
-- M6 release gate audit returns `blocked_by_distribution_policy`.
+- M6 release gate audit returns `ready_to_close_m6_private_beta`.
 - #73 and #74 are complete.
-- #72 and #78 must be resolved before #75, #10, or the M6 milestone can close.
+- unauthenticated public distribution remains deferred to M7 #83.
+
+## M7 Public Distribution Release
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #10 | E10: Public onboarding and distribution | split |
+| #83 | M7-1: Prove unauthenticated public distribution path | research |
+
+M7 remains open for a future public repository clone or separate public artifact. Do not advertise public clone/install claims until M7 evidence exists.

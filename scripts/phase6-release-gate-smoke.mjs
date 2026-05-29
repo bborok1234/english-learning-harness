@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const requiredEvidence = [
+  "docs/distribution-policy.json",
+  "docs/phase-6-evidence/M6-D-distribution-policy.md",
   "docs/phase-6-evidence/M6-1-public-clean-clone.md",
   "docs/phase-6-evidence/M6-2-marketplace-install.md",
   "docs/phase-6-evidence/M6-3-onboarding-diagnostics.md",
@@ -43,6 +45,8 @@ function main() {
   for (const file of requiredEvidence) {
     assert(existsSync(resolve(repoRoot, file)), `${file} missing`);
   }
+  const policy = JSON.parse(readFileSync(resolve(repoRoot, "docs/distribution-policy.json"), "utf8"));
+  assert(policy.schemaVersion === 1, "distribution policy schema mismatch");
 
   const authenticatedClone = runJson("node", ["scripts/phase6-public-clean-clone-smoke.mjs"], {
     env: { ENGLISH_LEARNING_ALLOW_PRIVATE_CLONE_SMOKE: "1" },
@@ -71,21 +75,23 @@ function main() {
   const diagnostics = runJson("node", ["scripts/phase6-onboarding-diagnostics-smoke.mjs"]);
   assert(diagnostics.status === "pass", "onboarding diagnostics smoke failed");
 
-  const canCloseM6 = authenticatedClone.publicAccessStatus === "public";
+  const canCloseM6 =
+    authenticatedClone.publicAccessStatus === "public" ||
+    (policy.currentPolicy === "private-beta" &&
+      policy.releaseClaim === "invited-user clone-to-learn" &&
+      authenticatedClone.publicAccessStatus === "private_authenticated_clone_only");
   console.log(
     JSON.stringify(
       {
         status: "pass",
         issue: "M6-4",
-        decision: canCloseM6 ? "ready_to_close_m6" : "blocked_by_distribution_policy",
+        decision: canCloseM6 ? "ready_to_close_m6_private_beta" : "blocked_by_distribution_policy",
         canCloseM6,
-        blockers: canCloseM6
-          ? []
-          : [
-              "#72 public clone smoke is not passing in default mode",
-              "#78 repository visibility / distribution policy is unresolved",
-            ],
+        blockers: canCloseM6 ? [] : ["#72 public clone smoke is not passing in default mode"],
         verified: {
+          distributionPolicy: policy.currentPolicy,
+          releaseClaim: policy.releaseClaim,
+          publicReleaseStatus: policy.publicReleaseStatus,
           authenticatedClone: authenticatedClone.status,
           publicAccessStatus: authenticatedClone.publicAccessStatus,
           marketplaceInstall: marketplace.status,
