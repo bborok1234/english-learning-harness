@@ -4,7 +4,7 @@ Last updated: 2026-05-29
 
 ## Current State
 
-The project is in **M5 Real Learning Validation gate complete on PR branch / #72 M6 public clone setup next** state.
+The project is in **M5 Real Learning Validation closed / #72 M6 public clone setup next** state.
 
 What is complete:
 - Product north star is synchronized to D82: **AI 파트너와 편안하게 영어로 대화하는 능력**.
@@ -59,10 +59,11 @@ What is complete:
 - M4 epics #7/#8 and the M4 Multimodal Interaction Lab milestone are closed.
 - M5-0 is complete: #9 is split into executable validation issues #62-#66.
 - M5-1 is complete: the seven-day validation protocol defines pilot schedule, prompt set, evidence fields, thresholds, privacy handoff, and claim boundaries.
-- M5-2 is implemented on the PR branch: `export` writes a redacted JSON+Markdown evidence pack from a seven-day learner store.
-- M5-3 is implemented on the PR branch: before/after transcript rubric scores observable behavior and rejects unsupported claims.
-- M5-4 is implemented on the PR branch: four target personas complete seven-day validation fixtures with evidence export and transcript rubric decisions.
-- M5-5 is implemented on the PR branch: M5 gate smoke approves continuing to M6 while blocking real learner outcome claims.
+- M5-2 is merged: `export` writes a redacted JSON+Markdown evidence pack from a seven-day learner store.
+- M5-3 is merged: before/after transcript rubric scores observable behavior and rejects unsupported claims.
+- M5-4 is merged: four target personas complete seven-day validation fixtures with evidence export and transcript rubric decisions.
+- M5-5 is merged: M5 gate smoke approves continuing to M6 while blocking real learner outcome claims.
+- M5 epic #9 and the M5 Real Learning Validation milestone are closed.
 - M6 is split into executable issues #72-#75.
 
 What is not started:

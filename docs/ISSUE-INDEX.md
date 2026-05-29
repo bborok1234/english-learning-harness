@@ -133,12 +133,14 @@ Current implementation target:
 gh issue view 72
 ```
 
-M5 remains open. Epic #9 has been split into executable issues #62-#66.
+M5 is closed. Epic #9 was split into executable issues #62-#66.
 M5-1 is merged through PR #68 and closed #62.
 M5-2 is merged through PR #69 and closed #63.
 M5-3 is merged through PR #70 and closed #64.
 M5-4 is merged through PR #71 and closed #65.
-M5-5 is implemented on the PR branch and waits for PR review/merge evidence before closing #66, #9, and the M5 milestone.
+M5-5 is merged through PR #76 and closed #66.
+M5 epic #9 is closed with evidence comments.
+M5 Real Learning Validation milestone is closed with `open_issues=0`.
 
 ## M6 Public Clone-to-Learn Release
 
