@@ -306,7 +306,7 @@ M7 now targets the current source repository as the open-source public distribut
 #114 evidence currently shows:
 
 - `scripts/phase7-open-source-history-audit-smoke.mjs` scans all git revisions and committed paths.
-- current output reports `revisionsScanned=123`, `committedPathsScanned=184`, `forbiddenPathFindings=0`, `secretContentFindings=0`, and `largeObjectFindings=0`.
+- current output reports `forbiddenPathFindings=0`, `secretContentFindings=0`, and `largeObjectFindings=0`; revision and path scan counts are intentionally not treated as stable dashboard facts because they change with every merge.
 - this does not change repository visibility or prove public clone access.
 
 #83/#90 final public source evidence currently shows:
