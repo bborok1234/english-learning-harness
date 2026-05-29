@@ -1464,6 +1464,18 @@
             "docs/phase-7-evidence/M7-6-no-publish-workflow-run.md",
             "docs/project-state.json"
           ]
+        },
+        {
+          "id": "M7-7",
+          "title": "#104 public publication preflight를 추가함",
+          "why": "실제 공개 publish 전, owner decision/target repo/workflow/handoff가 준비됐는지 한 번에 보여주는 non-publishing readiness check가 필요하다.",
+          "done": "distribution policy, workflow artifact_repo/token boundary, handoff bundle, gh repo visibility를 검사하는 preflight를 추가했다. 현재 publicationReady=false다.",
+          "verification": "`node scripts/phase7-publication-preflight.mjs`가 decisionStatus=owner_decision_required, artifactRepoStatus=unavailable, publicationReady=false, canPublishNow=false를 반환한다.",
+          "files": [
+            "scripts/phase7-publication-preflight.mjs",
+            "docs/phase-7-evidence/M7-7-publication-preflight.md",
+            "docs/project-state.json"
+          ]
         }
       ]
     },
@@ -1494,11 +1506,11 @@
           "id": "M7-D",
           "title": "#90 public release surface decision",
           "why": "public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.",
-          "done": "권장안은 source repo를 private으로 유지해야 한다면 별도 public artifact repo release 또는 public static URL에 tarball을 게시하는 것이다.",
-          "verification": "결정 후 docs/distribution-policy.json이 선택된 surface와 Codex publish authority를 기록해야 한다.",
+          "done": "preflight 기준 현재 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.",
+          "verification": "publication preflight가 publicationReady=true가 되려면 #90 approval과 public artifact repo visibility가 필요하다.",
           "files": [
             "docs/distribution-policy.json",
-            ".github/workflows/public-artifact.yml"
+            "scripts/phase7-publication-preflight.mjs"
           ]
         },
         {
@@ -1859,6 +1871,11 @@
       "name": "M7-6 no-publish workflow run",
       "status": "Pass",
       "detail": "GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication"
+    },
+    {
+      "name": "M7-7 publication preflight",
+      "status": "Blocked",
+      "detail": "preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible"
     }
   ],
   "commands": [
@@ -2011,6 +2028,10 @@
       "command": "node scripts/phase7-public-release-url-smoke.mjs"
     },
     {
+      "label": "Run M7 publication preflight",
+      "command": "node scripts/phase7-publication-preflight.mjs"
+    },
+    {
       "label": "Run full-flow smoke",
       "command": "node scripts/phase1-full-flow-smoke.mjs"
     },
@@ -2121,12 +2142,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-D</strong>
-                <span>docs/distribution-policy.json, .github/workflows/public-artifact.yml</span>
+                <span>docs/distribution-policy.json, scripts/phase7-publication-preflight.mjs</span>
               </div>
               <h3>#90 public release surface decision</h3>
               <div class="card-row"><b>왜</b><p>public URL 검증은 배포면 선택이 먼저 있어야 하고, release publication은 암묵적으로 실행할 수 없는 외부 공개 action이다.</p></div>
-              <div class="card-row"><b>완료</b><p>권장안은 source repo를 private으로 유지해야 한다면 별도 public artifact repo release 또는 public static URL에 tarball을 게시하는 것이다.</p></div>
-              <div class="card-row"><b>검증</b><p>결정 후 docs/distribution-policy.json이 선택된 surface와 Codex publish authority를 기록해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>preflight 기준 현재 blocker는 owner decision 미승인과 bborok1234/english-learning-harness-public repo 미확인이다.</p></div>
+              <div class="card-row"><b>검증</b><p>publication preflight가 publicationReady=true가 되려면 #90 approval과 public artifact repo visibility가 필요하다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -2147,16 +2168,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-D2</strong>
-                <span>scripts/phase7-public-release-decision-smoke.mjs, docs/distribution-policy.json, docs/phase-7-evidence/M7-D-public-release-decision.md</span>
-              </div>
-              <h3>#90 public release decision gate를 검증함</h3>
-              <div class="card-row"><b>왜</b><p>release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=public_artifact_repository_release, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M7-2</strong>
@@ -2206,6 +2217,16 @@
               <div class="card-row"><b>왜</b><p>workflow가 별도 artifact_repo target으로 바뀐 뒤 GitHub Actions runner에서도 no-publication mode가 안전하게 통과하는지 증거가 필요하다.</p></div>
               <div class="card-row"><b>완료</b><p>workflow_dispatch run 26619701714이 publish_release=false, artifact_repo=bborok1234/english-learning-harness-public 입력으로 성공했고 release publish step은 skipped였다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh run view 26619701714` shows conclusion=success; downloaded workflow artifact exists at tmp/phase-7-artifact-repo-workflow-run and is 317395 bytes.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-7</strong>
+                <span>scripts/phase7-publication-preflight.mjs, docs/phase-7-evidence/M7-7-publication-preflight.md, docs/project-state.json</span>
+              </div>
+              <h3>#104 public publication preflight를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>실제 공개 publish 전, owner decision/target repo/workflow/handoff가 준비됐는지 한 번에 보여주는 non-publishing readiness check가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>distribution policy, workflow artifact_repo/token boundary, handoff bundle, gh repo visibility를 검사하는 preflight를 추가했다. 현재 publicationReady=false다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-publication-preflight.mjs`가 decisionStatus=owner_decision_required, artifactRepoStatus=unavailable, publicationReady=false, canPublishNow=false를 반환한다.</p></div>
             </article>
         </div>
       </section>
@@ -2384,10 +2405,6 @@
           <tbody>
 
             <tr>
-              <td>M7-1 release workflow</td>
-              <td><strong>Pass</strong><span>manual GitHub Actions workflow is wired for artifact packaging, verification, workflow artifact upload, and optional release upload</span></td>
-            </tr>
-            <tr>
               <td>M7-1 workflow run</td>
               <td><strong>Pass</strong><span>GitHub Actions run 26618527553 succeeded with publish_release=false and uploaded workflow artifact english-learning-harness-public</span></td>
             </tr>
@@ -2414,6 +2431,10 @@
             <tr>
               <td>M7-6 no-publish workflow run</td>
               <td><strong>Pass</strong><span>GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication</span></td>
+            </tr>
+            <tr>
+              <td>M7-7 publication preflight</td>
+              <td><strong>Blocked</strong><span>preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible</span></td>
             </tr>
           </tbody>
         </table>
@@ -2459,7 +2480,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 62개 보기</summary>
+        <summary>완료 이력 63개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3082,10 +3103,20 @@
               <div class="card-row"><b>완료</b><p>#90을 생성해 별도 public artifact repo release, object storage/static URL, repository public 전환 중 하나를 선택하도록 분리했다.</p></div>
               <div class="card-row"><b>검증</b><p>`gh issue view 90` shows milestone=M7 Public Distribution Release and labels type:research, area:distribution, decision:research.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-D2</strong>
+                <span>scripts/phase7-public-release-decision-smoke.mjs, docs/distribution-policy.json, docs/phase-7-evidence/M7-D-public-release-decision.md</span>
+              </div>
+              <h3>#90 public release decision gate를 검증함</h3>
+              <div class="card-row"><b>왜</b><p>release publication은 외부 공개 action이라, 결정 전에도 자동화가 public distribution 완료를 과장하지 못하게 해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>distribution policy의 publicReleaseDecision을 검증하는 smoke를 추가해 owner decision required 상태와 Codex publish 금지를 확인한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-public-release-decision-smoke.mjs`가 decisionStatus=owner_decision_required, recommendedSurface=public_artifact_repository_release, codexMayPublishWithoutExplicitApproval=false를 통과한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 59개 보기</summary>
+        <summary>전체 검증 60개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3326,12 +3357,16 @@
               <td>M7-6 no-publish workflow run</td>
               <td><strong>Pass</strong><span>GitHub Actions run 26619701714 succeeded with artifact_repo input, uploaded workflow artifact, and skipped release publication</span></td>
             </tr>
+            <tr>
+              <td>M7-7 publication preflight</td>
+              <td><strong>Blocked</strong><span>preflight passes but reports publicationReady=false: owner decision is not approved and artifact repo is not visible</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 45개 보기</summary>
+        <summary>전체 명령 46개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -3481,6 +3516,10 @@
             <div class="command">
               <span>Run M7 public release URL smoke</span>
               <code>node scripts/phase7-public-release-url-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M7 publication preflight</span>
+              <code>node scripts/phase7-publication-preflight.mjs</code>
             </div>
             <div class="command">
               <span>Run full-flow smoke</span>
