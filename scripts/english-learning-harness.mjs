@@ -471,22 +471,22 @@ function day0MissionCards() {
       title: "오늘의 한 컷",
       setup: "방금 친구가 '오늘 뭐 했어?'라고 물었다고 상상합니다.",
       ask: "오늘 실제로 한 일을 영어로 한 문장만 말해보세요.",
-      example: "I worked on my side project today.",
+      example: "I had lunch and took a short walk today.",
     },
     {
       id: "meaning_check",
       title: "잠깐, 무슨 뜻이야?",
       setup:
-        '상대가 이렇게 말했습니다: "Your project sounds useful, but I am not sure who it is for."',
-      ask: "여기서 헷갈리는 부분을 영어로 한 번만 다시 물어보세요.",
-      example: "Do you mean who the main users are?",
+        '친구가 이렇게 말했습니다: "Let\'s meet at the usual place after work."',
+      ask: "어디에서 만나자는 뜻인지 영어로 한 번만 다시 물어보세요.",
+      example: "Which place do you mean?",
     },
     {
       id: "stuck_rescue",
       title: "막혔을 때 도망가지 않기",
       setup: "말하려는 단어가 바로 떠오르지 않는 상황입니다.",
       ask: '영어로 "정확한 단어는 모르겠지만..." 하고 계속 이어가 보세요.',
-      example: "I do not know the exact word, but I mean the project feels useful.",
+      example: "I do not know the exact word, but I mean this place feels comfortable.",
     },
     {
       id: "scene_snap",
@@ -531,9 +531,9 @@ function dayPracticeGuide(dayNumber, state) {
     firstQuestion: {
       title: "확인 질문 만들기",
       setup:
-        '상대가 이렇게 말했습니다: "Your project sounds useful, but I am not sure who it is for."',
-      ask: "상대가 무엇을 궁금해하는지 확인하는 영어 질문을 한 문장으로 해보세요.",
-      example: "Do you mean who the main users are?",
+        '친구가 이렇게 말했습니다: "Let\'s meet at the usual place after work."',
+      ask: "어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장으로 해보세요.",
+      example: "Which place do you mean?",
     },
     learnerRule: "답은 한 문장이면 됩니다. 예시를 그대로 조금 바꿔도 됩니다.",
   };
@@ -566,7 +566,7 @@ function pilotNextAction(state) {
       command: "pilot-day",
       day: completedDays + 1,
       prompt:
-        '상대가 "Your project sounds useful, but I am not sure who it is for."라고 말했습니다. 무엇을 의미하는지 확인하는 질문을 영어로 한 문장만 해보세요.',
+        '친구가 "Let\'s meet at the usual place after work."라고 말했습니다. 어디에서 만나자는 뜻인지 확인하는 질문을 영어로 한 문장만 해보세요.',
       guide: dayPracticeGuide(completedDays + 1, state),
     };
   }

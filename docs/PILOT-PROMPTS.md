@@ -39,7 +39,7 @@ Korean-first opening:
 예시:
 
 ```text
-I worked on my side project today.
+I had lunch and took a short walk today.
 ```
 
 ### 2. 잠깐, 무슨 뜻이야?
@@ -48,19 +48,19 @@ I worked on my side project today.
 
 ```text
 상대가 이렇게 말했어요:
-"Your project sounds useful, but I am not sure who it is for."
+"Let's meet at the usual place after work."
 ```
 
 질문:
 
 ```text
-여기서 헷갈리는 부분을 영어로 한 번만 다시 물어보세요.
+어디에서 만나자는 뜻인지 영어로 한 번만 다시 물어보세요.
 ```
 
 예시:
 
 ```text
-Do you mean who the main users are?
+Which place do you mean?
 ```
 
 ### 3. 막혔을 때 도망가지 않기
@@ -80,7 +80,7 @@ Do you mean who the main users are?
 예시:
 
 ```text
-I do not know the exact word, but I mean the project feels useful.
+I do not know the exact word, but I mean this place feels comfortable.
 ```
 
 ### 4. 내 주변 스냅샷
@@ -152,7 +152,7 @@ Use this instead:
 
 ```text
 상대가 이렇게 말했어요:
-"Your project sounds useful, but I am not sure who it is for."
+"Let's meet at the usual place after work."
 
-여기서 헷갈리는 부분을 영어로 한 번만 다시 물어보세요.
+어디에서 만나자는 뜻인지 영어로 한 번만 다시 물어보세요.
 ```
