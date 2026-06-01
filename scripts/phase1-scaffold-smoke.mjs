@@ -87,6 +87,7 @@ const requiredFiles = [
   "scripts/phase8-speaking-skill-os-seven-day-smoke.mjs",
   "scripts/phase8-research-basis-smoke.mjs",
   "scripts/phase9-owner-pilot-smoke.mjs",
+  "scripts/phase9-pilot-prompt-ux-smoke.mjs",
 ];
 
 function readJson(path) {

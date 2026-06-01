@@ -464,12 +464,100 @@ function relativeToRoot(paths, filePath) {
   return filePath ? relative(paths.root, filePath) : "";
 }
 
+function day0MissionCards() {
+  return [
+    {
+      id: "today_snapshot",
+      title: "오늘의 한 컷",
+      setup: "방금 친구가 '오늘 뭐 했어?'라고 물었다고 상상합니다.",
+      ask: "오늘 실제로 한 일을 영어로 한 문장만 말해보세요.",
+      example: "I worked on my side project today.",
+    },
+    {
+      id: "meaning_check",
+      title: "잠깐, 무슨 뜻이야?",
+      setup:
+        '상대가 이렇게 말했습니다: "Your project sounds useful, but I am not sure who it is for."',
+      ask: "여기서 헷갈리는 부분을 영어로 한 번만 다시 물어보세요.",
+      example: "Do you mean who the main users are?",
+    },
+    {
+      id: "stuck_rescue",
+      title: "막혔을 때 도망가지 않기",
+      setup: "말하려는 단어가 바로 떠오르지 않는 상황입니다.",
+      ask: '영어로 "정확한 단어는 모르겠지만..." 하고 계속 이어가 보세요.',
+      example: "I do not know the exact word, but I mean the project feels useful.",
+    },
+    {
+      id: "scene_snap",
+      title: "내 주변 스냅샷",
+      setup: "누군가 화상 통화로 지금 있는 곳이 어떤지 물었습니다.",
+      ask: "주변에 보이는 장소나 물건을 영어로 한두 문장 묘사해보세요.",
+      example: "I am in an office. There are many desks, chairs, and monitors.",
+    },
+    {
+      id: "comfort_check",
+      title: "오늘의 체감",
+      setup: "마지막으로 오늘 영어로 말하는 느낌을 기록합니다.",
+      ask: "0부터 5까지 점수와 이유를 아주 짧게 말해보세요.",
+      example: "My comfort score is 3. I feel okay, but I am a little tired.",
+    },
+  ];
+}
+
+function day0ConversationGuide() {
+  return {
+    title: "3분 영어 스냅샷",
+    opening:
+      "시험이 아니라 현재 말하기 상태를 찍어두는 첫 장면입니다. 틀려도 그대로가 좋은 데이터입니다.",
+    howToRun:
+      "Codex should ask one mission at a time, wait for the learner's answer, then move to the next card. Do not expose rubric labels or ask the learner to fill evaluation fields.",
+    learnerRule: "한 번에 한 문장만 말해도 됩니다. 막히면 쉬운 단어로 돌아가면 됩니다.",
+    privacy:
+      "이 답변은 기본적으로 로컬에만 저장됩니다. 공개 이슈나 PR에는 원문을 올리지 않습니다.",
+    firstQuestion: day0MissionCards()[0],
+    cards: day0MissionCards(),
+  };
+}
+
+function dayPracticeGuide(dayNumber, state) {
+  const nextTitle = state.baseline ? `Pilot Day ${dayNumber}` : "Day 0 먼저 필요";
+  return {
+    title: nextTitle,
+    opening:
+      "오늘은 하나의 실제 대화 행동만 연습합니다. 긴 답보다 자연스럽게 한 번 물어보거나 이어가는 것이 목표입니다.",
+    howToRun:
+      "Codex should give a concrete situation, ask for one English sentence, then save the attempt through pilot-day.",
+    firstQuestion: {
+      title: "확인 질문 만들기",
+      setup:
+        '상대가 이렇게 말했습니다: "Your project sounds useful, but I am not sure who it is for."',
+      ask: "상대가 무엇을 궁금해하는지 확인하는 영어 질문을 한 문장으로 해보세요.",
+      example: "Do you mean who the main users are?",
+    },
+    learnerRule: "답은 한 문장이면 됩니다. 예시를 그대로 조금 바꿔도 됩니다.",
+  };
+}
+
+function finalConversationGuide() {
+  return {
+    title: "Day 7 다시 찍는 영어 스냅샷",
+    opening:
+      "Day 0과 비슷한 장면을 다시 말해봅니다. 목적은 점수 매기기가 아니라 어떤 행동이 편해졌는지 보는 것입니다.",
+    howToRun:
+      "Codex should reuse the same five mission cards, ask one at a time, and then save the collected answers through pilot-finish.",
+    learnerRule: "Day 0보다 완벽할 필요는 없습니다. 조금 더 자연스럽게 묻고 이어가면 충분합니다.",
+    cards: day0MissionCards(),
+  };
+}
+
 function pilotNextAction(state) {
   if (!state.baseline) {
     return {
       command: "pilot-start",
       prompt:
-        "Day 0 baseline: answer in English with 3-5 short lines: one thing you did today, one clarification question, one stuck-moment repair phrase, one scene/detail description, and one comfort note.",
+        '3분 영어 스냅샷을 시작합니다. 첫 질문: 친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.',
+      guide: day0ConversationGuide(),
     };
   }
   const completedDays = state.days.filter((day) => day.status === "complete").length;
@@ -477,14 +565,17 @@ function pilotNextAction(state) {
     return {
       command: "pilot-day",
       day: completedDays + 1,
-      prompt: `Pilot Day ${completedDays + 1}: do one low-pressure Speaking Skill OS session and leave one friction note if anything felt annoying.`,
+      prompt:
+        '상대가 "Your project sounds useful, but I am not sure who it is for."라고 말했습니다. 무엇을 의미하는지 확인하는 질문을 영어로 한 문장만 해보세요.',
+      guide: dayPracticeGuide(completedDays + 1, state),
     };
   }
   if (!state.final_sample) {
     return {
       command: "pilot-finish",
       prompt:
-        "Final sample: repeat the same Day 0 prompt categories so the rubric can compare baseline and final evidence.",
+        "마지막 영어 스냅샷입니다. Day 0과 비슷한 다섯 장면을 한 문장씩 다시 말해보겠습니다.",
+      guide: finalConversationGuide(),
     };
   }
   return {
@@ -567,6 +658,7 @@ function pilotStart(options) {
     baselineArtifactPath,
     diagnosis,
     summary: pilotStatusSummary(state),
+    conversationGuide: state.baseline ? dayPracticeGuide(1, state) : day0ConversationGuide(),
     privacy:
       "Local-only by default. Review and redact transcripts before posting any pilot evidence publicly.",
     claimBoundary: state.claim_boundary,
@@ -582,6 +674,7 @@ function pilotStatus(options) {
     learnerRoot: paths.root,
     pilotStatePath: paths.pilotState,
     summary: pilotStatusSummary(state),
+    conversationGuide: pilotNextAction(state).guide,
     state,
   };
 }
@@ -626,6 +719,7 @@ function pilotDay(options) {
     day: dayRecord,
     session: sessionResult,
     summary: pilotStatusSummary(state),
+    conversationGuide: pilotNextAction(state).guide,
     claimBoundary: state.claim_boundary,
   };
 }

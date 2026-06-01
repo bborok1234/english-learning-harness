@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-01",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Owner pilot bridge in progress",
-    "status": "Public onboarding and Speaking Skill OS are live; M9 now adds real owner/self pilot mechanics without assuming a personal name",
+    "stage": "Owner pilot prompt UX in progress",
+    "status": "M9 owner/self pilot mechanics exist, and Day 0 prompt UX is being converted into concrete learner-facing mission cards",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research basis citations, and now an M9 owner/self pilot bridge: pilot-start/status/day/finish create local pilot state, Day 0 baseline diagnosis, daily pilot records, and final transcript-rubric report mechanics. Actual owner pilot evidence is still pending real Day 0 and Day 7 samples."
+    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, and now learner-facing pilot mission cards. The old internal prompt style is explicitly rejected; Day 0 starts as a 3-minute English snapshot with concrete situations, examples, one-sentence answers, and local-only privacy copy."
   },
   "ssot": [
     {
@@ -532,6 +532,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/PILOT-PROMPTS.md",
+      "path": "./PILOT-PROMPTS.md",
+      "role": "owner pilot learner-facing prompt contract",
+      "kind": "source"
+    },
+    {
       "label": "docs/PRODUCT-ROADMAP.md",
       "path": "./PRODUCT-ROADMAP.md",
       "role": "제품 로드맵과 게이트",
@@ -589,14 +595,14 @@
     },
     {
       "label": "Next decision",
-      "value": "Owner pilot",
-      "detail": "run real Day 0 -> daily practice -> final sample with owner/self participant evidence",
+      "value": "Run Day 1",
+      "detail": "pilot prompts are clearer; next real evidence is one Day 1 attempt from the owner/self participant",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
       "value": "56 issues",
-      "detail": "#136-#139 add M9 owner pilot bridge work",
+      "detail": "#138 improves learner-facing pilot prompt UX",
       "tone": "green"
     },
     {
@@ -662,6 +668,13 @@
       "status": "Pass",
       "evidence": "#136, phase9-owner-pilot-smoke",
       "claim": "local owner/self pilot mechanics exist without assumed personal name; actual pilot outcome evidence remains pending"
+    },
+    {
+      "id": "GATE-9",
+      "label": "Learner-facing pilot prompt UX",
+      "status": "Pass",
+      "evidence": "#138, phase9-pilot-prompt-ux-smoke",
+      "claim": "Day 0 no longer exposes internal rubric labels and uses concrete mission cards with examples"
     }
   ],
   "board": [
@@ -1735,6 +1748,20 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-9-evidence/M9-1-owner-pilot-state.md"
           ]
+        },
+        {
+          "id": "M9-3",
+          "title": "#138 pilot 시작 prompt를 미션 카드로 바꿈",
+          "why": "A clarification question I can ask 같은 문구는 영어 문제가 아니라 task design 문제다. 사용자가 처음부터 흥미를 느끼려면 실제 장면, 역할, 예시, 한 문장 목표가 필요하다.",
+          "done": "Day 0을 3분 영어 스냅샷으로 바꾸고, 오늘의 한 컷/잠깐 무슨 뜻이야/막혔을 때/내 주변 스냅샷/오늘의 체감 카드와 예시를 추가했다.",
+          "verification": "`node scripts/phase9-pilot-prompt-ux-smoke.mjs`가 mission cards, concrete examples, privacy copy, bad prompt rejection을 검증한다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "docs/PILOT-PROMPTS.md",
+            "README.md",
+            "scripts/phase9-pilot-prompt-ux-smoke.mjs",
+            "docs/phase-9-evidence/M9-3-pilot-prompt-ux.md"
+          ]
         }
       ]
     },
@@ -1745,13 +1772,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Owner/self pilot bridge",
-          "why": "M8 local fixture는 충분하다. 다음은 실제 owner/self participant가 Day 0 baseline부터 Day 7 final sample까지 진행할 수 있는 pilot lane이다.",
-          "done": "M9-1 command surface is implemented on the current branch.",
-          "verification": "`node scripts/phase9-owner-pilot-smoke.mjs` passes.",
+          "title": "Pilot prompt UX repair",
+          "why": "현재 blocker는 엔진이 아니라 첫 질문의 품질이다. 평가 항목을 숨기고 실제 장면 중심으로 바꿔야 한다.",
+          "done": "M9-3 prompt cards are implemented on the current branch.",
+          "verification": "`node scripts/phase9-pilot-prompt-ux-smoke.mjs` passes.",
           "files": [
-            "scripts/english-learning-harness.mjs",
-            "docs/phase-9-evidence/M9-1-owner-pilot-state.md"
+            "docs/PILOT-PROMPTS.md",
+            "scripts/english-learning-harness.mjs"
           ]
         }
       ]
@@ -1763,24 +1790,13 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "Run actual owner pilot Day 0",
-          "why": "The mechanics are now ready, but real evidence requires the actual owner/self participant baseline sample and comfort rating.",
-          "done": "아직 실제 Day 0 발화는 수집하지 않았다.",
-          "verification": "Next gate requires real baseline transcript, local-only consent boundary, and pilot-status showing baselineReady=true.",
+          "title": "Run actual Pilot Day 1 with better prompt",
+          "why": "Day 0은 bad prompt friction을 포함해 저장됐다. 이제 개선된 concrete prompt로 Day 1 시도를 받아야 실제 pilot evidence가 생긴다.",
+          "done": "아직 Day 1 실제 답변은 저장하지 않았다.",
+          "verification": "pilot-day should record one clarification attempt and friction note if the prompt still feels unclear.",
           "files": [
             "pilot-state.json under learner root",
-            "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md"
-          ]
-        },
-        {
-          "id": "NEXT-2",
-          "title": "Learner-facing pilot prompt/privacy copy",
-          "why": "사용자는 script가 아니라 Codex 대화로 pilot을 진행해야 한다.",
-          "done": "M9-3에서 README/skill prompt를 정리해야 한다.",
-          "verification": "learner README smoke and privacy handoff smoke should pass.",
-          "files": [
-            "README.md",
-            "skills/daily-session/SKILL.md"
+            "docs/PILOT-PROMPTS.md"
           ]
         }
       ]
@@ -2210,6 +2226,11 @@
       "name": "M9-1 owner pilot",
       "status": "Pass",
       "detail": "pilot-start/status/day/finish mechanics and generic owner/self participant identity pass smoke"
+    },
+    {
+      "name": "M9-3 pilot prompt UX",
+      "status": "Pass",
+      "detail": "mission-card prompt UX and rejected ambiguous prompt smoke pass"
     }
   ],
   "commands": [
@@ -2424,6 +2445,10 @@
     {
       "label": "Run M9 owner pilot smoke",
       "command": "node scripts/phase9-owner-pilot-smoke.mjs"
+    },
+    {
+      "label": "Run M9 pilot prompt UX smoke",
+      "command": "node scripts/phase9-pilot-prompt-ux-smoke.mjs"
     }
   ]
 }
@@ -2432,12 +2457,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research basis citations, and now an M9 owner/self pilot bridge: pilot-start/status/day/finish create local pilot state, Day 0 baseline diagnosis, daily pilot records, and final transcript-rubric report mechanics. Actual owner pilot evidence is still pending real Day 0 and Day 7 samples.</p>
+        <p class="summary">The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, and now learner-facing pilot mission cards. The old internal prompt style is explicitly rejected; Day 0 starts as a 3-minute English snapshot with concrete situations, examples, one-sentence answers, and local-only privacy copy.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-01</strong>
-        Owner pilot bridge in progress<br>
-        Public onboarding and Speaking Skill OS are live; M9 now adds real owner/self pilot mechanics without assuming a personal name
+        Owner pilot prompt UX in progress<br>
+        M9 owner/self pilot mechanics exist, and Day 0 prompt UX is being converted into concrete learner-facing mission cards
       </div>
     </header>
 
@@ -2455,13 +2480,13 @@
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next decision</div>
-          <div class="metric-value">Owner pilot</div>
-          <p>run real Day 0 -&gt; daily practice -&gt; final sample with owner/self participant evidence</p>
+          <div class="metric-value">Run Day 1</div>
+          <p>pilot prompts are clearer; next real evidence is one Day 1 attempt from the owner/self participant</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
           <div class="metric-value">56 issues</div>
-          <p>#136-#139 add M9 owner pilot bridge work</p>
+          <p>#138 improves learner-facing pilot prompt UX</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
@@ -2487,39 +2512,29 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>3</span>
+          <span>2</span>
         </header>
         <div class="column-cards">
 
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/english-learning-harness.mjs, docs/phase-9-evidence/M9-1-owner-pilot-state.md</span>
+                <span>docs/PILOT-PROMPTS.md, scripts/english-learning-harness.mjs</span>
               </div>
-              <h3>Owner/self pilot bridge</h3>
-              <div class="card-row"><b>왜</b><p>M8 local fixture는 충분하다. 다음은 실제 owner/self participant가 Day 0 baseline부터 Day 7 final sample까지 진행할 수 있는 pilot lane이다.</p></div>
-              <div class="card-row"><b>완료</b><p>M9-1 command surface is implemented on the current branch.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase9-owner-pilot-smoke.mjs` passes.</p></div>
+              <h3>Pilot prompt UX repair</h3>
+              <div class="card-row"><b>왜</b><p>현재 blocker는 엔진이 아니라 첫 질문의 품질이다. 평가 항목을 숨기고 실제 장면 중심으로 바꿔야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>M9-3 prompt cards are implemented on the current branch.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-prompt-ux-smoke.mjs` passes.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>NEXT-1</strong>
-                <span>pilot-state.json under learner root, docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md</span>
+                <span>pilot-state.json under learner root, docs/PILOT-PROMPTS.md</span>
               </div>
-              <h3>Run actual owner pilot Day 0</h3>
-              <div class="card-row"><b>왜</b><p>The mechanics are now ready, but real evidence requires the actual owner/self participant baseline sample and comfort rating.</p></div>
-              <div class="card-row"><b>완료</b><p>아직 실제 Day 0 발화는 수집하지 않았다.</p></div>
-              <div class="card-row"><b>검증</b><p>Next gate requires real baseline transcript, local-only consent boundary, and pilot-status showing baselineReady=true.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>NEXT-2</strong>
-                <span>README.md, skills/daily-session/SKILL.md</span>
-              </div>
-              <h3>Learner-facing pilot prompt/privacy copy</h3>
-              <div class="card-row"><b>왜</b><p>사용자는 script가 아니라 Codex 대화로 pilot을 진행해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>M9-3에서 README/skill prompt를 정리해야 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>learner README smoke and privacy handoff smoke should pass.</p></div>
+              <h3>Run actual Pilot Day 1 with better prompt</h3>
+              <div class="card-row"><b>왜</b><p>Day 0은 bad prompt friction을 포함해 저장됐다. 이제 개선된 concrete prompt로 Day 1 시도를 받아야 실제 pilot evidence가 생긴다.</p></div>
+              <div class="card-row"><b>완료</b><p>아직 Day 1 실제 답변은 저장하지 않았다.</p></div>
+              <div class="card-row"><b>검증</b><p>pilot-day should record one clarification attempt and friction note if the prompt still feels unclear.</p></div>
             </article>
         </div>
       </section>
@@ -2530,16 +2545,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M7-17</strong>
-                <span>README.md, README.en.md, scripts/phase7-learner-readme-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, scripts/package-public-artifact.mjs, scripts/phase7-public-artifact-smoke.mjs, docs/phase-7-evidence/M7-17-korean-primary-readme.md</span>
-              </div>
-              <h3>#124 한국어 README를 메인 공개 표면으로 전환함</h3>
-              <div class="card-row"><b>왜</b><p>제품의 1차 타겟은 한국인 영어 회화 학습자다. 첫 방문자가 영어 README나 Node 명령 목록을 먼저 보면 제품 의도와 맞지 않는다.</p></div>
-              <div class="card-row"><b>완료</b><p>`README.md`를 한국어 메인 README로 바꾸고, `README.en.md`를 보조 영어 README로 추가했다. 배포 아티팩트와 readiness smoke도 bilingual README 구조를 검증한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M8-1</strong>
@@ -2589,6 +2594,16 @@
               <div class="card-row"><b>왜</b><p>fixture evidence 다음 단계는 실제 owner/self participant pilot이다. 이때 특정 이름을 임의로 가정하지 않고, baseline/day/final/report 흐름을 local state로 관리해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`pilot-start`, `pilot-status`, `pilot-day`, `pilot-finish`, `pilot-state.json`, local pilot report, transcript rubric bridge를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase9-owner-pilot-smoke.mjs`가 baseline 대기, baseline diagnosis, 5 daily sessions, final rubric report, generic participant identity를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M9-3</strong>
+                <span>scripts/english-learning-harness.mjs, docs/PILOT-PROMPTS.md, README.md, scripts/phase9-pilot-prompt-ux-smoke.mjs, docs/phase-9-evidence/M9-3-pilot-prompt-ux.md</span>
+              </div>
+              <h3>#138 pilot 시작 prompt를 미션 카드로 바꿈</h3>
+              <div class="card-row"><b>왜</b><p>A clarification question I can ask 같은 문구는 영어 문제가 아니라 task design 문제다. 사용자가 처음부터 흥미를 느끼려면 실제 장면, 역할, 예시, 한 문장 목표가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>Day 0을 3분 영어 스냅샷으로 바꾸고, 오늘의 한 컷/잠깐 무슨 뜻이야/막혔을 때/내 주변 스냅샷/오늘의 체감 카드와 예시를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-prompt-ux-smoke.mjs`가 mission cards, concrete examples, privacy copy, bad prompt rejection을 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -2675,6 +2690,11 @@
               <td><strong>GATE-8</strong><span>Owner/self pilot command surface</span></td>
               <td><strong>Pass</strong><span>#136, phase9-owner-pilot-smoke</span></td>
               <td>local owner/self pilot mechanics exist without assumed personal name; actual pilot outcome evidence remains pending</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-9</strong><span>Learner-facing pilot prompt UX</span></td>
+              <td><strong>Pass</strong><span>#138, phase9-pilot-prompt-ux-smoke</span></td>
+              <td>Day 0 no longer exposes internal rubric labels and uses concrete mission cards with examples</td>
             </tr>
         </tbody>
       </table>
@@ -2765,6 +2785,10 @@
               <strong>docs/RESEARCH-BASIS.md</strong>
               <span>학습 방식 출처/근거와 source-to-feature claim boundary map</span>
             </a>
+            <a class="link-card source" href="./PILOT-PROMPTS.md">
+              <strong>docs/PILOT-PROMPTS.md</strong>
+              <span>owner pilot learner-facing prompt contract</span>
+            </a>
             <a class="link-card source" href="./PRODUCT-ROADMAP.md">
               <strong>docs/PRODUCT-ROADMAP.md</strong>
               <span>제품 로드맵과 게이트</span>
@@ -2801,10 +2825,6 @@
           <tbody>
 
             <tr>
-              <td>M7-15 Codex-native user surface</td>
-              <td><strong>Pass</strong><span>README and skills now keep learners in Codex conversation; node commands are internal engine details</span></td>
-            </tr>
-            <tr>
               <td>M7-16 agent-installed onboarding</td>
               <td><strong>Pass</strong><span>setup --host codex installs skills into Codex; README leads with paste-into-Codex install prompt</span></td>
             </tr>
@@ -2831,6 +2851,10 @@
             <tr>
               <td>M9-1 owner pilot</td>
               <td><strong>Pass</strong><span>pilot-start/status/day/finish mechanics and generic owner/self participant identity pass smoke</span></td>
+            </tr>
+            <tr>
+              <td>M9-3 pilot prompt UX</td>
+              <td><strong>Pass</strong><span>mission-card prompt UX and rejected ambiguous prompt smoke pass</span></td>
             </tr>
           </tbody>
         </table>
@@ -2876,7 +2900,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 78개 보기</summary>
+        <summary>완료 이력 79개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3659,10 +3683,20 @@
               <div class="card-row"><b>완료</b><p>`setup --host codex`가 네 개의 English Learning Harness skill을 `~/.codex/skills`에 설치하고, README 첫 경로를 paste-into-Codex install prompt로 바꿨다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase7-agent-install-smoke.mjs`가 isolated Codex skills dir에서 symlink/copy 설치를 검증하고, `node scripts/phase7-learner-readme-smoke.mjs`가 human clone/download primary path를 금지한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M7-17</strong>
+                <span>README.md, README.en.md, scripts/phase7-learner-readme-smoke.mjs, scripts/phase7-open-source-readiness-smoke.mjs, scripts/package-public-artifact.mjs, scripts/phase7-public-artifact-smoke.mjs, docs/phase-7-evidence/M7-17-korean-primary-readme.md</span>
+              </div>
+              <h3>#124 한국어 README를 메인 공개 표면으로 전환함</h3>
+              <div class="card-row"><b>왜</b><p>제품의 1차 타겟은 한국인 영어 회화 학습자다. 첫 방문자가 영어 README나 Node 명령 목록을 먼저 보면 제품 의도와 맞지 않는다.</p></div>
+              <div class="card-row"><b>완료</b><p>`README.md`를 한국어 메인 README로 바꾸고, `README.en.md`를 보조 영어 README로 추가했다. 배포 아티팩트와 readiness smoke도 bilingual README 구조를 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase7-open-source-readiness-smoke.mjs`, `node scripts/phase7-public-artifact-smoke.mjs`가 통과한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 75개 보기</summary>
+        <summary>전체 검증 76개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -3967,12 +4001,16 @@
               <td>M9-1 owner pilot</td>
               <td><strong>Pass</strong><span>pilot-start/status/day/finish mechanics and generic owner/self participant identity pass smoke</span></td>
             </tr>
+            <tr>
+              <td>M9-3 pilot prompt UX</td>
+              <td><strong>Pass</strong><span>mission-card prompt UX and rejected ambiguous prompt smoke pass</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 53개 보기</summary>
+        <summary>전체 명령 54개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -4186,6 +4224,10 @@
             <div class="command">
               <span>Run M9 owner pilot smoke</span>
               <code>node scripts/phase9-owner-pilot-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M9 pilot prompt UX smoke</span>
+              <code>node scripts/phase9-pilot-prompt-ux-smoke.mjs</code>
             </div>
         </div>
       </details>
