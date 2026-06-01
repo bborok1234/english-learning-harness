@@ -36,8 +36,8 @@ function assertPromptUx(value, label) {
     "3분 영어 스냅샷",
     "친구",
     "오늘 실제로 한 일",
-    "Your project sounds useful",
-    "Do you mean who the main users are?",
+    "Let's meet at the usual place after work",
+    "Which place do you mean?",
     "한 문장",
     "로컬",
   ]) {
@@ -45,6 +45,9 @@ function assertPromptUx(value, label) {
   }
   for (const forbidden of [
     "A clarification question I can ask",
+    "Your project sounds useful",
+    "main users",
+    "side project",
     "answer in English with 3-5 short lines",
     "one clarification question",
     "prompt categories",
@@ -77,7 +80,7 @@ function main() {
   const promptDoc = readFileSync(resolve(repoRoot, "docs/PILOT-PROMPTS.md"), "utf8");
   assert(promptDoc.includes("Do not ask"), "prompt doc should document bad prompt pattern");
   assert(promptDoc.includes("A clarification question I can ask"), "prompt doc should record the rejected bad prompt");
-  assert(promptDoc.includes("Do you mean who the main users are?"), "prompt doc should include concrete replacement");
+  assert(promptDoc.includes("Which place do you mean?"), "prompt doc should include concrete replacement");
 
   console.log(
     JSON.stringify(

@@ -12,6 +12,7 @@ The first pilot prompt exposed internal evaluation language. A learner saw `A cl
 
 - Replaced internal Day 0 wording with a "3분 영어 스냅샷" learner-facing flow.
 - Added five mission cards with concrete situations, one-sentence asks, and examples.
+- Replaced project-specific first-use scenarios with neutral daily-life situations such as meeting at the usual place after work.
 - Added `conversationGuide` to `pilot-start`, `pilot-status`, and `pilot-day` outputs so Codex can ask one card at a time.
 - Added `docs/PILOT-PROMPTS.md` with the prompt contract and a rejected bad-prompt example.
 - Added a Korean README pilot start prompt and local-only privacy reminder.
