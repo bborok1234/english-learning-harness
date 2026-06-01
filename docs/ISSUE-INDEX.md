@@ -418,3 +418,12 @@ M7 now targets the current source repository as the open-source public distribut
 - `pilot-finish` compares baseline/final samples through the transcript review rubric and writes local JSON/Markdown pilot reports.
 - `scripts/phase9-owner-pilot-smoke.mjs` verifies the end-to-end mechanics and fails if the state assumes the wrong personal name.
 - this creates owner-pilot mechanics; it does not run the actual owner pilot or prove real learner outcomes yet.
+
+#138 evidence currently shows:
+
+- `pilot-start` and `pilot-status` return learner-facing conversation guides.
+- Day 0 is framed as a "3분 영어 스냅샷" with five concrete mission cards.
+- The old ambiguous style `A clarification question I can ask` is recorded as a rejected bad prompt in `docs/PILOT-PROMPTS.md`.
+- The replacement prompt gives a concrete situation, unclear phrase, one-sentence ask, and example answer.
+- README includes a Korean pilot start prompt and local-only privacy reminder.
+- `scripts/phase9-pilot-prompt-ux-smoke.mjs` verifies mission cards, concrete examples, privacy copy, and absence of ambiguous internal prompt wording.
