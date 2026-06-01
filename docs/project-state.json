@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-05-29",
+  "updatedAt": "2026-06-01",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Speaking Skill OS with research basis live",
-    "status": "Public onboarding is live, Speaking Skill OS has a seven-day local gate, and learning-method citations are mapped to product behavior",
+    "stage": "Owner pilot bridge in progress",
+    "status": "Public onboarding and Speaking Skill OS are live; M9 now adds real owner/self pilot mechanics without assuming a personal name",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and the default public clone-to-learn smoke passes. README.md is Korean-first and setup installs Codex skills into ~/.codex/skills. M8 adds the first truly harness-like differentiator: Speaking Skill OS records concrete speaking weaknesses in speaking-backlog.json, targets sessions from the queue, retries failed transfer work, passes a seven-day local fixture, and now has a visible research basis map that ties output practice, interaction repair, corrective feedback, retrieval practice, task-based scenarios, and claim boundaries to product surfaces."
+    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research basis citations, and now an M9 owner/self pilot bridge: pilot-start/status/day/finish create local pilot state, Day 0 baseline diagnosis, daily pilot records, and final transcript-rubric report mechanics. Actual owner pilot evidence is still pending real Day 0 and Day 7 samples."
   },
   "ssot": [
     {
@@ -100,6 +100,12 @@
       "kind": "source"
     },
     {
+      "label": "docs/phase-9-evidence/",
+      "path": "./phase-9-evidence/",
+      "role": "Phase 9 real learner pilot bridge evidence notes",
+      "kind": "source"
+    },
+    {
       "label": "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
       "path": "./M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
       "role": "M5 seven-day pilot protocol",
@@ -181,14 +187,14 @@
     },
     {
       "label": "Next decision",
-      "value": "Pilot / voice / plugin",
-      "detail": "choose the next proof: real learner pilot, realtime voice, or Git-backed plugin install",
+      "value": "Owner pilot",
+      "detail": "run real Day 0 -> daily practice -> final sample with owner/self participant evidence",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "52 issues",
-      "detail": "#134 adds the research basis citation map",
+      "value": "56 issues",
+      "detail": "#136-#139 add M9 owner pilot bridge work",
       "tone": "green"
     },
     {
@@ -247,6 +253,13 @@
       "status": "Pass",
       "evidence": "#134, docs/RESEARCH-BASIS.md, phase8-research-basis-smoke",
       "claim": "learning-method sources are visible and bounded by explicit non-outcome claims"
+    },
+    {
+      "id": "GATE-8",
+      "label": "Owner/self pilot command surface",
+      "status": "Pass",
+      "evidence": "#136, phase9-owner-pilot-smoke",
+      "claim": "local owner/self pilot mechanics exist without assumed personal name; actual pilot outcome evidence remains pending"
     }
   ],
   "board": [
@@ -1307,6 +1320,19 @@
             "scripts/phase8-research-basis-smoke.mjs",
             "docs/phase-8-evidence/M8-4-research-basis.md"
           ]
+        },
+        {
+          "id": "M9-1",
+          "title": "#136 owner/self pilot state와 command surface를 추가함",
+          "why": "fixture evidence 다음 단계는 실제 owner/self participant pilot이다. 이때 특정 이름을 임의로 가정하지 않고, baseline/day/final/report 흐름을 local state로 관리해야 한다.",
+          "done": "`pilot-start`, `pilot-status`, `pilot-day`, `pilot-finish`, `pilot-state.json`, local pilot report, transcript rubric bridge를 추가했다.",
+          "verification": "`node scripts/phase9-owner-pilot-smoke.mjs`가 baseline 대기, baseline diagnosis, 5 daily sessions, final rubric report, generic participant identity를 검증한다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase9-owner-pilot-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-9-evidence/M9-1-owner-pilot-state.md"
+          ]
         }
       ]
     },
@@ -1317,14 +1343,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Research-backed Speaking Skill OS",
-          "why": "현재 제품 차별점은 diagnose/backlog/drill/transfer 루프이고, 이 루프가 어떤 교육학적 근거 위에 있는지 공개 표면에서 바로 보여야 한다.",
-          "done": "Research basis citation map을 추가했다.",
-          "verification": "`node scripts/phase8-research-basis-smoke.mjs`가 통과한다.",
+          "title": "Owner/self pilot bridge",
+          "why": "M8 local fixture는 충분하다. 다음은 실제 owner/self participant가 Day 0 baseline부터 Day 7 final sample까지 진행할 수 있는 pilot lane이다.",
+          "done": "M9-1 command surface is implemented on the current branch.",
+          "verification": "`node scripts/phase9-owner-pilot-smoke.mjs` passes.",
           "files": [
-            "docs/RESEARCH-BASIS.md",
-            "README.md",
-            "docs/LEARNING-ENGINE.md"
+            "scripts/english-learning-harness.mjs",
+            "docs/phase-9-evidence/M9-1-owner-pilot-state.md"
           ]
         }
       ]
@@ -1336,14 +1361,24 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "Real learner pilot bridge",
-          "why": "M8 local mechanics는 7일 fixture로 통과했다. 다음 차이는 실제 한국인 학습자의 7일 pilot에서 이 OS가 지속 사용과 체감 개선을 만드는지 보는 것이다.",
-          "done": "아직 시작 전이다.",
-          "verification": "다음 gate는 실제 learner pilot protocol, consent/privacy handoff, before/after sample review, qualitative retention notes가 필요하다.",
+          "title": "Run actual owner pilot Day 0",
+          "why": "The mechanics are now ready, but real evidence requires the actual owner/self participant baseline sample and comfort rating.",
+          "done": "아직 실제 Day 0 발화는 수집하지 않았다.",
+          "verification": "Next gate requires real baseline transcript, local-only consent boundary, and pilot-status showing baselineReady=true.",
           "files": [
-            "docs/LEARNING-ENGINE.md",
-            "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
-            "scripts/phase8-speaking-skill-os-smoke.mjs"
+            "pilot-state.json under learner root",
+            "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md"
+          ]
+        },
+        {
+          "id": "NEXT-2",
+          "title": "Learner-facing pilot prompt/privacy copy",
+          "why": "사용자는 script가 아니라 Codex 대화로 pilot을 진행해야 한다.",
+          "done": "M9-3에서 README/skill prompt를 정리해야 한다.",
+          "verification": "learner README smoke and privacy handoff smoke should pass.",
+          "files": [
+            "README.md",
+            "skills/daily-session/SKILL.md"
           ]
         }
       ]
@@ -1768,6 +1803,11 @@
       "name": "M8-4 research basis",
       "status": "Pass",
       "detail": "source-to-feature citation map, README links, and claim-boundary guard smoke pass"
+    },
+    {
+      "name": "M9-1 owner pilot",
+      "status": "Pass",
+      "detail": "pilot-start/status/day/finish mechanics and generic owner/self participant identity pass smoke"
     }
   ],
   "commands": [
@@ -1978,6 +2018,10 @@
     {
       "label": "Run M8 research basis smoke",
       "command": "node scripts/phase8-research-basis-smoke.mjs"
+    },
+    {
+      "label": "Run M9 owner pilot smoke",
+      "command": "node scripts/phase9-owner-pilot-smoke.mjs"
     }
   ]
 }

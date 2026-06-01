@@ -398,3 +398,23 @@ M7 now targets the current source repository as the open-source public distribut
 - `docs/LEARNING-ENGINE.md` now points to the citation map and adds a Speaking Skill OS research anchor.
 - `scripts/phase8-research-basis-smoke.mjs` verifies required source URLs, README links, and unsupported-claim guardrails.
 - this justifies the instructional design direction; it does not prove real learner outcome improvement.
+
+## M9 Real Learner Pilot Bridge
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #136 | M9-1: Add owner pilot state and command surface | continue |
+| #137 | M9-2: Generate owner pilot report and transcript review bridge | continue |
+| #138 | M9-3: Add learner-facing pilot prompts and privacy handoff | continue |
+| #139 | M9-4: Close owner pilot readiness gate and dashboard | continue |
+
+#136 evidence currently shows:
+
+- M9 milestone description uses `repository owner / self pilot participant`, not an assumed personal name.
+- `pilot-start` creates `pilot-state.json`, local-only consent boundary, and Day 0 baseline prompt/state.
+- `pilot-start --say ...` stores baseline evidence and seeds Speaking Skill OS diagnosis.
+- `pilot-day` records daily session artifact references and optional friction notes.
+- `pilot-status` reports baseline, daily-session count, readiness, and next action.
+- `pilot-finish` compares baseline/final samples through the transcript review rubric and writes local JSON/Markdown pilot reports.
+- `scripts/phase9-owner-pilot-smoke.mjs` verifies the end-to-end mechanics and fails if the state assumes the wrong personal name.
+- this creates owner-pilot mechanics; it does not run the actual owner pilot or prove real learner outcomes yet.
