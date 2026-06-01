@@ -36,6 +36,7 @@ import {
   writeProfile,
 } from "./lib/english-learning-store.mjs";
 import { planScenario } from "./lib/scenario-engine.mjs";
+import { evaluateTranscriptReview } from "./lib/transcript-review-rubric.mjs";
 
 function parseArgs(argv) {
   const command = argv[2] || "help";
@@ -87,6 +88,24 @@ function parseArgs(argv) {
       index += 1;
     } else if (arg === "--result") {
       options.result = argv[index + 1];
+      index += 1;
+    } else if (arg === "--day") {
+      options.day = Number(argv[index + 1]);
+      if (!Number.isInteger(options.day) || options.day < 1 || options.day > 7) {
+        throw new Error(`Invalid --day: ${argv[index + 1]}`);
+      }
+      index += 1;
+    } else if (arg === "--comfort-rating") {
+      options.comfortRating = Number(argv[index + 1]);
+      if (!Number.isFinite(options.comfortRating) || options.comfortRating < 0 || options.comfortRating > 5) {
+        throw new Error("--comfort-rating must be a number from 0 to 5");
+      }
+      index += 1;
+    } else if (arg === "--friction-note") {
+      options.frictionNote = argv[index + 1];
+      index += 1;
+    } else if (arg === "--consent") {
+      options.consent = argv[index + 1];
       index += 1;
     } else if (arg === "--date") {
       const date = new Date(argv[index + 1]);
@@ -142,6 +161,10 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-day [--day 1-7] [--say TEXT ...] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-finish [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs voice [--say TEXT ...] [--transcript FILE] [--audio-file FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
     "  node scripts/english-learning-harness.mjs image [--image-file FILE] [--hidden-detail TEXT] [--clarification-prompt TEXT] [--say TEXT ...] [--scenario ID] [--learner-root DIR] [--date ISO]",
@@ -191,6 +214,7 @@ function supportDiagnostics(options, paths) {
       commandWithRoot("daily", learnerRoot, ["--json"]),
       commandWithRoot("diagnose", learnerRoot, ["--say", JSON.stringify("I get stuck when I speak."), "--json"]),
       commandWithRoot("backlog", learnerRoot, ["--json"]),
+      commandWithRoot("pilot-status", learnerRoot, ["--json"]),
       commandWithRoot("today", learnerRoot, ["--say", JSON.stringify("I want to practice today."), "--json"]),
       commandWithRoot("weekly", learnerRoot, ["--json"]),
       commandWithRoot("home", learnerRoot, ["--json"]),
@@ -352,6 +376,360 @@ function backlog(options) {
     items,
     claimBoundary:
       "This is a local speaking skill backlog. It tracks practice targets and transfer attempts, not certified fluency.",
+  };
+}
+
+const pilotPromptSet = ["warm_start", "clarification", "reuse", "image_info_gap", "reflection"];
+
+function pilotPaths(learnerRoot) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const pilotDir = resolve(paths.root, "artifacts/pilot");
+  mkdirSync(pilotDir, { recursive: true });
+  return {
+    ...paths,
+    pilotState: resolve(paths.root, "pilot-state.json"),
+    pilotDir,
+  };
+}
+
+function defaultPilotState(paths, date = new Date()) {
+  return {
+    schema_version: 1,
+    pilot_id: `owner-self-${date.toISOString().slice(0, 10)}`,
+    participant: {
+      type: "owner_self",
+      label: "repository owner / self pilot participant",
+    },
+    protocol: "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+    status: "awaiting_baseline",
+    started_at: date.toISOString(),
+    target_days: 7,
+    minimum_valid_daily_sessions: 5,
+    prompt_set: pilotPromptSet,
+    consent: {
+      scope: "local-only",
+      accepted_at: "",
+      note:
+        "Pilot data stays local by default. Do not post transcripts, private notes, local paths, audio, or image files publicly without explicit review.",
+    },
+    baseline: null,
+    days: [],
+    final_sample: null,
+    report: null,
+    claim_boundary:
+      "This owner/self pilot can produce early local behavioral evidence only. It does not prove generalized fluency or real-world speaking ability.",
+  };
+}
+
+function normalizePilotState(state, paths, date = new Date()) {
+  const base = defaultPilotState(paths, date);
+  const normalized = {
+    ...base,
+    ...state,
+    participant: {
+      ...base.participant,
+      ...(state?.participant ?? {}),
+      label: "repository owner / self pilot participant",
+    },
+    consent: {
+      ...base.consent,
+      ...(state?.consent ?? {}),
+    },
+    prompt_set: Array.isArray(state?.prompt_set) ? state.prompt_set : base.prompt_set,
+    days: Array.isArray(state?.days) ? state.days : [],
+  };
+  if (normalized.schema_version !== 1) {
+    throw new Error(`${paths.pilotState}: schema_version must be 1`);
+  }
+  if (!["awaiting_baseline", "in_progress", "ready_to_finish", "complete", "incomplete"].includes(normalized.status)) {
+    throw new Error(`${paths.pilotState}: invalid status ${normalized.status}`);
+  }
+  return normalized;
+}
+
+function readPilotState(paths, date = new Date()) {
+  if (!existsSync(paths.pilotState)) {
+    return defaultPilotState(paths, date);
+  }
+  return normalizePilotState(JSON.parse(readFileSync(paths.pilotState, "utf8")), paths, date);
+}
+
+function writePilotState(paths, state, date = new Date()) {
+  const normalized = normalizePilotState(state, paths, date);
+  writeFileSync(paths.pilotState, `${JSON.stringify(normalized, null, 2)}\n`);
+  return normalized;
+}
+
+function relativeToRoot(paths, filePath) {
+  return filePath ? relative(paths.root, filePath) : "";
+}
+
+function pilotNextAction(state) {
+  if (!state.baseline) {
+    return {
+      command: "pilot-start",
+      prompt:
+        "Day 0 baseline: answer in English with 3-5 short lines: one thing you did today, one clarification question, one stuck-moment repair phrase, one scene/detail description, and one comfort note.",
+    };
+  }
+  const completedDays = state.days.filter((day) => day.status === "complete").length;
+  if (completedDays < state.minimum_valid_daily_sessions) {
+    return {
+      command: "pilot-day",
+      day: completedDays + 1,
+      prompt: `Pilot Day ${completedDays + 1}: do one low-pressure Speaking Skill OS session and leave one friction note if anything felt annoying.`,
+    };
+  }
+  if (!state.final_sample) {
+    return {
+      command: "pilot-finish",
+      prompt:
+        "Final sample: repeat the same Day 0 prompt categories so the rubric can compare baseline and final evidence.",
+    };
+  }
+  return {
+    command: "pilot-complete",
+    prompt: "Pilot report is ready. Review the local report before sharing anything publicly.",
+  };
+}
+
+function pilotStatusSummary(state) {
+  const completedDailySessions = state.days.filter((day) => day.status === "complete").length;
+  const readyToFinish = Boolean(state.baseline) && completedDailySessions >= state.minimum_valid_daily_sessions;
+  return {
+    pilotId: state.pilot_id,
+    status: state.status,
+    participant: state.participant.label,
+    baselineReady: Boolean(state.baseline),
+    completedDailySessions,
+    minimumValidDailySessions: state.minimum_valid_daily_sessions,
+    targetDays: state.target_days,
+    finalReady: Boolean(state.final_sample),
+    reportReady: Boolean(state.report),
+    readyToFinish,
+    nextAction: pilotNextAction(state),
+    claimBoundary: state.claim_boundary,
+  };
+}
+
+function pilotStart(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  let state = readPilotState(paths, date);
+  const turns = transcriptInputs({ ...options, input: options.input ?? [] }).filter(Boolean);
+  const hasExplicitSample = (options.input?.length ?? 0) > 0 || Boolean(options.transcript);
+  const consentScope = options.consent || "local-only";
+
+  state = {
+    ...state,
+    status: hasExplicitSample ? "in_progress" : "awaiting_baseline",
+    started_at: state.started_at || date.toISOString(),
+    consent: {
+      ...state.consent,
+      scope: consentScope,
+      accepted_at: state.consent.accepted_at || date.toISOString(),
+    },
+  };
+
+  let diagnosis = null;
+  let baselineArtifactPath = "";
+  if (hasExplicitSample) {
+    diagnosis = diagnoseSpeakingSample(paths.root, turns, date);
+    const baseline = {
+      collected_at: date.toISOString(),
+      prompt_set: state.prompt_set,
+      transcript: turns,
+      comfort_rating: options.comfortRating ?? null,
+      diagnosis_artifact: relativeToRoot(paths, diagnosis.artifactPath),
+    };
+    baselineArtifactPath = resolve(paths.pilotDir, `baseline-${date.toISOString().slice(0, 10)}-${date.getTime()}.json`);
+    writeFileSync(
+      baselineArtifactPath,
+      `${JSON.stringify({
+        schema_version: 1,
+        pilot_id: state.pilot_id,
+        baseline,
+        claim_boundary: state.claim_boundary,
+      }, null, 2)}\n`,
+    );
+    state.baseline = {
+      ...baseline,
+      artifact: relativeToRoot(paths, baselineArtifactPath),
+    };
+  }
+
+  state = writePilotState(paths, state, date);
+  return {
+    status: "pass",
+    action: "pilot-start",
+    learnerRoot: paths.root,
+    pilotStatePath: paths.pilotState,
+    baselineArtifactPath,
+    diagnosis,
+    summary: pilotStatusSummary(state),
+    privacy:
+      "Local-only by default. Review and redact transcripts before posting any pilot evidence publicly.",
+    claimBoundary: state.claim_boundary,
+  };
+}
+
+function pilotStatus(options) {
+  const paths = pilotPaths(options.learnerRoot);
+  const state = readPilotState(paths, options.date || new Date());
+  return {
+    status: "pass",
+    action: "pilot-status",
+    learnerRoot: paths.root,
+    pilotStatePath: paths.pilotState,
+    summary: pilotStatusSummary(state),
+    state,
+  };
+}
+
+function pilotDay(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  let state = readPilotState(paths, date);
+  if (!state.baseline) {
+    throw new Error("pilot-day requires a baseline first. Run pilot-start with a learner sample.");
+  }
+  const completedDays = state.days.filter((day) => day.status === "complete").length;
+  const dayNumber = options.day ?? completedDays + 1;
+  const sessionResult = today({
+    ...options,
+    learnerRoot: paths.root,
+    date,
+  });
+  const dayRecord = {
+    day: dayNumber,
+    date: date.toISOString(),
+    status: "complete",
+    session_id: sessionResult.sessionId,
+    artifact: relativeToRoot(paths, sessionResult.artifactPath),
+    friction_note: options.frictionNote || "",
+    speaking_backlog_evidence: sessionResult.speakingBacklogEvidence,
+  };
+  const withoutSameDay = state.days.filter((day) => day.day !== dayNumber);
+  state = {
+    ...state,
+    status:
+      withoutSameDay.length + 1 >= state.minimum_valid_daily_sessions
+        ? "ready_to_finish"
+        : "in_progress",
+    days: [...withoutSameDay, dayRecord].sort((a, b) => a.day - b.day),
+  };
+  state = writePilotState(paths, state, date);
+  return {
+    status: "pass",
+    action: "pilot-day",
+    learnerRoot: paths.root,
+    day: dayRecord,
+    session: sessionResult,
+    summary: pilotStatusSummary(state),
+    claimBoundary: state.claim_boundary,
+  };
+}
+
+function pilotReportMarkdown(report) {
+  return [
+    "# English Learning Harness Owner Pilot Report",
+    "",
+    `Generated: ${report.generated_at}`,
+    `Pilot: ${report.pilot_id}`,
+    "",
+    "## Status",
+    "",
+    `- Decision: ${report.rubric.decision}`,
+    `- Daily sessions: ${report.daily_session_count}/${report.minimum_valid_daily_sessions} minimum`,
+    `- Pass signals: ${report.rubric.pass_signals.join(", ") || "none"}`,
+    "",
+    "## Rubric Deltas",
+    "",
+    ...Object.entries(report.rubric.metrics.deltas).map(([key, value]) => `- ${key}: ${value}`),
+    "",
+    "## Friction Notes",
+    "",
+    ...(report.friction_notes.length ? report.friction_notes.map((note) => `- Day ${note.day}: ${note.note}`) : ["- none"]),
+    "",
+    "## Claim Boundary",
+    "",
+    report.claim_boundary,
+    "",
+  ].join("\n");
+}
+
+function pilotFinish(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  let state = readPilotState(paths, date);
+  if (!state.baseline) {
+    throw new Error("pilot-finish requires a baseline first.");
+  }
+  const completedDays = state.days.filter((day) => day.status === "complete").length;
+  if (completedDays < state.minimum_valid_daily_sessions) {
+    throw new Error(
+      `pilot-finish requires at least ${state.minimum_valid_daily_sessions} completed daily sessions; current=${completedDays}`,
+    );
+  }
+  const turns = transcriptInputs(options);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const finalSample = {
+    collected_at: date.toISOString(),
+    prompt_set: state.prompt_set,
+    transcript: turns,
+    comfort_rating: options.comfortRating ?? null,
+  };
+  const rubric = evaluateTranscriptReview({
+    saved_phrases: vocabulary.personal_phrases ?? [],
+    baseline: state.baseline,
+    final: finalSample,
+  });
+  const report = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    pilot_id: state.pilot_id,
+    daily_session_count: completedDays,
+    minimum_valid_daily_sessions: state.minimum_valid_daily_sessions,
+    baseline: state.baseline,
+    final_sample: finalSample,
+    rubric,
+    friction_notes: state.days
+      .filter((day) => day.friction_note)
+      .map((day) => ({ day: day.day, note: day.friction_note })),
+    claim_boundary:
+      "This owner/self pilot report summarizes one local learner's behavioral evidence. It does not prove generalized fluency or real-world speaking ability.",
+  };
+  const reportPath = resolve(paths.pilotDir, `pilot-report-${date.toISOString().slice(0, 10)}.json`);
+  const reportMarkdownPath = resolve(paths.pilotDir, `pilot-report-${date.toISOString().slice(0, 10)}.md`);
+  writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  writeFileSync(reportMarkdownPath, pilotReportMarkdown(report));
+  state = writePilotState(
+    paths,
+    {
+      ...state,
+      status: "complete",
+      final_sample: {
+        ...finalSample,
+        report: relativeToRoot(paths, reportPath),
+      },
+      report: {
+        json: relativeToRoot(paths, reportPath),
+        markdown: relativeToRoot(paths, reportMarkdownPath),
+        decision: rubric.decision,
+        pass_signals: rubric.pass_signals,
+      },
+    },
+    date,
+  );
+  return {
+    status: "pass",
+    action: "pilot-finish",
+    learnerRoot: paths.root,
+    reportPath,
+    reportMarkdownPath,
+    rubric,
+    summary: pilotStatusSummary(state),
+    claimBoundary: report.claim_boundary,
   };
 }
 
@@ -855,6 +1233,22 @@ function run() {
   }
   if (command === "backlog") {
     output(backlog(options), options.json);
+    return;
+  }
+  if (command === "pilot-start") {
+    output(pilotStart(options), options.json);
+    return;
+  }
+  if (command === "pilot-status") {
+    output(pilotStatus(options), options.json);
+    return;
+  }
+  if (command === "pilot-day") {
+    output(pilotDay(options), options.json);
+    return;
+  }
+  if (command === "pilot-finish") {
+    output(pilotFinish(options), options.json);
     return;
   }
   if (command === "today") {

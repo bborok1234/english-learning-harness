@@ -406,6 +406,69 @@ Required JSON fields:
 
 Local learner roots and source media paths must be redacted or marked local-only inside the evidence pack. The command output may include the local pack paths so the user can open the generated files on their own machine.
 
+## M9 Owner Pilot State
+
+The `pilot-start`, `pilot-status`, `pilot-day`, and `pilot-finish` commands write `pilot-state.json` under the learner root and local report artifacts under `artifacts/pilot/`.
+
+Required JSON fields:
+
+```json
+{
+  "schema_version": 1,
+  "pilot_id": "owner-self-YYYY-MM-DD",
+  "participant": {
+    "type": "owner_self",
+    "label": "repository owner / self pilot participant"
+  },
+  "protocol": "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
+  "status": "awaiting_baseline|in_progress|ready_to_finish|complete|incomplete",
+  "started_at": "ISO-8601",
+  "target_days": 7,
+  "minimum_valid_daily_sessions": 5,
+  "prompt_set": ["warm_start", "clarification", "reuse", "image_info_gap", "reflection"],
+  "consent": {
+    "scope": "local-only",
+    "accepted_at": "ISO-8601",
+    "note": "Pilot data stays local by default."
+  },
+  "baseline": {
+    "collected_at": "ISO-8601",
+    "prompt_set": [],
+    "transcript": [],
+    "comfort_rating": 2,
+    "diagnosis_artifact": "artifacts/speaking-os/diagnosis-YYYY-MM-DD.json",
+    "artifact": "artifacts/pilot/baseline-YYYY-MM-DD.json"
+  },
+  "days": [
+    {
+      "day": 1,
+      "date": "ISO-8601",
+      "status": "complete",
+      "session_id": "YYYY-MM-DD-...",
+      "artifact": "artifacts/sessions/...",
+      "friction_note": "",
+      "speaking_backlog_evidence": {}
+    }
+  ],
+  "final_sample": {
+    "collected_at": "ISO-8601",
+    "prompt_set": [],
+    "transcript": [],
+    "comfort_rating": 3,
+    "report": "artifacts/pilot/pilot-report-YYYY-MM-DD.json"
+  },
+  "report": {
+    "json": "artifacts/pilot/pilot-report-YYYY-MM-DD.json",
+    "markdown": "artifacts/pilot/pilot-report-YYYY-MM-DD.md",
+    "decision": "continue|research|pivot|kill_claim|invalid",
+    "pass_signals": []
+  },
+  "claim_boundary": "This owner/self pilot can produce early local behavioral evidence only. It does not prove generalized fluency or real-world speaking ability."
+}
+```
+
+The participant label must stay generic unless the learner explicitly provides a name for public-facing output. The pilot state must not assume a personal name. Reports may include transcript text locally, but public issue/PR summaries should use redacted or summarized evidence unless the learner explicitly approves sharing.
+
 ## Contract Rule
 
 The dashboard may not claim learning progress from a field unless that field has:
