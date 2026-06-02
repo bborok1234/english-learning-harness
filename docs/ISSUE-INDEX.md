@@ -575,10 +575,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - Each variant runs the real `practice` flow and verifies generated mission, generated scene, session artifact, learner report, cockpit, and required scene evidence.
 - This proves local first-use conversation variety and persistence mechanics only. It does not prove real learner outcomes, engagement, retention, or realtime voice.
 
-#171 planned evidence should show:
+#171 evidence currently shows:
 
-- multimodal mission assets are represented by a machine-readable contract, not ad hoc decorative prompts.
-- text-first fallback remains the canonical completion path.
-- optional generated HTML/Remotion-style scene, image prompt, voice transcript prompt, and future video/realtime hooks map to the same Speaking Skill OS target and expected evidence.
-- negative fixtures reject assets that do not require learner output or cannot write evidence.
+- generated mission JSON includes a machine-readable `asset_contract`, not ad hoc decorative prompts.
+- text-first fallback is the canonical completion path.
+- interactive HTML scene, image information-gap prompt, voice transcript prompt, Remotion-style storyboard, and future realtime hook entries map to the same Speaking Skill OS target, required learner action, transfer test, and session evidence.
+- `validateMissionAssetContract()` rejects decorative assets, assets that do not require learner output, contracts without canonical text, missing session evidence, and unsupported claims.
+- `scripts/multimodal-mission-asset-contract-smoke.mjs` verifies the positive contract, rendered mission HTML summary, scene evidence alignment, and negative fixtures.
 - realtime voice and generated-media learning gains remain blocked claims unless separately proven.
