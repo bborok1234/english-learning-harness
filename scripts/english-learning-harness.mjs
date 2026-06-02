@@ -185,6 +185,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-day [--day 1-7] [--say TEXT ...] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-finish [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
@@ -1109,6 +1110,55 @@ function pilotCapture(options) {
     summary: pilotStatusSummary(state),
     cockpit: cockpitSnapshot,
     claimBoundary: state.claim_boundary,
+  };
+}
+
+function pilotReply(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const state = readPilotState(paths, date);
+  const nextAction = pilotNextAction(state);
+  const answer = transcriptInputs(options).filter(Boolean)[0] || "";
+  if (!answer) {
+    throw new Error("pilot-reply requires one --say answer.");
+  }
+  if (nextAction.command === "pilot-complete") {
+    throw new Error("pilot-reply cannot save an answer because the pilot is already complete.");
+  }
+
+  const captureOptions = {
+    ...options,
+    learnerRoot: paths.root,
+    date,
+    input: [answer],
+    transcript: undefined,
+  };
+  if (nextAction.command === "pilot-capture") {
+    captureOptions.phase = nextAction.phase;
+    captureOptions.cardId = nextAction.cardId;
+  } else if (nextAction.command === "pilot-day") {
+    captureOptions.phase = "day";
+    captureOptions.day = nextAction.day;
+    captureOptions.frictionNote = options.frictionNote || "No explicit friction note captured.";
+  } else {
+    throw new Error(`pilot-reply cannot route next action: ${nextAction.command}`);
+  }
+
+  const result = pilotCapture(captureOptions);
+  return {
+    status: "pass",
+    action: "pilot-reply",
+    routedTo: {
+      phase: captureOptions.phase,
+      cardId: captureOptions.cardId ?? null,
+      day: captureOptions.day ?? null,
+    },
+    result,
+    summary: result.summary,
+    cockpit: result.cockpit,
+    claimBoundary:
+      result.claimBoundary ||
+      "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion.",
   };
 }
 
@@ -2146,6 +2196,10 @@ function run() {
   }
   if (command === "pilot-next") {
     output(pilotNext(options), options.json);
+    return;
+  }
+  if (command === "pilot-reply") {
+    output(pilotReply(options), options.json);
     return;
   }
   if (command === "pilot-capture") {
