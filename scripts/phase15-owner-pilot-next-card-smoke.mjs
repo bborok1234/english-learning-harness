@@ -118,6 +118,9 @@ function main() {
   assert(read(day.htmlPath).includes("번호로 고를 수 있는 답변 후보"), "daily card should show numbered quick replies section");
   assert(read(day.htmlPath).includes("aria-label=\"1번 선택지\""), "daily card should render first quick reply as a selectable numbered choice");
   assert(read(day.htmlPath).includes("aria-label=\"2번 선택지\""), "daily card should render second quick reply as a selectable numbered choice");
+  assert(read(day.htmlPath).includes("class=\"copy-reply\""), "daily card should render quick reply copy buttons");
+  assert(read(day.htmlPath).includes("data-reply=\"Which place do you mean?\""), "daily card should wire the copy button to the quick reply text");
+  assert(read(day.htmlPath).includes("navigator.clipboard.writeText"), "daily card should include local copy behavior");
   assert(read(day.htmlPath).includes("답은 영어 한 문장만 보내주세요"), "daily card should render assistant prompt answer rule");
   assert(day.nextCard.title === "확인 질문 만들기", "day 1 should test clarification");
   assertCleanLearnerHtml(read(day.htmlPath));
