@@ -39,6 +39,7 @@ Codex should install the skill surface, handle setup, run practice, save local p
 - suggests due review and next scenarios
 - generates mini mirrors and weekly mirrors
 - generates interactive daily mission HTML with text, voice-transcript, and image information-gap practice modes
+- generates scene/timeline artifacts that turn the daily mission into speaking cues, repair, and transfer checkpoints
 - generates 7-day/30-day learner reports that connect sessions, saved phrases, speaking backlog, and next focus
 
 ## Learning Basis
@@ -53,7 +54,7 @@ Local learner state defaults to:
 ~/english-learning/
 ```
 
-Key generated learner surfaces include `cockpit.html`, daily mission artifacts under `artifacts/missions/`, and learner reports under `artifacts/reports/`.
+Key generated learner surfaces include `cockpit.html`, daily mission artifacts under `artifacts/missions/`, scene artifacts under `artifacts/scenes/`, and learner reports under `artifacts/reports/`.
 
 The command wrapper remains the internal persistence and verification engine for Codex, maintainers, and smoke tests. See the Korean README for full maintainer commands and current boundaries.
 

@@ -4,10 +4,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-4 Codex-operated daily practice flow is implemented for #160 and ready for PR verification.",
+    "status": "AIOS-5 generated scene artifacts are implemented for #162 and ready for PR verification.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now has a single Codex-operated practice path that refreshes mission, session evidence, weekly mirror, learner report, and cockpit after learner answers.",
-    "nextGoal": "Continue toward richer generated/Remotion-style learning artifacts and stronger natural-language skill execution without turning ordinary learning into command-line work.",
+    "summary": "English Learning Harness now generates mission-derived scene/timeline artifacts with speaking cue, repair, and transfer checkpoint frames, and links them from practice, learner reports, and cockpit.",
+    "nextGoal": "Continue toward skill-level learner conversation simulation and stronger generated artifact variants while preserving text-first evidence and claim boundaries.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can run a Codex-operated local daily practice flow that creates learning artifacts and evidence behind the learner conversation.",
+    "allowedClaim": "The harness can generate local scene/timeline artifacts from daily missions and connect them to the practice evidence loop.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local Codex-operated learning-flow mechanics only; outcome, realtime voice, child-mode, and retention claims remain blocked."
+    "claimBoundary": "Allowed claim is local rich-artifact mechanics and learning-loop linkage only; outcome, realtime voice, child-mode, retention, and Remotion efficacy claims remain blocked."
   },
   "ssot": [
     {
@@ -343,37 +343,49 @@
       "path": "../scripts/codex-operated-practice-flow-smoke.mjs",
       "role": "Codex-operated daily practice flow smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-5-generated-scene-artifacts.md",
+      "path": "./phase-11-evidence/AIOS-5-generated-scene-artifacts.md",
+      "role": "AIOS-5 generated scene artifact evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/generated-scene-artifact-smoke.mjs",
+      "path": "../scripts/generated-scene-artifact-smoke.mjs",
+      "role": "generated scene artifact smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-1/2/3/4 are implemented slices, not final product completion",
+      "detail": "full AI-native English Learning OS remains open; AIOS-1 through AIOS-5 are implemented slices, not final product completion",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-4 ready",
-      "detail": "practice command composes mission/session/weekly/report/cockpit and skill contract keeps learners in conversation",
+      "value": "AIOS-5 ready",
+      "detail": "mission-derived scene artifacts render interactive speaking/repair/transfer frames and link through practice/report/cockpit",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "Richer generated artifacts",
-      "detail": "explore HTML/Remotion-style generated scenes while preserving text-first evidence and claim boundaries",
+      "value": "Skill-level conversation simulation",
+      "detail": "verify onboarding/daily/mini-mirror skill flow as a natural learner transcript, not only engine commands",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#160 in progress",
-      "detail": "AIOS-4 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
+      "value": "#162 in progress",
+      "detail": "AIOS-5 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Conversation-operated OS",
-      "detail": "the learner answers in Codex while the harness engine updates daily artifacts behind the scenes",
+      "value": "Evidence-linked scene artifact",
+      "detail": "generated scenes now carry speaking cue, repair, and transfer checkpoint frames instead of decorative roleplay only",
       "tone": "green"
     }
   ],
@@ -496,6 +508,13 @@
       "status": "Pass",
       "evidence": "#160, codex-operated-practice-flow-smoke, interactive-artifact-report-smoke, phase7-learner-readme-smoke, phase1-scaffold-smoke",
       "claim": "one internal practice command can create mission, session evidence, weekly mirror, learner report, and cockpit while learner-facing output avoids command/process leakage"
+    },
+    {
+      "id": "GATE-18",
+      "label": "Generated scene artifact loop",
+      "status": "Pass",
+      "evidence": "#162, generated-scene-artifact-smoke, codex-operated-practice-flow-smoke, interactive-artifact-report-smoke",
+      "claim": "scene artifacts are generated from daily missions, render interactive frame controls, require session evidence, and link from learner report/cockpit without product-surface leakage"
     }
   ],
   "board": [
@@ -1732,6 +1751,19 @@
             "scripts/codex-operated-practice-flow-smoke.mjs",
             "docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md"
           ]
+        },
+        {
+          "id": "AIOS-5",
+          "title": "Generated scene artifact를 학습 루프에 연결함",
+          "why": "AI-native artifact가 단순 장식이면 기존 영어 챗봇과 차별점이 약하다. scene은 mission의 말하기 행동을 cue, repair, transfer checkpoint로 보이게 해야 했다.",
+          "done": "`scene` 명령이 `artifacts/scenes/daily-scene-YYYY-MM-DD.json/html`을 만들고, `practice`, learner report, cockpit이 최신 scene을 연결한다.",
+          "verification": "`node scripts/generated-scene-artifact-smoke.mjs`, `node scripts/codex-operated-practice-flow-smoke.mjs`, `node scripts/interactive-artifact-report-smoke.mjs`가 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/generated-scene-artifact-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-5-generated-scene-artifacts.md"
+          ]
         }
       ]
     },
@@ -1742,12 +1774,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-4 PR 검증과 병합",
-          "why": "Codex-operated practice flow는 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.",
-          "done": "새 smoke, 기존 artifact/report smoke, README/scaffold smoke, dashboard generation, product/ops smoke, diff check를 실행한다.",
-          "verification": "PR #160 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
+          "title": "AIOS-5 PR 검증과 병합",
+          "why": "generated scene artifact는 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.",
+          "done": "새 scene smoke, practice/artifact/report smoke, scaffold/readme/product/ops smoke, diff check를 실행한다.",
+          "verification": "PR #162 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
           "files": [
-            "scripts/codex-operated-practice-flow-smoke.mjs",
+            "scripts/generated-scene-artifact-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -1759,17 +1791,6 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "AIOS-RICH-ARTIFACTS",
-          "title": "Generated/Remotion-style rich artifact 탐색",
-          "why": "Codex 위 harness 차별점은 대화 중 필요한 순간 HTML/영상/이미지 artifact를 즉시 생성하는 능력이다.",
-          "done": "학습 증거를 약화하지 않는 범위에서 interactive HTML 또는 Remotion-style scene artifact 후보를 설계하고 하나를 fixture로 검증한다.",
-          "verification": "text-first fallback, claim guard, product/ops boundary smoke가 함께 통과해야 한다.",
-          "files": [
-            "docs/phase-11-evidence/",
-            "scripts/"
-          ]
-        },
-        {
           "id": "AIOS-SKILL-E2E",
           "title": "Skill-level learner conversation simulation",
           "why": "engine flow가 있어도 실제 Codex skill 응답이 학습자에게 자연스럽지 않으면 제품성이 부족하다.",
@@ -1778,6 +1799,17 @@
           "files": [
             "skills/",
             "scripts/"
+          ]
+        },
+        {
+          "id": "AIOS-GENAI-VARIANTS",
+          "title": "생성형 artifact variants 확장",
+          "why": "일일 scene 한 종류만으로는 매일 들어오고 싶어지는 다양성이 부족하다.",
+          "done": "learner state에 따라 cafe, office, travel, repair, disagreement 등 scene variants를 생성하되 모두 Speaking Skill OS evidence와 연결한다.",
+          "verification": "variant smoke가 text-first fallback, claim guard, report/cockpit linkage를 검증해야 한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "docs/phase-11-evidence/"
           ]
         }
       ]
@@ -2278,6 +2310,11 @@
       "name": "AIOS-4 Codex-operated daily practice flow",
       "status": "Pass",
       "detail": "codex-operated-practice-flow smoke validates one internal practice run creates mission, session artifact, weekly mirror, learner report, cockpit, Speaking Skill OS evidence, and command-leak-free learner summary."
+    },
+    {
+      "name": "AIOS-5 generated scene artifacts",
+      "status": "Pass",
+      "detail": "generated-scene-artifact smoke validates scene JSON/HTML generation, Playwright frame controls, evidence requirement, practice generation, report/cockpit linkage, and claim guards."
     }
   ],
   "commands": [
@@ -2588,6 +2625,14 @@
     {
       "label": "View AIOS-4 issue",
       "command": "gh issue view 160"
+    },
+    {
+      "label": "Run generated scene artifact smoke",
+      "command": "node scripts/generated-scene-artifact-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-5 issue",
+      "command": "gh issue view 162"
     }
   ]
 }

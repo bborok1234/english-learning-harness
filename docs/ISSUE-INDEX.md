@@ -497,6 +497,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #156 | AIOS-2: Generate daily mission artifacts linked to learner cockpit | continue |
 | #158 | AIOS-3: Add interactive mission artifacts and learner reports | continue |
 | #160 | AIOS-4: Add Codex-operated daily practice flow | continue |
+| #162 | AIOS-5: Add generated scene artifacts to the daily practice loop | continue |
 
 #154 evidence currently shows:
 
@@ -527,3 +528,12 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `skills/daily-session/SKILL.md` tells Codex to use the agent-operated `practice` path after collecting learner answers and not paste internal engine commands into learner-facing output.
 - `scripts/codex-operated-practice-flow-smoke.mjs` verifies one practice run creates mission HTML, session artifact, weekly mirror, learner report JSON/HTML, cockpit state/HTML, Speaking Skill OS evidence, and no learner-facing command leakage.
 - This proves local Codex-operated flow mechanics only. It does not prove learning outcomes, realtime voice, or real-world transfer.
+
+#162 evidence currently shows:
+
+- `node scripts/english-learning-harness.mjs scene` writes `artifacts/scenes/daily-scene-YYYY-MM-DD.json` and `.html`.
+- Scene artifacts derive from the generated mission target skill, required speaking action, and transfer test.
+- Scene HTML includes interactive Previous / Play / Next controls over scene entry, speaking cue, repair, and transfer checkpoint frames.
+- `practice` now generates a scene artifact and learner report/cockpit link the latest scene.
+- `scripts/generated-scene-artifact-smoke.mjs` verifies rendered interaction, report/cockpit linkage, session-evidence requirement, product-surface leak guard, and unsupported-claim guard.
+- This proves local rich-artifact mechanics only. It does not prove Remotion efficacy, generated-world retention, realtime voice, or learning outcomes.
