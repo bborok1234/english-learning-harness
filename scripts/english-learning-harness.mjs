@@ -87,6 +87,9 @@ function parseArgs(argv) {
     } else if (arg === "--scenario") {
       options.scenario = argv[index + 1];
       index += 1;
+    } else if (arg === "--scene-preset") {
+      options.scenePreset = argv[index + 1];
+      index += 1;
     } else if (arg === "--review-id") {
       options.reviewId = argv[index + 1];
       index += 1;
@@ -166,7 +169,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs scene [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
-    "  node scripts/english-learning-harness.mjs practice [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs practice [--say TEXT ...] [--transcript FILE] [--scene-preset ID] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
@@ -429,7 +432,9 @@ function practice(options) {
   const diagnosis = !nextSpeakingBacklogItem(paths.root) && hasExplicitInput
     ? diagnoseSpeakingSample(paths.root, turns, date)
     : null;
-  const missionResult = writeGeneratedDailyMission(paths.root, date);
+  const missionResult = writeGeneratedDailyMission(paths.root, date, {
+    scenePreset: options.scenePreset,
+  });
   const sceneResult = writeGeneratedMissionScene(paths.root, date, missionResult.state);
   const sessionOptions = {
     ...options,
