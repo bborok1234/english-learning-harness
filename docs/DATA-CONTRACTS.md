@@ -691,7 +691,7 @@ The router must delegate to `pilot-capture` rather than write pilot state direct
 }
 ```
 
-The generated HTML and `assistantPrompt.text` must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, rubric labels, artifact labels, or `product_journey_audit` internals. `assistantPrompt.text` is the preferred prompt for Codex to say directly to the learner when continuing the real pilot.
+The generated HTML must render `assistantPrompt.text` in a dedicated learner-ready prompt section, while preserving the shorter next-card prompt and progress. The generated HTML and `assistantPrompt.text` must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, rubric labels, artifact labels, or `product_journey_audit` internals. `assistantPrompt.text` is the preferred prompt for Codex to say directly to the learner when continuing the real pilot.
 
 The first five `pilot-next` daily cards must cover distinct speaking actions:
 

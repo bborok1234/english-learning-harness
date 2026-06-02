@@ -95,6 +95,8 @@ function main() {
   assert(day.assistantPrompt.text.includes("Let's meet at the usual place after work."), "daily assistant prompt should include concrete situation");
   assert(day.assistantPrompt.text.includes("Which place do you mean?"), "daily assistant prompt should include example");
   assert(read(day.htmlPath).includes("Which place do you mean?"), "daily card should show learner-facing example");
+  assert(read(day.htmlPath).includes("Codex가 바로 말할 다음 문장"), "daily card should show learner-ready prompt section");
+  assert(read(day.htmlPath).includes("답은 영어 한 문장만 보내주세요"), "daily card should render assistant prompt answer rule");
   assert(day.nextCard.title === "확인 질문 만들기", "day 1 should test clarification");
   assertCleanLearnerHtml(read(day.htmlPath));
 
@@ -123,6 +125,7 @@ function main() {
   assert(nextDay.nextCard.title === "말실수 고치기", "day 2 should test repair instead of repeating day 1");
   assert(nextDay.nextCard.example.includes("I meant iced latte"), "day 2 should expose repair example");
   assert(!nextDay.nextCard.ask.includes("usual place"), "day 2 should not repeat the usual-place clarification prompt");
+  assert(read(nextDay.htmlPath).includes(nextDay.assistantPrompt.text.split("\n")[0]), "next-day HTML should render assistant prompt");
 
   const state = JSON.parse(read(nextDay.jsonPath));
   assert(state.cockpit.html === "cockpit.html", "next card should link learner cockpit");
