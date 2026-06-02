@@ -1747,6 +1747,7 @@ function readLatestMissionAssetDeck(learnerRoot = defaultLearnerRoot()) {
     asset_count: deck.assets?.length ?? 0,
     canonical_completion_path: deck.canonical_completion_path,
     evidence_required: deck.evidence_required,
+    top_asset_action: deck.top_asset_action,
     generated_at: deck.generated_at,
   };
 }
@@ -2814,6 +2815,81 @@ export function writeGeneratedMissionScene(learnerRoot = defaultLearnerRoot(), d
   };
 }
 
+function missionAssetPriority(asset, context) {
+  if (asset.id === "future-realtime-hook") {
+    return {
+      score: 95,
+      action_label: "Realtime voice는 아직 선택하지 않음",
+      reason: "Stable realtime runtime이 검증되기 전까지 mission completion path가 아닙니다.",
+    };
+  }
+  if (!context.hasTextEvidence) {
+    if (asset.id === "text-practice") {
+      return {
+        score: 10,
+        action_label: "먼저 한 문장으로 시작",
+        reason: "아직 text-first session evidence가 없어 canonical completion path를 먼저 열어야 합니다.",
+      };
+    }
+    return {
+      score: asset.id === "interactive-html-scene" ? 45 : 60,
+      action_label: "text-first evidence 이후 사용",
+      reason: "선택 asset은 learner output session evidence가 생긴 뒤 보조 경로로 쓰는 것이 안전합니다.",
+    };
+  }
+  if (!context.hasImageEvidence && asset.id === "image-information-gap") {
+    return {
+      score: 15,
+      action_label: "이미지 정보차 질문으로 확장",
+      reason: "text evidence는 있으나 image modality evidence가 아직 없어 같은 speaking target을 시각 정보차로 전이합니다.",
+    };
+  }
+  if (!context.hasVoiceEvidence && asset.id === "voice-transcript") {
+    return {
+      score: context.hasImageEvidence ? 15 : 35,
+      action_label: "음성 transcript로 다시 말하기",
+      reason: context.hasImageEvidence
+        ? "text와 image evidence가 있으므로 transcript-backed voice path를 다음 전이로 시도합니다."
+        : "voice evidence가 아직 없지만 image information-gap이 먼저 더 구체적인 단서를 줄 수 있습니다.",
+    };
+  }
+  if (context.hasTextEvidence && context.hasImageEvidence && context.hasVoiceEvidence && asset.id === "interactive-html-scene") {
+    return {
+      score: 12,
+      action_label: "scene frame으로 transfer review",
+      reason: "text, image, voice evidence가 모두 있어 generated scene frame으로 전이 행동을 복습합니다.",
+    };
+  }
+  if (asset.id === "remotion-storyboard") {
+    return {
+      score: context.hasTextEvidence && context.hasImageEvidence && context.hasVoiceEvidence ? 25 : 70,
+      action_label: "storyboard는 준비 asset으로 보류",
+      reason: "storyboard는 learner output을 대체하지 않으므로 core evidence path 뒤에 둡니다.",
+    };
+  }
+  if (asset.id === "interactive-html-scene") {
+    return {
+      score: 30,
+      action_label: "scene cue로 답변 준비",
+      reason: "generated scene은 말하기 cue를 정리하지만 session evidence를 직접 대체하지 않습니다.",
+    };
+  }
+  if (asset.id === "text-practice") {
+    return {
+      score: context.nextBacklog?.status === "needs_review" ? 20 : 55,
+      action_label: "text-first로 약점 재시도",
+      reason: context.nextBacklog?.status === "needs_review"
+        ? "Speaking Skill OS에 needs-review 항목이 있어 text-first retry가 유효합니다."
+        : "이미 text evidence가 있어 다른 modality 전이를 먼저 시도할 수 있습니다.",
+    };
+  }
+  return {
+    score: 80,
+    action_label: "나중에 사용",
+    reason: "현재 learner evidence state에서 우선순위가 낮습니다.",
+  };
+}
+
 function buildMissionAssetDeckState(missionState, learnerRoot = defaultLearnerRoot(), date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const contract = missionState.asset_contract;
@@ -2821,6 +2897,36 @@ function buildMissionAssetDeckState(missionState, learnerRoot = defaultLearnerRo
   if (contractErrors.length) {
     throw new Error(`Mission asset deck requires a valid contract: ${contractErrors.join("; ")}`);
   }
+  const progress = readProgress(paths.progress);
+  const learnerModel = readLearnerModel(paths.learnerModel);
+  const artifacts = readSessionArtifacts(paths, progress);
+  const events = interactionEventsFromArtifacts(artifacts);
+  const modalities = new Set(events.map((event) => event.modality));
+  const nextBacklog = nextSpeakingBacklogItem(paths.root);
+  const weakSkill = weakestLearnerSkill(learnerModel);
+  const priorityContext = {
+    hasTextEvidence: modalities.has("text"),
+    hasImageEvidence: modalities.has("image"),
+    hasVoiceEvidence: modalities.has("voice"),
+    eventCount: events.length,
+    nextBacklog,
+    weakSkill,
+  };
+  const prioritizedAssets = contract.assets
+    .map((asset) => ({
+      ...asset,
+      priority: missionAssetPriority(asset, priorityContext),
+    }))
+    .sort((a, b) => a.priority.score - b.priority.score || a.id.localeCompare(b.id))
+    .map((asset, index) => ({
+      ...asset,
+      priority: {
+        ...asset.priority,
+        rank: index + 1,
+        recommended_next: index === 0,
+      },
+    }));
+  const topAsset = prioritizedAssets[0];
   return {
     schema_version: 1,
     generated_at: date.toISOString(),
@@ -2833,7 +2939,22 @@ function buildMissionAssetDeckState(missionState, learnerRoot = defaultLearnerRo
     canonical_completion_path: contract.canonical_completion_path,
     evidence_required: contract.expected_evidence.session_artifact,
     transfer_test: contract.transfer_test,
-    assets: contract.assets.map((asset) => ({
+    priority_context: {
+      event_count: priorityContext.eventCount,
+      modalities: [...modalities].sort(),
+      next_backlog_item_id: nextBacklog?.id ?? "",
+      next_backlog_skill: nextBacklog?.skill ?? "",
+      weakest_skill: weakSkill?.skill ?? "",
+    },
+    top_asset_action: {
+      asset_id: topAsset.id,
+      mode: topAsset.mode,
+      label: topAsset.priority.action_label,
+      reason: topAsset.priority.reason,
+      start_command: topAsset.start_command ?? "",
+      expected_evidence: topAsset.expected_evidence,
+    },
+    assets: prioritizedAssets.map((asset) => ({
       id: asset.id,
       mode: asset.mode,
       completion_role: asset.completion_role,
@@ -2843,6 +2964,7 @@ function buildMissionAssetDeckState(missionState, learnerRoot = defaultLearnerRo
       requires_learner_output: asset.requires_learner_output,
       expected_evidence: asset.expected_evidence,
       storyboard_frames: asset.storyboard_frames ?? [],
+      priority: asset.priority,
     })),
     completion_policy: {
       can_mark_complete_without_session_evidence: false,
@@ -2956,6 +3078,13 @@ function missionAssetDeckHtml(state) {
     </header>
 
     <section>
+      <h2>Next asset action</h2>
+      <p>${escapeHtml(state.top_asset_action.label)}</p>
+      <p class="subtle">${escapeHtml(state.top_asset_action.reason)}</p>
+      ${state.top_asset_action.start_command ? `<code>${escapeHtml(state.top_asset_action.start_command)}</code>` : ""}
+    </section>
+
+    <section>
       <h2>Asset cards</h2>
       <div class="grid">
         ${state.assets
@@ -2963,8 +3092,9 @@ function missionAssetDeckHtml(state) {
             (asset) => `
         <article class="card" data-asset-id="${escapeHtml(asset.id)}">
           <span class="mode">${escapeHtml(asset.mode)}</span>
-          <h3>${escapeHtml(asset.completion_role)}</h3>
+          <h3>#${escapeHtml(asset.priority?.rank ?? "")} ${escapeHtml(asset.completion_role)}</h3>
           <p>${escapeHtml(asset.prompt)}</p>
+          <p class="subtle">${escapeHtml(asset.priority?.reason ?? "")}</p>
           <p class="subtle">learner output required: ${escapeHtml(String(asset.requires_learner_output))}</p>
           <p class="subtle">evidence: ${escapeHtml(asset.expected_evidence?.session_artifact ?? "")}</p>
           ${asset.start_command ? `<code>${escapeHtml(asset.start_command)}</code>` : ""}
@@ -3430,11 +3560,25 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_generated_scene: latestScene,
       latest_mission_asset_deck: latestAssetDeck,
     },
+    next_asset_action: latestAssetDeck?.top_asset_action
+      ? {
+          deck: latestAssetDeck.html,
+          ...latestAssetDeck.top_asset_action,
+        }
+      : null,
     next_actions: [
       {
         label: "오늘 미션 시작",
         command: nextCommand,
       },
+      ...(latestAssetDeck?.top_asset_action
+        ? [
+            {
+              label: latestAssetDeck.top_asset_action.label,
+              command: latestAssetDeck.top_asset_action.start_command || commandLine(paths.root, "asset-deck", ["--json"]),
+            },
+          ]
+        : []),
       {
         label: "복습 확인",
         command: commandLine(paths.root, "review"),
@@ -3669,6 +3813,15 @@ function personalLearnerCockpitHtml(state) {
             <h3>Mission asset deck</h3>
             <p>${escapeHtml(state.journey.latest_mission_asset_deck.asset_count)} assets · ${escapeHtml(state.journey.latest_mission_asset_deck.canonical_completion_path)}</p>
             <p class="subtle">deck: ${escapeHtml(state.journey.latest_mission_asset_deck.html)}</p>
+          </div>`
+              : ""
+          }
+          ${
+            state.next_asset_action
+              ? `<div class="panel amber">
+            <h3>다음 asset action</h3>
+            <p>${escapeHtml(state.next_asset_action.label)}</p>
+            <p class="subtle">${escapeHtml(state.next_asset_action.reason)}</p>
           </div>`
               : ""
           }
