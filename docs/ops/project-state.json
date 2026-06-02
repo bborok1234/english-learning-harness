@@ -3,11 +3,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-7 adaptive scene variants are implemented for #166 and ready for PR verification.",
+    "stage": "M9 pilot readiness bridge ready for PR verification",
+    "status": "M9-2 and M9-4 local readiness mechanics are implemented on the current branch: owner/self pilot days now run through practice and final pilot reports link AIOS artifacts.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now has learner-facing adaptive scene variants that change setting and cue style by Speaking Skill OS target while preserving evidence links, transfer tests, reports, and cockpit surfaces.",
-    "nextGoal": "Continue toward real owner/self pilot gap closure and broader learner-conversation validation while preserving text-first evidence and claim boundaries.",
+    "summary": "The owner/self pilot bridge now connects daily speech samples to Codex-operated practice, generated mission, generated scene, learner report, cockpit, and final transcript review evidence.",
+    "nextGoal": "Verify, PR, merge, and then move from fixture readiness to real owner/self pilot usage plus broader conversation variants.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate local adaptive scene variants tied to Speaking Skill OS targets without breaking the practice evidence loop.",
+    "allowedClaim": "The harness can run a local owner/self pilot fixture through the same AIOS practice artifact loop used by daily learners.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local adaptive variant generation mechanics only; engagement, retention, realtime voice, and learning outcomes remain unclaimed."
+    "claimBoundary": "Allowed claim is local owner/self pilot readiness mechanics only; real learner outcomes, realtime voice, retention, and broad engagement remain unclaimed."
   },
   "ssot": [
     {
@@ -379,37 +379,55 @@
       "path": "../scripts/adaptive-scene-variants-smoke.mjs",
       "role": "adaptive scene variants smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-9-evidence/M9-2-pilot-report-aios-bridge.md",
+      "path": "./phase-9-evidence/M9-2-pilot-report-aios-bridge.md",
+      "role": "M9-2 pilot report to AIOS artifact bridge evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-9-evidence/M9-4-owner-pilot-readiness-closeout.md",
+      "path": "./phase-9-evidence/M9-4-owner-pilot-readiness-closeout.md",
+      "role": "M9-4 owner/self pilot readiness closeout evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/phase9-pilot-aios-readiness-smoke.mjs",
+      "path": "../scripts/phase9-pilot-aios-readiness-smoke.mjs",
+      "role": "M9 pilot AIOS readiness bridge smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-1 through AIOS-7 are implemented slices, not final product completion",
+      "detail": "full AI-native English Learning OS remains open; this change closes an M9 readiness bridge, not the full product",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-7 ready",
-      "detail": "adaptive scene variants change setting/cue style by Speaking Skill OS target while preserving evidence linkage",
+      "value": "M9 bridge ready",
+      "detail": "pilot days now use practice and final pilot reports link mission, scene, learner report, and cockpit evidence",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "Pilot gap closure",
-      "detail": "reconcile remaining M9 owner/self pilot report readiness with the current AIOS product surface",
+      "value": "PR + real pilot",
+      "detail": "verify and merge the bridge, then use it for a real owner/self pilot rather than only fixtures",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#166 in progress",
-      "detail": "AIOS-7 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
+      "value": "#137/#139",
+      "detail": "current branch should close M9-2 pilot report bridge and M9-4 readiness dashboard gate",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Adaptive scene variety",
-      "detail": "generated artifacts now vary by target skill instead of repeating one generic scene surface",
+      "value": "Pilot evidence loop",
+      "detail": "pilot review now inspects generated learning artifacts instead of detached transcript notes",
       "tone": "green"
     }
   ],
@@ -553,6 +571,20 @@
       "status": "Pass",
       "evidence": "#166, adaptive-scene-variants-smoke, generated-scene-artifact-smoke, codex-operated-practice-flow-smoke",
       "claim": "clarification, repair, and soft-disagreement targets produce distinct scene variants while preserving backlog evidence links and claim boundaries"
+    },
+    {
+      "id": "GATE-21",
+      "label": "Owner/self pilot AIOS report bridge",
+      "status": "Pass",
+      "evidence": "#137, phase9-pilot-aios-readiness-smoke, phase9-owner-pilot-smoke",
+      "claim": "pilot-day runs through practice and pilot-finish reports daily mission, scene, learner report, cockpit, and transcript rubric evidence"
+    },
+    {
+      "id": "GATE-22",
+      "label": "M9 owner pilot readiness closeout",
+      "status": "Pass",
+      "evidence": "#139, phase9-pilot-aios-readiness-smoke, phase9-pilot-prompt-ux-smoke, ops-dashboard-smoke",
+      "claim": "local owner/self pilot readiness mechanics are connected and dashboard-visible while learning outcome claims remain blocked"
     }
   ],
   "board": [
@@ -1826,6 +1858,31 @@
             "scripts/adaptive-scene-variants-smoke.mjs",
             "docs/phase-11-evidence/AIOS-7-adaptive-scene-variants.md"
           ]
+        },
+        {
+          "id": "M9-2",
+          "title": "#137 pilot report를 AIOS artifact bridge로 연결함",
+          "why": "pilot report가 transcript rubric만 보여주면 현재 제품 표면인 mission, scene, learner report, cockpit과 분리된다.",
+          "done": "pilot-day가 practice를 실행하고, pilot-finish가 daily/final AIOS artifact links를 JSON/Markdown report에 기록한다.",
+          "verification": "`node scripts/phase9-pilot-aios-readiness-smoke.mjs`와 `node scripts/phase9-owner-pilot-smoke.mjs`가 통과해야 한다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase9-pilot-aios-readiness-smoke.mjs",
+            "docs/phase-9-evidence/M9-2-pilot-report-aios-bridge.md"
+          ]
+        },
+        {
+          "id": "M9-4",
+          "title": "#139 owner/self pilot readiness gate를 닫음",
+          "why": "M9가 실제 제품 루프와 분리된 상태로 닫히면 이후 real pilot 판단이 약해진다.",
+          "done": "5일 pilot fixture, final learner report, final cockpit, dashboard SSOT, unsupported-claim guard를 하나의 readiness smoke로 묶었다.",
+          "verification": "`node scripts/phase9-pilot-aios-readiness-smoke.mjs`, product/ops dashboard smoke, scaffold smoke가 통과해야 한다.",
+          "files": [
+            "docs/STATUS.md",
+            "docs/ISSUE-INDEX.md",
+            "docs/ops/project-state.json",
+            "docs/phase-9-evidence/M9-4-owner-pilot-readiness-closeout.md"
+          ]
         }
       ]
     },
@@ -1836,12 +1893,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-7 PR 검증과 병합",
-          "why": "adaptive scene variants는 구현됐지만 main 기준으로 남기려면 smoke와 PR-first merge가 필요하다.",
-          "done": "variant/scene/practice/skill/product/ops/readme/scaffold smoke와 diff check를 실행한다.",
-          "verification": "PR #166 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
+          "title": "M9 pilot bridge PR 검증과 병합",
+          "why": "M9-2/M9-4 구현은 현재 branch에 있으므로 main 기준 evidence로 남기려면 PR-first closeout이 필요하다.",
+          "done": "pilot AIOS readiness, owner pilot, prompt UX, practice, adaptive scene, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
+          "verification": "PR이 #137/#139를 닫고 main에서 핵심 smoke를 재실행해야 한다.",
           "files": [
-            "scripts/adaptive-scene-variants-smoke.mjs",
+            "scripts/phase9-pilot-aios-readiness-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -1853,14 +1910,15 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "AIOS-REAL-PILOT-RECHECK",
-          "title": "실제 owner/self pilot gap 재점검",
-          "why": "fixture와 product surface가 늘어도 실제 사용 경험 검증은 아직 약하다.",
-          "done": "M9의 남은 #137/#139와 현재 AIOS surface를 비교해 실제 owner/self pilot readiness를 다시 정렬한다.",
-          "verification": "pilot readiness smoke와 current product surface evidence가 일치해야 한다.",
+          "id": "REAL-OWNER-PILOT",
+          "title": "실제 owner/self pilot 실행",
+          "why": "fixture readiness는 mechanics proof일 뿐이다. 제품 목표는 실제 사용자가 매일 들어오고 싶고 말하기 증거를 남기는 것이다.",
+          "done": "실제 5일 이상 pilot transcript를 local-only로 수집하고, final report/cockpit을 사람이 읽어 마찰과 학습 신호를 판단한다.",
+          "verification": "real transcript review, friction notes, cockpit journey, unsupported-claim boundary가 함께 남아야 한다.",
           "files": [
-            "docs/phase-9-evidence/",
-            "scripts/phase9-owner-pilot-smoke.mjs"
+            "artifacts/pilot/",
+            "cockpit.html",
+            "artifacts/reports/"
           ]
         },
         {
@@ -2387,6 +2445,16 @@
       "name": "AIOS-7 adaptive scene variants",
       "status": "Pass",
       "detail": "adaptive-scene-variants smoke validates distinct clarification/repair/soft-disagreement variants, preserved Speaking Skill OS evidence links, rendered variant HTML, and blocked unsupported claims."
+    },
+    {
+      "name": "M9 pilot AIOS readiness bridge",
+      "status": "Pass",
+      "detail": "phase9-pilot-aios-readiness smoke verifies five pilot days run through practice, daily mission/scene/report/cockpit links exist, final learner report and cockpit are linked, and unsupported claims are blocked."
+    },
+    {
+      "name": "M9 owner pilot mechanics regression",
+      "status": "Pass",
+      "detail": "phase9-owner-pilot-smoke remains green after pilot-day moved from today to practice; baseline, five days, rubric report, and no-assumed-name checks pass."
     }
   ],
   "commands": [
@@ -2599,14 +2667,6 @@
       "command": "node scripts/phase8-research-basis-smoke.mjs"
     },
     {
-      "label": "Run M9 owner pilot smoke",
-      "command": "node scripts/phase9-owner-pilot-smoke.mjs"
-    },
-    {
-      "label": "Run M9 pilot prompt UX smoke",
-      "command": "node scripts/phase9-pilot-prompt-ux-smoke.mjs"
-    },
-    {
       "label": "Run M10 narrative mission plan smoke",
       "command": "node scripts/phase10-narrative-mission-plan-smoke.mjs"
     },
@@ -2721,6 +2781,26 @@
     {
       "label": "View AIOS-7 issue",
       "command": "gh issue view 166"
+    },
+    {
+      "label": "Run M9 pilot AIOS readiness smoke",
+      "command": "node scripts/phase9-pilot-aios-readiness-smoke.mjs"
+    },
+    {
+      "label": "Run M9 owner pilot smoke",
+      "command": "node scripts/phase9-owner-pilot-smoke.mjs"
+    },
+    {
+      "label": "Run M9 pilot prompt UX smoke",
+      "command": "node scripts/phase9-pilot-prompt-ux-smoke.mjs"
+    },
+    {
+      "label": "View M9-2 issue",
+      "command": "gh issue view 137"
+    },
+    {
+      "label": "View M9-4 issue",
+      "command": "gh issue view 139"
     }
   ]
 }

@@ -428,6 +428,15 @@ M7 now targets the current source repository as the open-source public distribut
 - README includes a Korean pilot start prompt and local-only privacy reminder.
 - `scripts/phase9-pilot-prompt-ux-smoke.mjs` verifies mission cards, concrete examples, privacy copy, and absence of ambiguous internal prompt wording.
 
+#137/#139 evidence currently shows:
+
+- `pilot-day` now runs through the Codex-operated `practice` flow instead of a standalone `today` session.
+- Each pilot day stores learner-root relative links to the generated mission, generated scene, learner report, and cockpit.
+- `pilot-finish` writes JSON and Markdown reports that include the AIOS artifact bridge plus transcript rubric decision.
+- The final learner report and final cockpit are regenerated at pilot closeout and linked from the pilot report.
+- `scripts/phase9-pilot-aios-readiness-smoke.mjs` verifies five pilot days, all daily AIOS artifact links, final report/cockpit linkage, and unsupported-claim guardrails.
+- this closes local owner/self pilot readiness mechanics; it still does not prove real learner outcome improvement or realtime voice support.
+
 ## M10 Narrative Mission Layer
 
 | Issue | Work | Default Decision |

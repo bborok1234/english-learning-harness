@@ -868,7 +868,7 @@ function pilotDay(options) {
   }
   const completedDays = state.days.filter((day) => day.status === "complete").length;
   const dayNumber = options.day ?? completedDays + 1;
-  const sessionResult = today({
+  const practiceResult = practice({
     ...options,
     learnerRoot: paths.root,
     date,
@@ -877,10 +877,16 @@ function pilotDay(options) {
     day: dayNumber,
     date: date.toISOString(),
     status: "complete",
-    session_id: sessionResult.sessionId,
-    artifact: relativeToRoot(paths, sessionResult.artifactPath),
+    session_id: practiceResult.session.id,
+    artifact: relativeToRoot(paths, practiceResult.session.artifactPath),
     friction_note: options.frictionNote || "",
-    speaking_backlog_evidence: sessionResult.speakingBacklogEvidence,
+    speaking_backlog_evidence: practiceResult.session.speakingBacklogEvidence,
+    aios_artifacts: {
+      mission: relativeToRoot(paths, practiceResult.mission.htmlPath),
+      scene: relativeToRoot(paths, practiceResult.scene.htmlPath),
+      learner_report: relativeToRoot(paths, practiceResult.report.htmlPath),
+      cockpit: relativeToRoot(paths, practiceResult.cockpit.htmlPath),
+    },
   };
   const withoutSameDay = state.days.filter((day) => day.day !== dayNumber);
   state = {
@@ -897,7 +903,8 @@ function pilotDay(options) {
     action: "pilot-day",
     learnerRoot: paths.root,
     day: dayRecord,
-    session: sessionResult,
+    session: practiceResult.session,
+    practice: practiceResult,
     summary: pilotStatusSummary(state),
     conversationGuide: pilotNextAction(state).guide,
     claimBoundary: state.claim_boundary,
@@ -905,6 +912,8 @@ function pilotDay(options) {
 }
 
 function pilotReportMarkdown(report) {
+  const artifactBridge = report.aios_artifacts ?? {};
+  const bridgeDays = artifactBridge.days ?? [];
   return [
     "# English Learning Harness Owner Pilot Report",
     "",
@@ -924,6 +933,18 @@ function pilotReportMarkdown(report) {
     "## Friction Notes",
     "",
     ...(report.friction_notes.length ? report.friction_notes.map((note) => `- Day ${note.day}: ${note.note}`) : ["- none"]),
+    "",
+    "## AIOS Artifact Bridge",
+    "",
+    `- Final learner report: ${artifactBridge.final_learner_report || "none"}`,
+    `- Final cockpit: ${artifactBridge.final_cockpit || "none"}`,
+    "",
+    ...(bridgeDays.length
+      ? bridgeDays.map(
+          (day) =>
+            `- Day ${day.day}: mission=${day.mission || "none"}; scene=${day.scene || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
+        )
+      : ["- none"]),
     "",
     "## Claim Boundary",
     "",
@@ -958,7 +979,7 @@ function pilotFinish(options) {
     baseline: state.baseline,
     final: finalSample,
   });
-  const report = {
+  const pilotReport = {
     schema_version: 1,
     generated_at: date.toISOString(),
     pilot_id: state.pilot_id,
@@ -970,13 +991,35 @@ function pilotFinish(options) {
     friction_notes: state.days
       .filter((day) => day.friction_note)
       .map((day) => ({ day: day.day, note: day.friction_note })),
+    aios_artifacts: {
+      days: state.days.map((day) => ({
+        day: day.day,
+        session_id: day.session_id,
+        mission: day.aios_artifacts?.mission ?? "",
+        scene: day.aios_artifacts?.scene ?? "",
+        learner_report: day.aios_artifacts?.learner_report ?? "",
+        cockpit: day.aios_artifacts?.cockpit ?? "",
+      })),
+    },
     claim_boundary:
       "This owner/self pilot report summarizes one local learner's behavioral evidence. It does not prove generalized fluency or real-world speaking ability.",
   };
   const reportPath = resolve(paths.pilotDir, `pilot-report-${date.toISOString().slice(0, 10)}.json`);
   const reportMarkdownPath = resolve(paths.pilotDir, `pilot-report-${date.toISOString().slice(0, 10)}.md`);
-  writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
-  writeFileSync(reportMarkdownPath, pilotReportMarkdown(report));
+  const learnerReport = report({
+    ...options,
+    learnerRoot: paths.root,
+    date,
+  });
+  const cockpitReport = cockpit({
+    ...options,
+    learnerRoot: paths.root,
+    date,
+  });
+  pilotReport.aios_artifacts.final_learner_report = relativeToRoot(paths, learnerReport.reportHtmlPath);
+  pilotReport.aios_artifacts.final_cockpit = relativeToRoot(paths, cockpitReport.cockpitPath);
+  writeFileSync(reportPath, `${JSON.stringify(pilotReport, null, 2)}\n`);
+  writeFileSync(reportMarkdownPath, pilotReportMarkdown(pilotReport));
   state = writePilotState(
     paths,
     {
@@ -1003,7 +1046,7 @@ function pilotFinish(options) {
     reportMarkdownPath,
     rubric,
     summary: pilotStatusSummary(state),
-    claimBoundary: report.claim_boundary,
+    claimBoundary: pilotReport.claim_boundary,
   };
 }
 
