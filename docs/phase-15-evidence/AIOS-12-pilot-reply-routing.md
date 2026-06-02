@@ -17,6 +17,7 @@ The learner should not need to know whether the current pilot answer belongs to 
 - The existing `pilot-capture` cockpit refresh path remains the only persistence path, so the router does not duplicate storage logic.
 - After saving, the router regenerates `artifacts/pilot/pilot-next-card.json/html` through `pilot-next`.
 - `pilot-reply` now returns `learnerFacing`, a learner-safe summary for Codex to speak back after saving.
+- `pilot-reply` writes `artifacts/pilot/pilot-reply-card.json/html`, a learner-facing saved-reply card with coaching and the next prompt.
 - Updated the owner-pilot skill to prefer `pilot-reply` and avoid asking the learner to choose phase, card id, or day number.
 
 ## Verification
@@ -35,6 +36,8 @@ The smoke validates:
 - each reply returns a refreshed `nextCardArtifact` so the learner-facing next card is not stale,
 - daily replies expose `learnerFacing.recast`, `learnerFacing.nextPhrase`, `learnerFacing.nextFocus`, and `learnerFacing.nextCard`,
 - baseline/final replies expose saved status and the next card without inventing coaching,
+- each reply writes a `pilot-reply-card.html/json` artifact,
+- the daily reply card includes saved status, recast, next phrase, and next card,
 - learner-facing cockpit HTML does not expose internal pilot command tokens.
 
 ## Claim Boundary

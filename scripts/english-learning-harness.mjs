@@ -1152,6 +1152,114 @@ function pilotReplyLearnerFacing({ routedTo, captureResult, nextCardArtifact }) 
   };
 }
 
+function pilotReplyCardArtifact({ paths, date, routedTo, learnerFacing, nextCardArtifact, cockpit, claimBoundary }) {
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "learner-facing pilot reply card",
+    saved: learnerFacing.saved,
+    routed_to: routedTo,
+    coaching: {
+      communicated: learnerFacing.communicated ?? "",
+      recast: learnerFacing.recast ?? "",
+      next_phrase: learnerFacing.nextPhrase ?? "",
+      next_focus: learnerFacing.nextFocus ?? "",
+      artifact_hint: learnerFacing.artifactHint ?? "",
+    },
+    next_card: learnerFacing.nextCard ?? null,
+    learner_rule: learnerFacing.learnerRule,
+    cockpit: {
+      html: cockpit?.htmlPath ? relativeToRoot(paths, cockpit.htmlPath) : "",
+      url: cockpit?.url ?? "",
+    },
+    next_card_artifact: {
+      html: nextCardArtifact?.htmlPath ? relativeToRoot(paths, nextCardArtifact.htmlPath) : "",
+      url: nextCardArtifact?.url ?? "",
+    },
+    privacy: "답변 원문은 기본적으로 로컬 pilot state에만 저장됩니다. 공개 PR/issue에는 올리지 않습니다.",
+    claim_boundary: claimBoundary,
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-reply-card.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-reply-card.html");
+  const hasCoaching = Boolean(artifact.coaching.recast || artifact.coaching.next_phrase || artifact.coaching.next_focus);
+  writeFileSync(jsonPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>답변 저장됨</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #657067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; --cool: #e8f2ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(820px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; text-transform: uppercase; }
+    h1 { margin: 8px 0 10px; font-size: clamp(28px, 5vw, 40px); line-height: 1.12; letter-spacing: 0; }
+    h2 { margin: 22px 0 8px; font-size: 18px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .saved { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 8px 12px; border-radius: 999px; background: #e5f6ea; color: #225f3d; font-weight: 760; }
+    .line { padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .line + .line { margin-top: 10px; }
+    .next { margin-top: 18px; padding: 18px; border-radius: 8px; background: var(--warm); }
+    .ask { margin-top: 8px; font-size: 21px; font-weight: 760; line-height: 1.32; }
+    .example, .rule, footer { margin-top: 14px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .ask { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Saved Reply</p>
+      <h1>답변이 저장됐어요</h1>
+      <p class="subtle">${escapeHtml(artifact.learner_rule)}</p>
+      <p class="saved">저장됨 · ${escapeHtml(artifact.routed_to.phase)}${artifact.routed_to.day ? ` Day ${escapeHtml(artifact.routed_to.day)}` : ""}</p>
+      ${
+        hasCoaching
+          ? `<h2>오늘 남긴 말하기 증거</h2>
+      <div class="grid">
+        <div class="line"><strong>전달한 뜻</strong><p>${escapeHtml(artifact.coaching.communicated)}</p></div>
+        <div class="line"><strong>자연스럽게 바꾸면</strong><p>${escapeHtml(artifact.coaching.recast)}</p></div>
+        <div class="line"><strong>다음에 쓸 표현</strong><p>${escapeHtml(artifact.coaching.next_phrase)}</p></div>
+        <div class="line"><strong>다음 작은 초점</strong><p>${escapeHtml(artifact.coaching.next_focus)}</p></div>
+      </div>`
+          : ""
+      }
+      ${
+        artifact.next_card
+          ? `<section class="next" aria-label="next card">
+        <h2>다음 카드</h2>
+        <p class="subtle">${escapeHtml(artifact.next_card.title)}</p>
+        <p class="ask">${escapeHtml(artifact.next_card.ask)}</p>
+        ${artifact.next_card.example ? `<p class="example">예시: ${escapeHtml(artifact.next_card.example)}</p>` : ""}
+      </section>`
+          : ""
+      }
+      <p class="rule">${escapeHtml(artifact.privacy)}</p>
+    </section>
+    <footer>${escapeHtml(artifact.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-reply-card",
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    learnerFacing,
+    claimBoundary,
+  };
+}
+
 function pilotReply(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -1190,6 +1298,19 @@ function pilotReply(options) {
     cardId: captureOptions.cardId ?? null,
     day: captureOptions.day ?? null,
   };
+  const learnerFacing = pilotReplyLearnerFacing({ routedTo, captureResult: result, nextCardArtifact });
+  const claimBoundary =
+    result.claimBoundary ||
+    "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion.";
+  const replyCardArtifact = pilotReplyCardArtifact({
+    paths,
+    date,
+    routedTo,
+    learnerFacing,
+    nextCardArtifact,
+    cockpit: result.cockpit,
+    claimBoundary,
+  });
   return {
     status: "pass",
     action: "pilot-reply",
@@ -1198,10 +1319,9 @@ function pilotReply(options) {
     summary: result.summary,
     cockpit: result.cockpit,
     nextCardArtifact,
-    learnerFacing: pilotReplyLearnerFacing({ routedTo, captureResult: result, nextCardArtifact }),
-    claimBoundary:
-      result.claimBoundary ||
-      "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion.",
+    replyCardArtifact,
+    learnerFacing,
+    claimBoundary,
   };
 }
 
