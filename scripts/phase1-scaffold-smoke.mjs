@@ -104,6 +104,7 @@ const requiredFiles = [
   "scripts/phase9-owner-pilot-smoke.mjs",
   "scripts/phase9-pilot-aios-readiness-smoke.mjs",
   "scripts/phase9-pilot-prompt-ux-smoke.mjs",
+  "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
   "scripts/phase10-narrative-mission-plan-smoke.mjs",
   "scripts/phase10-world-state-smoke.mjs",
   "scripts/phase10-mission-spec-validator-smoke.mjs",
