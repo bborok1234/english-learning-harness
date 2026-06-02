@@ -27,6 +27,7 @@ import {
   readSpeakingBacklog,
   readVocabulary,
   writeWeeklyMirror,
+  writeGeneratedDailyMission,
   writeLearnerModel,
   writeProgress,
   writePersonalLearnerCockpit,
@@ -159,6 +160,7 @@ function helpText() {
     "Usage:",
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs mission [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
@@ -214,6 +216,7 @@ function supportDiagnostics(options, paths) {
     nativeHooksStatus: "optional",
     nextCommands: [
       commandWithRoot("daily", learnerRoot, ["--json"]),
+      commandWithRoot("mission", learnerRoot, ["--json"]),
       commandWithRoot("cockpit", learnerRoot, ["--json"]),
       commandWithRoot("diagnose", learnerRoot, ["--say", JSON.stringify("I get stuck when I speak."), "--json"]),
       commandWithRoot("backlog", learnerRoot, ["--json"]),
@@ -325,6 +328,26 @@ function daily(options) {
     learnerRoot: cockpit.learner_root,
     cockpit,
     claimBoundary: cockpit.claim_boundary,
+  };
+}
+
+function mission(options) {
+  const result = writeGeneratedDailyMission(options.learnerRoot, options.date || new Date());
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: result.state.learner_root,
+    missionStatePath: result.missionStatePath,
+    missionHtmlPath: result.missionHtmlPath,
+    missionUrl: result.missionUrl,
+    mission: {
+      id: result.state.mission_id,
+      title: result.state.learner_visible_scene.title,
+      targetSkill: result.state.target_skill,
+      transferTest: result.state.transfer_test,
+      startCommands: result.state.start_commands,
+    },
+    claimBoundary: result.state.claim_boundary,
   };
 }
 
@@ -1334,6 +1357,10 @@ function run() {
   }
   if (command === "daily") {
     output(daily(options), options.json);
+    return;
+  }
+  if (command === "mission") {
+    output(mission(options), options.json);
     return;
   }
   if (command === "cockpit") {

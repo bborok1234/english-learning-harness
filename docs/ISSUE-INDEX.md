@@ -494,6 +494,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | Issue | Work | Default Decision |
 |---|---|---|
 | #154 | AIOS-1: Generate personal learner cockpit from runtime state | continue |
+| #156 | AIOS-2: Generate daily mission artifacts linked to learner cockpit | continue |
 
 #154 evidence currently shows:
 
@@ -501,3 +502,10 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - The cockpit connects today's mission, Speaking Skill OS, due review, multimodal interaction evidence, and 7-day/30-day journey windows.
 - `scripts/personal-learner-cockpit-smoke.mjs` creates text, voice, and image session evidence, generates a weekly mirror, renders the cockpit HTML, and verifies no engineering PR/issue/smoke language leaks into the learner product surface.
 - This proves local personal cockpit mechanics and evidence aggregation only. It does not prove learning outcomes or realtime voice.
+
+#156 evidence currently shows:
+
+- `node scripts/english-learning-harness.mjs mission` writes `artifacts/missions/daily-mission-YYYY-MM-DD.json` and `.html` under the learner root.
+- The generated mission links to the current Speaking Skill OS item or daily scenario and includes required learner action, transfer test, text-first start command, optional voice/image commands, and prompt material.
+- `scripts/generated-daily-mission-smoke.mjs` verifies mission generation, rendered HTML, product-surface leak guard, post-mission `today` evidence, and personal cockpit linkage.
+- This proves generated mission artifact mechanics only. It does not prove learning outcomes, generated-world retention, or realtime voice.

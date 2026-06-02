@@ -406,10 +406,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-1 personal learner cockpit runtime is implemented and verified for #154.",
+    "status": "AIOS-2 generated daily mission artifacts are implemented and under verification for #156.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now has a learner-root personal cockpit that connects daily mission, Speaking Skill OS, multimodal interaction evidence, and 7-day/30-day journey windows. The larger AI-native OS goal remains active.",
-    "nextGoal": "Expand the personal cockpit into richer generated missions/artifacts while keeping product surface and ops dashboard separated.",
+    "summary": "English Learning Harness now generates learner-root daily mission artifacts that connect the current Speaking Skill OS target to text-first practice, optional voice/image paths, and the personal cockpit.",
+    "nextGoal": "Connect generated mission artifacts to richer interactive/Remotion-style artifacts and learner reports without weakening claim boundaries.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -708,6 +708,18 @@
       "label": "scripts/personal-learner-cockpit-smoke.mjs",
       "path": "../scripts/personal-learner-cockpit-smoke.mjs",
       "role": "personal learner cockpit runtime smoke",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md",
+      "path": "./phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md",
+      "role": "AIOS-2 generated daily mission artifact evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/generated-daily-mission-smoke.mjs",
+      "path": "../scripts/generated-daily-mission-smoke.mjs",
+      "role": "generated daily mission artifact smoke",
       "kind": "source"
     }
   ],
@@ -2043,6 +2055,21 @@
             "docs/ISSUE-INDEX.md",
             "README.md"
           ]
+        },
+        {
+          "id": "AIOS-2",
+          "title": "#156 generated daily mission artifact 구현",
+          "why": "개인 cockpit이 상태만 보여주면 AI-native OS가 아니라 dashboard에 머문다. 매일 새 학습 장면이 생성되고 Speaking Skill OS evidence로 이어져야 한다.",
+          "done": "`mission` command가 learner-root `artifacts/missions/daily-mission-YYYY-MM-DD.json/html`을 생성하고, current Speaking Skill OS target, transfer test, text/voice/image start paths, optional prompt material, personal cockpit latest mission pointer를 연결한다.",
+          "verification": "`node scripts/generated-daily-mission-smoke.mjs`가 mission generation, rendered HTML, product-surface leak guard, post-mission today evidence, cockpit linkage를 검증한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/generated-daily-mission-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md",
+            "docs/ISSUE-INDEX.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -2082,10 +2109,10 @@
         },
         {
           "id": "AIOS-NEXT",
-          "title": "Next: generated mission/artifact layer를 personal cockpit에 연결",
-          "why": "큰 goal은 매일 새로운 학습 장면과 증거를 생성하는 AI-native OS다. 개인 cockpit 다음에는 narrative/multimodal/generated artifacts가 같은 표면에서 자연스럽게 시작되어야 한다.",
+          "title": "Next: interactive/Remotion-style artifact layer와 learner report 강화",
+          "why": "큰 goal에는 generated interactive HTML/Remotion artifacts와 learner reports가 포함된다. 다음은 mission artifact를 더 풍부한 시각/시간 기반 학습 산출물과 리포트로 확장하는 것이다.",
           "done": "아직 미구현.",
-          "verification": "다음 PR에서 generated mission artifact smoke와 product cockpit integration smoke로 검증한다.",
+          "verification": "다음 PR에서 interactive artifact smoke, report linkage smoke, product cockpit render checks로 검증한다.",
           "files": [
             "docs/ops/project-state.json"
           ]
@@ -2573,6 +2600,11 @@
       "name": "AIOS-1 personal learner cockpit",
       "status": "Pass",
       "detail": "personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard."
+    },
+    {
+      "name": "AIOS-2 generated daily mission artifacts",
+      "status": "Pass",
+      "detail": "generated mission smoke creates learner-root mission state/html, renders it, runs post-mission today evidence, and verifies cockpit linkage."
     }
   ],
   "commands": [
@@ -2859,6 +2891,14 @@
     {
       "label": "View AIOS-1 issue",
       "command": "gh issue view 154"
+    },
+    {
+      "label": "Run generated daily mission smoke",
+      "command": "node scripts/generated-daily-mission-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-2 issue",
+      "command": "gh issue view 156"
     }
   ]
 }
@@ -2867,12 +2907,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">English Learning Harness now has a learner-root personal cockpit that connects daily mission, Speaking Skill OS, multimodal interaction evidence, and 7-day/30-day journey windows. The larger AI-native OS goal remains active.</p>
+        <p class="summary">English Learning Harness now generates learner-root daily mission artifacts that connect the current Speaking Skill OS target to text-first practice, optional voice/image paths, and the personal cockpit.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
         AI-native Learning OS in progress<br>
-        AIOS-1 personal learner cockpit runtime is implemented and verified for #154.
+        AIOS-2 generated daily mission artifacts are implemented and under verification for #156.
       </div>
     </header>
 
@@ -2951,10 +2991,10 @@
                 <strong>AIOS-NEXT</strong>
                 <span>docs/ops/project-state.json</span>
               </div>
-              <h3>Next: generated mission/artifact layer를 personal cockpit에 연결</h3>
-              <div class="card-row"><b>왜</b><p>큰 goal은 매일 새로운 학습 장면과 증거를 생성하는 AI-native OS다. 개인 cockpit 다음에는 narrative/multimodal/generated artifacts가 같은 표면에서 자연스럽게 시작되어야 한다.</p></div>
+              <h3>Next: interactive/Remotion-style artifact layer와 learner report 강화</h3>
+              <div class="card-row"><b>왜</b><p>큰 goal에는 generated interactive HTML/Remotion artifacts와 learner reports가 포함된다. 다음은 mission artifact를 더 풍부한 시각/시간 기반 학습 산출물과 리포트로 확장하는 것이다.</p></div>
               <div class="card-row"><b>완료</b><p>아직 미구현.</p></div>
-              <div class="card-row"><b>검증</b><p>다음 PR에서 generated mission artifact smoke와 product cockpit integration smoke로 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>다음 PR에서 interactive artifact smoke, report linkage smoke, product cockpit render checks로 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -2965,16 +3005,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M10-3</strong>
-                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-mission-spec-validator-smoke.mjs, docs/phase-10-evidence/M10-3-mission-validator.md</span>
-              </div>
-              <h3>#145 decorative mission rejection을 구현함</h3>
-              <div class="card-row"><b>왜</b><p>스토리가 멋져도 목표 speaking skill 없이 완료되면 기존 역할극과 차별점이 없다.</p></div>
-              <div class="card-row"><b>완료</b><p>mission validator가 backlog link, target skill, transfer test, win condition, real-world target, text fallback, claim boundary를 검사한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase10-mission-spec-validator-smoke.mjs`가 7개 invalid mission fixture를 reject한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M10-4</strong>
@@ -3024,6 +3054,16 @@
               <div class="card-row"><b>왜</b><p>repo-level preview만으로는 학습자가 매일 들어오는 제품 표면이 아니다. 실제 learner root의 evidence와 next action을 한 화면에 연결해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>`cockpit` command가 learner-root `cockpit-state.json`과 `cockpit.html`을 생성하고 daily mission, Speaking Skill OS, due review, text/voice/image interaction evidence, 7일/30일 journey window를 연결한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/personal-learner-cockpit-smoke.mjs`가 fixture learner에서 diagnosis, text/voice/image sessions, weekly mirror, cockpit render, product-surface leak guard를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-2</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/generated-daily-mission-smoke.mjs, docs/phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md, docs/ISSUE-INDEX.md, README.md</span>
+              </div>
+              <h3>#156 generated daily mission artifact 구현</h3>
+              <div class="card-row"><b>왜</b><p>개인 cockpit이 상태만 보여주면 AI-native OS가 아니라 dashboard에 머문다. 매일 새 학습 장면이 생성되고 Speaking Skill OS evidence로 이어져야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`mission` command가 learner-root `artifacts/missions/daily-mission-YYYY-MM-DD.json/html`을 생성하고, current Speaking Skill OS target, transfer test, text/voice/image start paths, optional prompt material, personal cockpit latest mission pointer를 연결한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/generated-daily-mission-smoke.mjs`가 mission generation, rendered HTML, product-surface leak guard, post-mission today evidence, cockpit linkage를 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -3343,6 +3383,14 @@
               <strong>scripts/personal-learner-cockpit-smoke.mjs</strong>
               <span>personal learner cockpit runtime smoke</span>
             </a>
+            <a class="link-card source" href="../phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md">
+              <strong>docs/phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md</strong>
+              <span>AIOS-2 generated daily mission artifact evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/generated-daily-mission-smoke.mjs">
+              <strong>scripts/generated-daily-mission-smoke.mjs</strong>
+              <span>generated daily mission artifact smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3350,10 +3398,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M10-1 narrative mission plan</td>
-              <td><strong>Pass</strong><span>PRD/test spec/data contracts define narrative as Verified transfer wrapper; smoke verifies docs, issue links, dashboard state, and claim boundaries</span></td>
-            </tr>
             <tr>
               <td>M10-2 narrative data contracts</td>
               <td><strong>Pass</strong><span>world-state/tool-capability smoke rejects multiple NPCs, child mode, long lore, disabled text, and missing text fallback</span></td>
@@ -3382,14 +3426,14 @@
               <td>AIOS-1 personal learner cockpit</td>
               <td><strong>Pass</strong><span>personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-2 generated daily mission artifacts</td>
+              <td><strong>Pass</strong><span>generated mission smoke creates learner-root mission state/html, renders it, runs post-mission today evidence, and verifies cockpit linkage.</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>Open dashboard</span>
-              <code>open docs/ops/engineering-dashboard.html</code>
-            </div>
             <div class="command">
               <span>View next public distribution issue</span>
               <code>gh issue view 83</code>
@@ -3418,6 +3462,10 @@
               <span>View AIOS-1 issue</span>
               <code>gh issue view 154</code>
             </div>
+            <div class="command">
+              <span>View AIOS-2 issue</span>
+              <code>gh issue view 156</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3426,7 +3474,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 87개 보기</summary>
+        <summary>완료 이력 88개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4299,10 +4347,20 @@
               <div class="card-row"><b>완료</b><p>mission-spec, world-state, tool-capabilities JSON Schema와 positive fixture를 추가하고, world/capability validator smoke를 만들었다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase10-world-state-smoke.mjs`가 one-NPC, child-mode false, lore length, text fallback을 검사한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-3</strong>
+                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-mission-spec-validator-smoke.mjs, docs/phase-10-evidence/M10-3-mission-validator.md</span>
+              </div>
+              <h3>#145 decorative mission rejection을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>스토리가 멋져도 목표 speaking skill 없이 완료되면 기존 역할극과 차별점이 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>mission validator가 backlog link, target skill, transfer test, win condition, real-world target, text fallback, claim boundary를 검사한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-mission-spec-validator-smoke.mjs`가 7개 invalid mission fixture를 reject한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 84개 보기</summary>
+        <summary>전체 검증 85개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -4643,12 +4701,16 @@
               <td>AIOS-1 personal learner cockpit</td>
               <td><strong>Pass</strong><span>personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-2 generated daily mission artifacts</td>
+              <td><strong>Pass</strong><span>generated mission smoke creates learner-root mission state/html, renders it, runs post-mission today evidence, and verifies cockpit linkage.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 71개 보기</summary>
+        <summary>전체 명령 73개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -4934,6 +4996,14 @@
             <div class="command">
               <span>View AIOS-1 issue</span>
               <code>gh issue view 154</code>
+            </div>
+            <div class="command">
+              <span>Run generated daily mission smoke</span>
+              <code>node scripts/generated-daily-mission-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-2 issue</span>
+              <code>gh issue view 156</code>
             </div>
         </div>
       </details>
