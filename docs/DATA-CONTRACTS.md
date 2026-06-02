@@ -546,6 +546,30 @@ When a pilot is active, `cockpit-state.json` may include:
 
 The learner-facing cockpit must not expose `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, or `product_journey_audit` internals.
 
+`pilot-capture --json` returns the refreshed learner cockpit location after each captured card:
+
+```json
+{
+  "status": "pass",
+  "action": "pilot-capture",
+  "phase": "baseline|day|final",
+  "committed": false,
+  "cockpit": {
+    "statePath": "learner-root/cockpit-state.json",
+    "htmlPath": "learner-root/cockpit.html",
+    "url": "file:///absolute/path/to/cockpit.html",
+    "activePilot": {
+      "pilot_id": "owner-self-YYYY-MM-DD",
+      "status": "awaiting_baseline|in_progress|ready_to_finish|incomplete",
+      "next_card": {}
+    }
+  },
+  "claimBoundary": "This owner/self pilot can produce early local behavioral evidence only. It does not prove generalized fluency or real-world speaking ability."
+}
+```
+
+The cockpit refresh is a product-surface convenience contract. It is not evidence that the real owner/self pilot has been completed.
+
 ## M10 Narrative Mission Contracts
 
 Narrative mission state is valid only when story progress is bound to a Speaking Skill OS transfer test.
