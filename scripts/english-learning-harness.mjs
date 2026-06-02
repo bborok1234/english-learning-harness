@@ -1345,6 +1345,7 @@ function pilotDay(options) {
   }
   const completedDays = state.days.filter((day) => day.status === "complete").length;
   const dayNumber = options.day ?? completedDays + 1;
+  const mission = pilotDayMission(dayNumber);
   const practiceResult = practice({
     ...options,
     learnerRoot: paths.root,
@@ -1357,6 +1358,13 @@ function pilotDay(options) {
     session_id: practiceResult.session.id,
     artifact: relativeToRoot(paths, practiceResult.session.artifactPath),
     friction_note: options.frictionNote || "",
+    pilot_mission: {
+      id: mission.id,
+      day: dayNumber,
+      title: mission.title,
+      target_skill: mission.skill,
+      transfer_evidence: mission.evidence,
+    },
     speaking_backlog_evidence: practiceResult.session.speakingBacklogEvidence,
     aios_artifacts: {
       mission: relativeToRoot(paths, practiceResult.mission.htmlPath),
@@ -1424,7 +1432,7 @@ function pilotReportMarkdown(report) {
     ...(bridgeDays.length
       ? bridgeDays.map(
           (day) =>
-            `- Day ${day.day}: mission=${day.mission || "none"}; scene=${day.scene || "none"}; asset_deck=${day.asset_deck || "none"}; next_asset=${day.next_asset_action?.asset_id || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
+            `- Day ${day.day}: pilot_action=${day.pilot_mission?.target_skill || "none"}; mission=${day.mission || "none"}; scene=${day.scene || "none"}; asset_deck=${day.asset_deck || "none"}; next_asset=${day.next_asset_action?.asset_id || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
         )
       : ["- none"]),
     "",
@@ -1480,10 +1488,15 @@ function pilotFinish(options) {
     (day) => day.aios_artifacts?.asset_deck && day.aios_artifacts?.next_asset_action?.asset_id,
   ).length;
   const frictionNoteCount = state.days.filter((day) => day.friction_note).length;
+  const pilotMissionCount = state.days.filter((day) => day.pilot_mission?.target_skill).length;
+  const distinctPilotMissionSkills = [
+    ...new Set(state.days.map((day) => day.pilot_mission?.target_skill).filter(Boolean)),
+  ];
   const evidenceComplete =
     completedDays >= state.minimum_valid_daily_sessions &&
     daysWithCoreArtifacts === completedDays &&
     daysWithAssetActions === completedDays &&
+    pilotMissionCount === completedDays &&
     Boolean(state.baseline) &&
     turns.length > 0;
   const productDecision = evidenceComplete ? rubric.decision : "invalid";
@@ -1497,6 +1510,8 @@ function pilotFinish(options) {
     minimum_valid_daily_sessions: state.minimum_valid_daily_sessions,
     days_with_core_artifacts: daysWithCoreArtifacts,
     days_with_asset_actions: daysWithAssetActions,
+    days_with_pilot_mission_metadata: pilotMissionCount,
+    distinct_pilot_mission_skills: distinctPilotMissionSkills,
     friction_note_count: frictionNoteCount,
     required_decision_set: ["continue", "research", "pivot", "kill_claim", "invalid"],
     blocked_claims: [
@@ -1523,6 +1538,7 @@ function pilotFinish(options) {
       days: state.days.map((day) => ({
         day: day.day,
         session_id: day.session_id,
+        pilot_mission: day.pilot_mission ?? null,
         mission: day.aios_artifacts?.mission ?? "",
         scene: day.aios_artifacts?.scene ?? "",
         asset_deck: day.aios_artifacts?.asset_deck ?? "",

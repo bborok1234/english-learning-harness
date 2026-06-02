@@ -447,6 +447,13 @@ Required JSON fields:
       "session_id": "YYYY-MM-DD-...",
       "artifact": "artifacts/sessions/...",
       "friction_note": "",
+      "pilot_mission": {
+        "id": "clarify-usual-place|repair-wrong-order|image-info-gap|soft-disagreement|follow-up-invitation",
+        "day": 1,
+        "title": "확인 질문 만들기",
+        "target_skill": "clarification|repair|image_description|soft_disagreement|follow_up",
+        "transfer_evidence": "learner-facing behavior being sampled"
+      },
       "speaking_backlog_evidence": {},
       "aios_artifacts": {
         "mission": "artifacts/missions/daily-mission-YYYY-MM-DD.html",
@@ -501,13 +508,21 @@ Required JSON fields:
     "markdown": "artifacts/pilot/pilot-report-YYYY-MM-DD.md",
     "decision": "continue|research|pivot|kill_claim|invalid",
     "pass_signals": [],
-    "product_journey_audit": {
-      "decision": "continue|research|pivot|kill_claim|invalid",
-      "evidence_complete": true,
-      "days_with_core_artifacts": 5,
-      "days_with_asset_actions": 5,
-      "friction_note_count": 5
-    }
+      "product_journey_audit": {
+        "decision": "continue|research|pivot|kill_claim|invalid",
+        "evidence_complete": true,
+        "days_with_core_artifacts": 5,
+        "days_with_asset_actions": 5,
+        "days_with_pilot_mission_metadata": 5,
+        "distinct_pilot_mission_skills": [
+          "clarification",
+          "repair",
+          "image_description",
+          "soft_disagreement",
+          "follow_up"
+        ],
+        "friction_note_count": 5
+      }
   },
   "claim_boundary": "This owner/self pilot can produce early local behavioral evidence only. It does not prove generalized fluency or real-world speaking ability."
 }
@@ -605,6 +620,8 @@ The first five `pilot-next` daily cards must cover distinct speaking actions:
 | 5 | follow-up | `Where did you go hiking?` |
 
 These varied missions are local pilot prompts, not evidence of outcome improvement.
+
+`pilot-finish` must copy each day `pilot_mission` into `report.aios_artifacts.days[].pilot_mission` and must count `days_with_pilot_mission_metadata` in `product_journey_audit`. The audit is invalid if completed days lack this metadata.
 
 ## Local Pilot Dashboard Overlay
 

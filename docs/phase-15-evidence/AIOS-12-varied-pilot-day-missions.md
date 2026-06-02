@@ -19,6 +19,8 @@ The owner/self pilot should not ask the same clarification prompt for every prac
   - Day 5: follow-up.
 - `pilot-status` and `pilot-next` now expose the relevant daily mission for the next incomplete pilot day.
 - The learner cockpit active pilot card now follows the same day mission sequence.
+- `pilot-day` now persists the daily `pilot_mission` metadata so final audit can see which speaking action was sampled.
+- `pilot-finish` now counts `days_with_pilot_mission_metadata` and `distinct_pilot_mission_skills`.
 - Day 1 keeps the existing usual-place clarification prompt so the current real pilot next action remains stable.
 
 ## Verification
@@ -27,12 +29,13 @@ Passed:
 
 ```bash
 node scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs
+node scripts/phase15-owner-pilot-journey-audit-smoke.mjs
 node scripts/phase15-owner-pilot-next-card-smoke.mjs
 node scripts/phase15-owner-pilot-capture-smoke.mjs
 node scripts/phase9-pilot-prompt-ux-smoke.mjs
 ```
 
-The varied-day smoke verifies the first five fixture pilot days expose distinct learner-facing titles and examples, then become ready for final sample after five completed days.
+The varied-day smoke verifies the first five fixture pilot days expose distinct learner-facing titles and examples, then become ready for final sample after five completed days. The journey-audit smoke verifies the final report preserves per-day pilot action metadata and records distinct speaking skills.
 
 ## Claim Boundary
 
