@@ -24,6 +24,7 @@ Run a short, safe English contact session with the learner.
 - Never expose rubric labels such as "clarification question I can ask" as the learner prompt.
 - Do not make the first practice prompt about this repository, handoff documents, coding, or project planning unless the learner asks for that topic.
 - First-use prompts should be concrete everyday scenes such as today, food, commute, cafe, office, or asking what someone means.
+- Vary first-use scenes across concrete domains over time. Good defaults include cafe ordering repair, office clarification, nearby object description, lunch preference disagreement, commute timing, and daily comfort check-ins.
 
 ## Engine Discovery
 
@@ -82,6 +83,18 @@ Codex: 다음에 써볼 한 문장: Could you tell me which place you mean?
 ```
 
 The transcript must not ask the learner to run commands, inspect files, open GitHub issues, or fill internal evaluation fields.
+
+## First-Use Variant Coverage
+
+The first-use experience should not collapse into one repeated "usual place" prompt. Across local fixtures and real sessions, keep these variants available:
+
+- clarification: ask what an unclear everyday phrase means.
+- repair: recover when the learner does not know a word.
+- description: describe a visible place or object in simple concrete language.
+- soft disagreement: express a small preference or boundary politely.
+- comfort/status: say a simple current state and one reason.
+
+Each variant still ends in the same mini mirror shape and uses the agent-operated persistence path after the learner answers.
 
 ## Metrics To Record
 

@@ -509,6 +509,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #162 | AIOS-5: Add generated scene artifacts to the daily practice loop | continue |
 | #164 | AIOS-6: Add skill-level learner conversation simulation | continue |
 | #166 | AIOS-7: Add adaptive generated scene variants | continue |
+| #169 | AIOS-8: Add first-use conversation variant gate | continue |
 
 #154 evidence currently shows:
 
@@ -564,3 +565,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - Scene HTML, learner report, and cockpit expose latest scene variant labels.
 - `scripts/adaptive-scene-variants-smoke.mjs` verifies clarification, repair, and soft-disagreement samples produce different variants with preserved evidence links and blocked unsupported claims.
 - This proves local adaptive variant mechanics only. It does not prove engagement, retention, realtime voice, or learning outcomes.
+
+#169 evidence currently shows:
+
+- `skills/daily-session/SKILL.md` defines first-use variant coverage across clarification, repair, description, soft disagreement, and comfort/status scenes.
+- `scripts/skill-conversation-variants-smoke.mjs` verifies four concrete first-use transcript variants: office clarification, cafe repair, nearby object description, and lunch soft disagreement.
+- Each variant avoids Node/GitHub/PR/issue/smoke/rubric/project-planning/level/native-speaker/guaranteed-outcome leakage.
+- Each variant runs the real `practice` flow and verifies generated mission, generated scene, session artifact, learner report, cockpit, and required scene evidence.
+- This proves local first-use conversation variety and persistence mechanics only. It does not prove real learner outcomes, engagement, retention, or realtime voice.

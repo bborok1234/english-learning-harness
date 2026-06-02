@@ -1783,12 +1783,58 @@ function sceneForSkill(skill, fallbackGoal) {
   };
 }
 
-function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+function firstUseScenePreset(preset) {
+  const presets = {
+    "office-clarification": {
+      title: "The Office File Check",
+      setup: "사무실에서 동료가 어떤 파일을 말하는지 애매한 상황입니다.",
+      situation: '동료: "Can you send me the usual file?"',
+      ask: "어떤 파일을 말하는지 확인하는 질문을 영어로 한 문장 말해보세요.",
+      example: "Which file do you mean?",
+      image_prompt:
+        "A focused office desk scene with monitors, folders, and a chat notification asking for the usual file.",
+      hidden_detail: "the exact file name is missing",
+    },
+    "cafe-repair": {
+      title: "The Cafe Word Gap",
+      setup: "카페에서 원하는 음료 이름이 바로 생각나지 않는 상황입니다.",
+      situation: "직원이 주문을 기다리고 있고, 차가운 우유 커피를 원합니다.",
+      ask: "모르는 단어를 피해서 주문을 이어가는 문장을 영어로 말해보세요.",
+      example: "I do not know the name, but I want cold coffee with milk.",
+      image_prompt:
+        "A friendly cafe counter with a menu board, iced coffee, milk, and a learner trying to order without knowing the drink name.",
+      hidden_detail: "the learner does not know the exact drink name",
+    },
+    "desk-description": {
+      title: "The Desk Snapshot",
+      setup: "책상 위와 주변 분위기를 짧게 묘사하는 상황입니다.",
+      situation: "상대가 지금 주변에 무엇이 보이는지 물었습니다.",
+      ask: "보이는 물건 세 가지와 사람들의 분위기를 영어로 짧게 말해보세요.",
+      example: "There are desks, chairs, and monitors. People are working quietly.",
+      image_prompt:
+        "A typical office desk area with chairs, monitors, notebooks, and people working quietly in the background.",
+      hidden_detail: "the learner needs to mention visible objects and current activity",
+    },
+    "lunch-soft-disagreement": {
+      title: "The Lunch Boundary",
+      setup: "친구의 점심 제안에 부드럽게 다른 선택을 말하는 상황입니다.",
+      situation: '친구: "Let\'s eat something spicy today."',
+      ask: "배고프지만 매운 음식이 부담스럽다는 뜻을 부드럽게 영어로 말해보세요.",
+      example: "I see your point, but I want something light today.",
+      image_prompt:
+        "A lunch decision scene with two friends looking at spicy food and lighter menu options.",
+      hidden_detail: "the learner is hungry but does not want spicy food",
+    },
+  };
+  return presets[preset] ?? null;
+}
+
+function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = new Date(), options = {}) {
   const paths = ensureLearnerStore(learnerRoot);
   const dailyCockpit = buildDailyCockpit(paths.root, date);
   const backlogItem = dailyCockpit.speaking_os.next_item;
   const skill = backlogItem?.skill || dailyCockpit.suggested_scenario.speaking_backlog?.skill || dailyCockpit.suggested_scenario.cefr_skill || "starts";
-  const scene = sceneForSkill(skill, dailyCockpit.suggested_scenario.goal);
+  const scene = firstUseScenePreset(options.scenePreset) || sceneForSkill(skill, dailyCockpit.suggested_scenario.goal);
   const dateKey = todayStamp(date);
   const missionId = `daily-generated-${dateKey}-${skill}`;
   const startText = backlogItem?.drill_prompt || scene.example;
@@ -1797,6 +1843,7 @@ function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = n
     generated_at: date.toISOString(),
     learner_root: paths.root,
     mission_id: missionId,
+    scene_preset: options.scenePreset || "",
     source: {
       type: backlogItem ? "speaking-skill-os" : "daily-scenario",
       backlog_item_id: backlogItem?.id || "",
@@ -2068,9 +2115,9 @@ function generatedMissionHtml(state) {
 `;
 }
 
-export function writeGeneratedDailyMission(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+export function writeGeneratedDailyMission(learnerRoot = defaultLearnerRoot(), date = new Date(), options = {}) {
   const paths = ensureLearnerStore(learnerRoot);
-  const state = buildGeneratedMissionState(paths.root, date);
+  const state = buildGeneratedMissionState(paths.root, date, options);
   const stamp = todayStamp(date);
   const missionStatePath = resolve(paths.missionArtifactDir, `daily-mission-${stamp}.json`);
   const missionHtmlPath = resolve(paths.missionArtifactDir, `daily-mission-${stamp}.html`);
@@ -2211,10 +2258,48 @@ function sceneVariantForSkill(skill, date = new Date()) {
   return choices[daySeed % choices.length];
 }
 
+function firstUseSceneVariantPreset(preset) {
+  const variants = {
+    "office-clarification": {
+      id: "office-clarification",
+      label: "Office clarification",
+      setting: "사무실 책상 앞에서 동료의 파일 요청이 애매한 상황",
+      mood: "focused-clarifying",
+      prop: "모니터, 폴더, 채팅 알림",
+      cue_style: "정중하고 짧은 확인 질문",
+    },
+    "cafe-repair": {
+      id: "cafe-repair",
+      label: "Cafe repair",
+      setting: "카페 카운터에서 음료 이름이 생각나지 않는 상황",
+      mood: "friendly-repair",
+      prop: "메뉴판, 얼음컵, 우유",
+      cue_style: "I do not know the name, but...로 이어가기",
+    },
+    "desk-description": {
+      id: "desk-description",
+      label: "Desk description",
+      setting: "책상과 모니터가 많은 평범한 사무실을 묘사하는 상황",
+      mood: "observant-description",
+      prop: "책상, 의자, 모니터",
+      cue_style: "There are / I can see로 구체적으로 말하기",
+    },
+    "lunch-soft-disagreement": {
+      id: "lunch-soft-disagreement",
+      label: "Lunch soft disagreement",
+      setting: "점심 메뉴를 정하면서 매운 음식을 부드럽게 거절하는 상황",
+      mood: "gentle-boundary",
+      prop: "점심 메뉴 알림과 물컵",
+      cue_style: "I see your point, but...로 부드럽게 말하기",
+    },
+  };
+  return variants[preset] ?? null;
+}
+
 function buildGeneratedSceneState(missionState, learnerRoot = defaultLearnerRoot(), date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const scene = missionState.learner_visible_scene;
-  const variant = sceneVariantForSkill(missionState.target_skill, date);
+  const variant = firstUseSceneVariantPreset(missionState.scene_preset) || sceneVariantForSkill(missionState.target_skill, date);
   const frames = [
     {
       id: "enter",

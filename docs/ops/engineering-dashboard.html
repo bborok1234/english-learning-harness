@@ -405,11 +405,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M9 pilot readiness bridge ready for PR verification",
-    "status": "M9-2 and M9-4 local readiness mechanics are implemented on the current branch: owner/self pilot days now run through practice and final pilot reports link AIOS artifacts.",
+    "stage": "AIOS-8 first-use conversation variants ready for PR verification",
+    "status": "AIOS-8 adds first-use conversation variant coverage so learner-facing transcripts and generated scene artifacts stay aligned across office, cafe, desk, and lunch situations.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The owner/self pilot bridge now connects daily speech samples to Codex-operated practice, generated mission, generated scene, learner report, cockpit, and final transcript review evidence.",
-    "nextGoal": "Verify, PR, merge, and then move from fixture readiness to real owner/self pilot usage plus broader conversation variants.",
+    "summary": "The daily-session skill now defines first-use variant coverage, and a new smoke verifies four concrete learner-facing transcripts through the real practice artifact loop with matching scene presets.",
+    "nextGoal": "Verify, PR, merge AIOS-8, then use the broadened first-use surface for real owner/self pilot runs and richer multimodal missions.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can run a local owner/self pilot fixture through the same AIOS practice artifact loop used by daily learners.",
+    "allowedClaim": "The harness can validate local first-use conversation variants and align generated mission/scene artifacts with the selected transcript preset.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local owner/self pilot readiness mechanics only; real learner outcomes, realtime voice, retention, and broad engagement remain unclaimed."
+    "claimBoundary": "Allowed claim is local first-use conversation UX and persistence mechanics only; real learner outcomes, engagement, retention, and realtime voice remain unclaimed."
   },
   "ssot": [
     {
@@ -799,37 +799,49 @@
       "path": "../scripts/phase9-pilot-aios-readiness-smoke.mjs",
       "role": "M9 pilot AIOS readiness bridge smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-8-first-use-conversation-variants.md",
+      "path": "./phase-11-evidence/AIOS-8-first-use-conversation-variants.md",
+      "role": "AIOS-8 first-use conversation variants evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/skill-conversation-variants-smoke.mjs",
+      "path": "../scripts/skill-conversation-variants-smoke.mjs",
+      "role": "first-use conversation variants smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; this change closes an M9 readiness bridge, not the full product",
+      "detail": "full AI-native English Learning OS remains open; AIOS-8 is another verified slice, not final completion",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "M9 bridge ready",
-      "detail": "pilot days now use practice and final pilot reports link mission, scene, learner report, and cockpit evidence",
+      "value": "AIOS-8 ready",
+      "detail": "four first-use transcript variants run through practice and keep generated scene presets aligned",
       "tone": "green"
     },
     {
       "label": "Next goal",
       "value": "PR + real pilot",
-      "detail": "verify and merge the bridge, then use it for a real owner/self pilot rather than only fixtures",
+      "detail": "merge AIOS-8, then use the broader first-use surface in real owner/self pilot sessions",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#137/#139",
-      "detail": "current branch should close M9-2 pilot report bridge and M9-4 readiness dashboard gate",
+      "value": "#169",
+      "detail": "M11 First-Use Conversation Variants is open and AIOS-8 is the current PR-sized issue",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Pilot evidence loop",
-      "detail": "pilot review now inspects generated learning artifacts instead of detached transcript notes",
+      "value": "Scene-aligned first use",
+      "detail": "Codex can choose different everyday openings and keep mission/scene/report/cockpit evidence coherent",
       "tone": "green"
     }
   ],
@@ -987,6 +999,13 @@
       "status": "Pass",
       "evidence": "#139, phase9-pilot-aios-readiness-smoke, phase9-pilot-prompt-ux-smoke, ops-dashboard-smoke",
       "claim": "local owner/self pilot readiness mechanics are connected and dashboard-visible while learning outcome claims remain blocked"
+    },
+    {
+      "id": "GATE-23",
+      "label": "First-use conversation variants",
+      "status": "Pass",
+      "evidence": "#169, skill-conversation-variants-smoke, skill-conversation-simulation-smoke, codex-operated-practice-flow-smoke",
+      "claim": "office clarification, cafe repair, desk description, and lunch soft-disagreement transcripts avoid command/rubric leakage, run through practice, and keep mission/scene presets aligned"
     }
   ],
   "board": [
@@ -2285,6 +2304,19 @@
             "docs/ops/project-state.json",
             "docs/phase-9-evidence/M9-4-owner-pilot-readiness-closeout.md"
           ]
+        },
+        {
+          "id": "AIOS-8",
+          "title": "#169 first-use conversation variants gate 구현",
+          "why": "하나의 usual-place prompt만 검증하면 첫 사용 경험이 좁고 반복적으로 굳는다. 또한 transcript와 generated scene이 서로 다른 장면을 말하는 mismatch가 생길 수 있었다.",
+          "done": "daily-session skill에 first-use variant coverage를 추가하고, office/cafe/desk/lunch transcript variants가 practice와 matching scene preset을 통과하는 smoke를 만들었다.",
+          "verification": "`node scripts/skill-conversation-variants-smoke.mjs`가 4개 variant, command/rubric leakage guard, mission/scene/report/cockpit linkage, scene preset matching을 검증한다.",
+          "files": [
+            "skills/daily-session/SKILL.md",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/skill-conversation-variants-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-8-first-use-conversation-variants.md"
+          ]
         }
       ]
     },
@@ -2295,12 +2327,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "M9 pilot bridge PR 검증과 병합",
-          "why": "M9-2/M9-4 구현은 현재 branch에 있으므로 main 기준 evidence로 남기려면 PR-first closeout이 필요하다.",
-          "done": "pilot AIOS readiness, owner pilot, prompt UX, practice, adaptive scene, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
-          "verification": "PR이 #137/#139를 닫고 main에서 핵심 smoke를 재실행해야 한다.",
+          "title": "AIOS-8 PR 검증과 병합",
+          "why": "first-use variant gate는 구현됐지만 main evidence로 남기려면 #169 PR-first closeout이 필요하다.",
+          "done": "conversation variants, existing skill simulation, practice, adaptive scene, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
+          "verification": "PR이 #169를 닫고 main에서 핵심 smoke를 재실행해야 한다.",
           "files": [
-            "scripts/phase9-pilot-aios-readiness-smoke.mjs",
+            "scripts/skill-conversation-variants-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -2324,14 +2356,14 @@
           ]
         },
         {
-          "id": "AIOS-CONVERSATION-VARIANTS",
-          "title": "대화 simulation variants 확장",
-          "why": "하나의 usual-place transcript만으로는 다양한 학습자 첫 경험을 충분히 검증하지 못한다.",
-          "done": "daily, cafe, office, repair, disagreement transcript fixtures를 추가하고 command leakage/mini mirror/practice artifact linkage를 검증한다.",
-          "verification": "multi-transcript skill simulation smoke가 통과해야 한다.",
+          "id": "AIOS-MULTIMODAL-MISSION-ASSETS",
+          "title": "멀티모달 mission artifact를 더 실질적으로 연결",
+          "why": "현재 image/voice는 transcript-first evidence로 연결되지만 generated media나 Remotion-style artifact는 아직 학습 루프 중심 기능으로 충분히 쓰이지 않는다.",
+          "done": "scene preset을 기반으로 image prompt, transcript prompt, optional HTML/Remotion artifact 계획을 하나의 mission asset contract로 묶는다.",
+          "verification": "multimodal mission asset smoke가 text-first fallback과 optional rich artifact linkage를 함께 검증해야 한다.",
           "files": [
-            "skills/",
-            "scripts/"
+            "scripts/lib/english-learning-store.mjs",
+            "docs/phase-11-evidence/"
           ]
         }
       ]
@@ -2857,6 +2889,11 @@
       "name": "M9 owner pilot mechanics regression",
       "status": "Pass",
       "detail": "phase9-owner-pilot-smoke remains green after pilot-day moved from today to practice; baseline, five days, rubric report, and no-assumed-name checks pass."
+    },
+    {
+      "name": "AIOS-8 first-use conversation variants",
+      "status": "Pass",
+      "detail": "skill-conversation-variants smoke validates four concrete first-use transcripts, no command/rubric/project leakage, real practice artifacts, report/cockpit linkage, and matching mission/scene preset IDs."
     }
   ],
   "commands": [
@@ -3203,6 +3240,14 @@
     {
       "label": "View M9-4 issue",
       "command": "gh issue view 139"
+    },
+    {
+      "label": "Run first-use conversation variants smoke",
+      "command": "node scripts/skill-conversation-variants-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-8 issue",
+      "command": "gh issue view 169"
     }
   ]
 }
@@ -3211,12 +3256,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The owner/self pilot bridge now connects daily speech samples to Codex-operated practice, generated mission, generated scene, learner report, cockpit, and final transcript review evidence.</p>
+        <p class="summary">The daily-session skill now defines first-use variant coverage, and a new smoke verifies four concrete learner-facing transcripts through the real practice artifact loop with matching scene presets.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        M9 pilot readiness bridge ready for PR verification<br>
-        M9-2 and M9-4 local readiness mechanics are implemented on the current branch: owner/self pilot days now run through practice and final pilot reports link AIOS artifacts.
+        AIOS-8 first-use conversation variants ready for PR verification<br>
+        AIOS-8 adds first-use conversation variant coverage so learner-facing transcripts and generated scene artifacts stay aligned across office, cafe, desk, and lunch situations.
       </div>
     </header>
 
@@ -3225,27 +3270,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">Active</div>
-          <p>full AI-native English Learning OS remains open; this change closes an M9 readiness bridge, not the full product</p>
+          <p>full AI-native English Learning OS remains open; AIOS-8 is another verified slice, not final completion</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M9 bridge ready</div>
-          <p>pilot days now use practice and final pilot reports link mission, scene, learner report, and cockpit evidence</p>
+          <div class="metric-value">AIOS-8 ready</div>
+          <p>four first-use transcript variants run through practice and keep generated scene presets aligned</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next goal</div>
           <div class="metric-value">PR + real pilot</div>
-          <p>verify and merge the bridge, then use it for a real owner/self pilot rather than only fixtures</p>
+          <p>merge AIOS-8, then use the broader first-use surface in real owner/self pilot sessions</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">#137/#139</div>
-          <p>current branch should close M9-2 pilot report bridge and M9-4 readiness dashboard gate</p>
+          <div class="metric-value">#169</div>
+          <p>M11 First-Use Conversation Variants is open and AIOS-8 is the current PR-sized issue</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
-          <div class="metric-value">Pilot evidence loop</div>
-          <p>pilot review now inspects generated learning artifacts instead of detached transcript notes</p>
+          <div class="metric-value">Scene-aligned first use</div>
+          <p>Codex can choose different everyday openings and keep mission/scene/report/cockpit evidence coherent</p>
         </article>
     </section>
 
@@ -3273,12 +3318,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/phase9-pilot-aios-readiness-smoke.mjs, docs/ops/project-state.json</span>
+                <span>scripts/skill-conversation-variants-smoke.mjs, docs/ops/project-state.json</span>
               </div>
-              <h3>M9 pilot bridge PR 검증과 병합</h3>
-              <div class="card-row"><b>왜</b><p>M9-2/M9-4 구현은 현재 branch에 있으므로 main 기준 evidence로 남기려면 PR-first closeout이 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>pilot AIOS readiness, owner pilot, prompt UX, practice, adaptive scene, product/ops dashboard, scaffold smoke와 diff check를 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>PR이 #137/#139를 닫고 main에서 핵심 smoke를 재실행해야 한다.</p></div>
+              <h3>AIOS-8 PR 검증과 병합</h3>
+              <div class="card-row"><b>왜</b><p>first-use variant gate는 구현됐지만 main evidence로 남기려면 #169 PR-first closeout이 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>conversation variants, existing skill simulation, practice, adaptive scene, product/ops dashboard, scaffold smoke와 diff check를 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>PR이 #169를 닫고 main에서 핵심 smoke를 재실행해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3292,13 +3337,13 @@
             </article>
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-CONVERSATION-VARIANTS</strong>
-                <span>skills/, scripts/</span>
+                <strong>AIOS-MULTIMODAL-MISSION-ASSETS</strong>
+                <span>scripts/lib/english-learning-store.mjs, docs/phase-11-evidence/</span>
               </div>
-              <h3>대화 simulation variants 확장</h3>
-              <div class="card-row"><b>왜</b><p>하나의 usual-place transcript만으로는 다양한 학습자 첫 경험을 충분히 검증하지 못한다.</p></div>
-              <div class="card-row"><b>완료</b><p>daily, cafe, office, repair, disagreement transcript fixtures를 추가하고 command leakage/mini mirror/practice artifact linkage를 검증한다.</p></div>
-              <div class="card-row"><b>검증</b><p>multi-transcript skill simulation smoke가 통과해야 한다.</p></div>
+              <h3>멀티모달 mission artifact를 더 실질적으로 연결</h3>
+              <div class="card-row"><b>왜</b><p>현재 image/voice는 transcript-first evidence로 연결되지만 generated media나 Remotion-style artifact는 아직 학습 루프 중심 기능으로 충분히 쓰이지 않는다.</p></div>
+              <div class="card-row"><b>완료</b><p>scene preset을 기반으로 image prompt, transcript prompt, optional HTML/Remotion artifact 계획을 하나의 mission asset contract로 묶는다.</p></div>
+              <div class="card-row"><b>검증</b><p>multimodal mission asset smoke가 text-first fallback과 optional rich artifact linkage를 함께 검증해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -3309,16 +3354,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>AIOS-4</strong>
-                <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/codex-operated-practice-flow-smoke.mjs, docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md</span>
-              </div>
-              <h3>Codex-operated daily practice flow를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>학습자가 Node 명령을 직접 치는 순간 제품 표면이 깨진다. Codex가 대화 뒤에서 mission/session/report/cockpit을 한 번에 갱신할 경로가 필요했다.</p></div>
-              <div class="card-row"><b>완료</b><p>`practice` 명령이 Speaking Skill OS 진단, mission 생성, session 저장, weekly mirror, learner report, cockpit refresh를 조합한다. daily-session skill은 이 경로를 기본 내부 persistence로 사용하게 됐다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/codex-operated-practice-flow-smoke.mjs`, `node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase1-scaffold-smoke.mjs`가 통과했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-5</strong>
@@ -3368,6 +3403,16 @@
               <div class="card-row"><b>왜</b><p>M9가 실제 제품 루프와 분리된 상태로 닫히면 이후 real pilot 판단이 약해진다.</p></div>
               <div class="card-row"><b>완료</b><p>5일 pilot fixture, final learner report, final cockpit, dashboard SSOT, unsupported-claim guard를 하나의 readiness smoke로 묶었다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-aios-readiness-smoke.mjs`, product/ops dashboard smoke, scaffold smoke가 통과해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-8</strong>
+                <span>skills/daily-session/SKILL.md, scripts/lib/english-learning-store.mjs, scripts/skill-conversation-variants-smoke.mjs, docs/phase-11-evidence/AIOS-8-first-use-conversation-variants.md</span>
+              </div>
+              <h3>#169 first-use conversation variants gate 구현</h3>
+              <div class="card-row"><b>왜</b><p>하나의 usual-place prompt만 검증하면 첫 사용 경험이 좁고 반복적으로 굳는다. 또한 transcript와 generated scene이 서로 다른 장면을 말하는 mismatch가 생길 수 있었다.</p></div>
+              <div class="card-row"><b>완료</b><p>daily-session skill에 first-use variant coverage를 추가하고, office/cafe/desk/lunch transcript variants가 practice와 matching scene preset을 통과하는 smoke를 만들었다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/skill-conversation-variants-smoke.mjs`가 4개 variant, command/rubric leakage guard, mission/scene/report/cockpit linkage, scene preset matching을 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -3524,6 +3569,11 @@
               <td><strong>GATE-22</strong><span>M9 owner pilot readiness closeout</span></td>
               <td><strong>Pass</strong><span>#139, phase9-pilot-aios-readiness-smoke, phase9-pilot-prompt-ux-smoke, ops-dashboard-smoke</span></td>
               <td>local owner/self pilot readiness mechanics are connected and dashboard-visible while learning outcome claims remain blocked</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-23</strong><span>First-use conversation variants</span></td>
+              <td><strong>Pass</strong><span>#169, skill-conversation-variants-smoke, skill-conversation-simulation-smoke, codex-operated-practice-flow-smoke</span></td>
+              <td>office clarification, cafe repair, desk description, and lunch soft-disagreement transcripts avoid command/rubric leakage, run through practice, and keep mission/scene presets aligned</td>
             </tr>
         </tbody>
       </table>
@@ -3782,6 +3832,14 @@
               <strong>scripts/phase9-pilot-aios-readiness-smoke.mjs</strong>
               <span>M9 pilot AIOS readiness bridge smoke</span>
             </a>
+            <a class="link-card source" href="../phase-11-evidence/AIOS-8-first-use-conversation-variants.md">
+              <strong>docs/phase-11-evidence/AIOS-8-first-use-conversation-variants.md</strong>
+              <span>AIOS-8 first-use conversation variants evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/skill-conversation-variants-smoke.mjs">
+              <strong>scripts/skill-conversation-variants-smoke.mjs</strong>
+              <span>first-use conversation variants smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3789,10 +3847,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-2 generated daily mission artifacts</td>
-              <td><strong>Pass</strong><span>generated mission smoke creates learner-root mission state/html, renders it, runs post-mission today evidence, and verifies cockpit linkage.</span></td>
-            </tr>
             <tr>
               <td>AIOS-3 interactive artifacts and reports</td>
               <td><strong>Pass</strong><span>interactive-artifact-report smoke validates mission mode tabs, 7-day/30-day report generation, text/voice/image evidence counts, cockpit report linkage, and product-surface leak guards.</span></td>
@@ -3821,14 +3875,14 @@
               <td>M9 owner pilot mechanics regression</td>
               <td><strong>Pass</strong><span>phase9-owner-pilot-smoke remains green after pilot-day moved from today to practice; baseline, five days, rubric report, and no-assumed-name checks pass.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-8 first-use conversation variants</td>
+              <td><strong>Pass</strong><span>skill-conversation-variants smoke validates four concrete first-use transcripts, no command/rubric/project leakage, real practice artifacts, report/cockpit linkage, and matching mission/scene preset IDs.</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>View AIOS-2 issue</span>
-              <code>gh issue view 156</code>
-            </div>
             <div class="command">
               <span>View AIOS-3 issue</span>
               <code>gh issue view 158</code>
@@ -3857,6 +3911,10 @@
               <span>View M9-4 issue</span>
               <code>gh issue view 139</code>
             </div>
+            <div class="command">
+              <span>View AIOS-8 issue</span>
+              <code>gh issue view 169</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3865,7 +3923,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 95개 보기</summary>
+        <summary>완료 이력 96개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4818,10 +4876,20 @@
               <div class="card-row"><b>완료</b><p>`mission` HTML에 text/voice/image practice mode tab을 추가하고, `report` 명령으로 `artifacts/reports/learner-report-YYYY-MM-DD.json/html`을 생성하며, cockpit에서 최신 report를 연결했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/generated-daily-mission-smoke.mjs`, `node scripts/personal-learner-cockpit-smoke.mjs`가 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-4</strong>
+                <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/codex-operated-practice-flow-smoke.mjs, docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md</span>
+              </div>
+              <h3>Codex-operated daily practice flow를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>학습자가 Node 명령을 직접 치는 순간 제품 표면이 깨진다. Codex가 대화 뒤에서 mission/session/report/cockpit을 한 번에 갱신할 경로가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>`practice` 명령이 Speaking Skill OS 진단, mission 생성, session 저장, weekly mirror, learner report, cockpit refresh를 조합한다. daily-session skill은 이 경로를 기본 내부 persistence로 사용하게 됐다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/codex-operated-practice-flow-smoke.mjs`, `node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase1-scaffold-smoke.mjs`가 통과했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 92개 보기</summary>
+        <summary>전체 검증 93개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -5194,12 +5262,16 @@
               <td>M9 owner pilot mechanics regression</td>
               <td><strong>Pass</strong><span>phase9-owner-pilot-smoke remains green after pilot-day moved from today to practice; baseline, five days, rubric report, and no-assumed-name checks pass.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-8 first-use conversation variants</td>
+              <td><strong>Pass</strong><span>skill-conversation-variants smoke validates four concrete first-use transcripts, no command/rubric/project leakage, real practice artifacts, report/cockpit linkage, and matching mission/scene preset IDs.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 86개 보기</summary>
+        <summary>전체 명령 88개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5545,6 +5617,14 @@
             <div class="command">
               <span>View M9-4 issue</span>
               <code>gh issue view 139</code>
+            </div>
+            <div class="command">
+              <span>Run first-use conversation variants smoke</span>
+              <code>node scripts/skill-conversation-variants-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-8 issue</span>
+              <code>gh issue view 169</code>
             </div>
         </div>
       </details>
