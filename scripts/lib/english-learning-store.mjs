@@ -1829,6 +1829,184 @@ function firstUseScenePreset(preset) {
   return presets[preset] ?? null;
 }
 
+export function validateMissionAssetContract(contract) {
+  const errors = [];
+  if (!contract || typeof contract !== "object" || Array.isArray(contract)) {
+    return ["asset_contract must be an object"];
+  }
+  if (contract.schema_version !== 1) errors.push("asset_contract.schema_version must be 1");
+  if (contract.canonical_completion_path !== "text-first") {
+    errors.push("asset_contract.canonical_completion_path must be text-first");
+  }
+  if (!contract.target_skill) errors.push("asset_contract.target_skill is required");
+  if (!contract.required_learner_action) errors.push("asset_contract.required_learner_action is required");
+  if (!contract.expected_evidence?.session_artifact) {
+    errors.push("asset_contract.expected_evidence.session_artifact is required");
+  }
+  if (!Array.isArray(contract.assets) || !contract.assets.length) {
+    errors.push("asset_contract.assets must be a non-empty array");
+  }
+
+  const assets = Array.isArray(contract.assets) ? contract.assets : [];
+  const ids = new Set();
+  const requiredIds = ["text-practice", "interactive-html-scene", "image-information-gap", "voice-transcript", "remotion-storyboard"];
+  for (const requiredId of requiredIds) {
+    if (!assets.some((asset) => asset.id === requiredId)) {
+      errors.push(`asset_contract.assets missing ${requiredId}`);
+    }
+  }
+  for (const asset of assets) {
+    if (!asset || typeof asset !== "object" || Array.isArray(asset)) {
+      errors.push("asset_contract.assets entries must be objects");
+      continue;
+    }
+    if (!asset.id) errors.push("asset id is required");
+    if (asset.id && ids.has(asset.id)) errors.push(`duplicate asset id: ${asset.id}`);
+    if (asset.id) ids.add(asset.id);
+    if (!asset.mode) errors.push(`${asset.id || "asset"} mode is required`);
+    if (!asset.target_skill || asset.target_skill !== contract.target_skill) {
+      errors.push(`${asset.id || "asset"} target_skill must match contract target_skill`);
+    }
+    if (!asset.required_learner_action) errors.push(`${asset.id || "asset"} required_learner_action is required`);
+    if (asset.requires_learner_output !== true) {
+      errors.push(`${asset.id || "asset"} must require learner output`);
+    }
+    if (!asset.expected_evidence?.session_artifact) {
+      errors.push(`${asset.id || "asset"} expected_evidence.session_artifact is required`);
+    }
+    if (!asset.completion_role) errors.push(`${asset.id || "asset"} completion_role is required`);
+    if (asset.completion_role === "decorative") {
+      errors.push(`${asset.id || "asset"} cannot be decorative`);
+    }
+    const lowerClaim = `${asset.claim_boundary || ""}`.toLowerCase();
+    for (const forbidden of ["proves fluency", "guaranteed", "native speaker", "your level", "improves retention"]) {
+      if (lowerClaim.includes(forbidden)) {
+        errors.push(`${asset.id || "asset"} claim_boundary contains unsupported claim: ${forbidden}`);
+      }
+    }
+  }
+  if (!assets.some((asset) => asset.completion_role === "canonical" && asset.mode === "text")) {
+    errors.push("asset_contract must include a canonical text asset");
+  }
+  if (!contract.blocked_claims?.includes("realtime voice is supported")) {
+    errors.push("asset_contract must keep realtime voice support blocked");
+  }
+  if (!contract.blocked_claims?.includes("generated media improves learning outcomes")) {
+    errors.push("asset_contract must keep generated-media learning outcomes blocked");
+  }
+  return errors;
+}
+
+function buildMissionAssetContract({ missionState, scene, paths, startText }) {
+  const expectedEvidence = {
+    session_artifact: "artifacts/sessions/*.json",
+    interaction_event_modalities: ["text", "voice", "image"],
+    speaking_backlog_item_id: missionState.expected_evidence?.speaking_backlog_item_id ?? "",
+    transfer_test: missionState.transfer_test,
+  };
+  const base = {
+    target_skill: missionState.target_skill,
+    required_learner_action: missionState.required_learner_action,
+    expected_evidence: expectedEvidence,
+    claim_boundary:
+      "This asset supports local speaking practice and evidence collection. It does not prove fluency, retention, realtime voice, or generated-media learning gains.",
+  };
+  return {
+    schema_version: 1,
+    contract_id: `${missionState.mission_id}-asset-contract`,
+    mission_id: missionState.mission_id,
+    canonical_completion_path: "text-first",
+    target_skill: missionState.target_skill,
+    required_learner_action: missionState.required_learner_action,
+    transfer_test: missionState.transfer_test,
+    expected_evidence: expectedEvidence,
+    assets: [
+      {
+        id: "text-practice",
+        mode: "text",
+        completion_role: "canonical",
+        surface: "Codex conversation",
+        prompt: scene.ask,
+        start_command: commandLine(paths.root, "today", ["--say", JSON.stringify(startText)]),
+        requires_learner_output: true,
+        ...base,
+      },
+      {
+        id: "interactive-html-scene",
+        mode: "html",
+        completion_role: "evidence-guided",
+        surface: "generated daily mission and scene HTML",
+        prompt: "Use the generated scene frames to prepare one spoken or typed answer, then save the answer as session evidence.",
+        start_command: commandLine(paths.root, "scene"),
+        requires_learner_output: true,
+        ...base,
+      },
+      {
+        id: "image-information-gap",
+        mode: "image",
+        completion_role: "optional-evidence-path",
+        surface: "local image information-gap prompt",
+        prompt: scene.image_prompt,
+        hidden_detail: scene.hidden_detail,
+        start_command: commandLine(paths.root, "image", [
+          "--image-file",
+          JSON.stringify("path/to/local-image.png"),
+          "--hidden-detail",
+          JSON.stringify(scene.hidden_detail),
+          "--say",
+          JSON.stringify(startText),
+        ]),
+        requires_learner_output: true,
+        ...base,
+      },
+      {
+        id: "voice-transcript",
+        mode: "voice-transcript",
+        completion_role: "optional-evidence-path",
+        surface: "transcript-backed voice practice",
+        prompt: "Read the scene out loud, save or paste the transcript, then preserve the transcript as voice interaction evidence.",
+        start_command: commandLine(paths.root, "voice", [
+          "--transcript",
+          JSON.stringify("path/to/voice-transcript.txt"),
+          "--say",
+          JSON.stringify(startText),
+        ]),
+        requires_learner_output: true,
+        ...base,
+      },
+      {
+        id: "remotion-storyboard",
+        mode: "remotion-storyboard",
+        completion_role: "optional-preparation-asset",
+        surface: "generated storyboard plan",
+        prompt:
+          "Render or describe a short scene timeline only when it leads back to the same learner answer and session artifact requirement.",
+        storyboard_frames: ["scene setup", "speaking cue", "repair cue", "transfer check"],
+        requires_learner_output: true,
+        ...base,
+      },
+      {
+        id: "future-realtime-hook",
+        mode: "future-realtime",
+        completion_role: "blocked-future-capability",
+        surface: "future realtime voice hook",
+        prompt:
+          "Realtime voice is a future capability and cannot be required for mission completion until a stable runtime is proven.",
+        requires_learner_output: true,
+        ...base,
+      },
+    ],
+    blocked_claims: [
+      "realtime voice is supported",
+      "generated media improves learning outcomes",
+      "multimodal assets prove fluency",
+      "Remotion artifacts improve retention",
+    ],
+    claim_boundary:
+      "Mission assets are local practice supports. Text-first evidence remains canonical; optional media assets do not prove learning outcomes.",
+  };
+}
+
 function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = new Date(), options = {}) {
   const paths = ensureLearnerStore(learnerRoot);
   const dailyCockpit = buildDailyCockpit(paths.root, date);
@@ -1838,7 +2016,7 @@ function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = n
   const dateKey = todayStamp(date);
   const missionId = `daily-generated-${dateKey}-${skill}`;
   const startText = backlogItem?.drill_prompt || scene.example;
-  return {
+  const missionState = {
     schema_version: 1,
     generated_at: date.toISOString(),
     learner_root: paths.root,
@@ -1885,6 +2063,17 @@ function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = n
     claim_boundary:
       "This generated mission is a local practice scene. It can guide Speaking Skill OS transfer evidence, but it does not prove fluency, retention, or generated-world learning gains.",
   };
+  missionState.asset_contract = buildMissionAssetContract({
+    missionState,
+    scene,
+    paths,
+    startText,
+  });
+  const contractErrors = validateMissionAssetContract(missionState.asset_contract);
+  if (contractErrors.length) {
+    throw new Error(`Generated mission asset contract invalid: ${contractErrors.join("; ")}`);
+  }
+  return missionState;
 }
 
 function generatedMissionHtml(state) {
@@ -2088,6 +2277,23 @@ function generatedMissionHtml(state) {
         <summary>Voice prompt</summary>
         <p>${escapeHtml(state.optional_artifacts.voice_prompt)}</p>
       </details>
+    </section>
+
+    <section>
+      <h2>Asset evidence contract</h2>
+      <p class="subtle">Text-first가 기본 완료 경로입니다. 선택 asset도 learner output과 session evidence로 돌아와야 합니다.</p>
+      <div class="grid">
+        ${(state.asset_contract?.assets ?? [])
+          .map(
+            (asset) => `
+        <div class="card">
+          <h3>${escapeHtml(asset.mode)}</h3>
+          <p>${escapeHtml(asset.completion_role)}</p>
+          <p class="subtle">${escapeHtml(asset.expected_evidence?.session_artifact ?? "")}</p>
+        </div>`,
+          )
+          .join("")}
+      </div>
     </section>
 
     <section class="boundary">
