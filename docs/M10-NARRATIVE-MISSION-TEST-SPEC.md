@@ -23,7 +23,7 @@ Pass when:
 - `docs/M10-NARRATIVE-MISSION-TEST-SPEC.md` exists.
 - `docs/DATA-CONTRACTS.md` contains M10 mission/world/capability contracts.
 - `docs/ISSUE-INDEX.md` lists M10 issues #143-#148.
-- `docs/project-state.json` has an M10 dashboard gate.
+- `docs/ops/project-state.json` has an M10 engineering dashboard gate.
 
 Smoke:
 

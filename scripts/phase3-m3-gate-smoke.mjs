@@ -171,7 +171,7 @@ function main() {
   assert(sevenDay.status === "pass", "clean clone seven-day simulation failed");
 
   run("node", ["scripts/generate-dashboard.mjs"], { cwd: cloneRoot });
-  const dashboard = readFileSync(resolve(cloneRoot, "docs/dashboard.html"), "utf8");
+  const dashboard = readFileSync(resolve(cloneRoot, "docs/ops/engineering-dashboard.html"), "utf8");
   assert(dashboard.includes("M3"), "dashboard should include M3 state");
 
   const status = run("git", ["status", "--short"], { cwd: cloneRoot });

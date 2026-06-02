@@ -443,7 +443,7 @@ Every execution lane must produce:
 - changed files,
 - smoke command,
 - failing-before/passing-after evidence where applicable,
-- update to `docs/project-state.json`,
+- update to `docs/ops/project-state.json`,
 - dashboard regeneration,
 - explicit claim boundary.
 

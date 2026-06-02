@@ -32,7 +32,7 @@ function main() {
   const contracts = readText("docs/DATA-CONTRACTS.md");
   const issueIndex = readText("docs/ISSUE-INDEX.md");
   const status = readText("docs/STATUS.md");
-  const projectState = readText("docs/project-state.json");
+  const projectState = readText("docs/ops/project-state.json");
 
   includesAll(
     prd,

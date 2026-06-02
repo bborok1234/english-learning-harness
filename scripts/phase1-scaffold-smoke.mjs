@@ -37,6 +37,10 @@ const requiredFiles = [
   "scripts/package-local-marketplace.mjs",
   "scripts/package-public-artifact.mjs",
   "scripts/prepare-public-artifact-handoff.mjs",
+  "scripts/generate-dashboard.mjs",
+  "scripts/generate-learner-cockpit.mjs",
+  "scripts/product-surface-smoke.mjs",
+  "scripts/ops-dashboard-smoke.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
   "scripts/phase1-vocabulary-history-smoke.mjs",
   "scripts/phase1-scenario-loop-smoke.mjs",
@@ -102,6 +106,10 @@ const requiredFiles = [
   "docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json",
   "docs/narrative-missions/fixtures/daily-life.world-state.json",
   "docs/narrative-missions/fixtures/light.tool-capabilities.json",
+  "docs/ops/project-state.json",
+  "docs/ops/engineering-dashboard.html",
+  "docs/product/learner-cockpit-state.json",
+  "docs/product/learner-cockpit.html",
 ];
 
 function readJson(path) {

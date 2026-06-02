@@ -29,7 +29,7 @@ Each evidence note must include:
 - Verdict: `pass`, `fail`, or `blocked`.
 - Decision impact: proceed, redesign, defer, or fallback.
 
-Do not update implementation docs from memory. Update `docs/project-state.json` only after the evidence note exists.
+Do not update implementation docs from memory. Update `docs/ops/project-state.json` only after the evidence note exists.
 
 ## Spike Board
 
@@ -192,8 +192,8 @@ Phase 0 is complete when:
 
 - All four evidence files exist.
 - Each spike has verdict `pass`, `fail`, or `blocked`.
-- `docs/project-state.json` reflects the outcome.
-- `docs/dashboard.html` is regenerated.
+- `docs/ops/project-state.json` reflects the outcome.
+- `docs/ops/engineering-dashboard.html` is regenerated.
 - `DESIGN.md` open questions are updated or closed.
 
 Implementation may start only if:
