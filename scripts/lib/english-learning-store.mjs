@@ -44,6 +44,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     missionArtifactDir: resolve(root, "artifacts/missions"),
     reportArtifactDir: resolve(root, "artifacts/reports"),
     sceneArtifactDir: resolve(root, "artifacts/scenes"),
+    assetArtifactDir: resolve(root, "artifacts/assets"),
     speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
@@ -111,6 +112,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   mkdirSync(paths.missionArtifactDir, { recursive: true });
   mkdirSync(paths.reportArtifactDir, { recursive: true });
   mkdirSync(paths.sceneArtifactDir, { recursive: true });
+  mkdirSync(paths.assetArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -1722,6 +1724,33 @@ function readLatestGeneratedMission(learnerRoot = defaultLearnerRoot()) {
   };
 }
 
+function latestMissionAssetDeckPath(learnerRoot = defaultLearnerRoot()) {
+  const paths = learnerPaths(learnerRoot);
+  if (!existsSync(paths.assetArtifactDir)) return "";
+  const entries = readdirSync(paths.assetArtifactDir)
+    .filter((entry) => /^mission-assets-.*\.json$/.test(entry))
+    .sort();
+  return entries.length ? resolve(paths.assetArtifactDir, entries.at(-1)) : "";
+}
+
+function readLatestMissionAssetDeck(learnerRoot = defaultLearnerRoot()) {
+  const deckPath = latestMissionAssetDeckPath(learnerRoot);
+  if (!deckPath) return null;
+  const paths = learnerPaths(learnerRoot);
+  const deck = JSON.parse(readFileSync(deckPath, "utf8"));
+  return {
+    path: relative(paths.root, deckPath),
+    html: relative(paths.root, deckPath.replace(/\.json$/, ".html")),
+    deck_id: deck.deck_id,
+    mission_id: deck.mission_id,
+    target_skill: deck.target_skill,
+    asset_count: deck.assets?.length ?? 0,
+    canonical_completion_path: deck.canonical_completion_path,
+    evidence_required: deck.evidence_required,
+    generated_at: deck.generated_at,
+  };
+}
+
 function sceneForSkill(skill, fallbackGoal) {
   if (skill === "clarification") {
     return {
@@ -2785,6 +2814,198 @@ export function writeGeneratedMissionScene(learnerRoot = defaultLearnerRoot(), d
   };
 }
 
+function buildMissionAssetDeckState(missionState, learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const contract = missionState.asset_contract;
+  const contractErrors = validateMissionAssetContract(contract);
+  if (contractErrors.length) {
+    throw new Error(`Mission asset deck requires a valid contract: ${contractErrors.join("; ")}`);
+  }
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    deck_id: `mission-assets-${todayStamp(date)}`,
+    mission_id: missionState.mission_id,
+    mission_title: missionState.learner_visible_scene?.title ?? "",
+    target_skill: contract.target_skill,
+    required_learner_action: contract.required_learner_action,
+    canonical_completion_path: contract.canonical_completion_path,
+    evidence_required: contract.expected_evidence.session_artifact,
+    transfer_test: contract.transfer_test,
+    assets: contract.assets.map((asset) => ({
+      id: asset.id,
+      mode: asset.mode,
+      completion_role: asset.completion_role,
+      surface: asset.surface,
+      prompt: asset.prompt,
+      start_command: asset.start_command ?? "",
+      requires_learner_output: asset.requires_learner_output,
+      expected_evidence: asset.expected_evidence,
+      storyboard_frames: asset.storyboard_frames ?? [],
+    })),
+    completion_policy: {
+      can_mark_complete_without_session_evidence: false,
+      canonical_completion_path: "text-first",
+      required_evidence: contract.expected_evidence.session_artifact,
+    },
+    blocked_claims: contract.blocked_claims,
+    claim_boundary:
+      "This asset deck is a local preparation surface. It does not complete the mission or prove learning until learner output is saved as session evidence.",
+  };
+}
+
+function missionAssetDeckHtml(state) {
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Mission Asset Deck</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #162019;
+      --muted: #5d685f;
+      --line: #d7ded8;
+      --paper: #f7f8f3;
+      --panel: #ffffff;
+      --green: #2f7655;
+      --blue: #2e6689;
+      --amber: #9a6400;
+      --soft: #e8f3ec;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 48px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.05; letter-spacing: 0; }
+    h2 { font-size: 22px; }
+    h3 { font-size: 17px; }
+    header, section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+      margin-top: 16px;
+    }
+    header {
+      display: grid;
+      gap: 10px;
+      background: var(--soft);
+      border-color: #cfe2d5;
+    }
+    .subtle { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 14px;
+    }
+    .mode {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      background: #e7f1ec;
+      color: var(--green);
+      padding: 3px 9px;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    code {
+      display: block;
+      border-radius: 8px;
+      padding: 10px;
+      background: #162019;
+      color: #f7fbf7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .boundary { border-left: 6px solid var(--amber); }
+    @media (max-width: 840px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="subtle">Generated mission asset deck</p>
+      <h1>${escapeHtml(state.mission_title)}</h1>
+      <p>${escapeHtml(state.required_learner_action)}</p>
+      <p class="subtle">Canonical path: ${escapeHtml(state.canonical_completion_path)} · evidence: ${escapeHtml(state.evidence_required)}</p>
+    </header>
+
+    <section>
+      <h2>Asset cards</h2>
+      <div class="grid">
+        ${state.assets
+          .map(
+            (asset) => `
+        <article class="card" data-asset-id="${escapeHtml(asset.id)}">
+          <span class="mode">${escapeHtml(asset.mode)}</span>
+          <h3>${escapeHtml(asset.completion_role)}</h3>
+          <p>${escapeHtml(asset.prompt)}</p>
+          <p class="subtle">learner output required: ${escapeHtml(String(asset.requires_learner_output))}</p>
+          <p class="subtle">evidence: ${escapeHtml(asset.expected_evidence?.session_artifact ?? "")}</p>
+          ${asset.start_command ? `<code>${escapeHtml(asset.start_command)}</code>` : ""}
+          ${
+            asset.storyboard_frames?.length
+              ? `<p class="subtle">storyboard: ${asset.storyboard_frames.map((frame) => escapeHtml(frame)).join(" / ")}</p>`
+              : ""
+          }
+        </article>`,
+          )
+          .join("")}
+      </div>
+    </section>
+
+    <section class="boundary">
+      <h2>Completion policy</h2>
+      <p>이 deck은 준비 표면입니다. 완료는 learner output이 session artifact로 저장될 때만 주장할 수 있습니다.</p>
+      <p class="subtle">${escapeHtml(state.claim_boundary)}</p>
+    </section>
+  </main>
+</body>
+</html>
+`;
+}
+
+export function writeGeneratedMissionAssetDeck(learnerRoot = defaultLearnerRoot(), date = new Date(), missionState = null) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const state = buildMissionAssetDeckState(missionState || buildGeneratedMissionState(paths.root, date), paths.root, date);
+  const stamp = todayStamp(date);
+  const deckStatePath = resolve(paths.assetArtifactDir, `mission-assets-${stamp}.json`);
+  const deckHtmlPath = resolve(paths.assetArtifactDir, `mission-assets-${stamp}.html`);
+  writeFileSync(deckStatePath, `${JSON.stringify(state, null, 2)}\n`);
+  writeFileSync(deckHtmlPath, missionAssetDeckHtml(state));
+  return {
+    deckStatePath,
+    deckHtmlPath,
+    deckUrl: `file://${deckHtmlPath}`,
+    state,
+  };
+}
+
 function dateWithinDays(dateValue, now, days) {
   if (!dateValue || !Number.isFinite(Date.parse(dateValue))) return false;
   const then = new Date(dateValue.length === 10 ? `${dateValue}T00:00:00.000Z` : dateValue);
@@ -2885,6 +3106,7 @@ export function buildLearnerReport(learnerRoot = defaultLearnerRoot(), date = ne
     generated_artifacts: {
       latest_mission: readLatestGeneratedMission(paths.root),
       latest_scene: readLatestGeneratedScene(paths.root),
+      latest_asset_deck: readLatestMissionAssetDeck(paths.root),
       latest_weekly_mirror: weeklyMirror
         ? {
             generated_at: weeklyMirror.generated_at,
@@ -3073,6 +3295,11 @@ function learnerReportHtml(report) {
           ? `<p>${escapeHtml(report.generated_artifacts.latest_scene.title)} · ${escapeHtml(report.generated_artifacts.latest_scene.variant_label)}</p><code>${escapeHtml(report.generated_artifacts.latest_scene.html)}</code>`
           : '<p class="subtle">아직 연결된 scene artifact가 없습니다.</p>'
       }
+      ${
+        report.generated_artifacts.latest_asset_deck
+          ? `<p>Mission asset deck · ${escapeHtml(report.generated_artifacts.latest_asset_deck.asset_count)} assets</p><code>${escapeHtml(report.generated_artifacts.latest_asset_deck.html)}</code>`
+          : '<p class="subtle">아직 연결된 asset deck이 없습니다.</p>'
+      }
     </section>
 
     <section class="boundary">
@@ -3133,6 +3360,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const latestLearnerReport = readLatestLearnerReport(paths.root);
   const latestMission = readLatestGeneratedMission(paths.root);
   const latestScene = readLatestGeneratedScene(paths.root);
+  const latestAssetDeck = readLatestMissionAssetDeck(paths.root);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
   const nextCommand = commandLine(paths.root, "today", [
     "--say",
@@ -3200,6 +3428,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_learner_report: latestLearnerReport,
       latest_generated_mission: latestMission,
       latest_generated_scene: latestScene,
+      latest_mission_asset_deck: latestAssetDeck,
     },
     next_actions: [
       {
@@ -3231,6 +3460,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_weekly_mirror: dailyCockpit.latest_weekly_mirror,
       latest_generated_mission: latestMission?.html ?? "",
       latest_generated_scene: latestScene?.html ?? "",
+      latest_mission_asset_deck: latestAssetDeck?.html ?? "",
       latest_learner_report: latestLearnerReport?.html ?? "",
     },
     claim_boundary:
@@ -3430,6 +3660,15 @@ function personalLearnerCockpitHtml(state) {
             <p class="subtle">${escapeHtml(state.journey.latest_generated_scene.variant_label)}</p>
             <p>${escapeHtml(state.journey.latest_generated_scene.transfer_test)}</p>
             <p class="subtle">scene: ${escapeHtml(state.journey.latest_generated_scene.html)}</p>
+          </div>`
+              : ""
+          }
+          ${
+            state.journey.latest_mission_asset_deck
+              ? `<div class="panel blue">
+            <h3>Mission asset deck</h3>
+            <p>${escapeHtml(state.journey.latest_mission_asset_deck.asset_count)} assets · ${escapeHtml(state.journey.latest_mission_asset_deck.canonical_completion_path)}</p>
+            <p class="subtle">deck: ${escapeHtml(state.journey.latest_mission_asset_deck.html)}</p>
           </div>`
               : ""
           }

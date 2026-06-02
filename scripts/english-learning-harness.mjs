@@ -29,6 +29,7 @@ import {
   writeWeeklyMirror,
   writeGeneratedDailyMission,
   writeGeneratedMissionScene,
+  writeGeneratedMissionAssetDeck,
   writeLearnerReport,
   writeLearnerModel,
   writeProgress,
@@ -167,6 +168,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs mission [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs scene [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs asset-deck [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs practice [--say TEXT ...] [--transcript FILE] [--scene-preset ID] [--learner-root DIR] [--date ISO] [--json]",
@@ -392,6 +394,32 @@ function scene(options) {
   };
 }
 
+function assetDeck(options) {
+  const date = options.date || new Date();
+  const missionResult = writeGeneratedDailyMission(options.learnerRoot, date, {
+    scenePreset: options.scenePreset,
+  });
+  const deckResult = writeGeneratedMissionAssetDeck(options.learnerRoot, date, missionResult.state);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: deckResult.state.learner_root,
+    missionStatePath: missionResult.missionStatePath,
+    deckStatePath: deckResult.deckStatePath,
+    deckHtmlPath: deckResult.deckHtmlPath,
+    deckUrl: deckResult.deckUrl,
+    deck: {
+      id: deckResult.state.deck_id,
+      missionId: deckResult.state.mission_id,
+      targetSkill: deckResult.state.target_skill,
+      assetCount: deckResult.state.assets.length,
+      canonicalCompletionPath: deckResult.state.canonical_completion_path,
+      evidenceRequired: deckResult.state.evidence_required,
+    },
+    claimBoundary: deckResult.state.claim_boundary,
+  };
+}
+
 function cockpit(options) {
   const result = writePersonalLearnerCockpit(options.learnerRoot, options.date || new Date());
   return {
@@ -436,6 +464,7 @@ function practice(options) {
     scenePreset: options.scenePreset,
   });
   const sceneResult = writeGeneratedMissionScene(paths.root, date, missionResult.state);
+  const assetDeckResult = writeGeneratedMissionAssetDeck(paths.root, date, missionResult.state);
   const sessionOptions = {
     ...options,
     learnerRoot: paths.root,
@@ -483,6 +512,13 @@ function practice(options) {
       htmlPath: sceneResult.sceneHtmlPath,
       url: sceneResult.sceneUrl,
       frameCount: sceneResult.state.frames.length,
+    },
+    assetDeck: {
+      id: assetDeckResult.state.deck_id,
+      htmlPath: assetDeckResult.deckHtmlPath,
+      url: assetDeckResult.deckUrl,
+      assetCount: assetDeckResult.state.assets.length,
+      canonicalCompletionPath: assetDeckResult.state.canonical_completion_path,
     },
     session: {
       id: sessionResult.sessionId,
@@ -1551,6 +1587,10 @@ function run() {
   }
   if (command === "scene") {
     output(scene(options), options.json);
+    return;
+  }
+  if (command === "asset-deck") {
+    output(assetDeck(options), options.json);
     return;
   }
   if (command === "cockpit") {
