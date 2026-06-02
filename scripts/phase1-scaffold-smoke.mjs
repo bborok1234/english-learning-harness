@@ -88,6 +88,7 @@ const requiredFiles = [
   "scripts/phase8-research-basis-smoke.mjs",
   "scripts/phase9-owner-pilot-smoke.mjs",
   "scripts/phase9-pilot-prompt-ux-smoke.mjs",
+  "scripts/phase10-narrative-mission-plan-smoke.mjs",
 ];
 
 function readJson(path) {
