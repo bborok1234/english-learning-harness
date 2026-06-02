@@ -74,6 +74,8 @@ function assertDeck(deckState, deckHtml) {
   }
   assert(deckHtml.includes("Generated mission asset deck"), "deck HTML title missing");
   assert(deckHtml.includes("remotion-storyboard"), "deck HTML should include Remotion-style storyboard");
+  assert(deckState.storyboard_artifact?.html, "deck state should link generated storyboard artifact");
+  assert(deckHtml.includes(deckState.storyboard_artifact.html), "deck HTML should render generated storyboard artifact path");
   assert(deckHtml.includes("learner output required: true"), "deck HTML should show learner output requirement");
   assert(deckHtml.includes("완료는 learner output"), "deck HTML should state completion policy");
   assertNoProductSurfaceLeak(JSON.stringify(deckState), "deck state");

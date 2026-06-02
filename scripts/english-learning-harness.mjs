@@ -31,6 +31,7 @@ import {
   writeGeneratedDailyMission,
   writeGeneratedMissionScene,
   writeGeneratedMissionAssetDeck,
+  writeGeneratedMissionStoryboard,
   writeLearnerReport,
   writeLearnerModel,
   writeProgress,
@@ -178,6 +179,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs mission [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs scene [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs storyboard [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs asset-deck [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
@@ -241,6 +243,8 @@ function supportDiagnostics(options, paths) {
         paths.missionArtifactDir,
         paths.reportArtifactDir,
         paths.sceneArtifactDir,
+        paths.assetArtifactDir,
+        paths.storyboardArtifactDir,
       ]
     : [];
 
@@ -253,6 +257,7 @@ function supportDiagnostics(options, paths) {
       commandWithRoot("daily", learnerRoot, ["--json"]),
       commandWithRoot("mission", learnerRoot, ["--json"]),
       commandWithRoot("scene", learnerRoot, ["--json"]),
+      commandWithRoot("storyboard", learnerRoot, ["--json"]),
       commandWithRoot("practice", learnerRoot, ["--say", JSON.stringify("I want to practice today."), "--json"]),
       commandWithRoot("cockpit", learnerRoot, ["--json"]),
       commandWithRoot("report", learnerRoot, ["--json"]),
@@ -291,6 +296,8 @@ function repairLearnerStore(learnerRoot) {
   mkdirSync(paths.missionArtifactDir, { recursive: true });
   mkdirSync(paths.reportArtifactDir, { recursive: true });
   mkdirSync(paths.sceneArtifactDir, { recursive: true });
+  mkdirSync(paths.assetArtifactDir, { recursive: true });
+  mkdirSync(paths.storyboardArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -416,6 +423,32 @@ function scene(options) {
   };
 }
 
+function storyboard(options) {
+  const date = options.date || new Date();
+  const missionResult = writeGeneratedDailyMission(options.learnerRoot, date, {
+    scenePreset: options.scenePreset,
+  });
+  const storyboardResult = writeGeneratedMissionStoryboard(options.learnerRoot, date, missionResult.state);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: storyboardResult.state.learner_root,
+    missionStatePath: missionResult.missionStatePath,
+    storyboardStatePath: storyboardResult.storyboardStatePath,
+    storyboardHtmlPath: storyboardResult.storyboardHtmlPath,
+    storyboardUrl: storyboardResult.storyboardUrl,
+    storyboard: {
+      id: storyboardResult.state.storyboard_id,
+      missionId: storyboardResult.state.mission_id,
+      title: storyboardResult.state.mission_title,
+      targetSkill: storyboardResult.state.target_skill,
+      frameCount: storyboardResult.state.frames.length,
+      evidenceRequired: storyboardResult.state.expected_evidence.session_artifact,
+    },
+    claimBoundary: storyboardResult.state.claim_boundary,
+  };
+}
+
 function assetDeck(options) {
   const date = options.date || new Date();
   const missionResult = writeGeneratedDailyMission(options.learnerRoot, date, {
@@ -437,6 +470,7 @@ function assetDeck(options) {
       assetCount: deckResult.state.assets.length,
       canonicalCompletionPath: deckResult.state.canonical_completion_path,
       evidenceRequired: deckResult.state.evidence_required,
+      storyboardArtifact: deckResult.state.storyboard_artifact,
     },
     claimBoundary: deckResult.state.claim_boundary,
   };
@@ -545,6 +579,7 @@ function practice(options) {
       assetCount: assetDeckResult.state.assets.length,
       canonicalCompletionPath: assetDeckResult.state.canonical_completion_path,
       topAssetAction: assetDeckResult.state.top_asset_action,
+      storyboardArtifact: assetDeckResult.state.storyboard_artifact,
     },
     session: {
       id: sessionResult.sessionId,
@@ -2496,6 +2531,10 @@ function run() {
   }
   if (command === "scene") {
     output(scene(options), options.json);
+    return;
+  }
+  if (command === "storyboard") {
+    output(storyboard(options), options.json);
     return;
   }
   if (command === "asset-deck") {

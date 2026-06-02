@@ -45,6 +45,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     reportArtifactDir: resolve(root, "artifacts/reports"),
     sceneArtifactDir: resolve(root, "artifacts/scenes"),
     assetArtifactDir: resolve(root, "artifacts/assets"),
+    storyboardArtifactDir: resolve(root, "artifacts/storyboards"),
     speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
@@ -113,6 +114,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   mkdirSync(paths.reportArtifactDir, { recursive: true });
   mkdirSync(paths.sceneArtifactDir, { recursive: true });
   mkdirSync(paths.assetArtifactDir, { recursive: true });
+  mkdirSync(paths.storyboardArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -2815,6 +2817,186 @@ export function writeGeneratedMissionScene(learnerRoot = defaultLearnerRoot(), d
   };
 }
 
+function buildGeneratedStoryboardState(missionState, learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const contract = missionState.asset_contract;
+  const storyboardAsset = contract.assets.find((asset) => asset.id === "remotion-storyboard");
+  if (!storyboardAsset) {
+    throw new Error("Generated storyboard requires remotion-storyboard asset in the mission contract.");
+  }
+  const scene = missionState.learner_visible_scene;
+  const frames = [
+    {
+      label: "Scene setup",
+      visual: scene.situation,
+      narration: scene.setup,
+      learner_action: "상황을 이해하고 답변을 한 문장으로 준비합니다.",
+    },
+    {
+      label: "Speaking cue",
+      visual: scene.ask,
+      narration: `Target skill: ${missionState.target_skill}`,
+      learner_action: missionState.required_learner_action,
+    },
+    {
+      label: "Model answer",
+      visual: scene.example,
+      narration: "예시는 복사 정답이 아니라 시작점입니다.",
+      learner_action: "예시를 그대로 쓰거나 나에게 맞게 조금 바꿉니다.",
+    },
+    {
+      label: "Evidence checkpoint",
+      visual: missionState.transfer_test,
+      narration: `Evidence: ${contract.expected_evidence.session_artifact}`,
+      learner_action: "실제 learner output을 session evidence로 저장해야 완료를 주장할 수 있습니다.",
+    },
+  ];
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    storyboard_id: `mission-storyboard-${todayStamp(date)}-${missionState.target_skill}`,
+    mission_id: missionState.mission_id,
+    mission_title: scene.title,
+    target_skill: missionState.target_skill,
+    required_learner_action: missionState.required_learner_action,
+    transfer_test: missionState.transfer_test,
+    mode: storyboardAsset.mode,
+    completion_role: storyboardAsset.completion_role,
+    expected_evidence: storyboardAsset.expected_evidence,
+    frames,
+    blocked_claims: contract.blocked_claims,
+    claim_boundary:
+      "This generated storyboard is a local preparation artifact. It is not a video export, realtime voice, or learning-outcome evidence; completion still requires learner output saved as session evidence.",
+  };
+}
+
+function generatedStoryboardHtml(state) {
+  const framesJson = JSON.stringify(state.frames).replaceAll("</", "<\\/");
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Mission Storyboard</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #657067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(920px, calc(100% - 30px)); margin: 0 auto; padding: 32px 0 44px; }
+    header, section { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); padding: 18px; margin-top: 14px; }
+    header { background: var(--warm); }
+    h1, h2, p { margin: 0; }
+    h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.08; letter-spacing: 0; }
+    .subtle { color: var(--muted); }
+    .stage { min-height: 260px; display: grid; gap: 14px; align-content: center; border-color: #ccd8ce; background: #fbfcfa; }
+    .stage-label { color: var(--accent); font-weight: 780; }
+    .visual { font-size: clamp(24px, 5vw, 44px); line-height: 1.15; font-weight: 800; }
+    .cue { font-size: 18px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    button { appearance: none; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); padding: 9px 12px; font: inherit; font-weight: 720; cursor: pointer; }
+    button:focus-visible { outline: 3px solid rgba(47, 125, 85, 0.24); outline-offset: 2px; }
+    .boundary { border-left: 6px solid #9a6400; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="subtle">Generated mission storyboard · Remotion-style preparation</p>
+      <h1>${escapeHtml(state.mission_title)}</h1>
+      <p>${escapeHtml(state.required_learner_action)}</p>
+    </header>
+
+    <section class="stage" aria-label="storyboard frame">
+      <p class="stage-label" data-storyboard-label>${escapeHtml(state.frames[0].label)}</p>
+      <p class="visual" data-storyboard-visual>${escapeHtml(state.frames[0].visual)}</p>
+      <p class="cue" data-storyboard-narration>${escapeHtml(state.frames[0].narration)}</p>
+      <p class="subtle" data-storyboard-action>${escapeHtml(state.frames[0].learner_action)}</p>
+    </section>
+
+    <section>
+      <h2>Controls</h2>
+      <div class="controls">
+        <button type="button" data-storyboard-prev>Previous</button>
+        <button type="button" data-storyboard-play data-active="false">Play</button>
+        <button type="button" data-storyboard-next>Next</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Evidence link</h2>
+      <p>Target: ${escapeHtml(state.target_skill)}</p>
+      <p class="subtle">Required evidence: ${escapeHtml(state.expected_evidence.session_artifact)}</p>
+      <p class="subtle">Transfer test: ${escapeHtml(state.transfer_test)}</p>
+    </section>
+
+    <section class="boundary">
+      <h2>Boundary</h2>
+      <p>${escapeHtml(state.claim_boundary)}</p>
+    </section>
+  </main>
+  <script>
+    const frames = ${framesJson};
+    let index = 0;
+    let timer = null;
+    const label = document.querySelector("[data-storyboard-label]");
+    const visual = document.querySelector("[data-storyboard-visual]");
+    const narration = document.querySelector("[data-storyboard-narration]");
+    const action = document.querySelector("[data-storyboard-action]");
+    const play = document.querySelector("[data-storyboard-play]");
+    function show(nextIndex) {
+      index = (nextIndex + frames.length) % frames.length;
+      const frame = frames[index];
+      label.textContent = frame.label;
+      visual.textContent = frame.visual;
+      narration.textContent = frame.narration;
+      action.textContent = frame.learner_action;
+    }
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+      play.dataset.active = "false";
+      play.textContent = "Play";
+    }
+    document.querySelector("[data-storyboard-prev]").addEventListener("click", () => {
+      stop();
+      show(index - 1);
+    });
+    document.querySelector("[data-storyboard-next]").addEventListener("click", () => {
+      stop();
+      show(index + 1);
+    });
+    play.addEventListener("click", () => {
+      if (timer) {
+        stop();
+        return;
+      }
+      play.dataset.active = "true";
+      play.textContent = "Pause";
+      timer = setInterval(() => show(index + 1), 1000);
+    });
+  </script>
+</body>
+</html>
+`;
+}
+
+export function writeGeneratedMissionStoryboard(learnerRoot = defaultLearnerRoot(), date = new Date(), missionState = null) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const state = buildGeneratedStoryboardState(missionState || buildGeneratedMissionState(paths.root, date), paths.root, date);
+  const stamp = todayStamp(date);
+  const storyboardStatePath = resolve(paths.storyboardArtifactDir, `mission-storyboard-${stamp}.json`);
+  const storyboardHtmlPath = resolve(paths.storyboardArtifactDir, `mission-storyboard-${stamp}.html`);
+  writeFileSync(storyboardStatePath, `${JSON.stringify(state, null, 2)}\n`);
+  writeFileSync(storyboardHtmlPath, generatedStoryboardHtml(state));
+  return {
+    storyboardStatePath,
+    storyboardHtmlPath,
+    storyboardUrl: `file://${storyboardHtmlPath}`,
+    state,
+  };
+}
+
 function missionAssetPriority(asset, context) {
   if (asset.id === "future-realtime-hook") {
     return {
@@ -3097,6 +3279,7 @@ function missionAssetDeckHtml(state) {
           <p class="subtle">${escapeHtml(asset.priority?.reason ?? "")}</p>
           <p class="subtle">learner output required: ${escapeHtml(String(asset.requires_learner_output))}</p>
           <p class="subtle">evidence: ${escapeHtml(asset.expected_evidence?.session_artifact ?? "")}</p>
+          ${asset.artifact?.html ? `<p class="subtle">artifact: ${escapeHtml(asset.artifact.html)}</p>` : ""}
           ${asset.start_command ? `<code>${escapeHtml(asset.start_command)}</code>` : ""}
           ${
             asset.storyboard_frames?.length
@@ -3122,10 +3305,28 @@ function missionAssetDeckHtml(state) {
 
 export function writeGeneratedMissionAssetDeck(learnerRoot = defaultLearnerRoot(), date = new Date(), missionState = null) {
   const paths = ensureLearnerStore(learnerRoot);
-  const state = buildMissionAssetDeckState(missionState || buildGeneratedMissionState(paths.root, date), paths.root, date);
+  const sourceMissionState = missionState || buildGeneratedMissionState(paths.root, date);
+  const storyboard = writeGeneratedMissionStoryboard(paths.root, date, sourceMissionState);
+  const state = buildMissionAssetDeckState(sourceMissionState, paths.root, date);
   const stamp = todayStamp(date);
   const deckStatePath = resolve(paths.assetArtifactDir, `mission-assets-${stamp}.json`);
   const deckHtmlPath = resolve(paths.assetArtifactDir, `mission-assets-${stamp}.html`);
+  const storyboardArtifact = {
+    json: relative(paths.root, storyboard.storyboardStatePath),
+    html: relative(paths.root, storyboard.storyboardHtmlPath),
+    url: storyboard.storyboardUrl,
+    frame_count: storyboard.state.frames.length,
+    claim_boundary: storyboard.state.claim_boundary,
+  };
+  state.storyboard_artifact = storyboardArtifact;
+  state.assets = state.assets.map((asset) =>
+    asset.id === "remotion-storyboard"
+      ? {
+          ...asset,
+          artifact: storyboardArtifact,
+        }
+      : asset,
+  );
   writeFileSync(deckStatePath, `${JSON.stringify(state, null, 2)}\n`);
   writeFileSync(deckHtmlPath, missionAssetDeckHtml(state));
   return {
