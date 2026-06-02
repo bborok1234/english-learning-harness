@@ -70,6 +70,7 @@ function main() {
   assert(day.nextCard.phase === "day", "after baseline should ask daily card");
   assert(day.nextCard.day === 1, "daily card should point to day 1");
   assert(read(day.htmlPath).includes("Which place do you mean?"), "daily card should show learner-facing example");
+  assert(day.nextCard.title === "확인 질문 만들기", "day 1 should test clarification");
   assertCleanLearnerHtml(read(day.htmlPath));
 
   runJson([
@@ -93,10 +94,14 @@ function main() {
     "--json",
   ]);
   assert(nextDay.nextCard.day === 2, "next daily card should advance after completed day");
+  assert(nextDay.nextCard.title === "말실수 고치기", "day 2 should test repair instead of repeating day 1");
+  assert(nextDay.nextCard.example.includes("I meant iced latte"), "day 2 should expose repair example");
+  assert(!nextDay.nextCard.ask.includes("usual place"), "day 2 should not repeat the usual-place clarification prompt");
 
   const state = JSON.parse(read(nextDay.jsonPath));
   assert(state.cockpit.html === "cockpit.html", "next card should link learner cockpit");
   assert(state.privacy.includes("로컬"), "next card should preserve privacy boundary");
+  assert(state.next_card.title === "말실수 고치기", "next-card state should persist varied day title");
 
   console.log(
     JSON.stringify(

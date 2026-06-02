@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 learner-facing pilot next card implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 varied pilot day missions implemented; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible without leaking private data into the public repo: the next prompt can be opened as a learner-facing local card, each partial Day 0/final answer is captured durably, the learner cockpit refreshes after each captured card, and local ops can sync redacted pilot progress into an ignored dashboard overlay.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and cover more than one repeated phrase: the first five pilot days test clarification, repair, image/scene description, soft disagreement, and follow-up, while next prompt cards, cockpit refresh, durable capture, and redacted local ops remain separated from public repo data.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -483,9 +483,21 @@
       "kind": "source"
     },
     {
+      "label": "scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs",
+      "path": "../scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs",
+      "role": "owner pilot varied five-day mission smoke",
+      "kind": "source"
+    },
+    {
       "label": "docs/phase-15-evidence/AIOS-12-pilot-next-card.md",
       "path": "./phase-15-evidence/AIOS-12-pilot-next-card.md",
       "role": "AIOS-12 pilot next-card evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-12-varied-pilot-day-missions.md",
+      "path": "./phase-15-evidence/AIOS-12-varied-pilot-day-missions.md",
+      "role": "AIOS-12 varied pilot day mission evidence",
       "kind": "source"
     },
     {
@@ -535,7 +547,7 @@
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -794,6 +806,13 @@
       "status": "Pass",
       "evidence": "pilot-next command, phase15-owner-pilot-next-card-smoke, phase15-owner-pilot-skill-smoke",
       "claim": "pilot-next writes a local learner-facing next-card HTML/JSON artifact and refreshes cockpit without leaking internal commands or issue/PR language; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-34",
+      "label": "Varied five-day pilot missions",
+      "status": "Pass",
+      "evidence": "phase15-owner-pilot-varied-day-missions-smoke, phase15-owner-pilot-next-card-smoke, phase9-pilot-prompt-ux-smoke",
+      "claim": "the first five pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating one prompt; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -824,6 +843,19 @@
             "scripts/english-learning-harness.mjs",
             "scripts/phase15-owner-pilot-next-card-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-pilot-next-card.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-VARIED-PILOT-DAY-MISSIONS",
+          "title": "AIOS-12 varied five-day pilot missions 통과",
+          "why": "실제 5일 pilot이 같은 질문 반복이면 하네스가 다양한 회화 능력을 키우는지 판단하기 어렵다.",
+          "done": "Day 1 clarification, Day 2 repair, Day 3 image/scene description, Day 4 soft disagreement, Day 5 follow-up mission을 연결했다.",
+          "verification": "phase15 owner pilot varied day missions smoke verifies five distinct daily speaking actions and readiness for final sample after five fixture days.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-varied-pilot-day-missions.md"
           ]
         },
         {
@@ -2869,6 +2901,11 @@
       "name": "AIOS-12 learner-facing pilot next card",
       "status": "Pass",
       "detail": "phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage."
+    },
+    {
+      "name": "AIOS-12 varied five-day pilot missions",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-varied-day-missions smoke validates the first five fixture pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up before final-sample readiness."
     }
   ],
   "commands": [
@@ -2887,6 +2924,10 @@
     {
       "label": "Run AIOS-12 pilot next-card smoke",
       "command": "node scripts/phase15-owner-pilot-next-card-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-12 varied pilot day missions smoke",
+      "command": "node scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs"
     },
     {
       "label": "Run scaffold smoke",

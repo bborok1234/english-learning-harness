@@ -594,6 +594,18 @@ The cockpit refresh is a product-surface convenience contract. It is not evidenc
 
 The generated HTML must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, or `product_journey_audit` internals.
 
+The first five `pilot-next` daily cards must cover distinct speaking actions:
+
+| Day | Target action | Example |
+|---|---|---|
+| 1 | clarification | `Which place do you mean?` |
+| 2 | repair | `Sorry, I meant iced latte, not hot latte.` |
+| 3 | image/scene description | `It looks like a meeting room.` |
+| 4 | soft disagreement | `I understand, but I cannot stay late today.` |
+| 5 | follow-up | `Where did you go hiking?` |
+
+These varied missions are local pilot prompts, not evidence of outcome improvement.
+
 ## Local Pilot Dashboard Overlay
 
 `scripts/sync-local-pilot-dashboard.mjs` may write `docs/ops/local-pilot-status.json` and `docs/ops/local-engineering-dashboard.html` for local operations. These files are ignored by git. The tracked example is `docs/ops/local-pilot-status.example.json`.

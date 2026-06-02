@@ -3510,6 +3510,51 @@ function pilotCards() {
   ];
 }
 
+function pilotDayCards() {
+  return [
+    {
+      id: "clarify-usual-place",
+      skill: "clarification",
+      title: "확인 질문 만들기",
+      ask: '친구가 "Let\'s meet at the usual place after work."라고 말했습니다. 어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장만 해보세요.',
+      example: "Which place do you mean?",
+    },
+    {
+      id: "repair-wrong-order",
+      skill: "repair",
+      title: "말실수 고치기",
+      ask: "카페에서 음료 이름을 잘못 말했습니다. 방금 말한 주문을 정정하는 영어 문장을 한 문장으로 해보세요.",
+      example: "Sorry, I meant iced latte, not hot latte.",
+    },
+    {
+      id: "image-info-gap",
+      skill: "image_description",
+      title: "보이는 정보 설명하기",
+      ask: "상대가 사진을 못 보고 있습니다. 사진 속 장소를 상대가 상상할 수 있게 영어 한두 문장으로 설명해보세요.",
+      example: "It looks like a meeting room. There is a long table and a screen on the wall.",
+    },
+    {
+      id: "soft-disagreement",
+      skill: "soft_disagreement",
+      title: "부드럽게 다르게 말하기",
+      ask: "동료가 지금 바로 야근하자고 제안했습니다. 상대 기분을 상하게 하지 않고 오늘은 어렵다고 영어로 한 문장 말해보세요.",
+      example: "I understand, but I cannot stay late today.",
+    },
+    {
+      id: "follow-up-invitation",
+      skill: "follow_up",
+      title: "대화를 이어가기",
+      ask: "새로 만난 사람이 주말에 등산을 갔다고 말했습니다. 이야기를 이어갈 follow-up 질문을 영어로 한 문장 해보세요.",
+      example: "That sounds nice. Where did you go hiking?",
+    },
+  ];
+}
+
+function pilotDayCard(dayNumber) {
+  const cards = pilotDayCards();
+  return cards[(Math.max(1, dayNumber) - 1) % cards.length];
+}
+
 function readActivePilotState(paths) {
   const pilotStatePath = resolve(paths.root, "pilot-state.json");
   if (!existsSync(pilotStatePath)) return null;
@@ -3527,11 +3572,14 @@ function readActivePilotState(paths) {
   if (state.baseline && completedDailySessions < minimumValidDailySessions) {
     nextPhase = "day";
     nextDay = completedDailySessions + 1;
+    const dayCard = pilotDayCard(nextDay);
     nextCard = {
       id: `day-${nextDay}`,
-      title: `Pilot Day ${nextDay}`,
-      ask: '친구가 "Let\'s meet at the usual place after work."라고 말했습니다. 어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장만 해보세요.',
-      example: "Which place do you mean?",
+      source_id: dayCard.id,
+      skill: dayCard.skill,
+      title: `Pilot Day ${nextDay}: ${dayCard.title}`,
+      ask: dayCard.ask,
+      example: dayCard.example,
     };
   } else if (state.baseline && completedDailySessions >= minimumValidDailySessions && !state.final_sample) {
     nextPhase = "final";
