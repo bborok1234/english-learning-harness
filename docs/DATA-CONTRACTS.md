@@ -447,7 +447,19 @@ Required JSON fields:
       "session_id": "YYYY-MM-DD-...",
       "artifact": "artifacts/sessions/...",
       "friction_note": "",
-      "speaking_backlog_evidence": {}
+      "speaking_backlog_evidence": {},
+      "aios_artifacts": {
+        "mission": "artifacts/missions/daily-mission-YYYY-MM-DD.html",
+        "scene": "artifacts/scenes/daily-scene-YYYY-MM-DD.html",
+        "asset_deck": "artifacts/assets/mission-assets-YYYY-MM-DD.html",
+        "next_asset_action": {
+          "asset_id": "text-practice|image-information-gap|voice-transcript|interactive-html-scene|...",
+          "label": "learner-facing next action",
+          "reason": "why this asset is next from local evidence"
+        },
+        "learner_report": "artifacts/reports/learner-report-YYYY-MM-DD.html",
+        "cockpit": "cockpit.html"
+      }
     }
   ],
   "final_sample": {
@@ -461,7 +473,14 @@ Required JSON fields:
     "json": "artifacts/pilot/pilot-report-YYYY-MM-DD.json",
     "markdown": "artifacts/pilot/pilot-report-YYYY-MM-DD.md",
     "decision": "continue|research|pivot|kill_claim|invalid",
-    "pass_signals": []
+    "pass_signals": [],
+    "product_journey_audit": {
+      "decision": "continue|research|pivot|kill_claim|invalid",
+      "evidence_complete": true,
+      "days_with_core_artifacts": 5,
+      "days_with_asset_actions": 5,
+      "friction_note_count": 5
+    }
   },
   "claim_boundary": "This owner/self pilot can produce early local behavioral evidence only. It does not prove generalized fluency or real-world speaking ability."
 }

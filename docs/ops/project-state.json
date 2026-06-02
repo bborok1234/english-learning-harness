@@ -3,11 +3,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-11 merged; M14 closed; M15 real owner pilot selected",
-    "status": "AIOS-11 is merged through PR #178, #176 is closed, and M14 Adaptive Asset Journey is closed. AIOS-12 (#179) under M15 is the next Goal: run a real owner/self AIOS pilot and journey audit.",
+    "stage": "AIOS-12 pilot journey audit mechanics implemented; real owner pilot still required",
+    "status": "AIOS-12 (#179) now has local audit mechanics for mission, scene, asset deck top action, cockpit/report links, friction notes, and product decision fields. #179 remains open until a real owner/self five-day pilot is run with actual transcripts.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The asset deck now adapts next actions from learner evidence. The next bottleneck is no longer fixture mechanics; it is real owner/self usage evidence, friction, and product judgment.",
-    "nextGoal": "AIOS-12 (#179): run at least five real owner/self Codex-operated practice days, preserve journey evidence, and decide continue/split/pivot/kill/research.",
+    "summary": "The learner pilot lane can now judge the AI-native learning OS as a product journey instead of only checking transcript deltas. The next step is the real owner/self learner run, not another fixture-only claim.",
+    "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has local learner-operable mission asset decks with deterministic learner-evidence-based next asset actions surfaced in cockpit; the next selected goal is real owner/self pilot evidence.",
+    "allowedClaim": "The harness has local owner/self pilot audit mechanics that preserve daily AIOS artifacts and next asset actions for later real-pilot judgment.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-11 proves local adaptive asset sequencing mechanics only. AIOS-12 may show owner/self usage signals, but generalized learning outcomes, retention, realtime voice efficacy, and generated-media gains remain unclaimed."
+    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
   },
   "ssot": [
     {
@@ -445,37 +445,49 @@
       "path": "../scripts/adaptive-mission-asset-priority-smoke.mjs",
       "role": "adaptive mission asset priority smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md",
+      "path": "./phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md",
+      "role": "AIOS-12 owner pilot journey audit mechanics evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
+      "path": "../scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
+      "role": "owner pilot journey audit smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
-      "label": "Current state",
-      "value": "M14 closed",
-      "detail": "AIOS-11 merged via PR #178 and #176 is closed",
-      "tone": "green"
-    },
-    {
-      "label": "Next goal",
+      "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "#179 real owner/self pilot and journey audit under M15",
+      "detail": "pilot audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
-      "label": "Differentiator now",
-      "value": "Adaptive next action",
-      "detail": "deck chooses text/image/voice/scene from learner evidence",
+      "label": "Mechanics proof",
+      "value": "5 fixture days",
+      "detail": "mission/scene/asset action/report/cockpit/friction are preserved",
       "tone": "green"
     },
     {
-      "label": "Next proof",
-      "value": "5 days",
-      "detail": "real local pilot sessions with transcript, friction, cockpit/report evidence",
-      "tone": "amber"
+      "label": "Real proof needed",
+      "value": "5 real days",
+      "detail": "actual owner/self transcripts and friction notes still required",
+      "tone": "red"
     },
     {
-      "label": "Still blocked",
-      "value": "Outcome claims",
-      "detail": "fluency, retention, realtime voice, and generated-media efficacy remain unclaimed",
+      "label": "Decision set",
+      "value": "5 choices",
+      "detail": "continue, research, pivot, kill_claim, invalid",
+      "tone": "green"
+    },
+    {
+      "label": "Blocked claims",
+      "value": "Still blocked",
+      "detail": "fluency, retention, realtime voice, generated-media efficacy",
       "tone": "red"
     }
   ],
@@ -661,6 +673,13 @@
       "status": "Pass",
       "evidence": "#176, adaptive-mission-asset-priority-smoke, generated-mission-asset-deck-smoke, personal-learner-cockpit-smoke",
       "claim": "mission asset deck ranks text/image/voice/interactive scene assets from learner evidence and cockpit exposes the recommended next asset action while preserving evidence requirements"
+    },
+    {
+      "id": "GATE-27",
+      "label": "Owner pilot journey audit mechanics",
+      "status": "Pass",
+      "evidence": "#179 mechanics, phase15-owner-pilot-journey-audit-smoke, product-surface-smoke, ops-dashboard-smoke",
+      "claim": "pilot-day and pilot-finish preserve daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed"
     }
   ],
   "board": [
@@ -669,6 +688,18 @@
       "title": "Done",
       "tone": "green",
       "cards": [
+        {
+          "id": "AIOS-12-MECHANICS",
+          "title": "AIOS-12 pilot audit mechanics 통과",
+          "why": "실제 pilot을 닫기 전, 매일의 AIOS artifact와 friction이 final decision으로 이어지는 감사 구조가 필요했다.",
+          "done": "pilot-day가 asset deck top action까지 보존하고, pilot-finish가 product_journey_audit decision을 쓴다.",
+          "verification": "phase15 owner pilot journey audit smoke validates five fixture days and blocked-claim guardrails.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md"
+          ]
+        },
         {
           "id": "M14-CLOSED",
           "title": "M14 Adaptive Asset Journey closed",
@@ -2029,16 +2060,16 @@
       "tone": "blue",
       "cards": [
         {
-          "id": "AIOS-12",
-          "title": "AIOS-12 real owner/self AIOS pilot 시작",
-          "why": "fixture smoke는 mechanics proof다. 다음 병목은 실제 사용자가 매일 들어오고 싶고, cockpit/report가 여정을 이해시키며, 말하기 friction이 줄어드는지 판단하는 것이다.",
-          "done": "최소 5일 실제 owner/self practice evidence, transcript, asset action 선택, friction note, final audit, dashboard decision을 남긴다.",
-          "verification": "#179 planned evidence: replay/check 가능한 pilot evidence, product surface leak guard, final continue/split/pivot/kill/research decision.",
+          "id": "REAL-AIOS-12-PILOT",
+          "title": "실제 owner/self 5일 pilot 실행",
+          "why": "fixture는 mechanics proof일 뿐이다. 제품 목표는 실제 학습자가 매일 들어오고 싶고 말하기 journey를 이해하는 것이다.",
+          "done": "실제 transcript, friction note, asset action 선택, learner report/cockpit review, final decision이 local pilot report에 남는다.",
+          "verification": "#179 remains open until real owner/self evidence exists; do not close from fixture data.",
           "files": [
+            "pilot-state.json",
             "artifacts/pilot/",
             "cockpit.html",
-            "artifacts/reports/",
-            "docs/ops/project-state.json"
+            "artifacts/reports/"
           ]
         }
       ]
@@ -2048,6 +2079,13 @@
       "title": "Next",
       "tone": "amber",
       "cards": [
+        {
+          "id": "AIOS-MULTIMODAL-JOURNEY-AFTER-PILOT",
+          "title": "Pilot evidence로 multimodal journey split",
+          "why": "Remotion, generated video, realtime hook 같은 큰 확장은 실제 pilot friction을 보고 학습 행동에 연결해야 한다.",
+          "done": "실제 pilot audit decision에 따라 continue/research/pivot 이슈를 만든다.",
+          "verification": "새 이슈는 pilot report evidence reason을 링크해야 한다."
+        },
         {
           "id": "RICH-AI-NATIVE-JOURNEY",
           "title": "Pilot 결과 기반 richer AI-native journey 설계",
@@ -2615,6 +2653,11 @@
       "name": "M14 adaptive asset journey closeout",
       "status": "Pass",
       "detail": "PR #178 merged AIOS-11, #176 closed, M14 closed, and main smoke passed for adaptive asset priority, asset deck, cockpit, product surface, ops dashboard, scaffold, and git diff hygiene."
+    },
+    {
+      "name": "AIOS-12 owner pilot journey audit mechanics",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims."
     }
   ],
   "commands": [
@@ -3001,6 +3044,10 @@
     {
       "label": "List M15 issues",
       "command": "gh issue list --milestone \"M15 Real Owner AIOS Pilot\""
+    },
+    {
+      "label": "Run AIOS-12 pilot audit mechanics smoke",
+      "command": "node scripts/phase15-owner-pilot-journey-audit-smoke.mjs"
     }
   ]
 }

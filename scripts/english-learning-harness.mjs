@@ -521,6 +521,7 @@ function practice(options) {
       url: assetDeckResult.deckUrl,
       assetCount: assetDeckResult.state.assets.length,
       canonicalCompletionPath: assetDeckResult.state.canonical_completion_path,
+      topAssetAction: assetDeckResult.state.top_asset_action,
     },
     session: {
       id: sessionResult.sessionId,
@@ -927,6 +928,8 @@ function pilotDay(options) {
     aios_artifacts: {
       mission: relativeToRoot(paths, practiceResult.mission.htmlPath),
       scene: relativeToRoot(paths, practiceResult.scene.htmlPath),
+      asset_deck: relativeToRoot(paths, practiceResult.assetDeck.htmlPath),
+      next_asset_action: practiceResult.assetDeck.topAssetAction,
       learner_report: relativeToRoot(paths, practiceResult.report.htmlPath),
       cockpit: relativeToRoot(paths, practiceResult.cockpit.htmlPath),
     },
@@ -957,6 +960,7 @@ function pilotDay(options) {
 function pilotReportMarkdown(report) {
   const artifactBridge = report.aios_artifacts ?? {};
   const bridgeDays = artifactBridge.days ?? [];
+  const audit = report.product_journey_audit ?? {};
   return [
     "# English Learning Harness Owner Pilot Report",
     "",
@@ -968,6 +972,8 @@ function pilotReportMarkdown(report) {
     `- Decision: ${report.rubric.decision}`,
     `- Daily sessions: ${report.daily_session_count}/${report.minimum_valid_daily_sessions} minimum`,
     `- Pass signals: ${report.rubric.pass_signals.join(", ") || "none"}`,
+    `- Product decision: ${audit.decision || report.rubric.decision}`,
+    `- Evidence complete: ${String(audit.evidence_complete ?? false)}`,
     "",
     "## Rubric Deltas",
     "",
@@ -985,9 +991,17 @@ function pilotReportMarkdown(report) {
     ...(bridgeDays.length
       ? bridgeDays.map(
           (day) =>
-            `- Day ${day.day}: mission=${day.mission || "none"}; scene=${day.scene || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
+            `- Day ${day.day}: mission=${day.mission || "none"}; scene=${day.scene || "none"}; asset_deck=${day.asset_deck || "none"}; next_asset=${day.next_asset_action?.asset_id || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
         )
       : ["- none"]),
+    "",
+    "## Product Journey Audit",
+    "",
+    `- Days with mission/scene/report/cockpit: ${audit.days_with_core_artifacts ?? 0}/${report.daily_session_count}`,
+    `- Days with asset deck action: ${audit.days_with_asset_actions ?? 0}/${report.daily_session_count}`,
+    `- Friction note count: ${audit.friction_note_count ?? 0}`,
+    `- Decision: ${audit.decision || report.rubric.decision}`,
+    `- Decision reason: ${audit.decision_reason || "none"}`,
     "",
     "## Claim Boundary",
     "",
@@ -1022,6 +1036,44 @@ function pilotFinish(options) {
     baseline: state.baseline,
     final: finalSample,
   });
+  const daysWithCoreArtifacts = state.days.filter(
+    (day) =>
+      day.aios_artifacts?.mission &&
+      day.aios_artifacts?.scene &&
+      day.aios_artifacts?.learner_report &&
+      day.aios_artifacts?.cockpit,
+  ).length;
+  const daysWithAssetActions = state.days.filter(
+    (day) => day.aios_artifacts?.asset_deck && day.aios_artifacts?.next_asset_action?.asset_id,
+  ).length;
+  const frictionNoteCount = state.days.filter((day) => day.friction_note).length;
+  const evidenceComplete =
+    completedDays >= state.minimum_valid_daily_sessions &&
+    daysWithCoreArtifacts === completedDays &&
+    daysWithAssetActions === completedDays &&
+    Boolean(state.baseline) &&
+    turns.length > 0;
+  const productDecision = evidenceComplete ? rubric.decision : "invalid";
+  const productJourneyAudit = {
+    decision: productDecision,
+    decision_reason: evidenceComplete
+      ? `Transcript rubric decision is ${rubric.decision}; all completed pilot days have mission, scene, asset deck action, learner report, and cockpit evidence.`
+      : "Pilot journey evidence is incomplete; do not make product direction claims.",
+    evidence_complete: evidenceComplete,
+    daily_session_count: completedDays,
+    minimum_valid_daily_sessions: state.minimum_valid_daily_sessions,
+    days_with_core_artifacts: daysWithCoreArtifacts,
+    days_with_asset_actions: daysWithAssetActions,
+    friction_note_count: frictionNoteCount,
+    required_decision_set: ["continue", "research", "pivot", "kill_claim", "invalid"],
+    blocked_claims: [
+      "generalized learning outcomes",
+      "retention improvement",
+      "realtime voice efficacy",
+      "generated-media learning gains",
+      "real-world speaking outcome claims",
+    ],
+  };
   const pilotReport = {
     schema_version: 1,
     generated_at: date.toISOString(),
@@ -1040,10 +1092,13 @@ function pilotFinish(options) {
         session_id: day.session_id,
         mission: day.aios_artifacts?.mission ?? "",
         scene: day.aios_artifacts?.scene ?? "",
+        asset_deck: day.aios_artifacts?.asset_deck ?? "",
+        next_asset_action: day.aios_artifacts?.next_asset_action ?? null,
         learner_report: day.aios_artifacts?.learner_report ?? "",
         cockpit: day.aios_artifacts?.cockpit ?? "",
       })),
     },
+    product_journey_audit: productJourneyAudit,
     claim_boundary:
       "This owner/self pilot report summarizes one local learner's behavioral evidence. It does not prove generalized fluency or real-world speaking ability.",
   };
@@ -1075,8 +1130,9 @@ function pilotFinish(options) {
       report: {
         json: relativeToRoot(paths, reportPath),
         markdown: relativeToRoot(paths, reportMarkdownPath),
-        decision: rubric.decision,
+        decision: productDecision,
         pass_signals: rubric.pass_signals,
+        product_journey_audit: productJourneyAudit,
       },
     },
     date,

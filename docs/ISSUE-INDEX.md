@@ -619,3 +619,10 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - each day keeps learner transcript, mission, scene, asset deck top action, cockpit/report links, and friction notes.
 - final audit compares baseline/final transcript behavior without claiming unsupported fluency outcomes.
 - dashboard separates learner product evidence from engineering status and records continue/split/pivot/kill/research.
+
+#179 current mechanics evidence shows:
+
+- `pilot-day` preserves mission, scene, asset deck, next asset action, learner report, cockpit, session artifact, and friction note.
+- `pilot-finish` writes `product_journey_audit` into the local pilot report.
+- `scripts/phase15-owner-pilot-journey-audit-smoke.mjs` verifies the five-day fixture audit mechanics and claim boundaries.
+- `docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md` records that this is not a substitute for the real owner/self pilot run.
