@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 pilot reply-card surface browser-verified; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 pilot next prompt is learner-ready; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation with ready-to-say assistantPrompt, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can route the next answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day's sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can get a ready-to-say Korean prompt for the next learner turn, route the answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day's sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, learner-safe summary, saved-reply HTML card, automatic pilot cockpit refresh, active pilot cockpit visibility with latest reply-card link, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation with ready-to-say assistant prompts, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, learner-safe summary, saved-reply HTML card, automatic pilot cockpit refresh, active pilot cockpit visibility with latest reply-card link, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -1261,6 +1261,13 @@
       "status": "Pass",
       "evidence": "phase15-owner-pilot-reply-card-render-smoke, phase15-owner-pilot-reply-routing-smoke",
       "claim": "the saved-reply card renders in a browser with saved status, four coaching evidence cells, next phrase, next-card content, and no internal command/issue/audit leakage; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-39",
+      "label": "Learner-ready pilot next prompt",
+      "status": "Pass",
+      "evidence": "#198, phase15-owner-pilot-next-card-smoke, owner-pilot skill",
+      "claim": "pilot-next returns a Korean assistantPrompt that Codex can say directly, including the concrete scene, one-sentence answer rule, example, and no internal command/issue/audit language; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1285,11 +1292,24 @@
           "id": "AIOS-12-PILOT-NEXT-CARD",
           "title": "AIOS-12 learner-facing pilot next card 통과",
           "why": "실제 pilot에서 다음 질문이 JSON status나 cockpit 한 섹션에만 묻혀 있으면 제품 표면이 약하다. 바로 열 수 있는 오늘의 카드가 필요하다.",
-          "done": "pilot-next가 artifacts/pilot/pilot-next-card.json/html을 생성하고 cockpit을 갱신한다.",
-          "verification": "phase15 owner pilot next-card smoke verifies baseline/day cards, cockpit linkage, day advance, privacy boundary, and no internal command leakage.",
+          "done": "pilot-next가 artifacts/pilot/pilot-next-card.json/html을 생성하고 cockpit을 갱신한다. JSON에는 Codex가 그대로 말할 assistantPrompt도 포함한다.",
+          "verification": "phase15 owner pilot next-card smoke verifies baseline/day cards, learner-ready assistant prompt, cockpit linkage, day advance, privacy boundary, and no internal command leakage.",
           "files": [
             "scripts/english-learning-harness.mjs",
             "scripts/phase15-owner-pilot-next-card-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-pilot-next-card.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-LEARNER-READY-NEXT-PROMPT",
+          "title": "AIOS-12 learner-ready next prompt 통과",
+          "why": "실제 pilot을 진행할 때 Codex가 상태 JSON을 조립해 질문하면 또 혼란스러운 문구가 나올 수 있다. 엔진이 바로 말할 prompt를 줘야 한다.",
+          "done": "pilot-next가 한국어 assistantPrompt.text를 반환하고, owner-pilot skill이 이 값을 우선 사용하도록 명시했다.",
+          "verification": "phase15 owner pilot next-card smoke validates baseline/day assistant prompts include the concrete scene, one-sentence answer rule, example, and no command/issue/audit language.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-next-card-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
             "docs/phase-15-evidence/AIOS-12-pilot-next-card.md"
           ]
         },
@@ -3397,7 +3417,12 @@
     {
       "name": "AIOS-12 learner-facing pilot next card",
       "status": "Pass",
-      "detail": "phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage."
+      "detail": "phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, returns a ready-to-say Korean assistantPrompt, refreshes cockpit, advances day prompts, preserves learner-facing privacy copy, and avoids internal command leakage."
+    },
+    {
+      "name": "AIOS-12 learner-ready pilot next prompt",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-next-card smoke validates baseline and daily assistant prompts include the concrete scene, one-sentence answer rule, example support, and no command, issue, PR, rubric, artifact, or audit leakage."
     },
     {
       "name": "AIOS-12 varied five-day pilot missions",
@@ -3873,12 +3898,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can route the next answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day&#39;s sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.</p>
+        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can get a ready-to-say Korean prompt for the next learner turn, route the answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day&#39;s sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-12 pilot reply-card surface browser-verified; real owner pilot Day 1 answer still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
+        AIOS-12 pilot next prompt is learner-ready; real owner pilot Day 1 answer still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation with ready-to-say assistantPrompt, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -4275,6 +4300,11 @@
               <td><strong>Pass</strong><span>phase15-owner-pilot-reply-card-render-smoke, phase15-owner-pilot-reply-routing-smoke</span></td>
               <td>the saved-reply card renders in a browser with saved status, four coaching evidence cells, next phrase, next-card content, and no internal command/issue/audit leakage; real pilot completion remains unclaimed</td>
             </tr>
+            <tr>
+              <td><strong>GATE-39</strong><span>Learner-ready pilot next prompt</span></td>
+              <td><strong>Pass</strong><span>#198, phase15-owner-pilot-next-card-smoke, owner-pilot skill</span></td>
+              <td>pilot-next returns a Korean assistantPrompt that Codex can say directly, including the concrete scene, one-sentence answer rule, example, and no internal command/issue/audit language; real pilot completion remains unclaimed</td>
+            </tr>
         </tbody>
       </table>
     </section>
@@ -4648,16 +4678,16 @@
           <tbody>
 
             <tr>
-              <td>AIOS-12 active pilot cockpit</td>
-              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one pilot-reply Day 0 card appears as active pilot progress in learner cockpit, points to the next learner-facing card, and links the latest saved-reply card without command or engineering leakage.</span></td>
-            </tr>
-            <tr>
               <td>AIOS-12 redacted local pilot dashboard sync</td>
               <td><strong>Pass</strong><span>local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 learner-facing pilot next card</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage.</span></td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, returns a ready-to-say Korean assistantPrompt, refreshes cockpit, advances day prompts, preserves learner-facing privacy copy, and avoids internal command leakage.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 learner-ready pilot next prompt</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates baseline and daily assistant prompts include the concrete scene, one-sentence answer rule, example support, and no command, issue, PR, rubric, artifact, or audit leakage.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 varied five-day pilot missions</td>
@@ -4723,7 +4753,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 112개 보기</summary>
+        <summary>완료 이력 113개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4743,8 +4773,18 @@
               </div>
               <h3>AIOS-12 learner-facing pilot next card 통과</h3>
               <div class="card-row"><b>왜</b><p>실제 pilot에서 다음 질문이 JSON status나 cockpit 한 섹션에만 묻혀 있으면 제품 표면이 약하다. 바로 열 수 있는 오늘의 카드가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>pilot-next가 artifacts/pilot/pilot-next-card.json/html을 생성하고 cockpit을 갱신한다.</p></div>
-              <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke verifies baseline/day cards, cockpit linkage, day advance, privacy boundary, and no internal command leakage.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-next가 artifacts/pilot/pilot-next-card.json/html을 생성하고 cockpit을 갱신한다. JSON에는 Codex가 그대로 말할 assistantPrompt도 포함한다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke verifies baseline/day cards, learner-ready assistant prompt, cockpit linkage, day advance, privacy boundary, and no internal command leakage.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-LEARNER-READY-NEXT-PROMPT</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-next-card-smoke.mjs, skills/owner-pilot/SKILL.md, docs/phase-15-evidence/AIOS-12-pilot-next-card.md</span>
+              </div>
+              <h3>AIOS-12 learner-ready next prompt 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot을 진행할 때 Codex가 상태 JSON을 조립해 질문하면 또 혼란스러운 문구가 나올 수 있다. 엔진이 바로 말할 prompt를 줘야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-next가 한국어 assistantPrompt.text를 반환하고, owner-pilot skill이 이 값을 우선 사용하도록 명시했다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke validates baseline/day assistant prompts include the concrete scene, one-sentence answer rule, example, and no command/issue/audit language.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -5849,7 +5889,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 108개 보기</summary>
+        <summary>전체 검증 109개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -6264,7 +6304,11 @@
             </tr>
             <tr>
               <td>AIOS-12 learner-facing pilot next card</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage.</span></td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, returns a ready-to-say Korean assistantPrompt, refreshes cockpit, advances day prompts, preserves learner-facing privacy copy, and avoids internal command leakage.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 learner-ready pilot next prompt</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates baseline and daily assistant prompts include the concrete scene, one-sentence answer rule, example support, and no command, issue, PR, rubric, artifact, or audit leakage.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 varied five-day pilot missions</td>

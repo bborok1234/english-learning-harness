@@ -612,6 +612,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | Issue | Work | Default Decision |
 |---|---|---|
 | #179 | AIOS-12: Run real owner/self AIOS pilot and journey audit | continue |
+| #198 | AIOS-12: Add learner-ready pilot next prompt | continue |
 
 #179 planned evidence should show:
 
@@ -629,7 +630,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `skills/owner-pilot/SKILL.md` lets Codex run Day 0, daily pilot days, and final sample collection inside conversation while using the local engine internally.
 - `scripts/phase15-owner-pilot-skill-smoke.mjs` verifies the skill contract and keeps real pilot completion separate from fixture mechanics.
 - `pilot-next` now writes a learner-facing `artifacts/pilot/pilot-next-card.html/json` card for the current pilot prompt without exposing internal commands.
-- `scripts/phase15-owner-pilot-next-card-smoke.mjs` verifies baseline/day card generation, cockpit linkage, progress advance, and no internal command leakage.
+- `pilot-next` now returns `assistantPrompt.text`, a Korean-first prompt Codex can say directly to the learner without assembling scattered state fields.
+- `scripts/phase15-owner-pilot-next-card-smoke.mjs` verifies baseline/day card generation, learner-ready assistant prompt, cockpit linkage, progress advance, learner-facing privacy copy, and no internal command leakage.
 - The first five daily pilot missions now cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating the same prompt.
 - `scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs` verifies the first five fixture pilot days expose distinct learner-facing speaking actions and become ready for final sample after five days.
 - `pilot-day`/`pilot-finish` now preserve per-day `pilot_mission` metadata so final reports and product journey audit can see which speaking action was sampled.

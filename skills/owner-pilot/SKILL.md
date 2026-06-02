@@ -36,6 +36,7 @@ node scripts/english-learning-harness.mjs pilot-next --json
 ```
 
 This refreshes the learner cockpit and writes a local `artifacts/pilot/pilot-next-card.html` card. Use it as a product-surface aid, but do not ask the learner to run the command.
+Prefer the returned `assistantPrompt.text` as the exact learner-facing prompt. It is Korean-first, asks for one English sentence, and avoids command/issue/audit language.
 
 After the learner answers the current card, prefer the automatic reply router internally:
 

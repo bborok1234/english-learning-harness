@@ -675,11 +675,23 @@ The router must delegate to `pilot-capture` rather than write pilot state direct
     "example": "Which place do you mean?",
     "learner_rule": "답은 한 문장이면 됩니다."
   },
+  "assistantPrompt": {
+    "language": "ko",
+    "text": "Codex가 학습자에게 그대로 말할 수 있는 한국어 prompt",
+    "answer_rule": "영어 한 문장만 답하면 됩니다.",
+    "after_answer": "Codex가 답변을 내부적으로 저장하고 다음 카드와 cockpit을 갱신합니다.",
+    "progress": {
+      "phase": "day",
+      "day": 1,
+      "completed_daily_sessions": 0,
+      "minimum_valid_daily_sessions": 5
+    }
+  },
   "claimBoundary": "This card helps continue the local owner/self pilot. It does not prove learning outcomes or pilot completion."
 }
 ```
 
-The generated HTML must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, or `product_journey_audit` internals.
+The generated HTML and `assistantPrompt.text` must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, rubric labels, artifact labels, or `product_journey_audit` internals. `assistantPrompt.text` is the preferred prompt for Codex to say directly to the learner when continuing the real pilot.
 
 The first five `pilot-next` daily cards must cover distinct speaking actions:
 
