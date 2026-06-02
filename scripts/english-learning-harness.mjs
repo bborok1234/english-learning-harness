@@ -1145,6 +1145,7 @@ function pilotReply(options) {
   }
 
   const result = pilotCapture(captureOptions);
+  const nextCardArtifact = pilotNext({ learnerRoot: paths.root, date });
   return {
     status: "pass",
     action: "pilot-reply",
@@ -1156,6 +1157,7 @@ function pilotReply(options) {
     result,
     summary: result.summary,
     cockpit: result.cockpit,
+    nextCardArtifact,
     claimBoundary:
       result.claimBoundary ||
       "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion.",
