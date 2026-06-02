@@ -406,10 +406,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-3 interactive mission artifacts and learner reports are implemented for #158 and ready for PR verification.",
+    "status": "AIOS-4 Codex-operated daily practice flow is implemented for #160 and ready for PR verification.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now generates learner-root interactive daily mission cards and 7-day/30-day learner reports that connect Speaking Skill OS, multimodal interaction evidence, saved phrases, and the personal cockpit.",
-    "nextGoal": "Continue toward the full AI-native Learning OS by making Codex-operated daily skill flow and richer generated/Remotion-style artifacts feel unmistakably different from generic English chat.",
+    "summary": "English Learning Harness now has a single Codex-operated practice path that refreshes mission, session evidence, weekly mirror, learner report, and cockpit after learner answers.",
+    "nextGoal": "Continue toward richer generated/Remotion-style learning artifacts and stronger natural-language skill execution without turning ordinary learning into command-line work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate local interactive mission artifacts and learner reports from recorded practice evidence; it does not certify fluency or prove generated-world learning gains.",
+    "allowedClaim": "The harness can run a Codex-operated local daily practice flow that creates learning artifacts and evidence behind the learner conversation.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local AI-native learning OS mechanics and evidence aggregation only; outcome, realtime voice, child-mode, and retention claims remain blocked."
+    "claimBoundary": "Allowed claim is local Codex-operated learning-flow mechanics only; outcome, realtime voice, child-mode, and retention claims remain blocked."
   },
   "ssot": [
     {
@@ -733,37 +733,49 @@
       "path": "../scripts/interactive-artifact-report-smoke.mjs",
       "role": "interactive mission artifact and learner report smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md",
+      "path": "./phase-11-evidence/AIOS-4-codex-operated-practice-flow.md",
+      "role": "AIOS-4 Codex-operated daily practice flow evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/codex-operated-practice-flow-smoke.mjs",
+      "path": "../scripts/codex-operated-practice-flow-smoke.mjs",
+      "role": "Codex-operated daily practice flow smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-1/2/3 are implemented slices, not final product completion",
+      "detail": "full AI-native English Learning OS remains open; AIOS-1/2/3/4 are implemented slices, not final product completion",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-3 ready",
-      "detail": "interactive mission card, learner report command, cockpit report linkage, and smoke coverage pass locally",
+      "value": "AIOS-4 ready",
+      "detail": "practice command composes mission/session/weekly/report/cockpit and skill contract keeps learners in conversation",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "Codex-operated learning flow",
-      "detail": "make skills/onboarding/daily session operate the new artifacts so learners stay in conversation instead of touching engine commands",
+      "value": "Richer generated artifacts",
+      "detail": "explore HTML/Remotion-style generated scenes while preserving text-first evidence and claim boundaries",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#158 in progress",
-      "detail": "AIOS-3 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
+      "value": "#160 in progress",
+      "detail": "AIOS-4 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Evidence-generating missions",
-      "detail": "daily scenes now become local interactive artifacts and learner reports tied to Speaking Skill OS evidence",
+      "value": "Conversation-operated OS",
+      "detail": "the learner answers in Codex while the harness engine updates daily artifacts behind the scenes",
       "tone": "green"
     }
   ],
@@ -879,6 +891,13 @@
       "status": "Pass",
       "evidence": "#158, interactive-artifact-report-smoke, generated-daily-mission-smoke, personal-learner-cockpit-smoke",
       "claim": "generated daily missions render selectable practice modes, learner reports summarize 7-day/30-day local evidence, and cockpit links the latest report without product/ops surface leakage"
+    },
+    {
+      "id": "GATE-17",
+      "label": "Codex-operated daily practice flow",
+      "status": "Pass",
+      "evidence": "#160, codex-operated-practice-flow-smoke, interactive-artifact-report-smoke, phase7-learner-readme-smoke, phase1-scaffold-smoke",
+      "claim": "one internal practice command can create mission, session evidence, weekly mirror, learner report, and cockpit while learner-facing output avoids command/process leakage"
     }
   ],
   "board": [
@@ -2102,6 +2121,19 @@
             "scripts/interactive-artifact-report-smoke.mjs",
             "docs/phase-11-evidence/AIOS-3-interactive-artifact-reports.md"
           ]
+        },
+        {
+          "id": "AIOS-4",
+          "title": "Codex-operated daily practice flow를 구현함",
+          "why": "학습자가 Node 명령을 직접 치는 순간 제품 표면이 깨진다. Codex가 대화 뒤에서 mission/session/report/cockpit을 한 번에 갱신할 경로가 필요했다.",
+          "done": "`practice` 명령이 Speaking Skill OS 진단, mission 생성, session 저장, weekly mirror, learner report, cockpit refresh를 조합한다. daily-session skill은 이 경로를 기본 내부 persistence로 사용하게 됐다.",
+          "verification": "`node scripts/codex-operated-practice-flow-smoke.mjs`, `node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase1-scaffold-smoke.mjs`가 통과했다.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "skills/daily-session/SKILL.md",
+            "scripts/codex-operated-practice-flow-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md"
+          ]
         }
       ]
     },
@@ -2112,12 +2144,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-3 PR 검증과 병합",
-          "why": "interactive mission/report 기능은 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.",
-          "done": "새 smoke, 기존 mission/cockpit smoke, dashboard generation, product/ops smoke, diff check를 실행한다.",
-          "verification": "PR #158 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
+          "title": "AIOS-4 PR 검증과 병합",
+          "why": "Codex-operated practice flow는 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.",
+          "done": "새 smoke, 기존 artifact/report smoke, README/scaffold smoke, dashboard generation, product/ops smoke, diff check를 실행한다.",
+          "verification": "PR #160 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
           "files": [
-            "scripts/interactive-artifact-report-smoke.mjs",
+            "scripts/codex-operated-practice-flow-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -2129,18 +2161,6 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "AIOS-NEXT",
-          "title": "Codex-operated daily learning flow 강화",
-          "why": "사용자가 Node 명령을 만지는 순간 제품성이 깨진다. 다음 단위는 skills/onboarding/daily-session이 mission/report/cockpit 엔진을 자연어 대화 뒤에서 운영하게 만드는 것이다.",
-          "done": "처음 온 학습자가 Codex와 대화만 해도 generated mission, session evidence, mini mirror, report/cockpit 갱신이 이어진다.",
-          "verification": "skill contract smoke와 clean learner run smoke가 command-line chore를 learner-facing copy에 노출하지 않는지 확인한다.",
-          "files": [
-            "skills/",
-            "scripts/english-learning-harness.mjs",
-            "README.md"
-          ]
-        },
-        {
           "id": "AIOS-RICH-ARTIFACTS",
           "title": "Generated/Remotion-style rich artifact 탐색",
           "why": "Codex 위 harness 차별점은 대화 중 필요한 순간 HTML/영상/이미지 artifact를 즉시 생성하는 능력이다.",
@@ -2148,6 +2168,17 @@
           "verification": "text-first fallback, claim guard, product/ops boundary smoke가 함께 통과해야 한다.",
           "files": [
             "docs/phase-11-evidence/",
+            "scripts/"
+          ]
+        },
+        {
+          "id": "AIOS-SKILL-E2E",
+          "title": "Skill-level learner conversation simulation",
+          "why": "engine flow가 있어도 실제 Codex skill 응답이 학습자에게 자연스럽지 않으면 제품성이 부족하다.",
+          "done": "onboarding/daily/mini-mirror skill 계약을 따라 simulated learner transcript가 command leakage 없이 완료되는지 검증한다.",
+          "verification": "skill contract smoke와 learner transcript fixture가 통과해야 한다.",
+          "files": [
+            "skills/",
             "scripts/"
           ]
         }
@@ -2644,6 +2675,11 @@
       "name": "AIOS-3 interactive artifacts and reports",
       "status": "Pass",
       "detail": "interactive-artifact-report smoke validates mission mode tabs, 7-day/30-day report generation, text/voice/image evidence counts, cockpit report linkage, and product-surface leak guards."
+    },
+    {
+      "name": "AIOS-4 Codex-operated daily practice flow",
+      "status": "Pass",
+      "detail": "codex-operated-practice-flow smoke validates one internal practice run creates mission, session artifact, weekly mirror, learner report, cockpit, Speaking Skill OS evidence, and command-leak-free learner summary."
     }
   ],
   "commands": [
@@ -2946,6 +2982,14 @@
     {
       "label": "View AIOS-3 issue",
       "command": "gh issue view 158"
+    },
+    {
+      "label": "Run Codex-operated practice flow smoke",
+      "command": "node scripts/codex-operated-practice-flow-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-4 issue",
+      "command": "gh issue view 160"
     }
   ]
 }
@@ -2954,12 +2998,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">English Learning Harness now generates learner-root interactive daily mission cards and 7-day/30-day learner reports that connect Speaking Skill OS, multimodal interaction evidence, saved phrases, and the personal cockpit.</p>
+        <p class="summary">English Learning Harness now has a single Codex-operated practice path that refreshes mission, session evidence, weekly mirror, learner report, and cockpit after learner answers.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
         AI-native Learning OS in progress<br>
-        AIOS-3 interactive mission artifacts and learner reports are implemented for #158 and ready for PR verification.
+        AIOS-4 Codex-operated daily practice flow is implemented for #160 and ready for PR verification.
       </div>
     </header>
 
@@ -2968,27 +3012,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">Active</div>
-          <p>full AI-native English Learning OS remains open; AIOS-1/2/3 are implemented slices, not final product completion</p>
+          <p>full AI-native English Learning OS remains open; AIOS-1/2/3/4 are implemented slices, not final product completion</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">AIOS-3 ready</div>
-          <p>interactive mission card, learner report command, cockpit report linkage, and smoke coverage pass locally</p>
+          <div class="metric-value">AIOS-4 ready</div>
+          <p>practice command composes mission/session/weekly/report/cockpit and skill contract keeps learners in conversation</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next goal</div>
-          <div class="metric-value">Codex-operated learning flow</div>
-          <p>make skills/onboarding/daily session operate the new artifacts so learners stay in conversation instead of touching engine commands</p>
+          <div class="metric-value">Richer generated artifacts</div>
+          <p>explore HTML/Remotion-style generated scenes while preserving text-first evidence and claim boundaries</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">#158 in progress</div>
-          <p>AIOS-3 is the current PR-sized issue; larger ultragoal remains intentionally unclosed</p>
+          <div class="metric-value">#160 in progress</div>
+          <p>AIOS-4 is the current PR-sized issue; larger ultragoal remains intentionally unclosed</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
-          <div class="metric-value">Evidence-generating missions</div>
-          <p>daily scenes now become local interactive artifacts and learner reports tied to Speaking Skill OS evidence</p>
+          <div class="metric-value">Conversation-operated OS</div>
+          <p>the learner answers in Codex while the harness engine updates daily artifacts behind the scenes</p>
         </article>
     </section>
 
@@ -3016,22 +3060,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/interactive-artifact-report-smoke.mjs, docs/ops/project-state.json</span>
+                <span>scripts/codex-operated-practice-flow-smoke.mjs, docs/ops/project-state.json</span>
               </div>
-              <h3>AIOS-3 PR 검증과 병합</h3>
-              <div class="card-row"><b>왜</b><p>interactive mission/report 기능은 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>새 smoke, 기존 mission/cockpit smoke, dashboard generation, product/ops smoke, diff check를 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>PR #158 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>AIOS-NEXT</strong>
-                <span>skills/, scripts/english-learning-harness.mjs, README.md</span>
-              </div>
-              <h3>Codex-operated daily learning flow 강화</h3>
-              <div class="card-row"><b>왜</b><p>사용자가 Node 명령을 만지는 순간 제품성이 깨진다. 다음 단위는 skills/onboarding/daily-session이 mission/report/cockpit 엔진을 자연어 대화 뒤에서 운영하게 만드는 것이다.</p></div>
-              <div class="card-row"><b>완료</b><p>처음 온 학습자가 Codex와 대화만 해도 generated mission, session evidence, mini mirror, report/cockpit 갱신이 이어진다.</p></div>
-              <div class="card-row"><b>검증</b><p>skill contract smoke와 clean learner run smoke가 command-line chore를 learner-facing copy에 노출하지 않는지 확인한다.</p></div>
+              <h3>AIOS-4 PR 검증과 병합</h3>
+              <div class="card-row"><b>왜</b><p>Codex-operated practice flow는 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>새 smoke, 기존 artifact/report smoke, README/scaffold smoke, dashboard generation, product/ops smoke, diff check를 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>PR #160 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3043,6 +3077,16 @@
               <div class="card-row"><b>완료</b><p>학습 증거를 약화하지 않는 범위에서 interactive HTML 또는 Remotion-style scene artifact 후보를 설계하고 하나를 fixture로 검증한다.</p></div>
               <div class="card-row"><b>검증</b><p>text-first fallback, claim guard, product/ops boundary smoke가 함께 통과해야 한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-SKILL-E2E</strong>
+                <span>skills/, scripts/</span>
+              </div>
+              <h3>Skill-level learner conversation simulation</h3>
+              <div class="card-row"><b>왜</b><p>engine flow가 있어도 실제 Codex skill 응답이 학습자에게 자연스럽지 않으면 제품성이 부족하다.</p></div>
+              <div class="card-row"><b>완료</b><p>onboarding/daily/mini-mirror skill 계약을 따라 simulated learner transcript가 command leakage 없이 완료되는지 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>skill contract smoke와 learner transcript fixture가 통과해야 한다.</p></div>
+            </article>
         </div>
       </section>
       <section class="board-column compact tone-green">
@@ -3052,16 +3096,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M10-5</strong>
-                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-no-gen-fallback-smoke.mjs, docs/phase-10-evidence/M10-5-capability-router-no-gen-fallback.md</span>
-              </div>
-              <h3>#147 capability router와 no-gen fallback을 구현함</h3>
-              <div class="card-row"><b>왜</b><p>Codex 도구가 없어도 narrative mission은 text-first로 완료되고 evidence를 남겨야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`routeMissionCapabilities()`와 no-generation fallback smoke를 추가했다. required image/realtime voice와 missing text fallback은 reject된다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase10-no-gen-fallback-smoke.mjs`가 text-only completion과 negative fixtures를 검증한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M10-6</strong>
@@ -3111,6 +3145,16 @@
               <div class="card-row"><b>왜</b><p>AI-native OS가 단순 챗봇과 다르려면 매일 생성된 장면이 실제로 조작 가능한 학습 artifact가 되고, 7일/30일 증거가 learner report로 돌아와야 했다.</p></div>
               <div class="card-row"><b>완료</b><p>`mission` HTML에 text/voice/image practice mode tab을 추가하고, `report` 명령으로 `artifacts/reports/learner-report-YYYY-MM-DD.json/html`을 생성하며, cockpit에서 최신 report를 연결했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/generated-daily-mission-smoke.mjs`, `node scripts/personal-learner-cockpit-smoke.mjs`가 통과했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-4</strong>
+                <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/codex-operated-practice-flow-smoke.mjs, docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md</span>
+              </div>
+              <h3>Codex-operated daily practice flow를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>학습자가 Node 명령을 직접 치는 순간 제품 표면이 깨진다. Codex가 대화 뒤에서 mission/session/report/cockpit을 한 번에 갱신할 경로가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>`practice` 명령이 Speaking Skill OS 진단, mission 생성, session 저장, weekly mirror, learner report, cockpit refresh를 조합한다. daily-session skill은 이 경로를 기본 내부 persistence로 사용하게 됐다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/codex-operated-practice-flow-smoke.mjs`, `node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/phase7-learner-readme-smoke.mjs`, `node scripts/phase1-scaffold-smoke.mjs`가 통과했다.</p></div>
             </article>
         </div>
       </section>
@@ -3237,6 +3281,11 @@
               <td><strong>GATE-16</strong><span>Interactive mission and learner report surface</span></td>
               <td><strong>Pass</strong><span>#158, interactive-artifact-report-smoke, generated-daily-mission-smoke, personal-learner-cockpit-smoke</span></td>
               <td>generated daily missions render selectable practice modes, learner reports summarize 7-day/30-day local evidence, and cockpit links the latest report without product/ops surface leakage</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-17</strong><span>Codex-operated daily practice flow</span></td>
+              <td><strong>Pass</strong><span>#160, codex-operated-practice-flow-smoke, interactive-artifact-report-smoke, phase7-learner-readme-smoke, phase1-scaffold-smoke</span></td>
+              <td>one internal practice command can create mission, session evidence, weekly mirror, learner report, and cockpit while learner-facing output avoids command/process leakage</td>
             </tr>
         </tbody>
       </table>
@@ -3451,6 +3500,14 @@
               <strong>scripts/interactive-artifact-report-smoke.mjs</strong>
               <span>interactive mission artifact and learner report smoke</span>
             </a>
+            <a class="link-card source" href="../phase-11-evidence/AIOS-4-codex-operated-practice-flow.md">
+              <strong>docs/phase-11-evidence/AIOS-4-codex-operated-practice-flow.md</strong>
+              <span>AIOS-4 Codex-operated daily practice flow evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/codex-operated-practice-flow-smoke.mjs">
+              <strong>scripts/codex-operated-practice-flow-smoke.mjs</strong>
+              <span>Codex-operated daily practice flow smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3458,10 +3515,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M10-3 mission validator</td>
-              <td><strong>Pass</strong><span>mission validator smoke rejects missing backlog links, skill/win-condition mismatch, required media, unsupported claims, and decorative mission completion</span></td>
-            </tr>
             <tr>
               <td>M10-4 narrative parity</td>
               <td><strong>Pass</strong><span>plain today and usual-place narrative mission match backlog evidence for pass and needs-review outputs; story consequence follows transfer evidence</span></td>
@@ -3490,14 +3543,14 @@
               <td>AIOS-3 interactive artifacts and reports</td>
               <td><strong>Pass</strong><span>interactive-artifact-report smoke validates mission mode tabs, 7-day/30-day report generation, text/voice/image evidence counts, cockpit report linkage, and product-surface leak guards.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-4 Codex-operated daily practice flow</td>
+              <td><strong>Pass</strong><span>codex-operated-practice-flow smoke validates one internal practice run creates mission, session artifact, weekly mirror, learner report, cockpit, Speaking Skill OS evidence, and command-leak-free learner summary.</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>View next M10 parity issue</span>
-              <code>gh issue view 146</code>
-            </div>
             <div class="command">
               <span>View next M10 fallback issue</span>
               <code>gh issue view 147</code>
@@ -3526,6 +3579,10 @@
               <span>View AIOS-3 issue</span>
               <code>gh issue view 158</code>
             </div>
+            <div class="command">
+              <span>View AIOS-4 issue</span>
+              <code>gh issue view 160</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3534,7 +3591,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 89개 보기</summary>
+        <summary>완료 이력 90개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4427,10 +4484,20 @@
               <div class="card-row"><b>완료</b><p>`usual-place-clarification` narrative wrapper가 기존 `persistSession()` 경로를 재사용하고, pass/needs_review 모두 plain today와 같은 backlog evidence를 남기는지 검증했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase10-narrative-mission-parity-smoke.mjs`가 pass와 needs-review pair를 비교하고 story consequence가 transfer evidence 뒤에 기록되는지 확인한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-5</strong>
+                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-no-gen-fallback-smoke.mjs, docs/phase-10-evidence/M10-5-capability-router-no-gen-fallback.md</span>
+              </div>
+              <h3>#147 capability router와 no-gen fallback을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>Codex 도구가 없어도 narrative mission은 text-first로 완료되고 evidence를 남겨야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`routeMissionCapabilities()`와 no-generation fallback smoke를 추가했다. required image/realtime voice와 missing text fallback은 reject된다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-no-gen-fallback-smoke.mjs`가 text-only completion과 negative fixtures를 검증한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 86개 보기</summary>
+        <summary>전체 검증 87개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -4779,12 +4846,16 @@
               <td>AIOS-3 interactive artifacts and reports</td>
               <td><strong>Pass</strong><span>interactive-artifact-report smoke validates mission mode tabs, 7-day/30-day report generation, text/voice/image evidence counts, cockpit report linkage, and product-surface leak guards.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-4 Codex-operated daily practice flow</td>
+              <td><strong>Pass</strong><span>codex-operated-practice-flow smoke validates one internal practice run creates mission, session artifact, weekly mirror, learner report, cockpit, Speaking Skill OS evidence, and command-leak-free learner summary.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 75개 보기</summary>
+        <summary>전체 명령 77개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5086,6 +5157,14 @@
             <div class="command">
               <span>View AIOS-3 issue</span>
               <code>gh issue view 158</code>
+            </div>
+            <div class="command">
+              <span>Run Codex-operated practice flow smoke</span>
+              <code>node scripts/codex-operated-practice-flow-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-4 issue</span>
+              <code>gh issue view 160</code>
             </div>
         </div>
       </details>

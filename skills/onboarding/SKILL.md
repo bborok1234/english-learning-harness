@@ -17,6 +17,7 @@ Use this skill to create a low-pressure learner profile before daily practice.
 - Do not ask the learner to run `node` commands for ordinary onboarding.
 - If tool execution is unavailable, continue conversationally and clearly say persistence is not confirmed yet.
 - If the learner shares a real speaking sample, use the Speaking Skill OS diagnosis path so the first session starts from a concrete backlog item.
+- After setup, hand off to `english-daily-session`; the first real practice should use the agent-operated `practice` path after the learner answers.
 
 ## Engine Discovery
 
