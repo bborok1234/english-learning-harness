@@ -90,6 +90,8 @@ function main() {
   assert(result.diagnosis?.backlogItemId, "practice should diagnose a Speaking Skill OS item from first sample");
   assert(result.session?.speakingBacklogEvidence?.item_id === result.diagnosis.backlogItemId, "session should target diagnosed backlog item");
   assert(existsSync(result.mission.htmlPath), "practice should write mission HTML");
+  assert(existsSync(result.scene.htmlPath), "practice should write scene HTML");
+  assert(result.scene.frameCount === 4, "practice scene should include four learning frames");
   assert(existsSync(result.session.artifactPath), "practice should write session artifact");
   assert(existsSync(result.weekly.mirrorPath), "practice should write weekly mirror");
   assert(existsSync(result.report.path), "practice should write learner report JSON");
@@ -101,10 +103,12 @@ function main() {
   const report = readJson(result.report.path);
   assert(report.windows.seven_day.session_count === 1, "report should count the practice session in 7-day window");
   assert(report.generated_artifacts.latest_mission?.mission_id === result.mission.id, "report should link generated mission");
+  assert(report.generated_artifacts.latest_scene?.scene_id === result.scene.id, "report should link generated scene");
 
   const cockpit = readJson(result.cockpit.statePath);
   assert(cockpit.journey.latest_learner_report?.html, "cockpit should link the learner report");
   assert(cockpit.journey.latest_generated_mission?.mission_id === result.mission.id, "cockpit should link generated mission");
+  assert(cockpit.journey.latest_generated_scene?.scene_id === result.scene.id, "cockpit should link generated scene");
 
   console.log(
     JSON.stringify(
@@ -112,6 +116,7 @@ function main() {
         status: "pass",
         learnerRoot,
         missionId: result.mission.id,
+        sceneId: result.scene.id,
         sessionId: result.session.id,
         reportPath: result.report.path,
         cockpitPath: result.cockpit.htmlPath,

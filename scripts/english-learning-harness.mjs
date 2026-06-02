@@ -28,6 +28,7 @@ import {
   readVocabulary,
   writeWeeklyMirror,
   writeGeneratedDailyMission,
+  writeGeneratedMissionScene,
   writeLearnerReport,
   writeLearnerModel,
   writeProgress,
@@ -162,6 +163,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs mission [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs scene [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs practice [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
@@ -211,6 +213,7 @@ function supportDiagnostics(options, paths) {
         paths.artifactDir,
         paths.missionArtifactDir,
         paths.reportArtifactDir,
+        paths.sceneArtifactDir,
       ]
     : [];
 
@@ -222,6 +225,7 @@ function supportDiagnostics(options, paths) {
     nextCommands: [
       commandWithRoot("daily", learnerRoot, ["--json"]),
       commandWithRoot("mission", learnerRoot, ["--json"]),
+      commandWithRoot("scene", learnerRoot, ["--json"]),
       commandWithRoot("practice", learnerRoot, ["--say", JSON.stringify("I want to practice today."), "--json"]),
       commandWithRoot("cockpit", learnerRoot, ["--json"]),
       commandWithRoot("report", learnerRoot, ["--json"]),
@@ -259,6 +263,7 @@ function repairLearnerStore(learnerRoot) {
   mkdirSync(paths.artifactDir, { recursive: true });
   mkdirSync(paths.missionArtifactDir, { recursive: true });
   mkdirSync(paths.reportArtifactDir, { recursive: true });
+  mkdirSync(paths.sceneArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -360,6 +365,30 @@ function mission(options) {
   };
 }
 
+function scene(options) {
+  const date = options.date || new Date();
+  const missionResult = writeGeneratedDailyMission(options.learnerRoot, date);
+  const sceneResult = writeGeneratedMissionScene(options.learnerRoot, date, missionResult.state);
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: sceneResult.state.learner_root,
+    missionStatePath: missionResult.missionStatePath,
+    sceneStatePath: sceneResult.sceneStatePath,
+    sceneHtmlPath: sceneResult.sceneHtmlPath,
+    sceneUrl: sceneResult.sceneUrl,
+    scene: {
+      id: sceneResult.state.scene_id,
+      title: sceneResult.state.title,
+      missionId: sceneResult.state.mission_id,
+      targetSkill: sceneResult.state.target_skill,
+      transferTest: sceneResult.state.transfer_test,
+      frameCount: sceneResult.state.frames.length,
+    },
+    claimBoundary: sceneResult.state.claim_boundary,
+  };
+}
+
 function cockpit(options) {
   const result = writePersonalLearnerCockpit(options.learnerRoot, options.date || new Date());
   return {
@@ -401,6 +430,7 @@ function practice(options) {
     ? diagnoseSpeakingSample(paths.root, turns, date)
     : null;
   const missionResult = writeGeneratedDailyMission(paths.root, date);
+  const sceneResult = writeGeneratedMissionScene(paths.root, date, missionResult.state);
   const sessionOptions = {
     ...options,
     learnerRoot: paths.root,
@@ -441,6 +471,13 @@ function practice(options) {
       title: missionResult.state.learner_visible_scene.title,
       htmlPath: missionResult.missionHtmlPath,
       url: missionResult.missionUrl,
+    },
+    scene: {
+      id: sceneResult.state.scene_id,
+      title: sceneResult.state.title,
+      htmlPath: sceneResult.sceneHtmlPath,
+      url: sceneResult.sceneUrl,
+      frameCount: sceneResult.state.frames.length,
     },
     session: {
       id: sessionResult.sessionId,
@@ -1462,6 +1499,10 @@ function run() {
   }
   if (command === "mission") {
     output(mission(options), options.json);
+    return;
+  }
+  if (command === "scene") {
+    output(scene(options), options.json);
     return;
   }
   if (command === "cockpit") {

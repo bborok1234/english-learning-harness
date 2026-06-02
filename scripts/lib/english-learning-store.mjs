@@ -43,6 +43,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     artifactDir: resolve(root, "artifacts/sessions"),
     missionArtifactDir: resolve(root, "artifacts/missions"),
     reportArtifactDir: resolve(root, "artifacts/reports"),
+    sceneArtifactDir: resolve(root, "artifacts/scenes"),
     speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
@@ -109,6 +110,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   mkdirSync(paths.artifactDir, { recursive: true });
   mkdirSync(paths.missionArtifactDir, { recursive: true });
   mkdirSync(paths.reportArtifactDir, { recursive: true });
+  mkdirSync(paths.sceneArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -2082,6 +2084,312 @@ export function writeGeneratedDailyMission(learnerRoot = defaultLearnerRoot(), d
   };
 }
 
+function latestGeneratedScenePath(learnerRoot = defaultLearnerRoot()) {
+  const paths = learnerPaths(learnerRoot);
+  if (!existsSync(paths.sceneArtifactDir)) return "";
+  const entries = readdirSync(paths.sceneArtifactDir)
+    .filter((entry) => /^daily-scene-.*\.json$/.test(entry))
+    .sort();
+  return entries.length ? resolve(paths.sceneArtifactDir, entries.at(-1)) : "";
+}
+
+function readLatestGeneratedScene(learnerRoot = defaultLearnerRoot()) {
+  const scenePath = latestGeneratedScenePath(learnerRoot);
+  if (!scenePath) return null;
+  const paths = learnerPaths(learnerRoot);
+  const state = JSON.parse(readFileSync(scenePath, "utf8"));
+  return {
+    path: relative(paths.root, scenePath),
+    html: relative(paths.root, scenePath.replace(/\.json$/, ".html")),
+    scene_id: state.scene_id,
+    title: state.title,
+    mission_id: state.mission_id,
+    target_skill: state.target_skill,
+    transfer_test: state.transfer_test,
+    frame_count: state.frames?.length ?? 0,
+    generated_at: state.generated_at,
+  };
+}
+
+function buildGeneratedSceneState(missionState, learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const scene = missionState.learner_visible_scene;
+  const frames = [
+    {
+      id: "enter",
+      label: "장면 진입",
+      visual: scene.setup,
+      cue: scene.situation,
+      learner_action: "상황을 한 번 읽고, 말할 준비를 합니다.",
+    },
+    {
+      id: "speak",
+      label: "말하기 cue",
+      visual: scene.ask,
+      cue: `한 문장으로 답하세요: ${scene.ask}`,
+      learner_action: missionState.required_learner_action,
+    },
+    {
+      id: "repair",
+      label: "막힘 수리",
+      visual: `예시: ${scene.example}`,
+      cue: "막히면 쉬운 단어로 돌아와서 한 번 더 말합니다.",
+      learner_action: "recast 또는 rescue phrase를 사용해 다시 시도합니다.",
+    },
+    {
+      id: "transfer",
+      label: "전이 체크",
+      visual: missionState.transfer_test,
+      cue: "같은 말하기 행동을 다른 상황에도 옮길 수 있는지 확인합니다.",
+      learner_action: missionState.transfer_test,
+    },
+  ];
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    scene_id: `daily-scene-${todayStamp(date)}-${missionState.target_skill}`,
+    mission_id: missionState.mission_id,
+    title: `${scene.title} scene`,
+    target_skill: missionState.target_skill,
+    transfer_test: missionState.transfer_test,
+    required_evidence: {
+      session_artifact: "artifacts/sessions/*.json",
+      interaction_event_modalities: missionState.expected_evidence?.interaction_event_modalities ?? ["text"],
+      speaking_backlog_item_id: missionState.expected_evidence?.speaking_backlog_item_id ?? "",
+    },
+    controls: {
+      primary_path: "text-first",
+      optional_modes: ["voice-transcript", "image-information-gap"],
+      start_command: missionState.start_commands.text,
+    },
+    frames,
+    claim_boundary:
+      "This generated scene artifact supports local speaking practice and evidence collection. It does not prove learning outcomes, retention, realtime voice, or generated-media efficacy.",
+  };
+}
+
+function generatedSceneHtml(state) {
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Generated Scene</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #162019;
+      --muted: #5c6a60;
+      --line: #d7ded8;
+      --paper: #f7f8f3;
+      --panel: #ffffff;
+      --green: #2f7655;
+      --blue: #2e6689;
+      --amber: #9a6400;
+      --soft: #e8f3ec;
+      --soft-blue: #eaf2f7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 48px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.05; letter-spacing: 0; }
+    h2 { font-size: 22px; }
+    h3 { font-size: 16px; }
+    header {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    section {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+    .stage {
+      display: grid;
+      gap: 16px;
+      min-height: 300px;
+      background: linear-gradient(135deg, var(--soft), var(--soft-blue));
+      border-color: #cfe2d5;
+    }
+    .frame-label {
+      color: var(--green);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+    .visual {
+      font-size: clamp(25px, 4vw, 42px);
+      line-height: 1.12;
+      font-weight: 780;
+    }
+    .cue {
+      border-left: 5px solid var(--green);
+      padding-left: 12px;
+      color: var(--muted);
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      color: var(--ink);
+      padding: 9px 12px;
+      font: inherit;
+      font-weight: 720;
+      cursor: pointer;
+    }
+    button[data-active="true"] {
+      border-color: var(--green);
+      background: var(--soft);
+      color: var(--green);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfa;
+    }
+    code {
+      display: block;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #162019;
+      color: #f7fbf7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+    }
+    .boundary { border-left: 6px solid var(--amber); }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="frame-label">Generated scene artifact</p>
+      <h1>${escapeHtml(state.title)}</h1>
+      <p class="cue">${escapeHtml(state.transfer_test)}</p>
+    </header>
+
+    <section class="stage" aria-live="polite">
+      <p class="frame-label" data-scene-label>${escapeHtml(state.frames[0].label)}</p>
+      <p class="visual" data-scene-visual>${escapeHtml(state.frames[0].visual)}</p>
+      <p class="cue" data-scene-cue>${escapeHtml(state.frames[0].cue)}</p>
+      <p data-scene-action>${escapeHtml(state.frames[0].learner_action)}</p>
+      <div class="controls">
+        <button type="button" data-scene-prev>Previous</button>
+        <button type="button" data-scene-play data-active="false">Play</button>
+        <button type="button" data-scene-next>Next</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Speaking Skill OS 연결</h2>
+      <div class="grid">
+        <div class="card"><h3>Target</h3><p>${escapeHtml(state.target_skill)}</p></div>
+        <div class="card"><h3>Evidence</h3><p>${escapeHtml(state.required_evidence.session_artifact)}</p></div>
+        <div class="card"><h3>Mode</h3><p>${escapeHtml(state.controls.primary_path)}</p></div>
+      </div>
+      <code>${escapeHtml(state.controls.start_command)}</code>
+    </section>
+
+    <section class="boundary">
+      <h2>경계</h2>
+      <p>${escapeHtml(state.claim_boundary)}</p>
+    </section>
+  </main>
+  <script>
+    const frames = ${JSON.stringify(state.frames)};
+    let index = 0;
+    let timer = null;
+    const label = document.querySelector("[data-scene-label]");
+    const visual = document.querySelector("[data-scene-visual]");
+    const cue = document.querySelector("[data-scene-cue]");
+    const action = document.querySelector("[data-scene-action]");
+    const play = document.querySelector("[data-scene-play]");
+    function show(nextIndex) {
+      index = (nextIndex + frames.length) % frames.length;
+      const frame = frames[index];
+      label.textContent = frame.label;
+      visual.textContent = frame.visual;
+      cue.textContent = frame.cue;
+      action.textContent = frame.learner_action;
+    }
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+      play.dataset.active = "false";
+      play.textContent = "Play";
+    }
+    document.querySelector("[data-scene-prev]").addEventListener("click", () => {
+      stop();
+      show(index - 1);
+    });
+    document.querySelector("[data-scene-next]").addEventListener("click", () => {
+      stop();
+      show(index + 1);
+    });
+    play.addEventListener("click", () => {
+      if (timer) {
+        stop();
+        return;
+      }
+      play.dataset.active = "true";
+      play.textContent = "Pause";
+      timer = setInterval(() => show(index + 1), 900);
+    });
+  </script>
+</body>
+</html>
+`;
+}
+
+export function writeGeneratedMissionScene(learnerRoot = defaultLearnerRoot(), date = new Date(), missionState = null) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const state = buildGeneratedSceneState(missionState || buildGeneratedMissionState(paths.root, date), paths.root, date);
+  const stamp = todayStamp(date);
+  const sceneStatePath = resolve(paths.sceneArtifactDir, `daily-scene-${stamp}.json`);
+  const sceneHtmlPath = resolve(paths.sceneArtifactDir, `daily-scene-${stamp}.html`);
+  writeFileSync(sceneStatePath, `${JSON.stringify(state, null, 2)}\n`);
+  writeFileSync(sceneHtmlPath, generatedSceneHtml(state));
+  return {
+    sceneStatePath,
+    sceneHtmlPath,
+    sceneUrl: `file://${sceneHtmlPath}`,
+    state,
+  };
+}
+
 function dateWithinDays(dateValue, now, days) {
   if (!dateValue || !Number.isFinite(Date.parse(dateValue))) return false;
   const then = new Date(dateValue.length === 10 ? `${dateValue}T00:00:00.000Z` : dateValue);
@@ -2181,6 +2489,7 @@ export function buildLearnerReport(learnerRoot = defaultLearnerRoot(), date = ne
     },
     generated_artifacts: {
       latest_mission: readLatestGeneratedMission(paths.root),
+      latest_scene: readLatestGeneratedScene(paths.root),
       latest_weekly_mirror: weeklyMirror
         ? {
             generated_at: weeklyMirror.generated_at,
@@ -2364,6 +2673,11 @@ function learnerReportHtml(report) {
           ? `<p>${escapeHtml(report.generated_artifacts.latest_mission.title)}</p><code>${escapeHtml(report.generated_artifacts.latest_mission.html)}</code>`
           : '<p class="subtle">아직 연결된 mission artifact가 없습니다.</p>'
       }
+      ${
+        report.generated_artifacts.latest_scene
+          ? `<p>${escapeHtml(report.generated_artifacts.latest_scene.title)}</p><code>${escapeHtml(report.generated_artifacts.latest_scene.html)}</code>`
+          : '<p class="subtle">아직 연결된 scene artifact가 없습니다.</p>'
+      }
     </section>
 
     <section class="boundary">
@@ -2423,6 +2737,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const latestReport = latestPilotReport(paths);
   const latestLearnerReport = readLatestLearnerReport(paths.root);
   const latestMission = readLatestGeneratedMission(paths.root);
+  const latestScene = readLatestGeneratedScene(paths.root);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
   const nextCommand = commandLine(paths.root, "today", [
     "--say",
@@ -2489,6 +2804,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_report: latestReport,
       latest_learner_report: latestLearnerReport,
       latest_generated_mission: latestMission,
+      latest_generated_scene: latestScene,
     },
     next_actions: [
       {
@@ -2519,6 +2835,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_journal: dailyCockpit.latest_journal,
       latest_weekly_mirror: dailyCockpit.latest_weekly_mirror,
       latest_generated_mission: latestMission?.html ?? "",
+      latest_generated_scene: latestScene?.html ?? "",
       latest_learner_report: latestLearnerReport?.html ?? "",
     },
     claim_boundary:
@@ -2710,6 +3027,15 @@ function personalLearnerCockpitHtml(state) {
           </div>`
               : `<p class="subtle">아직 생성된 장면 artifact가 없습니다.</p>
           <code class="command">${escapeHtml(`node scripts/english-learning-harness.mjs mission --learner-root "${state.learner_root}" --json`)}</code>`
+          }
+          ${
+            state.journey.latest_generated_scene
+              ? `<div class="panel blue">
+            <h3>${escapeHtml(state.journey.latest_generated_scene.title)}</h3>
+            <p>${escapeHtml(state.journey.latest_generated_scene.transfer_test)}</p>
+            <p class="subtle">scene: ${escapeHtml(state.journey.latest_generated_scene.html)}</p>
+          </div>`
+              : ""
           }
         </section>
 
