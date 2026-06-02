@@ -3,11 +3,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-8 first-use conversation variants ready for PR verification",
-    "status": "AIOS-8 adds first-use conversation variant coverage so learner-facing transcripts and generated scene artifacts stay aligned across office, cafe, desk, and lunch situations.",
+    "stage": "AIOS-8 merged; AIOS-9 multimodal asset contract queued",
+    "status": "AIOS-8 is merged on main and #169 is closed. AIOS-9 (#171) is open under M12 to make multimodal/generated assets evidence-bearing rather than decorative.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The daily-session skill now defines first-use variant coverage, and a new smoke verifies four concrete learner-facing transcripts through the real practice artifact loop with matching scene presets.",
-    "nextGoal": "Verify, PR, merge AIOS-8, then use the broadened first-use surface for real owner/self pilot runs and richer multimodal missions.",
+    "summary": "The learner-facing first-use conversation surface now has verified variants. The next slice is a multimodal mission asset contract that keeps text-first fallback canonical while connecting optional generated assets to Speaking Skill OS evidence.",
+    "nextGoal": "Start AIOS-9: define and validate the multimodal mission asset contract with positive and negative fixtures.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can validate local first-use conversation variants and align generated mission/scene artifacts with the selected transcript preset.",
+    "allowedClaim": "The harness has local first-use conversation variants and a queued contract path for evidence-bearing multimodal mission assets.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local first-use conversation UX and persistence mechanics only; real learner outcomes, engagement, retention, and realtime voice remain unclaimed."
+    "claimBoundary": "AIOS-9 is planned, not implemented. Realtime voice, generated-media efficacy, engagement, retention, and learning outcomes remain unclaimed."
   },
   "ssot": [
     {
@@ -415,32 +415,32 @@
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-8 is another verified slice, not final completion",
+      "detail": "full AI-native English Learning OS remains open; AIOS-8 merged and AIOS-9 is queued",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-8 ready",
-      "detail": "four first-use transcript variants run through practice and keep generated scene presets aligned",
+      "value": "AIOS-8 merged",
+      "detail": "first-use variants are on main with #169 closed",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "PR + real pilot",
-      "detail": "merge AIOS-8, then use the broader first-use surface in real owner/self pilot sessions",
+      "value": "AIOS-9",
+      "detail": "multimodal mission asset contract under #171 / M12",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#169",
-      "detail": "M11 First-Use Conversation Variants is open and AIOS-8 is the current PR-sized issue",
+      "value": "#171 open",
+      "detail": "M12 Multimodal Mission Asset Contract is the next tracked slice",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Scene-aligned first use",
-      "detail": "Codex can choose different everyday openings and keep mission/scene/report/cockpit evidence coherent",
-      "tone": "green"
+      "value": "Evidence-bearing multimodal",
+      "detail": "next work targets generated assets that require learner output and write evidence",
+      "tone": "amber"
     }
   ],
   "gates": [
@@ -1925,12 +1925,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-8 PR 검증과 병합",
-          "why": "first-use variant gate는 구현됐지만 main evidence로 남기려면 #169 PR-first closeout이 필요하다.",
-          "done": "conversation variants, existing skill simulation, practice, adaptive scene, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
-          "verification": "PR이 #169를 닫고 main에서 핵심 smoke를 재실행해야 한다.",
+          "title": "AIOS-9 multimodal mission asset contract 시작",
+          "why": "이미 mission/scene/report/cockpit은 있지만 image/voice/video/Remotion-style artifact가 아직 학습 증거를 요구하는 계약으로 묶이지 않았다.",
+          "done": "text-first fallback, optional generated assets, Speaking Skill OS target, required learner action, expected evidence, claim boundary를 하나의 contract로 정의한다.",
+          "verification": "multimodal mission asset contract smoke가 positive fixture와 decorative negative fixtures를 함께 검증해야 한다.",
           "files": [
-            "scripts/skill-conversation-variants-smoke.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "docs/phase-11-evidence/",
             "docs/ops/project-state.json"
           ]
         }
@@ -1951,17 +1952,6 @@
             "artifacts/pilot/",
             "cockpit.html",
             "artifacts/reports/"
-          ]
-        },
-        {
-          "id": "AIOS-MULTIMODAL-MISSION-ASSETS",
-          "title": "멀티모달 mission artifact를 더 실질적으로 연결",
-          "why": "현재 image/voice는 transcript-first evidence로 연결되지만 generated media나 Remotion-style artifact는 아직 학습 루프 중심 기능으로 충분히 쓰이지 않는다.",
-          "done": "scene preset을 기반으로 image prompt, transcript prompt, optional HTML/Remotion artifact 계획을 하나의 mission asset contract로 묶는다.",
-          "verification": "multimodal mission asset smoke가 text-first fallback과 optional rich artifact linkage를 함께 검증해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/phase-11-evidence/"
           ]
         }
       ]
@@ -2846,6 +2836,14 @@
     {
       "label": "View AIOS-8 issue",
       "command": "gh issue view 169"
+    },
+    {
+      "label": "View AIOS-9 issue",
+      "command": "gh issue view 171"
+    },
+    {
+      "label": "Run multimodal mission asset contract smoke",
+      "command": "node scripts/multimodal-mission-asset-contract-smoke.mjs"
     }
   ]
 }
