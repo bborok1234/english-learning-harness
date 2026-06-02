@@ -48,6 +48,7 @@ const requiredFiles = [
   "scripts/skill-conversation-simulation-smoke.mjs",
   "scripts/skill-conversation-variants-smoke.mjs",
   "scripts/multimodal-mission-asset-contract-smoke.mjs",
+  "scripts/generated-mission-storyboard-smoke.mjs",
   "scripts/generated-mission-asset-deck-smoke.mjs",
   "scripts/adaptive-mission-asset-priority-smoke.mjs",
   "scripts/adaptive-scene-variants-smoke.mjs",
