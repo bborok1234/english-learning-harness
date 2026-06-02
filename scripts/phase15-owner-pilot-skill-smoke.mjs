@@ -18,6 +18,8 @@ function main() {
     "Codex conversation as the product surface",
     "Do not ask the learner to run `node`",
     "Use that engine yourself. Do not hand the command to the learner.",
+    "pilot-next",
+    "artifacts/pilot/pilot-next-card.html",
     "ask the five Day 0 mission cards one at a time",
     "pilot-capture",
     "pilot-start",

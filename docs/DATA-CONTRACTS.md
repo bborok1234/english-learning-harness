@@ -570,6 +570,30 @@ The learner-facing cockpit must not expose `pilot-capture`, `pilot-start`, `pilo
 
 The cockpit refresh is a product-surface convenience contract. It is not evidence that the real owner/self pilot has been completed.
 
+`pilot-next --json` writes the current learner-facing pilot card:
+
+```json
+{
+  "status": "pass",
+  "action": "pilot-next",
+  "jsonPath": "learner-root/artifacts/pilot/pilot-next-card.json",
+  "htmlPath": "learner-root/artifacts/pilot/pilot-next-card.html",
+  "url": "file:///absolute/path/to/pilot-next-card.html",
+  "nextCard": {
+    "phase": "baseline|day|final|complete",
+    "day": 1,
+    "title": "확인 질문 만들기",
+    "setup": "learner-facing setup",
+    "ask": "learner-facing prompt",
+    "example": "Which place do you mean?",
+    "learner_rule": "답은 한 문장이면 됩니다."
+  },
+  "claimBoundary": "This card helps continue the local owner/self pilot. It does not prove learning outcomes or pilot completion."
+}
+```
+
+The generated HTML must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, or `product_journey_audit` internals.
+
 ## Local Pilot Dashboard Overlay
 
 `scripts/sync-local-pilot-dashboard.mjs` may write `docs/ops/local-pilot-status.json` and `docs/ops/local-engineering-dashboard.html` for local operations. These files are ignored by git. The tracked example is `docs/ops/local-pilot-status.example.json`.
