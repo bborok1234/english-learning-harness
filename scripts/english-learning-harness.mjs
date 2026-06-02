@@ -1452,12 +1452,49 @@ function learnerFacingNextCard(nextAction) {
   };
 }
 
+function buildPilotAssistantPrompt(nextCard, summary) {
+  const progress =
+    nextCard.phase === "day" && nextCard.day
+      ? `오늘은 실제 연습 ${nextCard.day}일차입니다.`
+      : nextCard.phase === "baseline"
+        ? "오늘은 현재 말하기 상태를 찍는 짧은 스냅샷입니다."
+        : nextCard.phase === "final"
+          ? "오늘은 마지막 말하기 스냅샷입니다."
+          : "로컬 리포트를 확인할 차례입니다.";
+  const lines = [
+    progress,
+    nextCard.title ? `장면: ${nextCard.title}` : "",
+    nextCard.setup ? `상황: ${nextCard.setup}` : "",
+    nextCard.ask ? `질문: ${nextCard.ask}` : "",
+    nextCard.example ? `막히면 이렇게 시작해도 됩니다: ${nextCard.example}` : "",
+    nextCard.phase === "complete"
+      ? "답변을 새로 만들기보다 로컬 리포트를 먼저 확인하면 됩니다."
+      : "답은 영어 한 문장만 보내주세요. 예시를 그대로 조금 바꿔도 괜찮습니다.",
+  ];
+  return {
+    language: "ko",
+    text: lines.filter(Boolean).join("\n"),
+    answer_rule:
+      nextCard.phase === "complete"
+        ? "로컬 리포트를 먼저 확인합니다."
+        : "영어 한 문장만 답하면 됩니다. 틀려도 현재 말하기 증거로 충분합니다.",
+    after_answer: "Codex가 답변을 내부적으로 저장하고 다음 카드와 cockpit을 갱신합니다.",
+    progress: {
+      phase: nextCard.phase,
+      day: nextCard.day ?? null,
+      completed_daily_sessions: summary.completedDailySessions,
+      minimum_valid_daily_sessions: summary.minimumValidDailySessions,
+    },
+  };
+}
+
 function pilotNext(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
   const state = readPilotState(paths, date);
   const summary = pilotStatusSummary(state);
   const nextCard = learnerFacingNextCard(summary.nextAction);
+  const assistantPrompt = buildPilotAssistantPrompt(nextCard, summary);
   const cockpitSnapshot = pilotCockpitRefresh(paths, date);
   const artifact = {
     schema_version: 1,
@@ -1472,9 +1509,10 @@ function pilotNext(options) {
       ready_to_finish: summary.readyToFinish,
     },
     next_card: nextCard,
+    assistant_prompt: assistantPrompt,
     answer_rule: "영어 한 문장만 답하면 됩니다. 틀려도 현재 말하기 증거로 충분합니다.",
     after_answer: "Codex가 답변을 내부적으로 저장하고 cockpit/report를 갱신합니다.",
-    privacy: "답변 원문은 기본적으로 로컬 pilot state에만 저장됩니다. 공개 PR/issue에는 올리지 않습니다.",
+    privacy: "답변 원문은 기본적으로 내 컴퓨터의 학습 기록에만 저장됩니다. 공개 협업 기록에는 올리지 않습니다.",
     cockpit: {
       html: relativeToRoot(paths, cockpitSnapshot.htmlPath),
       url: cockpitSnapshot.url,
@@ -1545,6 +1583,7 @@ function pilotNext(options) {
     url: pathToFileURL(htmlPath).href,
     cockpit: cockpitSnapshot,
     nextCard,
+    assistantPrompt,
     claimBoundary: artifact.claim_boundary,
   };
 }
