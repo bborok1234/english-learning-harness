@@ -53,6 +53,21 @@ function assertNoLearnerCommandLeak(htmlPath) {
   }
 }
 
+function assertReplyCard(result, expectedText) {
+  assert(result.replyCardArtifact?.htmlPath, "reply should return learner-facing reply card artifact");
+  assert(result.replyCardArtifact?.jsonPath, "reply should return learner-facing reply card JSON");
+  assert(existsSync(result.replyCardArtifact.htmlPath), "reply card HTML missing");
+  assert(existsSync(result.replyCardArtifact.jsonPath), "reply card JSON missing");
+  const html = read(result.replyCardArtifact.htmlPath);
+  assert(html.includes("답변이 저장됐어요"), "reply card should show saved headline");
+  assert(html.includes(expectedText), `reply card should include ${expectedText}`);
+  assertNoLearnerCommandLeak(result.replyCardArtifact.htmlPath);
+  const state = JSON.parse(read(result.replyCardArtifact.jsonPath));
+  assert(state.surface === "learner-facing pilot reply card", "reply card JSON surface mismatch");
+  assert(state.saved === true, "reply card JSON should show saved");
+  assert(state.next_card?.title, "reply card JSON should include next card");
+}
+
 function main() {
   rmSync(smokeRoot, { recursive: true, force: true });
 
@@ -77,6 +92,7 @@ function main() {
   assert(firstBaseline.learnerFacing?.saved === true, "baseline reply should include learner-facing saved summary");
   assert(firstBaseline.learnerFacing.nextCard.title === "잠깐, 무슨 뜻이야?", "baseline learner-facing summary should include next card");
   assert(!("recast" in firstBaseline.learnerFacing), "baseline learner-facing summary should not invent coaching");
+  assertReplyCard(firstBaseline, "잠깐, 무슨 뜻이야?");
   assertNoLearnerCommandLeak(firstBaseline.cockpit.htmlPath);
   assertNoLearnerCommandLeak(firstBaseline.nextCardArtifact.htmlPath);
 
@@ -140,6 +156,8 @@ function main() {
   assert(dayOne.learnerFacing.nextFocus, "daily learner-facing summary should expose next focus");
   assert(dayOne.learnerFacing.nextCard.day === 2, "daily learner-facing summary should expose next card");
   assert(!JSON.stringify(dayOne.learnerFacing).includes("pilot-capture"), "learner-facing summary leaked command text");
+  assertReplyCard(dayOne, "자연스럽게 바꾸면");
+  assert(read(dayOne.replyCardArtifact.htmlPath).includes(dayOne.learnerFacing.nextPhrase), "daily reply card should include next phrase");
   assertNoLearnerCommandLeak(dayOne.cockpit.htmlPath);
   assertNoLearnerCommandLeak(dayOne.nextCardArtifact.htmlPath);
 
@@ -187,6 +205,7 @@ function main() {
   assert(finalOne.nextCardArtifact.nextCard.title === "잠깐, 무슨 뜻이야?", "first final reply should advance to second final card");
   assert(finalOne.learnerFacing?.phase === "final", "final learner-facing summary phase mismatch");
   assert(finalOne.learnerFacing.nextCard.title === "잠깐, 무슨 뜻이야?", "final learner-facing summary should expose next final card");
+  assertReplyCard(finalOne, "잠깐, 무슨 뜻이야?");
   assertNoLearnerCommandLeak(finalOne.cockpit.htmlPath);
   assertNoLearnerCommandLeak(finalOne.nextCardArtifact.htmlPath);
 
