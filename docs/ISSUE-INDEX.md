@@ -499,6 +499,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #160 | AIOS-4: Add Codex-operated daily practice flow | continue |
 | #162 | AIOS-5: Add generated scene artifacts to the daily practice loop | continue |
 | #164 | AIOS-6: Add skill-level learner conversation simulation | continue |
+| #166 | AIOS-7: Add adaptive generated scene variants | continue |
 
 #154 evidence currently shows:
 
@@ -546,3 +547,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `scripts/skill-conversation-simulation-smoke.mjs` verifies the simulated transcript has no Node/GitHub/PR/issue/smoke/rubric/project-planning/level/native-speaker/guaranteed-outcome/fluency-proof leakage.
 - The same smoke runs the real `practice` engine and verifies mission HTML, scene HTML, session artifact, learner report, cockpit, report scene linkage, and cockpit report linkage.
 - This proves a local skill-contract conversation fixture only. It does not prove real learner outcomes, hosted distribution, realtime voice, or perfect future LLM adherence.
+
+#166 evidence currently shows:
+
+- Generated scene state now includes skill/date-based `variant` metadata: id, label, setting, mood, prop, and cue style.
+- Variant frames enrich setting and cue style while preserving mission target skill, transfer test, required session evidence, and Speaking Skill OS backlog link.
+- Scene HTML, learner report, and cockpit expose latest scene variant labels.
+- `scripts/adaptive-scene-variants-smoke.mjs` verifies clarification, repair, and soft-disagreement samples produce different variants with preserved evidence links and blocked unsupported claims.
+- This proves local adaptive variant mechanics only. It does not prove engagement, retention, realtime voice, or learning outcomes.

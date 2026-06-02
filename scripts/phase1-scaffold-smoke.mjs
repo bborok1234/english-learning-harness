@@ -43,6 +43,7 @@ const requiredFiles = [
   "scripts/ops-dashboard-smoke.mjs",
   "scripts/codex-operated-practice-flow-smoke.mjs",
   "scripts/skill-conversation-simulation-smoke.mjs",
+  "scripts/adaptive-scene-variants-smoke.mjs",
   "scripts/generated-scene-artifact-smoke.mjs",
   "scripts/generated-daily-mission-smoke.mjs",
   "scripts/interactive-artifact-report-smoke.mjs",

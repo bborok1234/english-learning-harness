@@ -313,6 +313,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-4: Add Codex-operated daily practice flow (#160). `practice` lets Codex internally run mission generation, session persistence, weekly mirror, learner report, and cockpit refresh after learner answers, without making ordinary learners type engine commands.
 - [x] AIOS-5: Add generated scene artifacts (#162). `scene` writes `artifacts/scenes/daily-scene-YYYY-MM-DD.json/html`, and `practice`, learner report, and cockpit now link mission-derived scene/timeline artifacts with speaking cue, repair, and transfer checkpoint frames.
 - [x] AIOS-6: Add skill-level learner conversation simulation (#164). The daily-session skill now has learner-facing transcript guardrails, and `skill-conversation-simulation-smoke` verifies a concrete everyday prompt, mini mirror, no command/process leakage, and real `practice` artifact generation.
+- [x] AIOS-7: Add adaptive scene variants (#166). Generated scenes now include skill/date-based variant metadata and cue styles, with smoke coverage proving clarification, repair, and soft-disagreement variants preserve Speaking Skill OS evidence links.
 
 ## SSOT Structure
 
