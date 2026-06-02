@@ -2105,35 +2105,136 @@ function readLatestGeneratedScene(learnerRoot = defaultLearnerRoot()) {
     title: state.title,
     mission_id: state.mission_id,
     target_skill: state.target_skill,
+    variant_id: state.variant?.id ?? "",
+    variant_label: state.variant?.label ?? "",
     transfer_test: state.transfer_test,
     frame_count: state.frames?.length ?? 0,
     generated_at: state.generated_at,
   };
 }
 
+function sceneVariantForSkill(skill, date = new Date()) {
+  const daySeed = Number(todayStamp(date).replaceAll("-", "")) || 0;
+  const variants = {
+    clarification: [
+      {
+        id: "subway-usual-place",
+        label: "Subway meet-up",
+        setting: "퇴근 후 지하철역 근처에서 약속 장소가 애매한 상황",
+        mood: "calm-clarifying",
+        prop: "지도 앱과 메시지 알림",
+        cue_style: "짧고 직접적인 확인 질문",
+      },
+      {
+        id: "cafe-order-detail",
+        label: "Cafe detail check",
+        setting: "카페에서 주문 옵션을 다시 확인하는 상황",
+        mood: "friendly-check",
+        prop: "메뉴판과 컵 사이즈",
+        cue_style: "정중한 의미 확인 질문",
+      },
+    ],
+    repair: [
+      {
+        id: "desk-missing-word",
+        label: "Desk missing word",
+        setting: "책상 앞에서 정확한 단어가 떠오르지 않는 상황",
+        mood: "low-pressure-repair",
+        prop: "노트북, 머그컵, 메모지",
+        cue_style: "쉬운 단어로 돌아오는 rescue phrase",
+      },
+      {
+        id: "travel-description-gap",
+        label: "Travel description gap",
+        setting: "여행 중 본 장소를 설명하려다 단어가 막히는 상황",
+        mood: "curious-repair",
+        prop: "사진 한 장과 작은 표지판",
+        cue_style: "I mean / what I want to say is로 이어가기",
+      },
+    ],
+    follow_ups: [
+      {
+        id: "weekend-cafe-followup",
+        label: "Weekend cafe follow-up",
+        setting: "친구가 주말 카페 이야기를 짧게 꺼낸 상황",
+        mood: "warm-followup",
+        prop: "커피잔 두 개와 작은 영수증",
+        cue_style: "한 가지 더 묻는 follow-up question",
+      },
+      {
+        id: "office-smalltalk-followup",
+        label: "Office small talk follow-up",
+        setting: "동료가 어제 늦게까지 일했다고 말한 상황",
+        mood: "quiet-office",
+        prop: "모니터와 빈 커피컵",
+        cue_style: "because/when/where detail을 끌어내는 질문",
+      },
+    ],
+    soft_disagreement: [
+      {
+        id: "lunch-boundary",
+        label: "Lunch boundary",
+        setting: "점심을 건너뛰자는 제안에 부드럽게 다른 의견을 말하는 상황",
+        mood: "gentle-boundary",
+        prop: "회의실 문 앞과 점심 메뉴 알림",
+        cue_style: "I see your point, but...로 부드럽게 말하기",
+      },
+      {
+        id: "movie-choice",
+        label: "Movie choice",
+        setting: "친구의 영화 선택에 살짝 다른 의견을 말하는 상황",
+        mood: "friendly-disagreement",
+        prop: "영화 포스터와 예매 화면",
+        cue_style: "not really / maybe 대신 부드러운 제안",
+      },
+    ],
+    starts: [
+      {
+        id: "morning-snapshot",
+        label: "Morning snapshot",
+        setting: "오늘 아침 한 일을 한 문장으로 시작하는 상황",
+        mood: "easy-start",
+        prop: "캘린더, 커피, 짧은 할 일",
+        cue_style: "완벽하지 않아도 먼저 시작하는 한 문장",
+      },
+      {
+        id: "evening-checkin",
+        label: "Evening check-in",
+        setting: "하루가 어땠는지 묻는 메시지에 짧게 답하는 상황",
+        mood: "gentle-return",
+        prop: "휴대폰 메시지와 조용한 방",
+        cue_style: "I did / I felt / I want로 시작하기",
+      },
+    ],
+  };
+  const choices = variants[skill] || variants.starts;
+  return choices[daySeed % choices.length];
+}
+
 function buildGeneratedSceneState(missionState, learnerRoot = defaultLearnerRoot(), date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const scene = missionState.learner_visible_scene;
+  const variant = sceneVariantForSkill(missionState.target_skill, date);
   const frames = [
     {
       id: "enter",
       label: "장면 진입",
-      visual: scene.setup,
-      cue: scene.situation,
+      visual: `${variant.setting}. ${scene.setup}`,
+      cue: `${scene.situation} (${variant.prop})`,
       learner_action: "상황을 한 번 읽고, 말할 준비를 합니다.",
     },
     {
       id: "speak",
       label: "말하기 cue",
       visual: scene.ask,
-      cue: `한 문장으로 답하세요: ${scene.ask}`,
+      cue: `${variant.cue_style}: ${scene.ask}`,
       learner_action: missionState.required_learner_action,
     },
     {
       id: "repair",
       label: "막힘 수리",
       visual: `예시: ${scene.example}`,
-      cue: "막히면 쉬운 단어로 돌아와서 한 번 더 말합니다.",
+      cue: `막히면 ${variant.cue_style} 방식으로 쉬운 단어에 돌아옵니다.`,
       learner_action: "recast 또는 rescue phrase를 사용해 다시 시도합니다.",
     },
     {
@@ -2152,6 +2253,7 @@ function buildGeneratedSceneState(missionState, learnerRoot = defaultLearnerRoot
     mission_id: missionState.mission_id,
     title: `${scene.title} scene`,
     target_skill: missionState.target_skill,
+    variant,
     transfer_test: missionState.transfer_test,
     required_evidence: {
       session_artifact: "artifacts/sessions/*.json",
@@ -2298,6 +2400,7 @@ function generatedSceneHtml(state) {
     <header>
       <p class="frame-label">Generated scene artifact</p>
       <h1>${escapeHtml(state.title)}</h1>
+      <p>${escapeHtml(state.variant.label)} · ${escapeHtml(state.variant.mood)}</p>
       <p class="cue">${escapeHtml(state.transfer_test)}</p>
     </header>
 
@@ -2317,6 +2420,7 @@ function generatedSceneHtml(state) {
       <h2>Speaking Skill OS 연결</h2>
       <div class="grid">
         <div class="card"><h3>Target</h3><p>${escapeHtml(state.target_skill)}</p></div>
+        <div class="card"><h3>Variant</h3><p>${escapeHtml(state.variant.setting)}</p></div>
         <div class="card"><h3>Evidence</h3><p>${escapeHtml(state.required_evidence.session_artifact)}</p></div>
         <div class="card"><h3>Mode</h3><p>${escapeHtml(state.controls.primary_path)}</p></div>
       </div>
@@ -2675,7 +2779,7 @@ function learnerReportHtml(report) {
       }
       ${
         report.generated_artifacts.latest_scene
-          ? `<p>${escapeHtml(report.generated_artifacts.latest_scene.title)}</p><code>${escapeHtml(report.generated_artifacts.latest_scene.html)}</code>`
+          ? `<p>${escapeHtml(report.generated_artifacts.latest_scene.title)} · ${escapeHtml(report.generated_artifacts.latest_scene.variant_label)}</p><code>${escapeHtml(report.generated_artifacts.latest_scene.html)}</code>`
           : '<p class="subtle">아직 연결된 scene artifact가 없습니다.</p>'
       }
     </section>
@@ -3032,6 +3136,7 @@ function personalLearnerCockpitHtml(state) {
             state.journey.latest_generated_scene
               ? `<div class="panel blue">
             <h3>${escapeHtml(state.journey.latest_generated_scene.title)}</h3>
+            <p class="subtle">${escapeHtml(state.journey.latest_generated_scene.variant_label)}</p>
             <p>${escapeHtml(state.journey.latest_generated_scene.transfer_test)}</p>
             <p class="subtle">scene: ${escapeHtml(state.journey.latest_generated_scene.html)}</p>
           </div>`

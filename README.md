@@ -91,6 +91,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - 오늘의 약점에 맞는 generated mission artifact를 만듭니다.
 - generated mission artifact 안에서 text, voice transcript, image information-gap 연습 모드를 바로 전환할 수 있게 합니다.
 - mission에서 파생된 generated scene artifact로 말하기 cue, repair, transfer checkpoint를 한 화면에서 넘겨볼 수 있게 합니다.
+- Speaking Skill OS 목표에 따라 scene setting과 cue style이 달라져 매번 같은 장면으로 굳지 않게 합니다.
 - 7일/30일 learner report로 내가 남긴 세션, 표현, 약점 카드, 다음 focus를 보여줍니다.
 
 이 repo의 스크립트는 그 경험 아래에서 움직이는 엔진입니다. Codex, maintainer, setup, verification을 위한 것이지 학습자가 직접 조작해야 하는 제품 표면이 아닙니다.
@@ -392,6 +393,7 @@ node scripts/phase7-publication-preflight.mjs
 node scripts/phase1-scaffold-smoke.mjs
 node scripts/skill-conversation-simulation-smoke.mjs
 node scripts/codex-operated-practice-flow-smoke.mjs
+node scripts/adaptive-scene-variants-smoke.mjs
 node scripts/generated-scene-artifact-smoke.mjs
 node scripts/generated-daily-mission-smoke.mjs
 node scripts/interactive-artifact-report-smoke.mjs

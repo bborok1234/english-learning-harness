@@ -406,10 +406,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-6 skill-level learner conversation simulation is implemented for #164 and ready for PR verification.",
+    "status": "AIOS-7 adaptive scene variants are implemented for #166 and ready for PR verification.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now has a learner-facing skill-level transcript fixture that verifies first practice starts from an everyday scene, avoids command/process leakage, ends with a mini mirror, and still runs the real Codex-operated practice artifact loop.",
-    "nextGoal": "Continue toward generated artifact variants and broader learner-conversation simulations while preserving text-first evidence and claim boundaries.",
+    "summary": "English Learning Harness now has learner-facing adaptive scene variants that change setting and cue style by Speaking Skill OS target while preserving evidence links, transfer tests, reports, and cockpit surfaces.",
+    "nextGoal": "Continue toward real owner/self pilot gap closure and broader learner-conversation validation while preserving text-first evidence and claim boundaries.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can validate a local skill-level learner conversation fixture and connect it to the Codex-operated practice artifact loop.",
+    "allowedClaim": "The harness can generate local adaptive scene variants tied to Speaking Skill OS targets without breaking the practice evidence loop.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local skill-contract simulation and persistence mechanics only; real learner outcomes, hosted distribution, realtime voice, and perfect future LLM adherence remain unclaimed."
+    "claimBoundary": "Allowed claim is local adaptive variant generation mechanics only; engagement, retention, realtime voice, and learning outcomes remain unclaimed."
   },
   "ssot": [
     {
@@ -769,37 +769,49 @@
       "path": "../scripts/skill-conversation-simulation-smoke.mjs",
       "role": "skill-level learner conversation simulation smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-7-adaptive-scene-variants.md",
+      "path": "./phase-11-evidence/AIOS-7-adaptive-scene-variants.md",
+      "role": "AIOS-7 adaptive scene variant evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/adaptive-scene-variants-smoke.mjs",
+      "path": "../scripts/adaptive-scene-variants-smoke.mjs",
+      "role": "adaptive scene variants smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-1 through AIOS-6 are implemented slices, not final product completion",
+      "detail": "full AI-native English Learning OS remains open; AIOS-1 through AIOS-7 are implemented slices, not final product completion",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-6 ready",
-      "detail": "skill transcript fixture verifies everyday prompt, mini mirror, no process leakage, and real practice artifact generation",
+      "value": "AIOS-7 ready",
+      "detail": "adaptive scene variants change setting/cue style by Speaking Skill OS target while preserving evidence linkage",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "Generated variants",
-      "detail": "broaden daily scene variants and conversation simulations while preserving evidence linkage",
+      "value": "Pilot gap closure",
+      "detail": "reconcile remaining M9 owner/self pilot report readiness with the current AIOS product surface",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#164 in progress",
-      "detail": "AIOS-6 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
+      "value": "#166 in progress",
+      "detail": "AIOS-7 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Learner conversation gate",
-      "detail": "the harness now tests the skill-facing transcript, not only engine commands and generated files",
+      "value": "Adaptive scene variety",
+      "detail": "generated artifacts now vary by target skill instead of repeating one generic scene surface",
       "tone": "green"
     }
   ],
@@ -936,6 +948,13 @@
       "status": "Pass",
       "evidence": "#164, skill-conversation-simulation-smoke, codex-operated-practice-flow-smoke",
       "claim": "a first-use skill transcript can avoid command/process/rubric leakage, use an everyday prompt, end with a mini mirror, and run the real practice artifact loop"
+    },
+    {
+      "id": "GATE-20",
+      "label": "Adaptive generated scene variants",
+      "status": "Pass",
+      "evidence": "#166, adaptive-scene-variants-smoke, generated-scene-artifact-smoke, codex-operated-practice-flow-smoke",
+      "claim": "clarification, repair, and soft-disagreement targets produce distinct scene variants while preserving backlog evidence links and claim boundaries"
     }
   ],
   "board": [
@@ -2197,6 +2216,18 @@
             "scripts/skill-conversation-simulation-smoke.mjs",
             "docs/phase-11-evidence/AIOS-6-skill-conversation-simulation.md"
           ]
+        },
+        {
+          "id": "AIOS-7",
+          "title": "Adaptive scene variants를 추가함",
+          "why": "매일 같은 scene이면 흥미가 떨어진다. 하지만 다양성이 Speaking Skill OS evidence를 깨면 안 된다.",
+          "done": "scene state에 skill/date 기반 variant metadata를 추가하고, clarification/repair/soft-disagreement variant가 다른 setting/cue style을 갖도록 했다.",
+          "verification": "`node scripts/adaptive-scene-variants-smoke.mjs`가 세 skill variant, evidence link, claim guard를 검증했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/adaptive-scene-variants-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-7-adaptive-scene-variants.md"
+          ]
         }
       ]
     },
@@ -2207,12 +2238,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-6 PR 검증과 병합",
-          "why": "skill-level conversation simulation은 구현됐지만 main 기준으로 남기려면 smoke와 PR-first merge가 필요하다.",
-          "done": "skill simulation smoke, practice/scene/product/ops/readme/scaffold smoke, diff check를 실행한다.",
-          "verification": "PR #164 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
+          "title": "AIOS-7 PR 검증과 병합",
+          "why": "adaptive scene variants는 구현됐지만 main 기준으로 남기려면 smoke와 PR-first merge가 필요하다.",
+          "done": "variant/scene/practice/skill/product/ops/readme/scaffold smoke와 diff check를 실행한다.",
+          "verification": "PR #166 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
           "files": [
-            "scripts/skill-conversation-simulation-smoke.mjs",
+            "scripts/adaptive-scene-variants-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -2224,25 +2255,25 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "AIOS-GENAI-VARIANTS",
-          "title": "생성형 artifact variants 확장",
-          "why": "일일 scene 한 종류만으로는 매일 들어오고 싶어지는 다양성이 부족하다.",
-          "done": "learner state에 따라 cafe, office, travel, repair, disagreement 등 scene variants를 생성하되 모두 Speaking Skill OS evidence와 연결한다.",
-          "verification": "variant smoke가 text-first fallback, claim guard, report/cockpit linkage를 검증해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/phase-11-evidence/"
-          ]
-        },
-        {
           "id": "AIOS-REAL-PILOT-RECHECK",
           "title": "실제 owner/self pilot gap 재점검",
-          "why": "fixture가 늘어도 실제 사용 경험 검증은 아직 약하다.",
-          "done": "M9의 남은 #137/#139와 현재 AIOS surface를 비교해 실제 owner/self pilot을 다시 정렬한다.",
+          "why": "fixture와 product surface가 늘어도 실제 사용 경험 검증은 아직 약하다.",
+          "done": "M9의 남은 #137/#139와 현재 AIOS surface를 비교해 실제 owner/self pilot readiness를 다시 정렬한다.",
           "verification": "pilot readiness smoke와 current product surface evidence가 일치해야 한다.",
           "files": [
             "docs/phase-9-evidence/",
             "scripts/phase9-owner-pilot-smoke.mjs"
+          ]
+        },
+        {
+          "id": "AIOS-CONVERSATION-VARIANTS",
+          "title": "대화 simulation variants 확장",
+          "why": "하나의 usual-place transcript만으로는 다양한 학습자 첫 경험을 충분히 검증하지 못한다.",
+          "done": "daily, cafe, office, repair, disagreement transcript fixtures를 추가하고 command leakage/mini mirror/practice artifact linkage를 검증한다.",
+          "verification": "multi-transcript skill simulation smoke가 통과해야 한다.",
+          "files": [
+            "skills/",
+            "scripts/"
           ]
         }
       ]
@@ -2753,6 +2784,11 @@
       "name": "AIOS-6 skill-level learner conversation simulation",
       "status": "Pass",
       "detail": "skill-conversation-simulation smoke validates skill contracts, everyday first prompt, mini mirror transcript, no command/process/rubric/unsupported-claim leakage, and real practice artifact generation."
+    },
+    {
+      "name": "AIOS-7 adaptive scene variants",
+      "status": "Pass",
+      "detail": "adaptive-scene-variants smoke validates distinct clarification/repair/soft-disagreement variants, preserved Speaking Skill OS evidence links, rendered variant HTML, and blocked unsupported claims."
     }
   ],
   "commands": [
@@ -3079,6 +3115,14 @@
     {
       "label": "View AIOS-6 issue",
       "command": "gh issue view 164"
+    },
+    {
+      "label": "Run adaptive scene variants smoke",
+      "command": "node scripts/adaptive-scene-variants-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-7 issue",
+      "command": "gh issue view 166"
     }
   ]
 }
@@ -3087,12 +3131,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">English Learning Harness now has a learner-facing skill-level transcript fixture that verifies first practice starts from an everyday scene, avoids command/process leakage, ends with a mini mirror, and still runs the real Codex-operated practice artifact loop.</p>
+        <p class="summary">English Learning Harness now has learner-facing adaptive scene variants that change setting and cue style by Speaking Skill OS target while preserving evidence links, transfer tests, reports, and cockpit surfaces.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
         AI-native Learning OS in progress<br>
-        AIOS-6 skill-level learner conversation simulation is implemented for #164 and ready for PR verification.
+        AIOS-7 adaptive scene variants are implemented for #166 and ready for PR verification.
       </div>
     </header>
 
@@ -3101,27 +3145,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">Active</div>
-          <p>full AI-native English Learning OS remains open; AIOS-1 through AIOS-6 are implemented slices, not final product completion</p>
+          <p>full AI-native English Learning OS remains open; AIOS-1 through AIOS-7 are implemented slices, not final product completion</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">AIOS-6 ready</div>
-          <p>skill transcript fixture verifies everyday prompt, mini mirror, no process leakage, and real practice artifact generation</p>
+          <div class="metric-value">AIOS-7 ready</div>
+          <p>adaptive scene variants change setting/cue style by Speaking Skill OS target while preserving evidence linkage</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next goal</div>
-          <div class="metric-value">Generated variants</div>
-          <p>broaden daily scene variants and conversation simulations while preserving evidence linkage</p>
+          <div class="metric-value">Pilot gap closure</div>
+          <p>reconcile remaining M9 owner/self pilot report readiness with the current AIOS product surface</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">#164 in progress</div>
-          <p>AIOS-6 is the current PR-sized issue; larger ultragoal remains intentionally unclosed</p>
+          <div class="metric-value">#166 in progress</div>
+          <p>AIOS-7 is the current PR-sized issue; larger ultragoal remains intentionally unclosed</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
-          <div class="metric-value">Learner conversation gate</div>
-          <p>the harness now tests the skill-facing transcript, not only engine commands and generated files</p>
+          <div class="metric-value">Adaptive scene variety</div>
+          <p>generated artifacts now vary by target skill instead of repeating one generic scene surface</p>
         </article>
     </section>
 
@@ -3149,22 +3193,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/skill-conversation-simulation-smoke.mjs, docs/ops/project-state.json</span>
+                <span>scripts/adaptive-scene-variants-smoke.mjs, docs/ops/project-state.json</span>
               </div>
-              <h3>AIOS-6 PR 검증과 병합</h3>
-              <div class="card-row"><b>왜</b><p>skill-level conversation simulation은 구현됐지만 main 기준으로 남기려면 smoke와 PR-first merge가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>skill simulation smoke, practice/scene/product/ops/readme/scaffold smoke, diff check를 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>PR #164 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>AIOS-GENAI-VARIANTS</strong>
-                <span>scripts/lib/english-learning-store.mjs, docs/phase-11-evidence/</span>
-              </div>
-              <h3>생성형 artifact variants 확장</h3>
-              <div class="card-row"><b>왜</b><p>일일 scene 한 종류만으로는 매일 들어오고 싶어지는 다양성이 부족하다.</p></div>
-              <div class="card-row"><b>완료</b><p>learner state에 따라 cafe, office, travel, repair, disagreement 등 scene variants를 생성하되 모두 Speaking Skill OS evidence와 연결한다.</p></div>
-              <div class="card-row"><b>검증</b><p>variant smoke가 text-first fallback, claim guard, report/cockpit linkage를 검증해야 한다.</p></div>
+              <h3>AIOS-7 PR 검증과 병합</h3>
+              <div class="card-row"><b>왜</b><p>adaptive scene variants는 구현됐지만 main 기준으로 남기려면 smoke와 PR-first merge가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>variant/scene/practice/skill/product/ops/readme/scaffold smoke와 diff check를 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>PR #166 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3172,9 +3206,19 @@
                 <span>docs/phase-9-evidence/, scripts/phase9-owner-pilot-smoke.mjs</span>
               </div>
               <h3>실제 owner/self pilot gap 재점검</h3>
-              <div class="card-row"><b>왜</b><p>fixture가 늘어도 실제 사용 경험 검증은 아직 약하다.</p></div>
-              <div class="card-row"><b>완료</b><p>M9의 남은 #137/#139와 현재 AIOS surface를 비교해 실제 owner/self pilot을 다시 정렬한다.</p></div>
+              <div class="card-row"><b>왜</b><p>fixture와 product surface가 늘어도 실제 사용 경험 검증은 아직 약하다.</p></div>
+              <div class="card-row"><b>완료</b><p>M9의 남은 #137/#139와 현재 AIOS surface를 비교해 실제 owner/self pilot readiness를 다시 정렬한다.</p></div>
               <div class="card-row"><b>검증</b><p>pilot readiness smoke와 current product surface evidence가 일치해야 한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-CONVERSATION-VARIANTS</strong>
+                <span>skills/, scripts/</span>
+              </div>
+              <h3>대화 simulation variants 확장</h3>
+              <div class="card-row"><b>왜</b><p>하나의 usual-place transcript만으로는 다양한 학습자 첫 경험을 충분히 검증하지 못한다.</p></div>
+              <div class="card-row"><b>완료</b><p>daily, cafe, office, repair, disagreement transcript fixtures를 추가하고 command leakage/mini mirror/practice artifact linkage를 검증한다.</p></div>
+              <div class="card-row"><b>검증</b><p>multi-transcript skill simulation smoke가 통과해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -3185,16 +3229,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>AIOS-1</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/personal-learner-cockpit-smoke.mjs, docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md, docs/ISSUE-INDEX.md, README.md</span>
-              </div>
-              <h3>#154 개인 learner cockpit runtime 구현</h3>
-              <div class="card-row"><b>왜</b><p>repo-level preview만으로는 학습자가 매일 들어오는 제품 표면이 아니다. 실제 learner root의 evidence와 next action을 한 화면에 연결해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`cockpit` command가 learner-root `cockpit-state.json`과 `cockpit.html`을 생성하고 daily mission, Speaking Skill OS, due review, text/voice/image interaction evidence, 7일/30일 journey window를 연결한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/personal-learner-cockpit-smoke.mjs`가 fixture learner에서 diagnosis, text/voice/image sessions, weekly mirror, cockpit render, product-surface leak guard를 검증한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-2</strong>
@@ -3244,6 +3278,16 @@
               <div class="card-row"><b>왜</b><p>엔진이 좋아져도 첫 학습 대화가 명령어/프로젝트 설명처럼 보이면 제품 목표가 깨진다. skill transcript 자체를 검증하는 gate가 필요했다.</p></div>
               <div class="card-row"><b>완료</b><p>daily-session skill에 transcript guardrail을 추가하고, simulated learner transcript가 everyday prompt, learner answer, mini mirror, practice artifact generation을 통과하는 smoke를 만들었다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/skill-conversation-simulation-smoke.mjs`가 통과했고, 실제 `practice` 엔진으로 mission/scene/session/report/cockpit을 생성했다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-7</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/adaptive-scene-variants-smoke.mjs, docs/phase-11-evidence/AIOS-7-adaptive-scene-variants.md</span>
+              </div>
+              <h3>Adaptive scene variants를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>매일 같은 scene이면 흥미가 떨어진다. 하지만 다양성이 Speaking Skill OS evidence를 깨면 안 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>scene state에 skill/date 기반 variant metadata를 추가하고, clarification/repair/soft-disagreement variant가 다른 setting/cue style을 갖도록 했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/adaptive-scene-variants-smoke.mjs`가 세 skill variant, evidence link, claim guard를 검증했다.</p></div>
             </article>
         </div>
       </section>
@@ -3385,6 +3429,11 @@
               <td><strong>GATE-19</strong><span>Skill-level learner conversation simulation</span></td>
               <td><strong>Pass</strong><span>#164, skill-conversation-simulation-smoke, codex-operated-practice-flow-smoke</span></td>
               <td>a first-use skill transcript can avoid command/process/rubric leakage, use an everyday prompt, end with a mini mirror, and run the real practice artifact loop</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-20</strong><span>Adaptive generated scene variants</span></td>
+              <td><strong>Pass</strong><span>#166, adaptive-scene-variants-smoke, generated-scene-artifact-smoke, codex-operated-practice-flow-smoke</span></td>
+              <td>clarification, repair, and soft-disagreement targets produce distinct scene variants while preserving backlog evidence links and claim boundaries</td>
             </tr>
         </tbody>
       </table>
@@ -3623,6 +3672,14 @@
               <strong>scripts/skill-conversation-simulation-smoke.mjs</strong>
               <span>skill-level learner conversation simulation smoke</span>
             </a>
+            <a class="link-card source" href="../phase-11-evidence/AIOS-7-adaptive-scene-variants.md">
+              <strong>docs/phase-11-evidence/AIOS-7-adaptive-scene-variants.md</strong>
+              <span>AIOS-7 adaptive scene variant evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/adaptive-scene-variants-smoke.mjs">
+              <strong>scripts/adaptive-scene-variants-smoke.mjs</strong>
+              <span>adaptive scene variants smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3630,10 +3687,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M10 closeout gate</td>
-              <td><strong>Pass</strong><span>planning, world-state, validator, parity, fallback, claim guard, dashboard, and milestone review are aligned</span></td>
-            </tr>
             <tr>
               <td>Product/Ops surface split smoke</td>
               <td><strong>Pass</strong><span>product-surface-smoke, ops-dashboard-smoke, M10 closeout gate, phase1 scaffold smoke, and git diff --check passed.</span></td>
@@ -3662,14 +3715,14 @@
               <td>AIOS-6 skill-level learner conversation simulation</td>
               <td><strong>Pass</strong><span>skill-conversation-simulation smoke validates skill contracts, everyday first prompt, mini mirror transcript, no command/process/rubric/unsupported-claim leakage, and real practice artifact generation.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-7 adaptive scene variants</td>
+              <td><strong>Pass</strong><span>adaptive-scene-variants smoke validates distinct clarification/repair/soft-disagreement variants, preserved Speaking Skill OS evidence links, rendered variant HTML, and blocked unsupported claims.</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>Regenerate engineering dashboard</span>
-              <code>node scripts/generate-dashboard.mjs</code>
-            </div>
             <div class="command">
               <span>Run ops dashboard smoke</span>
               <code>node scripts/ops-dashboard-smoke.mjs</code>
@@ -3698,6 +3751,10 @@
               <span>View AIOS-6 issue</span>
               <code>gh issue view 164</code>
             </div>
+            <div class="command">
+              <span>View AIOS-7 issue</span>
+              <code>gh issue view 166</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3706,7 +3763,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 92개 보기</summary>
+        <summary>완료 이력 93개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4629,10 +4686,20 @@
               <div class="card-row"><b>완료</b><p>docs/product 아래 learner cockpit SSOT/HTML을 만들고, docs/ops 아래 engineering dashboard SSOT/HTML을 분리했다. docs/dashboard.html은 legacy redirect로 축소했다.</p></div>
               <div class="card-row"><b>검증</b><p>node scripts/product-surface-smoke.mjs, node scripts/ops-dashboard-smoke.mjs, node scripts/phase10-narrative-mission-gate-smoke.mjs, node scripts/phase1-scaffold-smoke.mjs, git diff --check.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-1</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/personal-learner-cockpit-smoke.mjs, docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md, docs/ISSUE-INDEX.md, README.md</span>
+              </div>
+              <h3>#154 개인 learner cockpit runtime 구현</h3>
+              <div class="card-row"><b>왜</b><p>repo-level preview만으로는 학습자가 매일 들어오는 제품 표면이 아니다. 실제 learner root의 evidence와 next action을 한 화면에 연결해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`cockpit` command가 learner-root `cockpit-state.json`과 `cockpit.html`을 생성하고 daily mission, Speaking Skill OS, due review, text/voice/image interaction evidence, 7일/30일 journey window를 연결한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/personal-learner-cockpit-smoke.mjs`가 fixture learner에서 diagnosis, text/voice/image sessions, weekly mirror, cockpit render, product-surface leak guard를 검증한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 89개 보기</summary>
+        <summary>전체 검증 90개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -4993,12 +5060,16 @@
               <td>AIOS-6 skill-level learner conversation simulation</td>
               <td><strong>Pass</strong><span>skill-conversation-simulation smoke validates skill contracts, everyday first prompt, mini mirror transcript, no command/process/rubric/unsupported-claim leakage, and real practice artifact generation.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-7 adaptive scene variants</td>
+              <td><strong>Pass</strong><span>adaptive-scene-variants smoke validates distinct clarification/repair/soft-disagreement variants, preserved Speaking Skill OS evidence links, rendered variant HTML, and blocked unsupported claims.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 81개 보기</summary>
+        <summary>전체 명령 83개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5324,6 +5395,14 @@
             <div class="command">
               <span>View AIOS-6 issue</span>
               <code>gh issue view 164</code>
+            </div>
+            <div class="command">
+              <span>Run adaptive scene variants smoke</span>
+              <code>node scripts/adaptive-scene-variants-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-7 issue</span>
+              <code>gh issue view 166</code>
             </div>
         </div>
       </details>

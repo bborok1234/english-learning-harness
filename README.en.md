@@ -41,6 +41,7 @@ Codex should install the skill surface, handle setup, run practice, save local p
 - generates mini mirrors and weekly mirrors
 - generates interactive daily mission HTML with text, voice-transcript, and image information-gap practice modes
 - generates scene/timeline artifacts that turn the daily mission into speaking cues, repair, and transfer checkpoints
+- adapts scene settings and cue style to the current Speaking Skill OS target
 - generates 7-day/30-day learner reports that connect sessions, saved phrases, speaking backlog, and next focus
 
 ## Learning Basis
