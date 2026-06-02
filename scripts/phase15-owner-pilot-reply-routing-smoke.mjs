@@ -74,6 +74,9 @@ function main() {
   assert(existsSync(firstBaseline.nextCardArtifact.htmlPath), "baseline reply next-card HTML missing");
   assert(firstBaseline.nextCardArtifact.nextCard.phase === "baseline", "first reply next card should stay in baseline phase");
   assert(firstBaseline.nextCardArtifact.nextCard.title === "잠깐, 무슨 뜻이야?", "first reply should advance to second baseline card");
+  assert(firstBaseline.learnerFacing?.saved === true, "baseline reply should include learner-facing saved summary");
+  assert(firstBaseline.learnerFacing.nextCard.title === "잠깐, 무슨 뜻이야?", "baseline learner-facing summary should include next card");
+  assert(!("recast" in firstBaseline.learnerFacing), "baseline learner-facing summary should not invent coaching");
   assertNoLearnerCommandLeak(firstBaseline.cockpit.htmlPath);
   assertNoLearnerCommandLeak(firstBaseline.nextCardArtifact.htmlPath);
 
@@ -129,6 +132,14 @@ function main() {
   assert(dayOne.result.result.day.pilot_mission?.target_skill === "clarification", "daily reply should preserve pilot mission metadata");
   assert(dayOne.result.result.day.learner_coaching?.next_phrase, "daily reply should preserve learner coaching metadata");
   assert(dayOne.nextCardArtifact?.nextCard.day === 2, "day 1 reply should refresh next card to day 2");
+  assert(dayOne.learnerFacing?.saved === true, "daily reply should include learner-facing saved summary");
+  assert(dayOne.learnerFacing.phase === "day", "daily learner-facing summary phase mismatch");
+  assert(dayOne.learnerFacing.day === 1, "daily learner-facing summary day mismatch");
+  assert(dayOne.learnerFacing.recast, "daily learner-facing summary should expose recast");
+  assert(dayOne.learnerFacing.nextPhrase, "daily learner-facing summary should expose next phrase");
+  assert(dayOne.learnerFacing.nextFocus, "daily learner-facing summary should expose next focus");
+  assert(dayOne.learnerFacing.nextCard.day === 2, "daily learner-facing summary should expose next card");
+  assert(!JSON.stringify(dayOne.learnerFacing).includes("pilot-capture"), "learner-facing summary leaked command text");
   assertNoLearnerCommandLeak(dayOne.cockpit.htmlPath);
   assertNoLearnerCommandLeak(dayOne.nextCardArtifact.htmlPath);
 
@@ -174,6 +185,8 @@ function main() {
   assert(finalOne.summary.partial.finalAnswers === 1, "summary should expose one captured final answer");
   assert(finalOne.nextCardArtifact?.nextCard.phase === "final", "first final reply should refresh next final card");
   assert(finalOne.nextCardArtifact.nextCard.title === "잠깐, 무슨 뜻이야?", "first final reply should advance to second final card");
+  assert(finalOne.learnerFacing?.phase === "final", "final learner-facing summary phase mismatch");
+  assert(finalOne.learnerFacing.nextCard.title === "잠깐, 무슨 뜻이야?", "final learner-facing summary should expose next final card");
   assertNoLearnerCommandLeak(finalOne.cockpit.htmlPath);
   assertNoLearnerCommandLeak(finalOne.nextCardArtifact.htmlPath);
 

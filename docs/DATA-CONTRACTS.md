@@ -624,11 +624,27 @@ The cockpit refresh is a product-surface convenience contract. It is not evidenc
       "title": "learner-facing next card title"
     }
   },
+  "learnerFacing": {
+    "saved": true,
+    "phase": "day",
+    "day": 1,
+    "communicated": "learner-facing summary of what was understood",
+    "recast": "short improved sentence",
+    "nextPhrase": "phrase to reuse next",
+    "nextFocus": "next learner-facing focus",
+    "artifactHint": "which local product surfaces were refreshed",
+    "nextCard": {
+      "title": "learner-facing next card title",
+      "ask": "next learner-facing prompt",
+      "example": "short example"
+    },
+    "learnerRule": "방금 답변은 저장됐습니다. 다음에도 영어 한 문장만 답하면 됩니다."
+  },
   "claimBoundary": "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion."
 }
 ```
 
-The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale. It is not a learner-facing command and must not appear in generated learner HTML.
+The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale. For daily replies, `learnerFacing` must expose only learner-safe coaching and next-card content; it must not expose command names, issue labels, or audit internals. It is not a learner-facing command and must not appear in generated learner HTML.
 
 `pilot-next --json` writes the current learner-facing pilot card:
 

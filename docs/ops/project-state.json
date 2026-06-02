@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 pilot reply-to-next-card loop implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 pilot reply-to-coaching loop implemented; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh and learner-safe reply summary, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can route the next answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, and keep each pilot day's sampled speaking action, coaching, generated artifacts, and product-surface links without exposing private transcripts publicly.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can route the next answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, and keep each pilot day's sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh and learner-safe summary, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -559,7 +559,7 @@
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "automatic pilot reply routing, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "automatic pilot reply routing with learner-safe summary, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -845,7 +845,7 @@
       "label": "Automatic pilot reply routing",
       "status": "Pass",
       "evidence": "pilot-reply command, phase15-owner-pilot-reply-routing-smoke, phase15-owner-pilot-skill-smoke",
-      "claim": "Codex can route the learner's current pilot answer to the next baseline, daily, or final slot and refresh the next learner-facing card without asking the learner for phase, card id, or day number; real pilot completion remains unclaimed"
+      "claim": "Codex can route the learner's current pilot answer to the next baseline, daily, or final slot, refresh the next learner-facing card, and return learner-safe saved/coaching summary fields without asking the learner for phase, card id, or day number; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -955,8 +955,8 @@
           "id": "AIOS-12-PILOT-REPLY-ROUTING",
           "title": "AIOS-12 automatic pilot reply routing 통과",
           "why": "사용자가 영어 답변을 했을 때 baseline인지 day인지 final인지 물어보는 순간 제품 표면이 깨진다. Codex가 현재 pilot 상태를 읽고 내부 저장 위치를 결정해야 한다.",
-          "done": "pilot-reply가 현재 next action을 읽어 pilot-capture에 위임하고, baseline/day/final 답변을 자동 라우팅한 뒤 다음 pilot-next-card artifact를 갱신한다.",
-          "verification": "phase15 owner pilot reply routing smoke validates baseline, daily, and final routing through cockpit-refreshing capture, next-card refresh, and no learner-facing command-token leakage.",
+          "done": "pilot-reply가 현재 next action을 읽어 pilot-capture에 위임하고, baseline/day/final 답변을 자동 라우팅한 뒤 다음 pilot-next-card artifact와 learnerFacing 요약을 반환한다.",
+          "verification": "phase15 owner pilot reply routing smoke validates baseline, daily, and final routing through cockpit-refreshing capture, next-card refresh, learner-facing saved/coaching fields, and no learner-facing command-token leakage.",
           "files": [
             "scripts/english-learning-harness.mjs",
             "scripts/phase15-owner-pilot-reply-routing-smoke.mjs",
@@ -2990,7 +2990,7 @@
     {
       "name": "AIOS-12 automatic pilot reply routing",
       "status": "Pass",
-      "detail": "phase15-owner-pilot-reply-routing smoke validates pilot-reply routes the next learner answer to baseline, daily day, and final card through pilot-capture while preserving cockpit refresh, regenerating the next pilot card, and avoiding learner-facing command-token leakage."
+      "detail": "phase15-owner-pilot-reply-routing smoke validates pilot-reply routes the next learner answer to baseline, daily day, and final card through pilot-capture while preserving cockpit refresh, regenerating the next pilot card, returning learner-safe summary fields, and avoiding learner-facing command-token leakage."
     }
   ],
   "commands": [
