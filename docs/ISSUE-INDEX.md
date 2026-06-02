@@ -615,6 +615,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #198 | AIOS-12: Add learner-ready pilot next prompt | continue |
 | #200 | AIOS-12: Show learner-ready prompt in pilot next-card HTML | continue |
 | #202 | AIOS-12: Add quick reply choices to pilot next card | continue |
+| #204 | AIOS-12: Save pilot replies from quick reply selection | continue |
 
 #179 planned evidence should show:
 
@@ -636,6 +637,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-next-card.html` now renders the same learner-ready prompt section so the local HTML card and Codex conversation prompt stay aligned.
 - `pilot-next` now returns quick reply choices and renders them in `pilot-next-card.html` so blocked learners can copy or lightly edit one sentence.
 - `scripts/phase15-owner-pilot-next-card-smoke.mjs` verifies baseline/day card generation, learner-ready assistant prompt, quick replies, rendered prompt and quick-reply sections, cockpit linkage, progress advance, learner-facing privacy copy, and no internal command leakage.
+- `pilot-reply --quick-reply` now resolves the selected current quick reply and saves its English sentence through the existing capture path.
+- `scripts/phase15-owner-pilot-reply-routing-smoke.mjs` verifies invalid quick-reply selections fail before saving, `quick-1` persists Day 1 clarification, and numeric selection persists Day 2 repair.
 - The first five daily pilot missions now cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating the same prompt.
 - `scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs` verifies the first five fixture pilot days expose distinct learner-facing speaking actions and become ready for final sample after five days.
 - `pilot-day`/`pilot-finish` now preserve per-day `pilot_mission` metadata so final reports and product journey audit can see which speaking action was sampled.

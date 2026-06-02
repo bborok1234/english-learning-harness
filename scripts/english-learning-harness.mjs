@@ -71,6 +71,9 @@ function parseArgs(argv) {
     } else if (arg === "--say" || arg === "--input") {
       options.input.push(argv[index + 1] ?? "");
       index += 1;
+    } else if (arg === "--quick-reply") {
+      options.quickReply = argv[index + 1];
+      index += 1;
     } else if (arg === "--transcript") {
       options.transcript = argv[index + 1];
       index += 1;
@@ -185,7 +188,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
-    "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-day [--day 1-7] [--say TEXT ...] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-finish [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
@@ -1260,14 +1263,40 @@ function pilotReplyCardArtifact({ paths, date, routedTo, learnerFacing, nextCard
   };
 }
 
+function resolvePilotReplyAnswer(options, nextCardArtifact) {
+  const explicitAnswer = transcriptInputs(options).filter(Boolean)[0] || "";
+  if (explicitAnswer && !options.quickReply) return { answer: explicitAnswer, quickReply: null };
+  if (!options.quickReply) return { answer: explicitAnswer, quickReply: null };
+
+  const selection = String(options.quickReply).trim();
+  const quickReplies = nextCardArtifact.quickReplies ?? [];
+  const selected =
+    quickReplies.find((reply) => reply.id === selection) ??
+    (Number.isInteger(Number(selection))
+      ? quickReplies[Number(selection) - 1]
+      : quickReplies.find((reply) => reply.text === selection));
+  if (!selected) {
+    throw new Error(`Unknown --quick-reply selection: ${selection}`);
+  }
+  return {
+    answer: selected.text,
+    quickReply: {
+      selected: selection,
+      id: selected.id,
+      text: selected.text,
+    },
+  };
+}
+
 function pilotReply(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
   const state = readPilotState(paths, date);
   const nextAction = pilotNextAction(state);
-  const answer = transcriptInputs(options).filter(Boolean)[0] || "";
+  const currentCardArtifact = pilotNext({ learnerRoot: paths.root, date });
+  const { answer, quickReply } = resolvePilotReplyAnswer(options, currentCardArtifact);
   if (!answer) {
-    throw new Error("pilot-reply requires one --say answer.");
+    throw new Error("pilot-reply requires one --say answer or --quick-reply selection.");
   }
   if (nextAction.command === "pilot-complete") {
     throw new Error("pilot-reply cannot save an answer because the pilot is already complete.");
@@ -1315,6 +1344,7 @@ function pilotReply(options) {
     status: "pass",
     action: "pilot-reply",
     routedTo,
+    quickReply,
     result,
     summary: result.summary,
     cockpit: result.cockpit,

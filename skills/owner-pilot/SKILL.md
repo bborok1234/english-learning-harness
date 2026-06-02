@@ -36,12 +36,18 @@ node scripts/english-learning-harness.mjs pilot-next --json
 ```
 
 This refreshes the learner cockpit and writes a local `artifacts/pilot/pilot-next-card.html` card. Use it as a product-surface aid, but do not ask the learner to run the command.
-Prefer the returned `assistantPrompt.text` as the exact learner-facing prompt. It is Korean-first, asks for one English sentence, and avoids command/issue/audit language.
+Prefer the returned `assistantPrompt.text` as the exact learner-facing prompt. It is Korean-first, asks for one English sentence, and avoids command/issue/audit language. If the learner chooses one of `quickReplies`, save it internally with `pilot-reply --quick-reply "<id-or-number>" --json` rather than asking them to retype the full sentence.
 
 After the learner answers the current card, prefer the automatic reply router internally:
 
 ```bash
 node scripts/english-learning-harness.mjs pilot-reply --say "<learner answer>" --json
+```
+
+If the learner picks a quick reply, use:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-reply --quick-reply "1" --json
 ```
 
 If the answer belongs to a daily pilot card and the learner mentioned a friction point, add `--friction-note "<short note>"`. The router reads current pilot state and saves the answer to the next baseline, daily, or final card. Do not ask the learner to choose a phase, card id, or day number.

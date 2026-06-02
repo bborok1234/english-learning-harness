@@ -31,6 +31,23 @@ function runJson(args) {
   );
 }
 
+function runExpectFail(args) {
+  try {
+    execFileSync(process.execPath, args, {
+      cwd: repoRoot,
+      env: {
+        ...process.env,
+        ENGLISH_LEARNING_HOME: learnerRoot,
+      },
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+  } catch (error) {
+    return error;
+  }
+  throw new Error(`Expected command to fail: ${args.join(" ")}`);
+}
+
 function read(path) {
   return readFileSync(path, "utf8");
 }
@@ -129,15 +146,28 @@ function main() {
   ]);
   assert(nextCard.nextCard.phase === "day", "after baseline next card should be daily");
   assert(nextCard.nextCard.day === 1, "after baseline next card should be day 1");
+  assert(nextCard.quickReplies.some((reply) => reply.id === "quick-1"), "day 1 next card should expose quick replies");
   assertNoLearnerCommandLeak(nextCard.htmlPath);
+
+  const invalidQuickReply = runExpectFail([
+    "scripts/english-learning-harness.mjs",
+    "pilot-reply",
+    "--date",
+    isoDay(1),
+    "--quick-reply",
+    "99",
+    "--json",
+  ]);
+  assert(invalidQuickReply.message.includes("Unknown --quick-reply selection"), "invalid quick reply should fail clearly");
+  assert(readState().days.length === 0, "invalid quick reply should not save a pilot day");
 
   const dayOne = runJson([
     "scripts/english-learning-harness.mjs",
     "pilot-reply",
     "--date",
     isoDay(1),
-    "--say",
-    "Which place do you mean before I choose the subway exit?",
+    "--quick-reply",
+    "quick-1",
     "--friction-note",
     "Automatic reply routing kept the learner out of command details.",
     "--json",
@@ -147,6 +177,8 @@ function main() {
   assert(dayOne.result.committed === true, "daily reply should commit through pilot-day");
   assert(dayOne.result.result.day.pilot_mission?.target_skill === "clarification", "daily reply should preserve pilot mission metadata");
   assert(dayOne.result.result.day.learner_coaching?.next_phrase, "daily reply should preserve learner coaching metadata");
+  assert(dayOne.result.result.day.learner_coaching.communicated.includes("Which place do you mean?"), "daily quick reply should persist selected answer text");
+  assert(dayOne.quickReply.id === "quick-1", "daily reply should report selected quick reply");
   assert(dayOne.nextCardArtifact?.nextCard.day === 2, "day 1 reply should refresh next card to day 2");
   assert(dayOne.learnerFacing?.saved === true, "daily reply should include learner-facing saved summary");
   assert(dayOne.learnerFacing.phase === "day", "daily learner-facing summary phase mismatch");
@@ -174,8 +206,7 @@ function main() {
       "pilot-reply",
       "--date",
       isoDay(day),
-      "--say",
-      answer,
+      ...(day === 2 ? ["--quick-reply", "1"] : ["--say", answer]),
       "--friction-note",
       `fixture friction day ${day}`,
       "--json",
@@ -183,6 +214,10 @@ function main() {
     assert(reply.routedTo.phase === "day", `day ${day} should route to day phase`);
     assert(reply.routedTo.day === day, `day ${day} route mismatch`);
     assert(reply.result.committed === true, `day ${day} should commit`);
+    if (day === 2) {
+      assert(reply.quickReply.id === "quick-1", "numeric quick reply should select first option");
+      assert(reply.result.result.day.learner_coaching.communicated.includes("Sorry, I meant iced latte, not hot latte."), "numeric quick reply should persist selected repair answer");
+    }
     dayFive = reply;
   }
   assert(dayFive?.nextCardArtifact?.nextCard.phase === "final", "day 5 reply should refresh next card to final phase");
