@@ -405,11 +405,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-10 mission asset deck ready for PR verification",
-    "status": "AIOS-10 turns the AIOS-9 asset contract into learner-root mission asset deck JSON/HTML and links it from practice, learner report, and cockpit.",
+    "stage": "AIOS-10 merged; AIOS-11 adaptive asset journey queued",
+    "status": "AIOS-10 is merged on main and #174 is closed. AIOS-11 (#176) is open under M14 to adapt asset deck priorities from learner evidence.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing mission surface now includes an operable asset deck. Text-first remains canonical, optional generated assets are visible, and mission completion still requires learner output saved as session evidence.",
-    "nextGoal": "Verify, PR, and merge AIOS-10; then decide between real owner/self pilot or deeper rich asset runtime generation.",
+    "summary": "The learner-facing mission asset deck is now generated and linked. The next slice is to adapt which deck asset should come next based on Speaking Skill OS and recent learner evidence.",
+    "nextGoal": "Start AIOS-11: rank mission asset deck actions from learner evidence and surface the next asset action in cockpit.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate local learner-operable mission asset decks from the multimodal asset contract and link them into report/cockpit surfaces.",
+    "allowedClaim": "The harness has local learner-operable mission asset decks and a queued path for adaptive asset sequencing.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local asset deck generation and linkage mechanics only; realtime voice, generated-media efficacy, engagement, retention, and learning outcomes remain unclaimed."
+    "claimBoundary": "AIOS-11 is planned, not implemented. Realtime voice, generated-media efficacy, engagement, retention, and learning outcomes remain unclaimed."
   },
   "ssot": [
     {
@@ -841,32 +841,32 @@
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-10 is a product-surface slice",
+      "detail": "full AI-native English Learning OS remains open; AIOS-10 merged and AIOS-11 is queued",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-10 ready",
-      "detail": "asset contract is now rendered as learner-root JSON/HTML deck and linked from report/cockpit",
+      "value": "AIOS-10 merged",
+      "detail": "mission asset decks are on main with #174 closed",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "PR + pilot/runtime",
-      "detail": "merge #174, then use the deck in real owner/self pilot or deeper rich asset runtime work",
+      "value": "AIOS-11",
+      "detail": "adaptive asset journey under #176 / M14",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#174 in progress",
-      "detail": "M13 Rich Generated Asset Runtime is the current PR-sized issue",
+      "value": "#176 open",
+      "detail": "M14 Adaptive Asset Journey is the next tracked slice",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Learner-operable assets",
-      "detail": "generated multimodal assets are a visible deck but cannot claim completion without learner evidence",
-      "tone": "green"
+      "value": "Adaptive asset sequencing",
+      "detail": "next work ranks generated assets by learner evidence instead of showing a static deck",
+      "tone": "amber"
     }
   ],
   "gates": [
@@ -2390,12 +2390,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-10 PR 검증과 병합",
-          "why": "asset deck mechanics는 구현됐지만 main evidence로 남기려면 #174 PR-first closeout이 필요하다.",
-          "done": "asset deck, contract, scene, practice, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
-          "verification": "PR이 #174를 닫고 main에서 핵심 smoke를 재실행해야 한다.",
+          "title": "AIOS-11 adaptive asset priority 시작",
+          "why": "asset deck은 생성됐지만 모든 asset이 정적인 순서로 보이면 학습 OS라기보다 content deck에 머문다.",
+          "done": "Speaking Skill OS target, recent modalities, weak/failed evidence, text-first fallback을 사용해 next asset action을 결정한다.",
+          "verification": "adaptive mission asset priority smoke가 서로 다른 learner evidence state에서 다른 top asset을 검증해야 한다.",
           "files": [
-            "scripts/generated-mission-asset-deck-smoke.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "docs/phase-11-evidence/",
             "docs/ops/project-state.json"
           ]
         }
@@ -2416,17 +2417,6 @@
             "artifacts/pilot/",
             "cockpit.html",
             "artifacts/reports/"
-          ]
-        },
-        {
-          "id": "ADAPTIVE-DECK-SEQUENCING",
-          "title": "asset deck sequencing을 adaptive journey에 연결",
-          "why": "deck은 생성됐지만 7일/30일 journey 안에서 어떤 asset을 언제 다시 보여줄지 아직 학습 전략으로 닫히지 않았다.",
-          "done": "recent evidence와 Speaking Skill OS 상태에 따라 deck asset priority를 바꾸고 learner cockpit에 다음 asset action을 제안한다.",
-          "verification": "adaptive deck sequencing smoke가 repeated session evidence에 따라 priority가 바뀌는지 검증해야 한다.",
-          "files": [
-            "scripts/lib/english-learning-store.mjs",
-            "docs/phase-11-evidence/"
           ]
         }
       ]
@@ -3337,6 +3327,14 @@
     {
       "label": "View AIOS-10 issue",
       "command": "gh issue view 174"
+    },
+    {
+      "label": "View AIOS-11 issue",
+      "command": "gh issue view 176"
+    },
+    {
+      "label": "Run adaptive mission asset priority smoke",
+      "command": "node scripts/adaptive-mission-asset-priority-smoke.mjs"
     }
   ]
 }
@@ -3345,12 +3343,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing mission surface now includes an operable asset deck. Text-first remains canonical, optional generated assets are visible, and mission completion still requires learner output saved as session evidence.</p>
+        <p class="summary">The learner-facing mission asset deck is now generated and linked. The next slice is to adapt which deck asset should come next based on Speaking Skill OS and recent learner evidence.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-10 mission asset deck ready for PR verification<br>
-        AIOS-10 turns the AIOS-9 asset contract into learner-root mission asset deck JSON/HTML and links it from practice, learner report, and cockpit.
+        AIOS-10 merged; AIOS-11 adaptive asset journey queued<br>
+        AIOS-10 is merged on main and #174 is closed. AIOS-11 (#176) is open under M14 to adapt asset deck priorities from learner evidence.
       </div>
     </header>
 
@@ -3359,27 +3357,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">Active</div>
-          <p>full AI-native English Learning OS remains open; AIOS-10 is a product-surface slice</p>
+          <p>full AI-native English Learning OS remains open; AIOS-10 merged and AIOS-11 is queued</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">AIOS-10 ready</div>
-          <p>asset contract is now rendered as learner-root JSON/HTML deck and linked from report/cockpit</p>
+          <div class="metric-value">AIOS-10 merged</div>
+          <p>mission asset decks are on main with #174 closed</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next goal</div>
-          <div class="metric-value">PR + pilot/runtime</div>
-          <p>merge #174, then use the deck in real owner/self pilot or deeper rich asset runtime work</p>
+          <div class="metric-value">AIOS-11</div>
+          <p>adaptive asset journey under #176 / M14</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">#174 in progress</div>
-          <p>M13 Rich Generated Asset Runtime is the current PR-sized issue</p>
+          <div class="metric-value">#176 open</div>
+          <p>M14 Adaptive Asset Journey is the next tracked slice</p>
         </article>
-        <article class="metric-card tone-green">
+        <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
-          <div class="metric-value">Learner-operable assets</div>
-          <p>generated multimodal assets are a visible deck but cannot claim completion without learner evidence</p>
+          <div class="metric-value">Adaptive asset sequencing</div>
+          <p>next work ranks generated assets by learner evidence instead of showing a static deck</p>
         </article>
     </section>
 
@@ -3400,19 +3398,19 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>3</span>
+          <span>2</span>
         </header>
         <div class="column-cards">
 
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/generated-mission-asset-deck-smoke.mjs, docs/ops/project-state.json</span>
+                <span>scripts/lib/english-learning-store.mjs, docs/phase-11-evidence/, docs/ops/project-state.json</span>
               </div>
-              <h3>AIOS-10 PR 검증과 병합</h3>
-              <div class="card-row"><b>왜</b><p>asset deck mechanics는 구현됐지만 main evidence로 남기려면 #174 PR-first closeout이 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>asset deck, contract, scene, practice, product/ops dashboard, scaffold smoke와 diff check를 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>PR이 #174를 닫고 main에서 핵심 smoke를 재실행해야 한다.</p></div>
+              <h3>AIOS-11 adaptive asset priority 시작</h3>
+              <div class="card-row"><b>왜</b><p>asset deck은 생성됐지만 모든 asset이 정적인 순서로 보이면 학습 OS라기보다 content deck에 머문다.</p></div>
+              <div class="card-row"><b>완료</b><p>Speaking Skill OS target, recent modalities, weak/failed evidence, text-first fallback을 사용해 next asset action을 결정한다.</p></div>
+              <div class="card-row"><b>검증</b><p>adaptive mission asset priority smoke가 서로 다른 learner evidence state에서 다른 top asset을 검증해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3423,16 +3421,6 @@
               <div class="card-row"><b>왜</b><p>fixture readiness는 mechanics proof일 뿐이다. 제품 목표는 실제 사용자가 매일 들어오고 싶고 말하기 증거를 남기는 것이다.</p></div>
               <div class="card-row"><b>완료</b><p>실제 5일 이상 pilot transcript를 local-only로 수집하고, final report/cockpit을 사람이 읽어 마찰과 학습 신호를 판단한다.</p></div>
               <div class="card-row"><b>검증</b><p>real transcript review, friction notes, cockpit journey, unsupported-claim boundary가 함께 남아야 한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>ADAPTIVE-DECK-SEQUENCING</strong>
-                <span>scripts/lib/english-learning-store.mjs, docs/phase-11-evidence/</span>
-              </div>
-              <h3>asset deck sequencing을 adaptive journey에 연결</h3>
-              <div class="card-row"><b>왜</b><p>deck은 생성됐지만 7일/30일 journey 안에서 어떤 asset을 언제 다시 보여줄지 아직 학습 전략으로 닫히지 않았다.</p></div>
-              <div class="card-row"><b>완료</b><p>recent evidence와 Speaking Skill OS 상태에 따라 deck asset priority를 바꾸고 learner cockpit에 다음 asset action을 제안한다.</p></div>
-              <div class="card-row"><b>검증</b><p>adaptive deck sequencing smoke가 repeated session evidence에 따라 priority가 바뀌는지 검증해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -3999,10 +3987,6 @@
         <div class="commands">
 
             <div class="command">
-              <span>View AIOS-5 issue</span>
-              <code>gh issue view 162</code>
-            </div>
-            <div class="command">
               <span>View AIOS-6 issue</span>
               <code>gh issue view 164</code>
             </div>
@@ -4029,6 +4013,10 @@
             <div class="command">
               <span>View AIOS-10 issue</span>
               <code>gh issue view 174</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-11 issue</span>
+              <code>gh issue view 176</code>
             </div>
         </div>
       </aside>
@@ -5414,7 +5402,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 92개 보기</summary>
+        <summary>전체 명령 94개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5784,6 +5772,14 @@
             <div class="command">
               <span>View AIOS-10 issue</span>
               <code>gh issue view 174</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-11 issue</span>
+              <code>gh issue view 176</code>
+            </div>
+            <div class="command">
+              <span>Run adaptive mission asset priority smoke</span>
+              <code>node scripts/adaptive-mission-asset-priority-smoke.mjs</code>
             </div>
         </div>
       </details>

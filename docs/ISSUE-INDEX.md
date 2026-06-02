@@ -512,6 +512,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #169 | AIOS-8: Add first-use conversation variant gate | continue |
 | #171 | AIOS-9: Define multimodal mission asset contract | continue |
 | #174 | AIOS-10: Generate learner-operable mission asset deck | continue |
+| #176 | AIOS-11: Adapt mission asset priorities from learner evidence | continue |
 
 #154 evidence currently shows:
 
@@ -593,3 +594,10 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - The deck completion policy says it cannot complete the mission without learner output saved as session evidence.
 - Learner report and cockpit link the latest mission asset deck.
 - `scripts/generated-mission-asset-deck-smoke.mjs` verifies command path, practice path, report/cockpit linkage, no engineering language leakage, and blocked unsupported claims.
+
+#176 planned evidence should show:
+
+- mission asset deck JSON includes deterministic asset priority and reason fields.
+- different learner evidence states produce different top asset actions.
+- cockpit exposes the next asset action while preserving the latest deck link.
+- completion evidence requirements and blocked claims remain intact.
