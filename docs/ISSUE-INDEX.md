@@ -1,6 +1,6 @@
 # GitHub Issue Index
 
-Last updated: 2026-05-29
+Last updated: 2026-06-02
 Repository: https://github.com/bborok1234/english-learning-harness
 
 ## Operating Rule
@@ -427,3 +427,25 @@ M7 now targets the current source repository as the open-source public distribut
 - The replacement prompt gives a concrete situation, unclear phrase, one-sentence ask, and example answer.
 - README includes a Korean pilot start prompt and local-only privacy reminder.
 - `scripts/phase9-pilot-prompt-ux-smoke.mjs` verifies mission cards, concrete examples, privacy copy, and absence of ambiguous internal prompt wording.
+
+## M10 Narrative Mission Layer
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #143 | M10-1: Define Narrative Mission Layer PRD and test spec | continue |
+| #144 | M10-2: Add mission-spec and world-state data contracts | continue |
+| #145 | M10-3: Implement mission validator and decorative-mission rejection | continue |
+| #146 | M10-4: Implement one narrative mission parity fixture | continue |
+| #147 | M10-5: Add capability router and no-gen fallback gate | continue |
+| #148 | M10-6: Close narrative mission gate and update dashboard | continue |
+
+M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrapper over Speaking Skill OS. A mission is valid only when story progress requires the same speaking behavior that the backlog item is trying to train.
+
+#143 evidence currently shows:
+
+- `docs/M10-NARRATIVE-MISSION-PRD.md` defines the product boundary: narrative missions must be rejected if they can be completed without the target speaking skill.
+- `docs/M10-NARRATIVE-MISSION-TEST-SPEC.md` defines planning, validator, world-state, parity, no-generation fallback, claim guard, and dashboard gates.
+- `docs/DATA-CONTRACTS.md` now includes M10 `mission-spec.json`, `world-state.json`, and `tool-capabilities.json` contracts.
+- `docs/phase-10-evidence/M10-1-narrative-mission-design.md` records the Claude cross-review finding that a mission win condition must be equivalent to a Speaking Skill OS transfer test.
+- `scripts/phase10-narrative-mission-plan-smoke.mjs` verifies the planning artifacts, issue linkage, status/dashboard state, and claim boundaries.
+- This does not implement generated worlds yet; it creates the gate that future generated worlds must pass.

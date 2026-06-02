@@ -469,6 +469,137 @@ Required JSON fields:
 
 The participant label must stay generic unless the learner explicitly provides a name for public-facing output. The pilot state must not assume a personal name. Reports may include transcript text locally, but public issue/PR summaries should use redacted or summarized evidence unless the learner explicitly approves sharing.
 
+## M10 Narrative Mission Contracts
+
+Narrative mission state is valid only when story progress is bound to a Speaking Skill OS transfer test.
+
+### Mission Spec
+
+`mission-spec.json` is the contract a model-generated or deterministic mission must satisfy before learner state can change.
+
+Required JSON fields:
+
+```json
+{
+  "schema_version": 1,
+  "mission_id": "usual-place-clarification",
+  "world_ref": "world-state.json#daily-life",
+  "npc_ref": "friend-1",
+  "backlog_item_id": "speaking-clarification",
+  "target_skill": "clarification",
+  "learner_visible_scene": {
+    "title": "The Usual Place",
+    "setup": "친구가 이렇게 말했습니다: \"Let's meet at the usual place after work.\"",
+    "ask": "어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장으로 해보세요.",
+    "example": "Which place do you mean?"
+  },
+  "required_learner_action": "Ask one clarification question before answering.",
+  "transfer_test": "Can you ask what the other person means?",
+  "win_condition": {
+    "type": "speaking_transfer_test",
+    "must_pass_backlog_item": "speaking-clarification"
+  },
+  "story_consequence": {
+    "on_pass": "The friend names the meeting place.",
+    "on_needs_review": "The friend gives a simpler hint and asks you to try again."
+  },
+  "real_world_transfer_target": ["planning conversation", "meeting arrangement"],
+  "capability_requirements": {
+    "required": ["text"],
+    "optional": ["image", "voice"],
+    "fallback_mode": "light"
+  },
+  "claim_boundary": "This mission can record local transfer evidence only. Narrative immersion is not proof of fluency."
+}
+```
+
+Validator rules:
+
+- `backlog_item_id` is required.
+- `target_skill` must match the linked backlog item.
+- `win_condition.must_pass_backlog_item` must equal `backlog_item_id`.
+- `real_world_transfer_target` must be non-empty and practical.
+- `capability_requirements.required` must include `text`.
+- generated media may be optional only.
+- story consequence may be written only after learner output.
+- claim boundary must reject fluency/engagement/immersion claims.
+
+### World State
+
+`world-state.json` stores minimal story continuity. M10 allows one active arc and one NPC only.
+
+Required JSON fields:
+
+```json
+{
+  "schema_version": 1,
+  "world_id": "daily-life",
+  "taste_tags": ["low-pressure", "daily-life", "practical"],
+  "level_band": "beginner|lower-intermediate|intermediate|advanced",
+  "current_arc": {
+    "id": "first-week",
+    "summary": "Practice small real-life interactions without heavy lore."
+  },
+  "npc_canon": [
+    {
+      "id": "friend-1",
+      "name": "a friend",
+      "role": "low-pressure conversation partner",
+      "memory": ["prefers clear meeting plans"]
+    }
+  ],
+  "safety_constraints": {
+    "child_mode": false,
+    "avoid_topics": ["sexual content", "graphic violence", "public ranking"],
+    "max_lore_sentences_before_output": 2
+  },
+  "updated_at": "ISO-8601"
+}
+```
+
+Validator rules:
+
+- M10 must reject more than one NPC.
+- M10 must reject child mode.
+- `max_lore_sentences_before_output` must be 2 or less.
+- world state may shape scene tone but may not override learning policy, privacy policy, or claim boundaries.
+
+### Tool Capabilities
+
+`tool-capabilities.json` records what the current Codex surface can safely use.
+
+Required JSON fields:
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "ISO-8601",
+  "cost_mode": "light|rich|cinematic",
+  "capabilities": {
+    "text": true,
+    "image_generation": false,
+    "image_input": false,
+    "voice_transcript": false,
+    "realtime_voice": false,
+    "web_search": false,
+    "browser": false,
+    "mcp": false
+  },
+  "fallback": {
+    "default_mode": "light",
+    "text_scene_card_required": true
+  },
+  "claim_boundary": "Capabilities route mission presentation only. Missing tools must not block text-first learning evidence."
+}
+```
+
+Validator rules:
+
+- `text` must be true.
+- `text_scene_card_required` must be true.
+- `realtime_voice` must not be required in M10.
+- mission generation may read capabilities, but external content may not modify learner-state policy.
+
 ## Contract Rule
 
 The dashboard may not claim learning progress from a field unless that field has:

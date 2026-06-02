@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-06-01",
+  "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Owner pilot prompt UX in progress",
-    "status": "M9 owner/self pilot mechanics exist, and Day 0 prompt UX is being converted into concrete learner-facing mission cards",
+    "stage": "M10 Narrative Mission Layer design",
+    "status": "M10-1 defines narrative missions as a verified transfer wrapper over Speaking Skill OS; generated worlds remain blocked until mission validator and no-gen fallback gates pass.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, and learner-facing pilot mission cards. The old internal prompt style is explicitly rejected, and first-use cards now avoid project-specific assumptions: Day 0 starts as a 3-minute English snapshot with neutral daily-life situations, examples, one-sentence answers, and local-only privacy copy."
+    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer design gate. The next differentiator is not generic roleplay: a story mission must advance only when the learner performs the target speaking skill and leaves transfer evidence."
   },
   "ssot": [
     {
@@ -176,37 +176,55 @@
       "path": "../.omx/",
       "role": "워크플로 로그와 임시 실행 산출물",
       "kind": "runtime"
+    },
+    {
+      "label": "docs/M10-NARRATIVE-MISSION-PRD.md",
+      "path": "./M10-NARRATIVE-MISSION-PRD.md",
+      "role": "Narrative Mission Layer product boundary and claim guardrails",
+      "kind": "source"
+    },
+    {
+      "label": "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
+      "path": "./M10-NARRATIVE-MISSION-TEST-SPEC.md",
+      "role": "M10 planning, validator, fallback, parity, and closeout gates",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-10-evidence/",
+      "path": "./phase-10-evidence/",
+      "role": "Phase 10 narrative mission layer evidence notes",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "Complete",
-      "detail": "public source clone-to-learn plus agent-installed Codex skills",
-      "tone": "green"
+      "value": "In progress",
+      "detail": "public source is live; Speaking Skill OS exists; narrative missions are being designed as verified transfer wrappers",
+      "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "Public live",
-      "detail": "new visitors paste the GitHub install prompt into Codex and then practice by talking",
-      "tone": "green"
+      "value": "M10 design",
+      "detail": "mission/world/capability contracts now define what AI-generated narrative must prove before implementation",
+      "tone": "blue"
     },
     {
       "label": "Next decision",
-      "value": "Run Day 1",
-      "detail": "pilot prompts are clearer; next real evidence is one Day 1 attempt from the owner/self participant",
+      "value": "Build validator",
+      "detail": "next work is #144/#145: machine-check mission specs and reject decorative missions",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "56 issues",
-      "detail": "#138 improves learner-facing pilot prompt UX",
+      "value": "74 issues",
+      "detail": "#143-#148 opened for M10 Narrative Mission Layer",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Speaking OS",
-      "detail": "diagnose -> backlog -> targeted drill -> transfer evidence, with cited learning basis",
+      "value": "Verified transfer wrapper",
+      "detail": "story progress must require the same speaking behavior that the backlog item trains",
       "tone": "green"
     }
   ],
@@ -273,6 +291,13 @@
       "status": "Pass",
       "evidence": "#138, phase9-pilot-prompt-ux-smoke",
       "claim": "Day 0 no longer exposes internal rubric labels or project-specific first-use assumptions and uses concrete daily-life mission cards with examples"
+    },
+    {
+      "id": "GATE-10",
+      "label": "Narrative mission planning contract",
+      "status": "Pass",
+      "evidence": "#143, docs/M10-NARRATIVE-MISSION-PRD.md, phase10-narrative-mission-plan-smoke",
+      "claim": "M10 defines narrative as a verified transfer wrapper only; generated worlds and learning outcomes remain unclaimed"
     }
   ],
   "board": [
@@ -1360,6 +1385,20 @@
             "scripts/phase9-pilot-prompt-ux-smoke.mjs",
             "docs/phase-9-evidence/M9-3-pilot-prompt-ux.md"
           ]
+        },
+        {
+          "id": "M10-1",
+          "title": "#143 Narrative Mission Layer 설계를 계약으로 고정함",
+          "why": "몰입형 세계관이 장식으로 흐르면 ChatGPT 역할극과 차이가 없다. 스토리 진행이 목표 회화 행동을 요구해야 제품 차별점이 된다.",
+          "done": "PRD, test spec, mission/world/capability data contracts, issue plan, Claude cross-review evidence, planning smoke를 추가했다.",
+          "verification": "phase10-narrative-mission-plan-smoke가 M10 문서, 이슈 색인, 상태판, claim boundary를 검사한다.",
+          "files": [
+            "docs/M10-NARRATIVE-MISSION-PRD.md",
+            "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-10-evidence/M10-1-narrative-mission-design.md",
+            "scripts/phase10-narrative-mission-plan-smoke.mjs"
+          ]
         }
       ]
     },
@@ -1370,13 +1409,14 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "Pilot prompt UX repair",
-          "why": "현재 blocker는 엔진이 아니라 첫 질문의 품질이다. 평가 항목을 숨기고 실제 장면 중심으로 바꿔야 한다.",
-          "done": "M9-3 prompt cards are implemented and project-specific first-use assumptions are removed on the current branch.",
-          "verification": "`node scripts/phase9-pilot-prompt-ux-smoke.mjs` passes.",
+          "title": "M10 Narrative Mission Layer",
+          "why": "사용자가 원하는 차별점은 일반 영어 챗봇이 아니라 Codex-native, AI-generated, multimodal-capable speaking harness다.",
+          "done": "M10-1은 설계 계약을 닫고, 다음 구현은 mission spec validator와 decorative roleplay rejection으로 들어간다.",
+          "verification": "M10-1 smoke와 dashboard render check가 통과해야 #143을 닫는다.",
           "files": [
-            "docs/PILOT-PROMPTS.md",
-            "scripts/english-learning-harness.mjs"
+            "docs/M10-NARRATIVE-MISSION-PRD.md",
+            "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
+            "docs/DATA-CONTRACTS.md"
           ]
         }
       ]
@@ -1388,13 +1428,13 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "Run actual Pilot Day 1 with better prompt",
-          "why": "Day 0은 bad prompt friction을 포함해 저장됐다. 이제 개선된 일상 상황 prompt로 Day 1 시도를 받아야 실제 pilot evidence가 생긴다.",
-          "done": "아직 Day 1 실제 답변은 저장하지 않았다.",
-          "verification": "pilot-day should record one clarification attempt and friction note if the prompt still feels unclear.",
+          "title": "#144/#145 mission contracts and validator",
+          "why": "세계관 생성 전에 mission-spec이 backlog item, win condition, real-world transfer target, capability fallback을 만족하는지 자동으로 걸러야 한다.",
+          "done": "아직 미구현. 다음 PR에서 fixture schema, validator, invalid decorative mission examples를 추가한다.",
+          "verification": "validator smoke must reject missions that can be completed without the target speaking skill.",
           "files": [
-            "pilot-state.json under learner root",
-            "docs/PILOT-PROMPTS.md"
+            "docs/DATA-CONTRACTS.md",
+            "scripts/phase10-narrative-mission-plan-smoke.mjs"
           ]
         }
       ]
@@ -1445,6 +1485,17 @@
           "why": "full-flow smoke가 persistence mechanics만 증명했고, native hook end-to-end와 실제 conversation UX를 증명하지 못했다.",
           "done": "완료 상태를 hardening required로 낮추고 PH1-FIX 작업을 추가했다.",
           "verification": "gap audit에 P1/P2 finding과 재현 명령을 기록했다."
+        },
+        {
+          "id": "R006",
+          "title": "Narrative can become cosmetic roleplay",
+          "why": "멋진 세계관만 만들면 기존 ChatGPT 영어 역할극과 제품적으로 다르지 않다.",
+          "done": "M10은 mission validator와 transfer-test equivalence를 통과하기 전까지 generated worlds, NPC arcs, realtime voice adventure를 claim하지 않는다.",
+          "verification": "M10 PRD/test spec and plan smoke enforce blocked claims and no-generation fallback.",
+          "files": [
+            "docs/M10-NARRATIVE-MISSION-PRD.md",
+            "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md"
+          ]
         }
       ]
     }
@@ -1829,6 +1880,11 @@
       "name": "M9-3 pilot prompt UX",
       "status": "Pass",
       "detail": "mission-card prompt UX, rejected ambiguous prompt, and neutral first-use scenario smoke pass"
+    },
+    {
+      "name": "M10-1 narrative mission plan",
+      "status": "Pass",
+      "detail": "PRD/test spec/data contracts define narrative as Verified transfer wrapper; smoke verifies docs, issue links, dashboard state, and claim boundaries"
     }
   ],
   "commands": [
@@ -2047,6 +2103,14 @@
     {
       "label": "Run M9 pilot prompt UX smoke",
       "command": "node scripts/phase9-pilot-prompt-ux-smoke.mjs"
+    },
+    {
+      "label": "Run M10 narrative mission plan smoke",
+      "command": "node scripts/phase10-narrative-mission-plan-smoke.mjs"
+    },
+    {
+      "label": "View M10 issue plan",
+      "command": "gh issue list --milestone \"M10 Narrative Mission Layer\""
     }
   ]
 }
