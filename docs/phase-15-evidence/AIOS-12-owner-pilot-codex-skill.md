@@ -16,6 +16,7 @@ The owner/self pilot needs to run inside Codex conversation. Asking the learner 
 - Agent install smoke now expects the owner pilot skill.
 - Scaffold smoke now treats the owner pilot skill and skill smoke as required files.
 - Added `scripts/phase15-owner-pilot-skill-smoke.mjs` to verify the learner-facing pilot contract.
+- Added `pilot-capture` as the card-level persistence path for Day 0, daily pilot, and final sample answers.
 
 ## Verified Behavior
 
@@ -23,7 +24,8 @@ The skill contract requires Codex to:
 
 - keep the learner in conversation;
 - ask one pilot card at a time;
-- run `pilot-start`, `pilot-day`, and `pilot-finish` internally;
+- run `pilot-capture` internally so each answer is durably saved before the full Day 0/final set is complete;
+- let the fifth captured Day 0/final card automatically commit through the existing pilot engine;
 - avoid exposing command-line operation, rubric fields, or engineering status;
 - keep real pilot completion separate from fixture mechanics.
 
@@ -33,6 +35,7 @@ Passed:
 
 ```bash
 node scripts/phase15-owner-pilot-skill-smoke.mjs
+node scripts/phase15-owner-pilot-capture-smoke.mjs
 node scripts/phase7-agent-install-smoke.mjs
 node scripts/phase1-scaffold-smoke.mjs
 ```

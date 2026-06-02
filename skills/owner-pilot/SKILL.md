@@ -43,11 +43,13 @@ Learner-facing opening:
 첫 질문: 친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.
 ```
 
-After collecting the Day 0 answers, persist internally:
+After each Day 0 answer, persist internally:
 
 ```bash
-node scripts/english-learning-harness.mjs pilot-start --say "<answer 1>" --say "<answer 2>" ... --comfort-rating "<0-5>" --json
+node scripts/english-learning-harness.mjs pilot-capture --phase baseline --card-id "<card id>" --say "<answer>" --json
 ```
+
+The fifth captured card automatically commits the Day 0 baseline through the pilot engine. If the learner gives a comfort rating, include `--comfort-rating "<0-5>"` on the latest capture.
 
 ### Daily Pilot Day
 
@@ -56,18 +58,20 @@ Use `pilot-status --json` internally. If the baseline exists and fewer than five
 After collecting the learner answer and one short friction note, persist internally:
 
 ```bash
-node scripts/english-learning-harness.mjs pilot-day --day "<n>" --say "<learner answer>" --friction-note "<short note>" --json
+node scripts/english-learning-harness.mjs pilot-capture --phase day --day "<n>" --say "<learner answer>" --friction-note "<short note>" --json
 ```
 
 The engine should update mission, scene, asset deck, learner report, cockpit, session evidence, and the day's next asset action. Summarize this in learner language without exposing commands.
 
 ### Final Sample
 
-When five daily sessions exist, ask the Day 7 snapshot cards one at a time. After collecting final answers and comfort rating, persist internally:
+When five daily sessions exist, ask the Day 7 snapshot cards one at a time. After each final answer, persist internally:
 
 ```bash
-node scripts/english-learning-harness.mjs pilot-finish --say "<answer 1>" --say "<answer 2>" ... --comfort-rating "<0-5>" --json
+node scripts/english-learning-harness.mjs pilot-capture --phase final --card-id "<card id>" --say "<answer>" --json
 ```
+
+The fifth captured final card automatically commits the final sample through the pilot engine. If the learner gives a comfort rating, include `--comfort-rating "<0-5>"` on the latest capture.
 
 Then summarize:
 
@@ -80,7 +84,7 @@ Then summarize:
 
 - Ask only one card at a time.
 - Avoid meta labels like "baseline", "rubric", "artifact bridge", or "product_journey_audit" in the learner prompt.
-- Do not expose `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
+- Do not expose `pilot-capture`, `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
 - If tool execution fails, continue the conversation and say durable saving was not confirmed.
 - If the user wants to stop early, save nothing extra unless they already answered a pilot prompt; then explain what was or was not saved.
 

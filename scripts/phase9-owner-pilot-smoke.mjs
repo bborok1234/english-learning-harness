@@ -57,7 +57,8 @@ function main() {
     "--json",
   ]);
   assert(awaiting.summary.status === "awaiting_baseline", "pilot-start without sample should await baseline");
-  assert(awaiting.summary.nextAction.command === "pilot-start", "awaiting pilot should ask for baseline");
+  assert(awaiting.summary.nextAction.command === "pilot-capture", "awaiting pilot should ask for card-level baseline capture");
+  assert(awaiting.summary.nextAction.phase === "baseline", "awaiting pilot should capture baseline first");
   assertNoAssumedName(awaiting);
 
   const started = runJson([

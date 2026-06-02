@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 owner pilot Codex skill installed; real owner pilot still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics plus a Codex-facing owner-pilot skill installed by setup. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 card-level pilot capture implemented; real owner pilot still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, a Codex-facing owner-pilot skill, and card-level pilot-capture persistence. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now be run by Codex inside conversation, while the local engine stores Day 0, daily sessions, final audit, asset actions, cockpit, and reports internally. The next step is the real owner/self learner run.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations: each Day 0/final card answer is captured durably, and the fifth card automatically commits through the existing pilot engine. The next step is the real owner/self learner run.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -877,13 +877,19 @@
       "path": "../scripts/phase15-owner-pilot-skill-smoke.mjs",
       "role": "owner pilot Codex skill smoke",
       "kind": "source"
+    },
+    {
+      "label": "scripts/phase15-owner-pilot-capture-smoke.mjs",
+      "path": "../scripts/phase15-owner-pilot-capture-smoke.mjs",
+      "role": "owner pilot card-level capture smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "pilot audit mechanics and Codex pilot skill implemented; #179 stays open",
+      "detail": "pilot-capture, pilot skill, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -893,9 +899,9 @@
       "tone": "green"
     },
     {
-      "label": "Mechanics proof",
-      "value": "5 fixture days",
-      "detail": "mission/scene/asset action/report/cockpit/friction are preserved",
+      "label": "Persistence",
+      "value": "Card-level",
+      "detail": "Day 0/final answers survive before full commit",
       "tone": "green"
     },
     {
@@ -1107,6 +1113,13 @@
       "status": "Pass",
       "evidence": "phase15-owner-pilot-skill-smoke, phase7-agent-install-smoke, phase1-scaffold-smoke",
       "claim": "setup installs a Codex-facing owner pilot skill that keeps learners in conversation while Codex runs pilot-start/day/finish internally; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-29",
+      "label": "Owner pilot card-level capture",
+      "status": "Pass",
+      "evidence": "pilot-capture command, phase15-owner-pilot-capture-smoke, phase9-owner-pilot-smoke",
+      "claim": "pilot-capture durably stores one card answer at a time, auto-commits Day 0/final samples on the fifth card, and daily capture preserves next asset action evidence; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1115,6 +1128,18 @@
       "title": "Done",
       "tone": "green",
       "cards": [
+        {
+          "id": "AIOS-12-CARD-CAPTURE",
+          "title": "AIOS-12 card-level pilot capture 통과",
+          "why": "실제 pilot 대화는 중간에 끊길 수 있다. Day 0/final 다섯 답변을 모두 모으기 전에도 durable evidence가 필요하다.",
+          "done": "pilot-capture가 카드 단위 답변을 저장하고, 다섯 번째 baseline/final 카드에서 기존 pilot engine으로 자동 commit한다.",
+          "verification": "phase15 owner pilot capture smoke and M9 owner pilot regression smoke passed.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-capture-smoke.mjs",
+            "skills/owner-pilot/SKILL.md"
+          ]
+        },
         {
           "id": "AIOS-12-CODEX-SKILL",
           "title": "AIOS-12 Codex pilot skill 준비 완료",
@@ -2501,9 +2526,9 @@
         {
           "id": "REAL-AIOS-12-PILOT",
           "title": "실제 owner/self 5일 pilot 실행",
-          "why": "이제 Codex가 대화형 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.",
+          "why": "이제 Codex가 한 카드씩 저장하며 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.",
           "done": "Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.",
-          "verification": "#179 remains open until real owner/self evidence exists; fixture and skill smokes are not enough.",
+          "verification": "#179 remains open until real owner/self evidence exists; capture, fixture, and skill smokes are not enough.",
           "files": [
             "pilot-state.json",
             "artifacts/pilot/",
@@ -3102,6 +3127,11 @@
       "name": "AIOS-12 owner pilot Codex skill",
       "status": "Pass",
       "detail": "phase15-owner-pilot-skill smoke validates the Codex-facing pilot skill contract, and phase7-agent-install smoke verifies setup installs english-learning-owner-pilot."
+    },
+    {
+      "name": "AIOS-12 owner pilot card-level capture",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence."
     }
   ],
   "commands": [
@@ -3500,6 +3530,10 @@
     {
       "label": "Run agent install smoke",
       "command": "node scripts/phase7-agent-install-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-12 owner pilot capture smoke",
+      "command": "node scripts/phase15-owner-pilot-capture-smoke.mjs"
     }
   ]
 }
@@ -3508,12 +3542,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now be run by Codex inside conversation, while the local engine stores Day 0, daily sessions, final audit, asset actions, cockpit, and reports internally. The next step is the real owner/self learner run.</p>
+        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations: each Day 0/final card answer is captured durably, and the fifth card automatically commits through the existing pilot engine. The next step is the real owner/self learner run.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-12 owner pilot Codex skill installed; real owner pilot still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics plus a Codex-facing owner-pilot skill installed by setup. #179 remains open until real owner/self transcript evidence is collected.
+        AIOS-12 card-level pilot capture implemented; real owner pilot still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics, a Codex-facing owner-pilot skill, and card-level pilot-capture persistence. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -3522,7 +3556,7 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current slice</div>
           <div class="metric-value">AIOS-12</div>
-          <p>pilot audit mechanics and Codex pilot skill implemented; #179 stays open</p>
+          <p>pilot-capture, pilot skill, and audit mechanics implemented; #179 stays open</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Pilot surface</div>
@@ -3530,9 +3564,9 @@
           <p>english-learning-owner-pilot installed by setup</p>
         </article>
         <article class="metric-card tone-green">
-          <div class="eyebrow"><span class="dot"></span>Mechanics proof</div>
-          <div class="metric-value">5 fixture days</div>
-          <p>mission/scene/asset action/report/cockpit/friction are preserved</p>
+          <div class="eyebrow"><span class="dot"></span>Persistence</div>
+          <div class="metric-value">Card-level</div>
+          <p>Day 0/final answers survive before full commit</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Real proof needed</div>
@@ -3573,9 +3607,9 @@
                 <span>pilot-state.json, artifacts/pilot/, cockpit.html, artifacts/reports/</span>
               </div>
               <h3>실제 owner/self 5일 pilot 실행</h3>
-              <div class="card-row"><b>왜</b><p>이제 Codex가 대화형 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.</p></div>
+              <div class="card-row"><b>왜</b><p>이제 Codex가 한 카드씩 저장하며 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.</p></div>
-              <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; fixture and skill smokes are not enough.</p></div>
+              <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; capture, fixture, and skill smokes are not enough.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3859,6 +3893,11 @@
               <td><strong>GATE-28</strong><span>Owner pilot Codex skill surface</span></td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-skill-smoke, phase7-agent-install-smoke, phase1-scaffold-smoke</span></td>
               <td>setup installs a Codex-facing owner pilot skill that keeps learners in conversation while Codex runs pilot-start/day/finish internally; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-29</strong><span>Owner pilot card-level capture</span></td>
+              <td><strong>Pass</strong><span>pilot-capture command, phase15-owner-pilot-capture-smoke, phase9-owner-pilot-smoke</span></td>
+              <td>pilot-capture durably stores one card answer at a time, auto-commits Day 0/final samples on the fifth card, and daily capture preserves next asset action evidence; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -4169,6 +4208,10 @@
               <strong>scripts/phase15-owner-pilot-skill-smoke.mjs</strong>
               <span>owner pilot Codex skill smoke</span>
             </a>
+            <a class="link-card source" href="../../scripts/phase15-owner-pilot-capture-smoke.mjs">
+              <strong>scripts/phase15-owner-pilot-capture-smoke.mjs</strong>
+              <span>owner pilot card-level capture smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -4176,10 +4219,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M9 owner pilot mechanics regression</td>
-              <td><strong>Pass</strong><span>phase9-owner-pilot-smoke remains green after pilot-day moved from today to practice; baseline, five days, rubric report, and no-assumed-name checks pass.</span></td>
-            </tr>
             <tr>
               <td>AIOS-8 first-use conversation variants</td>
               <td><strong>Pass</strong><span>skill-conversation-variants smoke validates four concrete first-use transcripts, no command/rubric/project leakage, real practice artifacts, report/cockpit linkage, and matching mission/scene preset IDs.</span></td>
@@ -4207,6 +4246,10 @@
             <tr>
               <td>AIOS-12 owner pilot Codex skill</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the Codex-facing pilot skill contract, and phase7-agent-install smoke verifies setup installs english-learning-owner-pilot.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 owner pilot card-level capture</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence.</span></td>
             </tr>
           </tbody>
         </table>
@@ -4252,9 +4295,19 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 102개 보기</summary>
+        <summary>완료 이력 103개 보기</summary>
         <div class="archive-body column-cards">
 
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-CARD-CAPTURE</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-capture-smoke.mjs, skills/owner-pilot/SKILL.md</span>
+              </div>
+              <h3>AIOS-12 card-level pilot capture 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot 대화는 중간에 끊길 수 있다. Day 0/final 다섯 답변을 모두 모으기 전에도 durable evidence가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-capture가 카드 단위 답변을 저장하고, 다섯 번째 baseline/final 카드에서 기존 pilot engine으로 자동 commit한다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot capture smoke and M9 owner pilot regression smoke passed.</p></div>
+            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-12-CODEX-SKILL</strong>
@@ -5278,7 +5331,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 99개 보기</summary>
+        <summary>전체 검증 100개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -5679,12 +5732,16 @@
               <td>AIOS-12 owner pilot Codex skill</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the Codex-facing pilot skill contract, and phase7-agent-install smoke verifies setup installs english-learning-owner-pilot.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-12 owner pilot card-level capture</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 99개 보기</summary>
+        <summary>전체 명령 100개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -6082,6 +6139,10 @@
             <div class="command">
               <span>Run agent install smoke</span>
               <code>node scripts/phase7-agent-install-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-12 owner pilot capture smoke</span>
+              <code>node scripts/phase15-owner-pilot-capture-smoke.mjs</code>
             </div>
         </div>
       </details>
