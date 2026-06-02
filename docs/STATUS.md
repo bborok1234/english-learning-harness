@@ -292,9 +292,9 @@ Start from the verified/fallback Phase 0 constraints.
 ### Phase 9 Real Learner Pilot Bridge
 
 - [x] M9-1: Add owner/self pilot state and command surface (#136). `pilot-start/status/day/finish` creates local pilot state, baseline diagnosis, daily records, final rubric report, and generic owner/self participant identity.
-- [ ] M9-2: Generate owner pilot report and transcript review bridge (#137).
+- [x] M9-2: Generate owner pilot report and transcript review bridge (#137). `pilot-day` now runs through the Codex-operated `practice` loop, and the final pilot report links daily mission, scene, learner report, cockpit, and transcript rubric evidence.
 - [x] M9-3: Add learner-facing pilot prompts and privacy handoff (#138). Day 0 is now a "3분 영어 스냅샷" mission-card flow with concrete situations, one-sentence answers, examples, and local-only privacy copy.
-- [ ] M9-4: Close owner pilot readiness gate and dashboard (#139).
+- [x] M9-4: Close owner pilot readiness gate and dashboard (#139). `phase9-pilot-aios-readiness-smoke` verifies five pilot days, final learner report, final cockpit linkage, and unsupported-claim guardrails.
 
 ### Phase 10 Narrative Mission Layer
 
