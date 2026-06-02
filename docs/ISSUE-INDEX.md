@@ -513,6 +513,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #171 | AIOS-9: Define multimodal mission asset contract | continue |
 | #174 | AIOS-10: Generate learner-operable mission asset deck | continue |
 | #176 | AIOS-11: Adapt mission asset priorities from learner evidence | continue |
+| #179 | AIOS-12: Run real owner/self AIOS pilot and journey audit | continue |
 
 #154 evidence currently shows:
 
@@ -603,3 +604,18 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - completion evidence requirements and blocked claims remain intact.
 - `scripts/adaptive-mission-asset-priority-smoke.mjs` verifies the no-evidence -> text, text -> image, text+image -> voice, and text+image+voice -> interactive scene priority path.
 - `docs/phase-11-evidence/AIOS-11-adaptive-mission-asset-priority.md` records the decision, verification commands, and claim boundary.
+
+M14 Adaptive Asset Journey is closed with #176 complete.
+
+## M15 Real Owner AIOS Pilot
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #179 | AIOS-12: Run real owner/self AIOS pilot and journey audit | continue |
+
+#179 planned evidence should show:
+
+- at least five real owner/self daily practice sessions through the Codex-operated flow.
+- each day keeps learner transcript, mission, scene, asset deck top action, cockpit/report links, and friction notes.
+- final audit compares baseline/final transcript behavior without claiming unsupported fluency outcomes.
+- dashboard separates learner product evidence from engineering status and records continue/split/pivot/kill/research.
