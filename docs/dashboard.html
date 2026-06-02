@@ -405,10 +405,27 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M10 narrative parity implemented",
-    "status": "M10-4/#146 proves one text-first narrative mission records the same Speaking Skill OS transfer evidence as plain today for pass and needs-review outputs.",
+    "stage": "M10 Narrative Mission Layer complete",
+    "status": "M10 is complete as a local narrative-transfer mechanics gate: validator, decorative rejection, parity, no-generation fallback, claim guard, dashboard closeout, and milestone review are in place.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer admission plus parity gate. The first narrative mission is not just roleplay: it preserves the same backlog transfer evidence as plain practice, then records story consequence after the transfer result."
+    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a complete M10 Narrative Mission Layer mechanics gate. Narrative missions can be admitted only when they preserve Speaking Skill OS transfer evidence, complete in text-only mode, and keep blocked claims visible.",
+    "nextGoal": "Return to M9 Real Learner Pilot Bridge: #137 owner pilot report/transcript review bridge and #139 pilot readiness gate.",
+    "blockedClaims": [
+      "narrative immersion improves fluency",
+      "engagement proves learning",
+      "generated worlds increase retention",
+      "child mode is ready",
+      "realtime voice adventure is supported"
+    ],
+    "allowedClaim": "The harness can validate and run one text-first narrative mission that requires a targeted Speaking Skill OS behavior and records local transfer evidence.",
+    "remainingBlockedClaims": [
+      "narrative immersion improves fluency",
+      "engagement proves learning",
+      "generated worlds increase retention",
+      "child mode is ready",
+      "realtime voice adventure is supported"
+    ],
+    "claimBoundary": "Allowed claim is local narrative-transfer mechanics only; remaining blocked claims stay visible and unclaimed."
   },
   "ssot": [
     {
@@ -626,37 +643,67 @@
       "path": "./phase-10-evidence/M10-4-narrative-mission-parity.md",
       "role": "M10-4 parity evidence note",
       "kind": "source"
+    },
+    {
+      "label": "scripts/phase10-no-gen-fallback-smoke.mjs",
+      "path": "../scripts/phase10-no-gen-fallback-smoke.mjs",
+      "role": "M10 no-generation fallback smoke",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/phase10-narrative-claim-guard-smoke.mjs",
+      "path": "../scripts/phase10-narrative-claim-guard-smoke.mjs",
+      "role": "M10 blocked claim guard smoke",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/phase10-narrative-mission-gate-smoke.mjs",
+      "path": "../scripts/phase10-narrative-mission-gate-smoke.mjs",
+      "role": "M10 full closeout gate smoke",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-10-evidence/M10-5-capability-router-no-gen-fallback.md",
+      "path": "./phase-10-evidence/M10-5-capability-router-no-gen-fallback.md",
+      "role": "M10-5 capability router evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-10-evidence/M10-6-narrative-mission-closeout.md",
+      "path": "./phase-10-evidence/M10-6-narrative-mission-closeout.md",
+      "role": "M10 closeout and milestone direction review",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "In progress",
-      "detail": "public source is live; Speaking Skill OS exists; first narrative mission parity now passes",
+      "detail": "public source is live; Speaking Skill OS exists; M10 narrative-transfer mechanics are complete",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "M10 parity",
-      "detail": "#146 proves usual-place-clarification matches plain Speaking OS evidence before story consequence",
-      "tone": "blue"
+      "value": "M10 complete",
+      "detail": "validator, parity, no-gen fallback, claim guard, and milestone review pass locally",
+      "tone": "green"
     },
     {
-      "label": "Next decision",
-      "value": "Fallback/router",
-      "detail": "next work is #147: capability router and no-generation fallback gate",
+      "label": "Next goal",
+      "value": "M9 pilot bridge",
+      "detail": "#137/#139 should turn local mechanics into owner/self pilot report and readiness evidence",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
       "value": "74 issues",
-      "detail": "#146 implemented on this branch; #147/#148 remain in M10",
+      "detail": "#147/#148 are implemented on this branch; M10 can close after PR merge",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Narrative transfer parity",
-      "detail": "story consequence is written only after matching Speaking Skill OS transfer evidence exists",
+      "value": "Narrative transfer gate",
+      "detail": "story progress must preserve Speaking Skill OS transfer evidence and text-only fallback",
       "tone": "green"
     }
   ],
@@ -751,6 +798,20 @@
       "status": "Pass",
       "evidence": "#146, phase10-narrative-mission-parity-smoke",
       "claim": "one text-first narrative mission produces the same Speaking Skill OS transfer evidence as plain today before story consequence is recorded"
+    },
+    {
+      "id": "GATE-14",
+      "label": "No-generation fallback",
+      "status": "Pass",
+      "evidence": "#147, routeMissionCapabilities, phase10-no-gen-fallback-smoke",
+      "claim": "text-only missions complete and write evidence; image/realtime-required missions are rejected"
+    },
+    {
+      "id": "GATE-15",
+      "label": "M10 closeout and claim guard",
+      "status": "Pass",
+      "evidence": "#148, phase10-narrative-claim-guard-smoke, phase10-narrative-mission-gate-smoke",
+      "claim": "M10 may claim local narrative-transfer mechanics only; blocked outcome, child-mode, and realtime claims remain visible"
     }
   ],
   "board": [
@@ -1890,6 +1951,30 @@
             "scripts/phase10-narrative-mission-parity-smoke.mjs",
             "docs/phase-10-evidence/M10-4-narrative-mission-parity.md"
           ]
+        },
+        {
+          "id": "M10-5",
+          "title": "#147 capability router와 no-gen fallback을 구현함",
+          "why": "Codex 도구가 없어도 narrative mission은 text-first로 완료되고 evidence를 남겨야 한다.",
+          "done": "`routeMissionCapabilities()`와 no-generation fallback smoke를 추가했다. required image/realtime voice와 missing text fallback은 reject된다.",
+          "verification": "`node scripts/phase10-no-gen-fallback-smoke.mjs`가 text-only completion과 negative fixtures를 검증한다.",
+          "files": [
+            "scripts/lib/narrative-mission.mjs",
+            "scripts/phase10-no-gen-fallback-smoke.mjs",
+            "docs/phase-10-evidence/M10-5-capability-router-no-gen-fallback.md"
+          ]
+        },
+        {
+          "id": "M10-6",
+          "title": "#148 M10 closeout gate와 milestone review를 완료함",
+          "why": "M10은 real outcome proof가 아니라 local narrative-transfer mechanics gate로 정직하게 닫혀야 한다.",
+          "done": "claim guard, full M10 gate smoke, dashboard closeout, milestone direction review, next goal candidate를 추가했다.",
+          "verification": "`node scripts/phase10-narrative-mission-gate-smoke.mjs`가 M10 planning/validator/parity/fallback/claim guard를 묶어 검증한다.",
+          "files": [
+            "scripts/phase10-narrative-claim-guard-smoke.mjs",
+            "scripts/phase10-narrative-mission-gate-smoke.mjs",
+            "docs/phase-10-evidence/M10-6-narrative-mission-closeout.md"
+          ]
         }
       ]
     },
@@ -1900,13 +1985,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "M10 narrative parity implemented",
-          "why": "이제 첫 narrative mission은 단순 roleplay가 아니라 Speaking Skill OS evidence와 동등한 transfer wrapper로 검증된다.",
-          "done": "#146 구현은 끝났고, 다음은 capability router/no-gen fallback gate인 #147이다.",
-          "verification": "parity smoke, mission validator smoke, scaffold smoke, dashboard render check가 필요하다.",
+          "title": "M10 Narrative Mission Layer complete",
+          "why": "Narrative layer is now a validated transfer wrapper, not a cosmetic story layer.",
+          "done": "#147/#148 close M10 as local mechanics complete; richer generated worlds remain blocked until real pilot evidence and future scope.",
+          "verification": "M10 gate smoke, claim guard, scaffold smoke, dashboard render check.",
           "files": [
-            "scripts/phase10-narrative-mission-parity-smoke.mjs",
-            "scripts/lib/narrative-mission.mjs"
+            "docs/phase-10-evidence/M10-6-narrative-mission-closeout.md",
+            "scripts/phase10-narrative-mission-gate-smoke.mjs"
           ]
         }
       ]
@@ -1918,13 +2003,13 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "#147 capability router and no-gen fallback",
-          "why": "Codex 도구가 있든 없든 narrative mission은 text-first로 완료되어야 하고, 이미지/음성/웹은 optional presentation layer여야 한다.",
-          "done": "아직 미구현. 다음 PR에서 capability router와 no-generation fallback smoke를 추가한다.",
-          "verification": "no-gen fallback smoke must pass with text only and reject missions that require generated media.",
+          "title": "Next goal: M9 real learner pilot bridge",
+          "why": "M10 has fixture-level mechanics. The product now needs owner/self pilot report and readiness evidence before richer narrative or multimodal expansion.",
+          "done": "아직 미구현. 다음 goal은 #137 owner pilot report/transcript bridge와 #139 readiness gate를 묶는 것이 적절하다.",
+          "verification": "pilot report smoke, pilot readiness gate smoke, dashboard render check.",
           "files": [
-            "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
-            "docs/narrative-missions/fixtures/light.tool-capabilities.json"
+            "docs/STATUS.md",
+            "docs/phase-9-evidence/"
           ]
         }
       ]
@@ -2390,6 +2475,16 @@
       "name": "M10-4 narrative parity",
       "status": "Pass",
       "detail": "plain today and usual-place narrative mission match backlog evidence for pass and needs-review outputs; story consequence follows transfer evidence"
+    },
+    {
+      "name": "M10-5 no-generation fallback",
+      "status": "Pass",
+      "detail": "text-only narrative mission completes and writes evidence; required image/realtime voice and missing text fallback are rejected"
+    },
+    {
+      "name": "M10 closeout gate",
+      "status": "Pass",
+      "detail": "planning, world-state, validator, parity, fallback, claim guard, dashboard, and milestone review are aligned"
     }
   ],
   "commands": [
@@ -2636,6 +2731,22 @@
     {
       "label": "View next M10 fallback issue",
       "command": "gh issue view 147"
+    },
+    {
+      "label": "Run M10 no-gen fallback smoke",
+      "command": "node scripts/phase10-no-gen-fallback-smoke.mjs"
+    },
+    {
+      "label": "Run M10 claim guard smoke",
+      "command": "node scripts/phase10-narrative-claim-guard-smoke.mjs"
+    },
+    {
+      "label": "Run M10 closeout gate smoke",
+      "command": "node scripts/phase10-narrative-mission-gate-smoke.mjs"
+    },
+    {
+      "label": "View next M9 pilot report issue",
+      "command": "gh issue view 137"
     }
   ]
 }
@@ -2644,12 +2755,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer admission plus parity gate. The first narrative mission is not just roleplay: it preserves the same backlog transfer evidence as plain practice, then records story consequence after the transfer result.</p>
+        <p class="summary">The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a complete M10 Narrative Mission Layer mechanics gate. Narrative missions can be admitted only when they preserve Speaking Skill OS transfer evidence, complete in text-only mode, and keep blocked claims visible.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        M10 narrative parity implemented<br>
-        M10-4/#146 proves one text-first narrative mission records the same Speaking Skill OS transfer evidence as plain today for pass and needs-review outputs.
+        M10 Narrative Mission Layer complete<br>
+        M10 is complete as a local narrative-transfer mechanics gate: validator, decorative rejection, parity, no-generation fallback, claim guard, dashboard closeout, and milestone review are in place.
       </div>
     </header>
 
@@ -2658,27 +2769,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">In progress</div>
-          <p>public source is live; Speaking Skill OS exists; first narrative mission parity now passes</p>
+          <p>public source is live; Speaking Skill OS exists; M10 narrative-transfer mechanics are complete</p>
         </article>
-        <article class="metric-card tone-blue">
+        <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M10 parity</div>
-          <p>#146 proves usual-place-clarification matches plain Speaking OS evidence before story consequence</p>
+          <div class="metric-value">M10 complete</div>
+          <p>validator, parity, no-gen fallback, claim guard, and milestone review pass locally</p>
         </article>
         <article class="metric-card tone-amber">
-          <div class="eyebrow"><span class="dot"></span>Next decision</div>
-          <div class="metric-value">Fallback/router</div>
-          <p>next work is #147: capability router and no-generation fallback gate</p>
+          <div class="eyebrow"><span class="dot"></span>Next goal</div>
+          <div class="metric-value">M9 pilot bridge</div>
+          <p>#137/#139 should turn local mechanics into owner/self pilot report and readiness evidence</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
           <div class="metric-value">74 issues</div>
-          <p>#146 implemented on this branch; #147/#148 remain in M10</p>
+          <p>#147/#148 are implemented on this branch; M10 can close after PR merge</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
-          <div class="metric-value">Narrative transfer parity</div>
-          <p>story consequence is written only after matching Speaking Skill OS transfer evidence exists</p>
+          <div class="metric-value">Narrative transfer gate</div>
+          <p>story progress must preserve Speaking Skill OS transfer evidence and text-only fallback</p>
         </article>
     </section>
 
@@ -2706,22 +2817,22 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/phase10-narrative-mission-parity-smoke.mjs, scripts/lib/narrative-mission.mjs</span>
+                <span>docs/phase-10-evidence/M10-6-narrative-mission-closeout.md, scripts/phase10-narrative-mission-gate-smoke.mjs</span>
               </div>
-              <h3>M10 narrative parity implemented</h3>
-              <div class="card-row"><b>왜</b><p>이제 첫 narrative mission은 단순 roleplay가 아니라 Speaking Skill OS evidence와 동등한 transfer wrapper로 검증된다.</p></div>
-              <div class="card-row"><b>완료</b><p>#146 구현은 끝났고, 다음은 capability router/no-gen fallback gate인 #147이다.</p></div>
-              <div class="card-row"><b>검증</b><p>parity smoke, mission validator smoke, scaffold smoke, dashboard render check가 필요하다.</p></div>
+              <h3>M10 Narrative Mission Layer complete</h3>
+              <div class="card-row"><b>왜</b><p>Narrative layer is now a validated transfer wrapper, not a cosmetic story layer.</p></div>
+              <div class="card-row"><b>완료</b><p>#147/#148 close M10 as local mechanics complete; richer generated worlds remain blocked until real pilot evidence and future scope.</p></div>
+              <div class="card-row"><b>검증</b><p>M10 gate smoke, claim guard, scaffold smoke, dashboard render check.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>NEXT-1</strong>
-                <span>docs/M10-NARRATIVE-MISSION-TEST-SPEC.md, docs/narrative-missions/fixtures/light.tool-capabilities.json</span>
+                <span>docs/STATUS.md, docs/phase-9-evidence/</span>
               </div>
-              <h3>#147 capability router and no-gen fallback</h3>
-              <div class="card-row"><b>왜</b><p>Codex 도구가 있든 없든 narrative mission은 text-first로 완료되어야 하고, 이미지/음성/웹은 optional presentation layer여야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>아직 미구현. 다음 PR에서 capability router와 no-generation fallback smoke를 추가한다.</p></div>
-              <div class="card-row"><b>검증</b><p>no-gen fallback smoke must pass with text only and reject missions that require generated media.</p></div>
+              <h3>Next goal: M9 real learner pilot bridge</h3>
+              <div class="card-row"><b>왜</b><p>M10 has fixture-level mechanics. The product now needs owner/self pilot report and readiness evidence before richer narrative or multimodal expansion.</p></div>
+              <div class="card-row"><b>완료</b><p>아직 미구현. 다음 goal은 #137 owner pilot report/transcript bridge와 #139 readiness gate를 묶는 것이 적절하다.</p></div>
+              <div class="card-row"><b>검증</b><p>pilot report smoke, pilot readiness gate smoke, dashboard render check.</p></div>
             </article>
         </div>
       </section>
@@ -2732,26 +2843,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M9-1</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/phase9-owner-pilot-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-9-evidence/M9-1-owner-pilot-state.md</span>
-              </div>
-              <h3>#136 owner/self pilot state와 command surface를 추가함</h3>
-              <div class="card-row"><b>왜</b><p>fixture evidence 다음 단계는 실제 owner/self participant pilot이다. 이때 특정 이름을 임의로 가정하지 않고, baseline/day/final/report 흐름을 local state로 관리해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`pilot-start`, `pilot-status`, `pilot-day`, `pilot-finish`, `pilot-state.json`, local pilot report, transcript rubric bridge를 추가했다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase9-owner-pilot-smoke.mjs`가 baseline 대기, baseline diagnosis, 5 daily sessions, final rubric report, generic participant identity를 검증한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M9-3</strong>
-                <span>scripts/english-learning-harness.mjs, docs/PILOT-PROMPTS.md, README.md, scripts/phase9-pilot-prompt-ux-smoke.mjs, docs/phase-9-evidence/M9-3-pilot-prompt-ux.md</span>
-              </div>
-              <h3>#138 pilot 시작 prompt를 미션 카드로 바꿈</h3>
-              <div class="card-row"><b>왜</b><p>A clarification question I can ask 같은 문구는 영어 문제가 아니라 task design 문제다. 사용자가 처음부터 흥미를 느끼려면 실제 장면, 역할, 예시, 한 문장 목표가 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>Day 0을 3분 영어 스냅샷으로 바꾸고, 오늘의 한 컷/잠깐 무슨 뜻이야/막혔을 때/내 주변 스냅샷/오늘의 체감 카드와 예시를 추가했다. 첫 사용자가 프로젝트 설명을 해야 하는 상황은 제거하고 일상 약속 확인 상황으로 바꿨다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-prompt-ux-smoke.mjs`가 mission cards, neutral daily-life examples, privacy copy, bad prompt rejection, project-specific first-use prompt absence를 검증한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M10-1</strong>
@@ -2791,6 +2882,26 @@
               <div class="card-row"><b>왜</b><p>validated mission이 실제 학습 evidence를 plain Speaking OS와 다르게 기록하면 narrative layer는 장식이 된다.</p></div>
               <div class="card-row"><b>완료</b><p>`usual-place-clarification` narrative wrapper가 기존 `persistSession()` 경로를 재사용하고, pass/needs_review 모두 plain today와 같은 backlog evidence를 남기는지 검증했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase10-narrative-mission-parity-smoke.mjs`가 pass와 needs-review pair를 비교하고 story consequence가 transfer evidence 뒤에 기록되는지 확인한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-5</strong>
+                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-no-gen-fallback-smoke.mjs, docs/phase-10-evidence/M10-5-capability-router-no-gen-fallback.md</span>
+              </div>
+              <h3>#147 capability router와 no-gen fallback을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>Codex 도구가 없어도 narrative mission은 text-first로 완료되고 evidence를 남겨야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`routeMissionCapabilities()`와 no-generation fallback smoke를 추가했다. required image/realtime voice와 missing text fallback은 reject된다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-no-gen-fallback-smoke.mjs`가 text-only completion과 negative fixtures를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-6</strong>
+                <span>scripts/phase10-narrative-claim-guard-smoke.mjs, scripts/phase10-narrative-mission-gate-smoke.mjs, docs/phase-10-evidence/M10-6-narrative-mission-closeout.md</span>
+              </div>
+              <h3>#148 M10 closeout gate와 milestone review를 완료함</h3>
+              <div class="card-row"><b>왜</b><p>M10은 real outcome proof가 아니라 local narrative-transfer mechanics gate로 정직하게 닫혀야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>claim guard, full M10 gate smoke, dashboard closeout, milestone direction review, next goal candidate를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-narrative-mission-gate-smoke.mjs`가 M10 planning/validator/parity/fallback/claim guard를 묶어 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -2902,6 +3013,16 @@
               <td><strong>GATE-13</strong><span>Narrative mission parity</span></td>
               <td><strong>Pass</strong><span>#146, phase10-narrative-mission-parity-smoke</span></td>
               <td>one text-first narrative mission produces the same Speaking Skill OS transfer evidence as plain today before story consequence is recorded</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-14</strong><span>No-generation fallback</span></td>
+              <td><strong>Pass</strong><span>#147, routeMissionCapabilities, phase10-no-gen-fallback-smoke</span></td>
+              <td>text-only missions complete and write evidence; image/realtime-required missions are rejected</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-15</strong><span>M10 closeout and claim guard</span></td>
+              <td><strong>Pass</strong><span>#148, phase10-narrative-claim-guard-smoke, phase10-narrative-mission-gate-smoke</span></td>
+              <td>M10 may claim local narrative-transfer mechanics only; blocked outcome, child-mode, and realtime claims remain visible</td>
             </tr>
         </tbody>
       </table>
@@ -3056,6 +3177,26 @@
               <strong>docs/phase-10-evidence/M10-4-narrative-mission-parity.md</strong>
               <span>M10-4 parity evidence note</span>
             </a>
+            <a class="link-card source" href="../scripts/phase10-no-gen-fallback-smoke.mjs">
+              <strong>scripts/phase10-no-gen-fallback-smoke.mjs</strong>
+              <span>M10 no-generation fallback smoke</span>
+            </a>
+            <a class="link-card source" href="../scripts/phase10-narrative-claim-guard-smoke.mjs">
+              <strong>scripts/phase10-narrative-claim-guard-smoke.mjs</strong>
+              <span>M10 blocked claim guard smoke</span>
+            </a>
+            <a class="link-card source" href="../scripts/phase10-narrative-mission-gate-smoke.mjs">
+              <strong>scripts/phase10-narrative-mission-gate-smoke.mjs</strong>
+              <span>M10 full closeout gate smoke</span>
+            </a>
+            <a class="link-card source" href="./phase-10-evidence/M10-5-capability-router-no-gen-fallback.md">
+              <strong>docs/phase-10-evidence/M10-5-capability-router-no-gen-fallback.md</strong>
+              <span>M10-5 capability router evidence</span>
+            </a>
+            <a class="link-card source" href="./phase-10-evidence/M10-6-narrative-mission-closeout.md">
+              <strong>docs/phase-10-evidence/M10-6-narrative-mission-closeout.md</strong>
+              <span>M10 closeout and milestone direction review</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3063,14 +3204,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M8-3 seven-day Speaking OS gate</td>
-              <td><strong>Pass</strong><span>seven-session fixture proves queue retry, weekly mirror, and export evidence</span></td>
-            </tr>
-            <tr>
-              <td>M8-4 research basis</td>
-              <td><strong>Pass</strong><span>source-to-feature citation map, README links, and claim-boundary guard smoke pass</span></td>
-            </tr>
             <tr>
               <td>M9-1 owner pilot</td>
               <td><strong>Pass</strong><span>pilot-start/status/day/finish mechanics and generic owner/self participant identity pass smoke</span></td>
@@ -3095,14 +3228,18 @@
               <td>M10-4 narrative parity</td>
               <td><strong>Pass</strong><span>plain today and usual-place narrative mission match backlog evidence for pass and needs-review outputs; story consequence follows transfer evidence</span></td>
             </tr>
+            <tr>
+              <td>M10-5 no-generation fallback</td>
+              <td><strong>Pass</strong><span>text-only narrative mission completes and writes evidence; required image/realtime voice and missing text fallback are rejected</span></td>
+            </tr>
+            <tr>
+              <td>M10 closeout gate</td>
+              <td><strong>Pass</strong><span>planning, world-state, validator, parity, fallback, claim guard, dashboard, and milestone review are aligned</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>Run M4 multimodal gate smoke</span>
-              <code>node scripts/phase4-multimodal-gate-smoke.mjs</code>
-            </div>
             <div class="command">
               <span>Run M6 public clone smoke</span>
               <code>node scripts/phase6-public-clean-clone-smoke.mjs</code>
@@ -3131,6 +3268,10 @@
               <span>View next M10 fallback issue</span>
               <code>gh issue view 147</code>
             </div>
+            <div class="command">
+              <span>View next M9 pilot report issue</span>
+              <code>gh issue view 137</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3139,7 +3280,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 83개 보기</summary>
+        <summary>완료 이력 85개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3972,10 +4113,30 @@
               <div class="card-row"><b>완료</b><p>docs/RESEARCH-BASIS.md를 추가하고 README/LEARNING-ENGINE에 연결했다. source-to-feature map은 output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, claim boundary를 다룬다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase8-research-basis-smoke.mjs`가 필수 출처 URL, README 링크, claim boundary guard를 확인한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M9-1</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase9-owner-pilot-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-9-evidence/M9-1-owner-pilot-state.md</span>
+              </div>
+              <h3>#136 owner/self pilot state와 command surface를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>fixture evidence 다음 단계는 실제 owner/self participant pilot이다. 이때 특정 이름을 임의로 가정하지 않고, baseline/day/final/report 흐름을 local state로 관리해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`pilot-start`, `pilot-status`, `pilot-day`, `pilot-finish`, `pilot-state.json`, local pilot report, transcript rubric bridge를 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase9-owner-pilot-smoke.mjs`가 baseline 대기, baseline diagnosis, 5 daily sessions, final rubric report, generic participant identity를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M9-3</strong>
+                <span>scripts/english-learning-harness.mjs, docs/PILOT-PROMPTS.md, README.md, scripts/phase9-pilot-prompt-ux-smoke.mjs, docs/phase-9-evidence/M9-3-pilot-prompt-ux.md</span>
+              </div>
+              <h3>#138 pilot 시작 prompt를 미션 카드로 바꿈</h3>
+              <div class="card-row"><b>왜</b><p>A clarification question I can ask 같은 문구는 영어 문제가 아니라 task design 문제다. 사용자가 처음부터 흥미를 느끼려면 실제 장면, 역할, 예시, 한 문장 목표가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>Day 0을 3분 영어 스냅샷으로 바꾸고, 오늘의 한 컷/잠깐 무슨 뜻이야/막혔을 때/내 주변 스냅샷/오늘의 체감 카드와 예시를 추가했다. 첫 사용자가 프로젝트 설명을 해야 하는 상황은 제거하고 일상 약속 확인 상황으로 바꿨다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-prompt-ux-smoke.mjs`가 mission cards, neutral daily-life examples, privacy copy, bad prompt rejection, project-specific first-use prompt absence를 검증한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 80개 보기</summary>
+        <summary>전체 검증 82개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -4300,12 +4461,20 @@
               <td>M10-4 narrative parity</td>
               <td><strong>Pass</strong><span>plain today and usual-place narrative mission match backlog evidence for pass and needs-review outputs; story consequence follows transfer evidence</span></td>
             </tr>
+            <tr>
+              <td>M10-5 no-generation fallback</td>
+              <td><strong>Pass</strong><span>text-only narrative mission completes and writes evidence; required image/realtime voice and missing text fallback are rejected</span></td>
+            </tr>
+            <tr>
+              <td>M10 closeout gate</td>
+              <td><strong>Pass</strong><span>planning, world-state, validator, parity, fallback, claim guard, dashboard, and milestone review are aligned</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 61개 보기</summary>
+        <summary>전체 명령 65개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -4551,6 +4720,22 @@
             <div class="command">
               <span>View next M10 fallback issue</span>
               <code>gh issue view 147</code>
+            </div>
+            <div class="command">
+              <span>Run M10 no-gen fallback smoke</span>
+              <code>node scripts/phase10-no-gen-fallback-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M10 claim guard smoke</span>
+              <code>node scripts/phase10-narrative-claim-guard-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M10 closeout gate smoke</span>
+              <code>node scripts/phase10-narrative-mission-gate-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View next M9 pilot report issue</span>
+              <code>gh issue view 137</code>
             </div>
         </div>
       </details>
