@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 varied pilot day missions implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 pilot mission audit metadata implemented; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission metadata, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and cover more than one repeated phrase: the first five pilot days test clarification, repair, image/scene description, soft disagreement, and follow-up, while next prompt cards, cockpit refresh, durable capture, and redacted local ops remain separated from public repo data.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and produce auditable speaking-action evidence: the first five pilot days test clarification, repair, image/scene description, soft disagreement, and follow-up, and pilot-day/pilot-finish preserve that metadata into reports without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission audit metadata, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -949,7 +949,7 @@
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -1165,7 +1165,7 @@
       "label": "Owner pilot journey audit mechanics",
       "status": "Pass",
       "evidence": "#179 mechanics, phase15-owner-pilot-journey-audit-smoke, product-surface-smoke, ops-dashboard-smoke",
-      "claim": "pilot-day and pilot-finish preserve daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed"
+      "claim": "pilot-day and pilot-finish preserve per-day pilot mission metadata, daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed"
     },
     {
       "id": "GATE-28",
@@ -1215,6 +1215,13 @@
       "status": "Pass",
       "evidence": "phase15-owner-pilot-varied-day-missions-smoke, phase15-owner-pilot-next-card-smoke, phase9-pilot-prompt-ux-smoke",
       "claim": "the first five pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating one prompt; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-35",
+      "label": "Pilot mission audit metadata",
+      "status": "Pass",
+      "evidence": "phase15-owner-pilot-journey-audit-smoke, phase15-owner-pilot-varied-day-missions-smoke",
+      "claim": "pilot reports preserve per-day pilot_mission metadata, count days_with_pilot_mission_metadata, and list distinct sampled speaking skills; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1258,6 +1265,18 @@
             "scripts/lib/english-learning-store.mjs",
             "scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-varied-pilot-day-missions.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-PILOT-MISSION-AUDIT-METADATA",
+          "title": "AIOS-12 pilot mission audit metadata 통과",
+          "why": "5일 pilot이 다양한 행동을 요구해도 report/audit에 어떤 행동을 샘플링했는지 남지 않으면 제품 판단 근거가 약해진다.",
+          "done": "pilot-day가 pilot_mission metadata를 저장하고, pilot-finish가 report.aios_artifacts.days와 product_journey_audit에 metadata count와 distinct skill list를 남긴다.",
+          "verification": "phase15 owner pilot journey audit smoke validates days_with_pilot_mission_metadata, distinct pilot mission skills, and Markdown pilot_action output.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md"
           ]
         },
         {
@@ -3277,7 +3296,7 @@
     {
       "name": "AIOS-12 owner pilot journey audit mechanics",
       "status": "Pass",
-      "detail": "phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims."
+      "detail": "phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve pilot mission metadata, mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims."
     },
     {
       "name": "AIOS-12 owner pilot Codex skill",
@@ -3308,6 +3327,11 @@
       "name": "AIOS-12 varied five-day pilot missions",
       "status": "Pass",
       "detail": "phase15-owner-pilot-varied-day-missions smoke validates the first five fixture pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up before final-sample readiness."
+    },
+    {
+      "name": "AIOS-12 pilot mission audit metadata",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-journey-audit smoke validates final reports include per-day pilot action metadata, days_with_pilot_mission_metadata, and distinct_pilot_mission_skills."
     }
   ],
   "commands": [
@@ -3330,6 +3354,10 @@
     {
       "label": "Run AIOS-12 varied pilot day missions smoke",
       "command": "node scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-12 pilot audit mechanics smoke",
+      "command": "node scripts/phase15-owner-pilot-journey-audit-smoke.mjs"
     },
     {
       "label": "Run scaffold smoke",
@@ -3746,12 +3774,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and cover more than one repeated phrase: the first five pilot days test clarification, repair, image/scene description, soft disagreement, and follow-up, while next prompt cards, cockpit refresh, durable capture, and redacted local ops remain separated from public repo data.</p>
+        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and produce auditable speaking-action evidence: the first five pilot days test clarification, repair, image/scene description, soft disagreement, and follow-up, and pilot-day/pilot-finish preserve that metadata into reports without exposing private transcripts publicly.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-12 varied pilot day missions implemented; real owner pilot Day 1 answer still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
+        AIOS-12 pilot mission audit metadata implemented; real owner pilot Day 1 answer still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission metadata, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -3760,7 +3788,7 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current slice</div>
           <div class="metric-value">AIOS-12</div>
-          <p>varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open</p>
+          <p>pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Pilot surface</div>
@@ -4091,7 +4119,7 @@
             <tr>
               <td><strong>GATE-27</strong><span>Owner pilot journey audit mechanics</span></td>
               <td><strong>Pass</strong><span>#179 mechanics, phase15-owner-pilot-journey-audit-smoke, product-surface-smoke, ops-dashboard-smoke</span></td>
-              <td>pilot-day and pilot-finish preserve daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed</td>
+              <td>pilot-day and pilot-finish preserve per-day pilot mission metadata, daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed</td>
             </tr>
             <tr>
               <td><strong>GATE-28</strong><span>Owner pilot Codex skill surface</span></td>
@@ -4127,6 +4155,11 @@
               <td><strong>GATE-34</strong><span>Varied five-day pilot missions</span></td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-varied-day-missions-smoke, phase15-owner-pilot-next-card-smoke, phase9-pilot-prompt-ux-smoke</span></td>
               <td>the first five pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating one prompt; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-35</strong><span>Pilot mission audit metadata</span></td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit-smoke, phase15-owner-pilot-varied-day-missions-smoke</span></td>
+              <td>pilot reports preserve per-day pilot_mission metadata, count days_with_pilot_mission_metadata, and list distinct sampled speaking skills; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -4489,12 +4522,8 @@
           <tbody>
 
             <tr>
-              <td>M14 adaptive asset journey closeout</td>
-              <td><strong>Pass</strong><span>PR #178 merged AIOS-11, #176 closed, M14 closed, and main smoke passed for adaptive asset priority, asset deck, cockpit, product surface, ops dashboard, scaffold, and git diff hygiene.</span></td>
-            </tr>
-            <tr>
               <td>AIOS-12 owner pilot journey audit mechanics</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims.</span></td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve pilot mission metadata, mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 owner pilot Codex skill</td>
@@ -4519,6 +4548,10 @@
             <tr>
               <td>AIOS-12 varied five-day pilot missions</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-varied-day-missions smoke validates the first five fixture pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up before final-sample readiness.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 pilot mission audit metadata</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates final reports include per-day pilot action metadata, days_with_pilot_mission_metadata, and distinct_pilot_mission_skills.</span></td>
             </tr>
           </tbody>
         </table>
@@ -4564,7 +4597,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 108개 보기</summary>
+        <summary>완료 이력 109개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4596,6 +4629,16 @@
               <div class="card-row"><b>왜</b><p>실제 5일 pilot이 같은 질문 반복이면 하네스가 다양한 회화 능력을 키우는지 판단하기 어렵다.</p></div>
               <div class="card-row"><b>완료</b><p>Day 1 clarification, Day 2 repair, Day 3 image/scene description, Day 4 soft disagreement, Day 5 follow-up mission을 연결했다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot varied day missions smoke verifies five distinct daily speaking actions and readiness for final sample after five fixture days.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-PILOT-MISSION-AUDIT-METADATA</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-journey-audit-smoke.mjs, docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md</span>
+              </div>
+              <h3>AIOS-12 pilot mission audit metadata 통과</h3>
+              <div class="card-row"><b>왜</b><p>5일 pilot이 다양한 행동을 요구해도 report/audit에 어떤 행동을 샘플링했는지 남지 않으면 제품 판단 근거가 약해진다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-day가 pilot_mission metadata를 저장하고, pilot-finish가 report.aios_artifacts.days와 product_journey_audit에 metadata count와 distinct skill list를 남긴다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot journey audit smoke validates days_with_pilot_mission_metadata, distinct pilot mission skills, and Markdown pilot_action output.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -5650,7 +5693,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 104개 보기</summary>
+        <summary>전체 검증 105개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -6045,7 +6088,7 @@
             </tr>
             <tr>
               <td>AIOS-12 owner pilot journey audit mechanics</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims.</span></td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve pilot mission metadata, mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 owner pilot Codex skill</td>
@@ -6071,12 +6114,16 @@
               <td>AIOS-12 varied five-day pilot missions</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-varied-day-missions smoke validates the first five fixture pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up before final-sample readiness.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-12 pilot mission audit metadata</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates final reports include per-day pilot action metadata, days_with_pilot_mission_metadata, and distinct_pilot_mission_skills.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 107개 보기</summary>
+        <summary>전체 명령 108개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -6098,6 +6145,10 @@
             <div class="command">
               <span>Run AIOS-12 varied pilot day missions smoke</span>
               <code>node scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-12 pilot audit mechanics smoke</span>
+              <code>node scripts/phase15-owner-pilot-journey-audit-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run scaffold smoke</span>
