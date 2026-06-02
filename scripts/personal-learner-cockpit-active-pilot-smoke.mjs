@@ -35,11 +35,7 @@ function main() {
   ]);
   runJson([
     "scripts/english-learning-harness.mjs",
-    "pilot-capture",
-    "--phase",
-    "baseline",
-    "--card-id",
-    "today_snapshot",
+    "pilot-reply",
     "--say",
     "I worked on a small plan and had coffee today.",
     "--json",
@@ -59,12 +55,17 @@ function main() {
   assert(state.active_pilot.partial.baseline_answers === 1, "cockpit should show captured baseline count");
   assert(state.active_pilot.next_card.card_id === "meaning_check", "cockpit should point to the next Day 0 card");
   assert(state.active_pilot.learner_prompt.includes("어디에서 만나자는 뜻인지"), "cockpit should show learner-facing next prompt");
+  assert(state.active_pilot.latest_reply_card?.html === "artifacts/pilot/pilot-reply-card.html", "cockpit should link latest reply card HTML");
+  assert(state.active_pilot.latest_reply_card?.json === "artifacts/pilot/pilot-reply-card.json", "cockpit should link latest reply card JSON");
+  assert(existsSync(resolve(learnerRoot, state.active_pilot.latest_reply_card.html)), "latest reply card HTML missing");
   assert(state.files.active_pilot_state === "pilot-state.json", "cockpit should link local pilot state file");
 
   const html = readFileSync(cockpit.cockpitPath, "utf8");
   assert(html.includes("진행 중인 owner pilot"), "cockpit HTML missing active pilot section");
   assert(html.includes("어디에서 만나자는 뜻인지"), "cockpit HTML missing next pilot prompt");
-  for (const forbidden of ["pilot-capture", "pilot-start", "product_journey_audit", "PR #", "issue #"]) {
+  assert(html.includes("방금 저장된 답변 카드"), "cockpit HTML should expose saved reply card link");
+  assert(html.includes("pilot-reply-card.html"), "cockpit HTML should link reply card");
+  for (const forbidden of ["pilot-capture", "pilot-reply ", "pilot-start", "product_journey_audit", "PR #", "issue #"]) {
     assert(!html.includes(forbidden), `active pilot cockpit leaked internal term: ${forbidden}`);
   }
 
