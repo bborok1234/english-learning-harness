@@ -402,13 +402,13 @@
   <script type="application/json" id="project-state">
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-06-02",
+  "updatedAt": "2026-06-02T00:00:00+09:00",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 quick reply selection can save pilot answers; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation with ready-to-say assistantPrompt and quick replies rendered in HTML, quick-reply selection saving through pilot-reply, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 quick replies are selectable in the pilot card; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation with ready-to-say assistantPrompt, numbered quick replies rendered in HTML, quick-reply selection saving through pilot-reply, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can get a ready-to-say Korean prompt and quick reply choices for the next learner turn, the same prompt and choices are visible in the next-card HTML, Codex can save a quick-reply selection through the same routing path, route the answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day's sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can get a ready-to-say Korean prompt and visible numbered quick reply choices for the next learner turn, the same prompt and choices are visible in the next-card HTML, Codex can save a quick-reply selection through the same routing path, route the answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation with ready-to-say assistant prompts and quick replies rendered in HTML, quick-reply selection saving through pilot-reply, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, learner-safe summary, saved-reply HTML card, automatic pilot cockpit refresh, active pilot cockpit visibility with latest reply-card link, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation with ready-to-say assistant prompts and numbered quick replies rendered in HTML, quick-reply selection saving through pilot-reply, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, learner-safe summary, saved-reply HTML card, automatic pilot cockpit refresh, active pilot cockpit visibility with latest reply-card link, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -1289,6 +1289,13 @@
       "status": "Pass",
       "evidence": "#204, phase15-owner-pilot-reply-routing-smoke",
       "claim": "pilot-reply resolves --quick-reply selections against the current pilot-next choices and saves the selected English sentence through the existing capture path, while invalid selections fail before saving; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-43",
+      "label": "Pilot next-card numbered quick replies",
+      "status": "Pass",
+      "evidence": "#206, phase15-owner-pilot-next-card-smoke",
+      "claim": "pilot-next-card.html renders quick replies as visible numbered choices so the learner can answer with an option number, while preserving command/issue/audit leak guards; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1369,6 +1376,18 @@
             "scripts/phase15-owner-pilot-reply-routing-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-pilot-reply-routing.md",
             "skills/owner-pilot/SKILL.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-NEXT-CARD-NUMBERED-QUICK-REPLIES",
+          "title": "AIOS-12 numbered quick replies 통과",
+          "why": "Codex 대화에서는 1, 2, 3으로 답할 수 있는데 HTML 카드에는 번호가 없다면 실제 pilot 중 사용자가 무엇을 보내야 하는지 다시 헷갈린다.",
+          "done": "pilot-next-card.html이 quickReplies를 1번, 2번, 3번 선택지로 렌더한다. 학습자 표면에는 command, issue, audit 언어를 노출하지 않는다.",
+          "verification": "phase15 owner pilot next-card smoke validates numbered quick-reply labels for daily cards plus existing prompt, privacy, progress, and leak guards.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-next-card-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-pilot-next-card.md"
           ]
         },
         {
@@ -3971,12 +3990,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can get a ready-to-say Korean prompt and quick reply choices for the next learner turn, the same prompt and choices are visible in the next-card HTML, Codex can save a quick-reply selection through the same routing path, route the answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day&#39;s sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.</p>
+        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can get a ready-to-say Korean prompt and visible numbered quick reply choices for the next learner turn, the same prompt and choices are visible in the next-card HTML, Codex can save a quick-reply selection through the same routing path, route the answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.</p>
       </div>
       <div class="stamp">
-        <strong>2026-06-02</strong>
-        AIOS-12 quick reply selection can save pilot answers; real owner pilot Day 1 answer still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation with ready-to-say assistantPrompt and quick replies rendered in HTML, quick-reply selection saving through pilot-reply, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
+        <strong>2026-06-02T00:00:00+09:00</strong>
+        AIOS-12 quick replies are selectable in the pilot card; real owner pilot Day 1 answer still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation with ready-to-say assistantPrompt, numbered quick replies rendered in HTML, quick-reply selection saving through pilot-reply, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -4392,6 +4411,11 @@
               <td><strong>GATE-42</strong><span>Pilot quick-reply selection saving</span></td>
               <td><strong>Pass</strong><span>#204, phase15-owner-pilot-reply-routing-smoke</span></td>
               <td>pilot-reply resolves --quick-reply selections against the current pilot-next choices and saves the selected English sentence through the existing capture path, while invalid selections fail before saving; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-43</strong><span>Pilot next-card numbered quick replies</span></td>
+              <td><strong>Pass</strong><span>#206, phase15-owner-pilot-next-card-smoke</span></td>
+              <td>pilot-next-card.html renders quick replies as visible numbered choices so the learner can answer with an option number, while preserving command/issue/audit leak guards; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -4841,7 +4865,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 116개 보기</summary>
+        <summary>완료 이력 117개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4903,6 +4927,16 @@
               <div class="card-row"><b>왜</b><p>후보를 보여줘도 저장하려면 전체 문장을 다시 입력해야 한다면 실제 pilot 마찰이 남는다. Codex는 선택값만 받아도 해당 영어 문장을 저장할 수 있어야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>pilot-reply가 --quick-reply 1 또는 quick-1을 현재 pilot-next 후보에서 해석하고 기존 pilot-capture 경로로 저장한다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot reply routing smoke validates invalid quick-reply failure, Day 1 quick-1 persistence, numeric Day 2 selection, next-card refresh, and saved-reply card generation.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-NEXT-CARD-NUMBERED-QUICK-REPLIES</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-next-card-smoke.mjs, docs/phase-15-evidence/AIOS-12-pilot-next-card.md</span>
+              </div>
+              <h3>AIOS-12 numbered quick replies 통과</h3>
+              <div class="card-row"><b>왜</b><p>Codex 대화에서는 1, 2, 3으로 답할 수 있는데 HTML 카드에는 번호가 없다면 실제 pilot 중 사용자가 무엇을 보내야 하는지 다시 헷갈린다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-next-card.html이 quickReplies를 1번, 2번, 3번 선택지로 렌더한다. 학습자 표면에는 command, issue, audit 언어를 노출하지 않는다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke validates numbered quick-reply labels for daily cards plus existing prompt, privacy, progress, and leak guards.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
