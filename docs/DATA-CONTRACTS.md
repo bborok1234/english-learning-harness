@@ -655,7 +655,7 @@ The cockpit refresh is a product-surface convenience contract. It is not evidenc
 }
 ```
 
-The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale, then write `pilot-reply-card.json/html` as the latest saved-reply surface. For daily replies, `learnerFacing` and the reply card must expose only learner-safe coaching and next-card content; they must not expose command names, issue labels, transcript internals, or audit internals. It is not a learner-facing command and must not appear in generated learner HTML.
+The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale, then write `pilot-reply-card.json/html` as the latest saved-reply surface. For daily replies, `learnerFacing` and the reply card must expose only learner-safe coaching and next-card content; they must not expose command names, issue labels, transcript internals, or audit internals. The generated reply card is a product surface, so a browser render smoke must verify saved status, coaching cells, next-card content, and no internal language leakage. It is not a learner-facing command and must not appear in generated learner HTML.
 
 `pilot-next --json` writes the current learner-facing pilot card:
 

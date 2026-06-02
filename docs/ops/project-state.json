@@ -3,8 +3,8 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 pilot reply-card surface implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 pilot reply-card surface browser-verified; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
     "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can route the next answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day's sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
@@ -519,6 +519,12 @@
       "kind": "source"
     },
     {
+      "label": "scripts/phase15-owner-pilot-reply-card-render-smoke.mjs",
+      "path": "../scripts/phase15-owner-pilot-reply-card-render-smoke.mjs",
+      "role": "owner pilot saved-reply card browser render smoke",
+      "kind": "source"
+    },
+    {
       "label": "docs/phase-15-evidence/AIOS-12-pilot-reply-routing.md",
       "path": "./phase-15-evidence/AIOS-12-pilot-reply-routing.md",
       "role": "AIOS-12 pilot reply routing evidence",
@@ -846,6 +852,13 @@
       "status": "Pass",
       "evidence": "pilot-reply command, phase15-owner-pilot-reply-routing-smoke, phase15-owner-pilot-skill-smoke",
       "claim": "Codex can route the learner's current pilot answer to the next baseline, daily, or final slot, refresh the next learner-facing card, return learner-safe saved/coaching summary fields, and write a saved-reply HTML card without asking the learner for phase, card id, or day number; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-38",
+      "label": "Pilot reply-card browser render",
+      "status": "Pass",
+      "evidence": "phase15-owner-pilot-reply-card-render-smoke, phase15-owner-pilot-reply-routing-smoke",
+      "claim": "the saved-reply card renders in a browser with saved status, four coaching evidence cells, next phrase, next-card content, and no internal command/issue/audit leakage; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -962,6 +975,18 @@
             "scripts/phase15-owner-pilot-reply-routing-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-pilot-reply-routing.md",
             "skills/owner-pilot/SKILL.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-PILOT-REPLY-CARD-RENDER",
+          "title": "AIOS-12 saved-reply card browser render 통과",
+          "why": "저장 카드가 파일로만 존재하면 제품 표면 검증이 약하다. 학습자가 실제로 여는 HTML이 브라우저에서 코칭과 다음 카드를 안전하게 보여줘야 한다.",
+          "done": "fixture Day 1 pilot-reply가 만든 pilot-reply-card.html을 Playwright로 렌더하고, 저장 상태, 네 개 코칭 셀, next phrase, next card, 누수 금지어를 검증한다.",
+          "verification": "phase15 owner pilot reply card render smoke validates browser-rendered saved status, coaching cells, next-card content, and no internal command/issue/audit leakage.",
+          "files": [
+            "scripts/phase15-owner-pilot-reply-card-render-smoke.mjs",
+            "scripts/phase15-owner-pilot-reply-routing-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-pilot-reply-routing.md"
           ]
         },
         {
@@ -2991,6 +3016,11 @@
       "name": "AIOS-12 automatic pilot reply routing",
       "status": "Pass",
       "detail": "phase15-owner-pilot-reply-routing smoke validates pilot-reply routes the next learner answer to baseline, daily day, and final card through pilot-capture while preserving cockpit refresh, regenerating the next pilot card, returning learner-safe summary fields, writing a saved-reply card, and avoiding learner-facing command-token leakage."
+    },
+    {
+      "name": "AIOS-12 saved-reply card browser render",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-reply-card-render smoke validates a fixture Day 1 saved-reply card renders in a browser with saved status, four coaching cells, next phrase, next-card prompt, and no internal command, issue, or audit leakage."
     }
   ],
   "commands": [
@@ -3017,6 +3047,10 @@
     {
       "label": "Run AIOS-12 pilot reply routing smoke",
       "command": "node scripts/phase15-owner-pilot-reply-routing-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-12 pilot reply-card render smoke",
+      "command": "node scripts/phase15-owner-pilot-reply-card-render-smoke.mjs"
     },
     {
       "label": "Run AIOS-12 pilot audit mechanics smoke",

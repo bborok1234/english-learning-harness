@@ -24,6 +24,7 @@ The learner should not need to know whether the current pilot answer belongs to 
 
 ```bash
 node scripts/phase15-owner-pilot-reply-routing-smoke.mjs
+node scripts/phase15-owner-pilot-reply-card-render-smoke.mjs
 ```
 
 The smoke validates:
@@ -38,6 +39,8 @@ The smoke validates:
 - baseline/final replies expose saved status and the next card without inventing coaching,
 - each reply writes a `pilot-reply-card.html/json` artifact,
 - the daily reply card includes saved status, recast, next phrase, and next card,
+- the saved-reply card renders in a browser through Playwright or the bundled Codex runtime fallback,
+- the rendered card shows saved status, four coaching evidence cells, and the next-card prompt,
 - learner-facing cockpit HTML does not expose internal pilot command tokens.
 
 ## Claim Boundary

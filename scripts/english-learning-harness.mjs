@@ -1176,7 +1176,7 @@ function pilotReplyCardArtifact({ paths, date, routedTo, learnerFacing, nextCard
       html: nextCardArtifact?.htmlPath ? relativeToRoot(paths, nextCardArtifact.htmlPath) : "",
       url: nextCardArtifact?.url ?? "",
     },
-    privacy: "답변 원문은 기본적으로 로컬 pilot state에만 저장됩니다. 공개 PR/issue에는 올리지 않습니다.",
+    privacy: "답변 원문은 기본적으로 내 컴퓨터의 학습 기록에만 저장됩니다. 공개 협업 기록에는 올리지 않습니다.",
     claim_boundary: claimBoundary,
   };
   const jsonPath = resolve(paths.pilotDir, "pilot-reply-card.json");
