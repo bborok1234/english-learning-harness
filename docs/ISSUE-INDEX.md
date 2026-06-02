@@ -626,3 +626,6 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-finish` writes `product_journey_audit` into the local pilot report.
 - `scripts/phase15-owner-pilot-journey-audit-smoke.mjs` verifies the five-day fixture audit mechanics and claim boundaries.
 - `docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md` records that this is not a substitute for the real owner/self pilot run.
+- `skills/owner-pilot/SKILL.md` lets Codex run Day 0, daily pilot days, and final sample collection inside conversation while using the local engine internally.
+- `scripts/phase15-owner-pilot-skill-smoke.mjs` verifies the skill contract and keeps real pilot completion separate from fixture mechanics.
+- `docs/phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md` records the Codex-facing pilot skill and install evidence.

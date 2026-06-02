@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 pilot journey audit mechanics implemented; real owner pilot still required",
-    "status": "AIOS-12 (#179) now has local audit mechanics for mission, scene, asset deck top action, cockpit/report links, friction notes, and product decision fields. #179 remains open until a real owner/self five-day pilot is run with actual transcripts.",
+    "stage": "AIOS-12 owner pilot Codex skill installed; real owner pilot still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics plus a Codex-facing owner-pilot skill installed by setup. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now judge the AI-native learning OS as a product journey instead of only checking transcript deltas. The next step is the real owner/self learner run, not another fixture-only claim.",
+    "summary": "The learner pilot lane can now be run by Codex inside conversation, while the local engine stores Day 0, daily sessions, final audit, asset actions, cockpit, and reports internally. The next step is the real owner/self learner run.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has local owner/self pilot audit mechanics that preserve daily AIOS artifacts and next asset actions for later real-pilot judgment.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -859,14 +859,38 @@
       "path": "../scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
       "role": "owner pilot journey audit smoke",
       "kind": "source"
+    },
+    {
+      "label": "skills/owner-pilot/SKILL.md",
+      "path": "../skills/owner-pilot/SKILL.md",
+      "role": "Codex-facing owner pilot skill",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md",
+      "path": "./phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md",
+      "role": "AIOS-12 owner pilot Codex skill evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/phase15-owner-pilot-skill-smoke.mjs",
+      "path": "../scripts/phase15-owner-pilot-skill-smoke.mjs",
+      "role": "owner pilot Codex skill smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "pilot audit mechanics implemented; #179 stays open",
+      "detail": "pilot audit mechanics and Codex pilot skill implemented; #179 stays open",
       "tone": "amber"
+    },
+    {
+      "label": "Pilot surface",
+      "value": "Codex skill",
+      "detail": "english-learning-owner-pilot installed by setup",
+      "tone": "green"
     },
     {
       "label": "Mechanics proof",
@@ -879,12 +903,6 @@
       "value": "5 real days",
       "detail": "actual owner/self transcripts and friction notes still required",
       "tone": "red"
-    },
-    {
-      "label": "Decision set",
-      "value": "5 choices",
-      "detail": "continue, research, pivot, kill_claim, invalid",
-      "tone": "green"
     },
     {
       "label": "Blocked claims",
@@ -1082,6 +1100,13 @@
       "status": "Pass",
       "evidence": "#179 mechanics, phase15-owner-pilot-journey-audit-smoke, product-surface-smoke, ops-dashboard-smoke",
       "claim": "pilot-day and pilot-finish preserve daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed"
+    },
+    {
+      "id": "GATE-28",
+      "label": "Owner pilot Codex skill surface",
+      "status": "Pass",
+      "evidence": "phase15-owner-pilot-skill-smoke, phase7-agent-install-smoke, phase1-scaffold-smoke",
+      "claim": "setup installs a Codex-facing owner pilot skill that keeps learners in conversation while Codex runs pilot-start/day/finish internally; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1090,6 +1115,18 @@
       "title": "Done",
       "tone": "green",
       "cards": [
+        {
+          "id": "AIOS-12-CODEX-SKILL",
+          "title": "AIOS-12 Codex pilot skill 준비 완료",
+          "why": "실제 pilot은 사용자가 node 명령을 치는 제품이면 안 된다. Codex가 대화 안에서 Day 0/day/final을 운영해야 한다.",
+          "done": "owner-pilot skill을 추가하고 setup 설치 및 skill contract smoke를 통과했다.",
+          "verification": "phase15 owner pilot skill smoke, phase7 agent install smoke, phase1 scaffold smoke passed.",
+          "files": [
+            "skills/owner-pilot/SKILL.md",
+            "setup",
+            "scripts/phase15-owner-pilot-skill-smoke.mjs"
+          ]
+        },
         {
           "id": "AIOS-12-MECHANICS",
           "title": "AIOS-12 pilot audit mechanics 통과",
@@ -2464,9 +2501,9 @@
         {
           "id": "REAL-AIOS-12-PILOT",
           "title": "실제 owner/self 5일 pilot 실행",
-          "why": "fixture는 mechanics proof일 뿐이다. 제품 목표는 실제 학습자가 매일 들어오고 싶고 말하기 journey를 이해하는 것이다.",
-          "done": "실제 transcript, friction note, asset action 선택, learner report/cockpit review, final decision이 local pilot report에 남는다.",
-          "verification": "#179 remains open until real owner/self evidence exists; do not close from fixture data.",
+          "why": "이제 Codex가 대화형 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.",
+          "done": "Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.",
+          "verification": "#179 remains open until real owner/self evidence exists; fixture and skill smokes are not enough.",
           "files": [
             "pilot-state.json",
             "artifacts/pilot/",
@@ -3060,6 +3097,11 @@
       "name": "AIOS-12 owner pilot journey audit mechanics",
       "status": "Pass",
       "detail": "phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims."
+    },
+    {
+      "name": "AIOS-12 owner pilot Codex skill",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-skill smoke validates the Codex-facing pilot skill contract, and phase7-agent-install smoke verifies setup installs english-learning-owner-pilot."
     }
   ],
   "commands": [
@@ -3450,6 +3492,14 @@
     {
       "label": "Run AIOS-12 pilot audit mechanics smoke",
       "command": "node scripts/phase15-owner-pilot-journey-audit-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-12 owner pilot skill smoke",
+      "command": "node scripts/phase15-owner-pilot-skill-smoke.mjs"
+    },
+    {
+      "label": "Run agent install smoke",
+      "command": "node scripts/phase7-agent-install-smoke.mjs"
     }
   ]
 }
@@ -3458,12 +3508,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now judge the AI-native learning OS as a product journey instead of only checking transcript deltas. The next step is the real owner/self learner run, not another fixture-only claim.</p>
+        <p class="summary">The learner pilot lane can now be run by Codex inside conversation, while the local engine stores Day 0, daily sessions, final audit, asset actions, cockpit, and reports internally. The next step is the real owner/self learner run.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-12 pilot journey audit mechanics implemented; real owner pilot still required<br>
-        AIOS-12 (#179) now has local audit mechanics for mission, scene, asset deck top action, cockpit/report links, friction notes, and product decision fields. #179 remains open until a real owner/self five-day pilot is run with actual transcripts.
+        AIOS-12 owner pilot Codex skill installed; real owner pilot still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics plus a Codex-facing owner-pilot skill installed by setup. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -3472,7 +3522,12 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current slice</div>
           <div class="metric-value">AIOS-12</div>
-          <p>pilot audit mechanics implemented; #179 stays open</p>
+          <p>pilot audit mechanics and Codex pilot skill implemented; #179 stays open</p>
+        </article>
+        <article class="metric-card tone-green">
+          <div class="eyebrow"><span class="dot"></span>Pilot surface</div>
+          <div class="metric-value">Codex skill</div>
+          <p>english-learning-owner-pilot installed by setup</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Mechanics proof</div>
@@ -3483,11 +3538,6 @@
           <div class="eyebrow"><span class="dot"></span>Real proof needed</div>
           <div class="metric-value">5 real days</div>
           <p>actual owner/self transcripts and friction notes still required</p>
-        </article>
-        <article class="metric-card tone-green">
-          <div class="eyebrow"><span class="dot"></span>Decision set</div>
-          <div class="metric-value">5 choices</div>
-          <p>continue, research, pivot, kill_claim, invalid</p>
         </article>
         <article class="metric-card tone-red">
           <div class="eyebrow"><span class="dot"></span>Blocked claims</div>
@@ -3523,9 +3573,9 @@
                 <span>pilot-state.json, artifacts/pilot/, cockpit.html, artifacts/reports/</span>
               </div>
               <h3>실제 owner/self 5일 pilot 실행</h3>
-              <div class="card-row"><b>왜</b><p>fixture는 mechanics proof일 뿐이다. 제품 목표는 실제 학습자가 매일 들어오고 싶고 말하기 journey를 이해하는 것이다.</p></div>
-              <div class="card-row"><b>완료</b><p>실제 transcript, friction note, asset action 선택, learner report/cockpit review, final decision이 local pilot report에 남는다.</p></div>
-              <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; do not close from fixture data.</p></div>
+              <div class="card-row"><b>왜</b><p>이제 Codex가 대화형 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.</p></div>
+              <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; fixture and skill smokes are not enough.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3804,6 +3854,11 @@
               <td><strong>GATE-27</strong><span>Owner pilot journey audit mechanics</span></td>
               <td><strong>Pass</strong><span>#179 mechanics, phase15-owner-pilot-journey-audit-smoke, product-surface-smoke, ops-dashboard-smoke</span></td>
               <td>pilot-day and pilot-finish preserve daily mission, scene, asset deck top action, learner report, cockpit, friction notes, and a product journey audit decision; real pilot outcome remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-28</strong><span>Owner pilot Codex skill surface</span></td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-skill-smoke, phase7-agent-install-smoke, phase1-scaffold-smoke</span></td>
+              <td>setup installs a Codex-facing owner pilot skill that keeps learners in conversation while Codex runs pilot-start/day/finish internally; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -4102,6 +4157,18 @@
               <strong>scripts/phase15-owner-pilot-journey-audit-smoke.mjs</strong>
               <span>owner pilot journey audit smoke</span>
             </a>
+            <a class="link-card source" href="../../skills/owner-pilot/SKILL.md">
+              <strong>skills/owner-pilot/SKILL.md</strong>
+              <span>Codex-facing owner pilot skill</span>
+            </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md">
+              <strong>docs/phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md</strong>
+              <span>AIOS-12 owner pilot Codex skill evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/phase15-owner-pilot-skill-smoke.mjs">
+              <strong>scripts/phase15-owner-pilot-skill-smoke.mjs</strong>
+              <span>owner pilot Codex skill smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -4109,10 +4176,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M9 pilot AIOS readiness bridge</td>
-              <td><strong>Pass</strong><span>phase9-pilot-aios-readiness smoke verifies five pilot days run through practice, daily mission/scene/report/cockpit links exist, final learner report and cockpit are linked, and unsupported claims are blocked.</span></td>
-            </tr>
             <tr>
               <td>M9 owner pilot mechanics regression</td>
               <td><strong>Pass</strong><span>phase9-owner-pilot-smoke remains green after pilot-day moved from today to practice; baseline, five days, rubric report, and no-assumed-name checks pass.</span></td>
@@ -4140,6 +4203,10 @@
             <tr>
               <td>AIOS-12 owner pilot journey audit mechanics</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 owner pilot Codex skill</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the Codex-facing pilot skill contract, and phase7-agent-install smoke verifies setup installs english-learning-owner-pilot.</span></td>
             </tr>
           </tbody>
         </table>
@@ -4185,9 +4252,19 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 101개 보기</summary>
+        <summary>완료 이력 102개 보기</summary>
         <div class="archive-body column-cards">
 
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-CODEX-SKILL</strong>
+                <span>skills/owner-pilot/SKILL.md, setup, scripts/phase15-owner-pilot-skill-smoke.mjs</span>
+              </div>
+              <h3>AIOS-12 Codex pilot skill 준비 완료</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot은 사용자가 node 명령을 치는 제품이면 안 된다. Codex가 대화 안에서 Day 0/day/final을 운영해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>owner-pilot skill을 추가하고 setup 설치 및 skill contract smoke를 통과했다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot skill smoke, phase7 agent install smoke, phase1 scaffold smoke passed.</p></div>
+            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-12-MECHANICS</strong>
@@ -5201,7 +5278,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 98개 보기</summary>
+        <summary>전체 검증 99개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -5598,12 +5675,16 @@
               <td>AIOS-12 owner pilot journey audit mechanics</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates five fixture pilot days preserve mission, scene, asset deck, next asset action, learner report, cockpit, friction notes, and product_journey_audit without outcome overclaims.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-12 owner pilot Codex skill</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the Codex-facing pilot skill contract, and phase7-agent-install smoke verifies setup installs english-learning-owner-pilot.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 97개 보기</summary>
+        <summary>전체 명령 99개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5993,6 +6074,14 @@
             <div class="command">
               <span>Run AIOS-12 pilot audit mechanics smoke</span>
               <code>node scripts/phase15-owner-pilot-journey-audit-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-12 owner pilot skill smoke</span>
+              <code>node scripts/phase15-owner-pilot-skill-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run agent install smoke</span>
+              <code>node scripts/phase7-agent-install-smoke.mjs</code>
             </div>
         </div>
       </details>

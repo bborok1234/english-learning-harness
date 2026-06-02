@@ -72,6 +72,7 @@ install_skill "$REPO_DIR/skills/onboarding" "english-learning-onboarding"
 install_skill "$REPO_DIR/skills/daily-session" "english-learning-daily-session"
 install_skill "$REPO_DIR/skills/mini-mirror" "english-learning-mini-mirror"
 install_skill "$REPO_DIR/skills/picture-description" "english-learning-picture-description"
+install_skill "$REPO_DIR/skills/owner-pilot" "english-learning-owner-pilot"
 
 mkdir -p "$INSTALL_STATE_DIR"
 cat > "$INSTALL_STATE_FILE" <<EOF

@@ -13,6 +13,7 @@ const expectedSkills = [
   "english-learning-daily-session",
   "english-learning-mini-mirror",
   "english-learning-picture-description",
+  "english-learning-owner-pilot",
 ];
 
 function assert(condition, message) {
