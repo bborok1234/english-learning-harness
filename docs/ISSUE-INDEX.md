@@ -595,9 +595,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - Learner report and cockpit link the latest mission asset deck.
 - `scripts/generated-mission-asset-deck-smoke.mjs` verifies command path, practice path, report/cockpit linkage, no engineering language leakage, and blocked unsupported claims.
 
-#176 planned evidence should show:
+#176 evidence currently shows:
 
 - mission asset deck JSON includes deterministic asset priority and reason fields.
 - different learner evidence states produce different top asset actions.
 - cockpit exposes the next asset action while preserving the latest deck link.
 - completion evidence requirements and blocked claims remain intact.
+- `scripts/adaptive-mission-asset-priority-smoke.mjs` verifies the no-evidence -> text, text -> image, text+image -> voice, and text+image+voice -> interactive scene priority path.
+- `docs/phase-11-evidence/AIOS-11-adaptive-mission-asset-priority.md` records the decision, verification commands, and claim boundary.

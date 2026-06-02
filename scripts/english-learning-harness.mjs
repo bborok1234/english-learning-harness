@@ -431,6 +431,8 @@ function cockpit(options) {
     cockpitUrl: result.cockpitUrl,
     todayAction: result.state.today,
     speakingSkillOS: result.state.speaking_skill_os,
+    nextAssetAction: result.state.next_asset_action,
+    nextActions: result.state.next_actions,
     journey: result.state.journey,
     claimBoundary: result.state.claim_boundary,
   };
