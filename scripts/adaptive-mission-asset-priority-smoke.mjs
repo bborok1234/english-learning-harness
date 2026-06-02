@@ -26,6 +26,12 @@ function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
 
+function assertNoLearnerCommandLeak(text, label) {
+  for (const forbidden of ["node scripts/english-learning-harness.mjs", "--learner-root", "start_command"]) {
+    assert(!text.includes(forbidden), `${label} leaked internal command token: ${forbidden}`);
+  }
+}
+
 function topAsset(deckPath) {
   const state = readJson(deckPath);
   const top = state.assets.find((asset) => asset.priority?.recommended_next);
@@ -168,11 +174,15 @@ function main() {
   ]);
   assert(cockpit.journey.latest_mission_asset_deck?.html, "cockpit should keep latest asset deck link");
   assert(cockpit.nextAssetAction?.asset_id === "interactive-html-scene", "cockpit next asset should match deck top asset");
+  assert(!("start_command" in cockpit.nextAssetAction), "cockpit next asset must not expose start_command");
   assert(
     cockpit.nextActions.some((action) => action.label === cockpit.nextAssetAction.label),
     "cockpit next actions should include asset action",
   );
+  const cockpitState = readFileSync(cockpit.cockpitStatePath, "utf8");
   const cockpitHtml = readFileSync(cockpit.cockpitPath, "utf8");
+  assertNoLearnerCommandLeak(cockpitState, "cockpit state");
+  assertNoLearnerCommandLeak(cockpitHtml, "cockpit HTML");
   assert(cockpitHtml.includes("다음 asset action"), "cockpit HTML should show next asset action");
   assert(cockpitHtml.includes("scene frame"), "cockpit HTML should explain scene frame priority");
 

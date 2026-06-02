@@ -617,6 +617,15 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `scripts/generated-mission-storyboard-smoke.mjs` verifies command output, JSON/HTML existence, frame structure, interactive controls, asset deck linkage, learner report linkage, personal cockpit linkage, product-surface leak guards, and unsupported-claim guards.
 - This proves local Remotion-style storyboard artifact mechanics only. It does not prove video rendering, realtime voice, retention, fluency, or real-world speaking improvement.
 
+#214 evidence currently shows:
+
+- Personal cockpit state/HTML no longer expose `node scripts/...`, `--learner-root`, or `start_command` for ordinary learner actions.
+- Today mission, generated artifact empty state, and next actions are rendered as Korean Codex-facing prompts.
+- `scripts/personal-learner-cockpit-smoke.mjs` checks cockpit JSON, HTML, and rendered text for internal command-token leakage.
+- `scripts/adaptive-mission-asset-priority-smoke.mjs` checks the asset-deck-linked cockpit state does not reintroduce internal command fields.
+- `scripts/product-surface-smoke.mjs` applies the same product-surface boundary to the tracked learner cockpit preview.
+- This improves product/ops surface separation only. It does not close the real owner/self pilot or prove learning outcomes.
+
 M14 Adaptive Asset Journey is closed with #176 complete.
 
 ## M15 Real Owner AIOS Pilot
@@ -630,6 +639,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #204 | AIOS-12: Save pilot replies from quick reply selection | continue |
 | #206 | AIOS-12: Make pilot quick replies visually selectable | continue |
 | #208 | AIOS-12: Add copy buttons to pilot quick replies | continue |
+| #214 | AIOS-14: Remove internal commands from learner cockpit product surface | continue |
 
 #179 planned evidence should show:
 

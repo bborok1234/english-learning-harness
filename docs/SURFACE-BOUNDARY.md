@@ -35,7 +35,7 @@ Allowed language:
 - review cue
 - progress reflection
 - privacy/local-first explanation
-- Codex prompt the learner can run
+- Korean Codex prompt the learner can say in the conversation
 
 Forbidden language:
 
@@ -44,6 +44,9 @@ Forbidden language:
 - milestone closeout jargon
 - implementation readiness claims
 - internal board/archive history
+- `node scripts/...` engine commands for ordinary learner actions
+- `--learner-root` or other shell flags
+- internal command field names such as `start_command`
 
 ## Engineering/Ops Surface
 
