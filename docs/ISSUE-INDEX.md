@@ -633,7 +633,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - The first five daily pilot missions now cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating the same prompt.
 - `scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs` verifies the first five fixture pilot days expose distinct learner-facing speaking actions and become ready for final sample after five days.
 - `pilot-day`/`pilot-finish` now preserve per-day `pilot_mission` metadata so final reports and product journey audit can see which speaking action was sampled.
-- `scripts/phase15-owner-pilot-journey-audit-smoke.mjs` verifies `days_with_pilot_mission_metadata`, distinct pilot mission skills, and Markdown pilot action output.
+- `pilot-day`/`pilot-finish` now preserve per-day `learner_coaching` so final reports can show the learner-facing recast/next phrase/focus produced by practice.
+- `scripts/phase15-owner-pilot-journey-audit-smoke.mjs` verifies `days_with_pilot_mission_metadata`, `days_with_learner_coaching`, distinct pilot mission skills, and Markdown pilot action/coaching output.
 - `pilot-capture` now durably stores one pilot card answer at a time and auto-commits the Day 0/final sample when the fifth card is captured.
 - `pilot-capture` now refreshes the learner cockpit after each captured card, including partial Day 0/final answers and daily pilot captures.
 - `scripts/phase15-owner-pilot-capture-smoke.mjs` verifies card-level baseline capture, automatic baseline commit, daily capture, next asset action preservation, and cockpit refresh.

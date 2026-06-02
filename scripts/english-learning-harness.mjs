@@ -1365,6 +1365,13 @@ function pilotDay(options) {
       target_skill: mission.skill,
       transfer_evidence: mission.evidence,
     },
+    learner_coaching: {
+      communicated: practiceResult.learnerFacing.today,
+      recast: practiceResult.learnerFacing.recast,
+      next_phrase: practiceResult.learnerFacing.nextPhrase,
+      next_focus: practiceResult.learnerFacing.nextFocus,
+      artifact_hint: practiceResult.learnerFacing.artifactHint,
+    },
     speaking_backlog_evidence: practiceResult.session.speakingBacklogEvidence,
     aios_artifacts: {
       mission: relativeToRoot(paths, practiceResult.mission.htmlPath),
@@ -1432,7 +1439,7 @@ function pilotReportMarkdown(report) {
     ...(bridgeDays.length
       ? bridgeDays.map(
           (day) =>
-            `- Day ${day.day}: pilot_action=${day.pilot_mission?.target_skill || "none"}; mission=${day.mission || "none"}; scene=${day.scene || "none"}; asset_deck=${day.asset_deck || "none"}; next_asset=${day.next_asset_action?.asset_id || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
+            `- Day ${day.day}: pilot_action=${day.pilot_mission?.target_skill || "none"}; coaching_next=${day.learner_coaching?.next_phrase || "none"}; mission=${day.mission || "none"}; scene=${day.scene || "none"}; asset_deck=${day.asset_deck || "none"}; next_asset=${day.next_asset_action?.asset_id || "none"}; report=${day.learner_report || "none"}; cockpit=${day.cockpit || "none"}`,
         )
       : ["- none"]),
     "",
@@ -1440,6 +1447,7 @@ function pilotReportMarkdown(report) {
     "",
     `- Days with mission/scene/report/cockpit: ${audit.days_with_core_artifacts ?? 0}/${report.daily_session_count}`,
     `- Days with asset deck action: ${audit.days_with_asset_actions ?? 0}/${report.daily_session_count}`,
+    `- Days with learner coaching: ${audit.days_with_learner_coaching ?? 0}/${report.daily_session_count}`,
     `- Friction note count: ${audit.friction_note_count ?? 0}`,
     `- Decision: ${audit.decision || report.rubric.decision}`,
     `- Decision reason: ${audit.decision_reason || "none"}`,
@@ -1492,11 +1500,13 @@ function pilotFinish(options) {
   const distinctPilotMissionSkills = [
     ...new Set(state.days.map((day) => day.pilot_mission?.target_skill).filter(Boolean)),
   ];
+  const learnerCoachingCount = state.days.filter((day) => day.learner_coaching?.next_phrase).length;
   const evidenceComplete =
     completedDays >= state.minimum_valid_daily_sessions &&
     daysWithCoreArtifacts === completedDays &&
     daysWithAssetActions === completedDays &&
     pilotMissionCount === completedDays &&
+    learnerCoachingCount === completedDays &&
     Boolean(state.baseline) &&
     turns.length > 0;
   const productDecision = evidenceComplete ? rubric.decision : "invalid";
@@ -1512,6 +1522,7 @@ function pilotFinish(options) {
     days_with_asset_actions: daysWithAssetActions,
     days_with_pilot_mission_metadata: pilotMissionCount,
     distinct_pilot_mission_skills: distinctPilotMissionSkills,
+    days_with_learner_coaching: learnerCoachingCount,
     friction_note_count: frictionNoteCount,
     required_decision_set: ["continue", "research", "pivot", "kill_claim", "invalid"],
     blocked_claims: [
@@ -1539,6 +1550,7 @@ function pilotFinish(options) {
         day: day.day,
         session_id: day.session_id,
         pilot_mission: day.pilot_mission ?? null,
+        learner_coaching: day.learner_coaching ?? null,
         mission: day.aios_artifacts?.mission ?? "",
         scene: day.aios_artifacts?.scene ?? "",
         asset_deck: day.aios_artifacts?.asset_deck ?? "",
