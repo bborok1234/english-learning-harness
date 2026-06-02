@@ -405,11 +405,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-9 multimodal asset contract ready for PR verification",
-    "status": "AIOS-9 implements a mission asset contract so text, HTML scene, image prompt, voice transcript, Remotion-style storyboard, and future realtime hooks must map to Speaking Skill OS evidence instead of acting as decoration.",
+    "stage": "AIOS-10 mission asset deck ready for PR verification",
+    "status": "AIOS-10 turns the AIOS-9 asset contract into learner-root mission asset deck JSON/HTML and links it from practice, learner report, and cockpit.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing mission surface now has an evidence-bearing multimodal asset contract. Text-first remains canonical, while optional generated assets must require learner output and session evidence.",
-    "nextGoal": "Verify, PR, and merge AIOS-9; then move toward real owner/self pilot usage or richer generated artifact runtime built on the contract.",
+    "summary": "The learner-facing mission surface now includes an operable asset deck. Text-first remains canonical, optional generated assets are visible, and mission completion still requires learner output saved as session evidence.",
+    "nextGoal": "Verify, PR, and merge AIOS-10; then decide between real owner/self pilot or deeper rich asset runtime generation.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate and validate local multimodal mission asset contracts tied to Speaking Skill OS evidence requirements.",
+    "allowedClaim": "The harness can generate local learner-operable mission asset decks from the multimodal asset contract and link them into report/cockpit surfaces.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local multimodal asset contract mechanics only; realtime voice, generated-media efficacy, engagement, retention, and learning outcomes remain unclaimed."
+    "claimBoundary": "Allowed claim is local asset deck generation and linkage mechanics only; realtime voice, generated-media efficacy, engagement, retention, and learning outcomes remain unclaimed."
   },
   "ssot": [
     {
@@ -823,37 +823,49 @@
       "path": "../scripts/multimodal-mission-asset-contract-smoke.mjs",
       "role": "multimodal mission asset contract smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-10-generated-mission-asset-deck.md",
+      "path": "./phase-11-evidence/AIOS-10-generated-mission-asset-deck.md",
+      "role": "AIOS-10 generated mission asset deck evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/generated-mission-asset-deck-smoke.mjs",
+      "path": "../scripts/generated-mission-asset-deck-smoke.mjs",
+      "role": "generated mission asset deck smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-9 closes another verified slice",
+      "detail": "full AI-native English Learning OS remains open; AIOS-10 is a product-surface slice",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-9 ready",
-      "detail": "multimodal mission assets now have a machine-readable evidence contract",
+      "value": "AIOS-10 ready",
+      "detail": "asset contract is now rendered as learner-root JSON/HTML deck and linked from report/cockpit",
       "tone": "green"
     },
     {
       "label": "Next goal",
       "value": "PR + pilot/runtime",
-      "detail": "merge #171, then use the contract for real pilot sessions or richer generated artifact runtime",
+      "detail": "merge #174, then use the deck in real owner/self pilot or deeper rich asset runtime work",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#171 in progress",
-      "detail": "M12 Multimodal Mission Asset Contract is the current PR-sized issue",
+      "value": "#174 in progress",
+      "detail": "M13 Rich Generated Asset Runtime is the current PR-sized issue",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Evidence-bearing multimodal",
-      "detail": "HTML, image, voice transcript, and Remotion-style assets must require learner output and session evidence",
+      "value": "Learner-operable assets",
+      "detail": "generated multimodal assets are a visible deck but cannot claim completion without learner evidence",
       "tone": "green"
     }
   ],
@@ -1025,6 +1037,13 @@
       "status": "Pass",
       "evidence": "#171, multimodal-mission-asset-contract-smoke, generated-scene-artifact-smoke, skill-conversation-variants-smoke",
       "claim": "mission assets include canonical text, interactive HTML, image information-gap, voice transcript, Remotion-style storyboard, and future realtime hook entries that require learner output and session evidence; decorative/generated-only assets are rejected"
+    },
+    {
+      "id": "GATE-25",
+      "label": "Learner-operable mission asset deck",
+      "status": "Pass",
+      "evidence": "#174, generated-mission-asset-deck-smoke, multimodal-mission-asset-contract-smoke, generated-scene-artifact-smoke",
+      "claim": "asset-deck writes learner-root JSON/HTML, practice refreshes the deck, report/cockpit link it, and the deck refuses completion claims without session evidence"
     }
   ],
   "board": [
@@ -2348,6 +2367,19 @@
             "scripts/multimodal-mission-asset-contract-smoke.mjs",
             "docs/phase-11-evidence/AIOS-9-multimodal-mission-asset-contract.md"
           ]
+        },
+        {
+          "id": "AIOS-10",
+          "title": "#174 learner-operable mission asset deck 구현",
+          "why": "AIOS-9 contract가 JSON에만 있으면 학습자가 체감하는 AI-native artifact가 약하다.",
+          "done": "asset-deck command와 practice deck refresh를 추가하고, learner report/cockpit에서 최신 deck을 연결했다.",
+          "verification": "`node scripts/generated-mission-asset-deck-smoke.mjs`가 deck render, asset cards, completion policy, report/cockpit linkage, leak guards를 검증한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/generated-mission-asset-deck-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-10-generated-mission-asset-deck.md"
+          ]
         }
       ]
     },
@@ -2358,12 +2390,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-9 PR 검증과 병합",
-          "why": "contract mechanics는 구현됐지만 main evidence로 남기려면 #171 PR-first closeout이 필요하다.",
-          "done": "multimodal asset contract, generated scene, first-use variants, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
-          "verification": "PR이 #171을 닫고 main에서 핵심 smoke를 재실행해야 한다.",
+          "title": "AIOS-10 PR 검증과 병합",
+          "why": "asset deck mechanics는 구현됐지만 main evidence로 남기려면 #174 PR-first closeout이 필요하다.",
+          "done": "asset deck, contract, scene, practice, product/ops dashboard, scaffold smoke와 diff check를 실행한다.",
+          "verification": "PR이 #174를 닫고 main에서 핵심 smoke를 재실행해야 한다.",
           "files": [
-            "scripts/multimodal-mission-asset-contract-smoke.mjs",
+            "scripts/generated-mission-asset-deck-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -2387,11 +2419,11 @@
           ]
         },
         {
-          "id": "RICH-ASSET-RUNTIME",
-          "title": "contract 기반 rich asset runtime 고도화",
-          "why": "AIOS-9는 contract를 만들었다. 다음에는 이 contract를 기반으로 실제 richer HTML/Remotion-style artifact를 더 깊게 생성하고 검증할 수 있다.",
-          "done": "asset contract entries에서 richer generated artifact를 만들고, learner output이 없으면 완료되지 않게 한다.",
-          "verification": "rich asset runtime smoke가 text-first fallback과 optional artifact evidence linkage를 함께 검증해야 한다.",
+          "id": "ADAPTIVE-DECK-SEQUENCING",
+          "title": "asset deck sequencing을 adaptive journey에 연결",
+          "why": "deck은 생성됐지만 7일/30일 journey 안에서 어떤 asset을 언제 다시 보여줄지 아직 학습 전략으로 닫히지 않았다.",
+          "done": "recent evidence와 Speaking Skill OS 상태에 따라 deck asset priority를 바꾸고 learner cockpit에 다음 asset action을 제안한다.",
+          "verification": "adaptive deck sequencing smoke가 repeated session evidence에 따라 priority가 바뀌는지 검증해야 한다.",
           "files": [
             "scripts/lib/english-learning-store.mjs",
             "docs/phase-11-evidence/"
@@ -2930,6 +2962,11 @@
       "name": "AIOS-9 multimodal mission asset contract",
       "status": "Pass",
       "detail": "multimodal-mission-asset-contract smoke validates canonical text-first fallback, HTML scene, image, voice transcript, Remotion-style storyboard, future realtime hook entries, scene evidence alignment, rendered HTML summary, and decorative negative fixtures."
+    },
+    {
+      "name": "AIOS-10 generated mission asset deck",
+      "status": "Pass",
+      "detail": "generated-mission-asset-deck smoke validates asset-deck command output, all contract asset cards, no completion without session evidence, practice deck refresh, learner report linkage, cockpit linkage, and product/claim leak guards."
     }
   ],
   "commands": [
@@ -3292,6 +3329,14 @@
     {
       "label": "View AIOS-9 issue",
       "command": "gh issue view 171"
+    },
+    {
+      "label": "Run generated mission asset deck smoke",
+      "command": "node scripts/generated-mission-asset-deck-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-10 issue",
+      "command": "gh issue view 174"
     }
   ]
 }
@@ -3300,12 +3345,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing mission surface now has an evidence-bearing multimodal asset contract. Text-first remains canonical, while optional generated assets must require learner output and session evidence.</p>
+        <p class="summary">The learner-facing mission surface now includes an operable asset deck. Text-first remains canonical, optional generated assets are visible, and mission completion still requires learner output saved as session evidence.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-9 multimodal asset contract ready for PR verification<br>
-        AIOS-9 implements a mission asset contract so text, HTML scene, image prompt, voice transcript, Remotion-style storyboard, and future realtime hooks must map to Speaking Skill OS evidence instead of acting as decoration.
+        AIOS-10 mission asset deck ready for PR verification<br>
+        AIOS-10 turns the AIOS-9 asset contract into learner-root mission asset deck JSON/HTML and links it from practice, learner report, and cockpit.
       </div>
     </header>
 
@@ -3314,27 +3359,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">Active</div>
-          <p>full AI-native English Learning OS remains open; AIOS-9 closes another verified slice</p>
+          <p>full AI-native English Learning OS remains open; AIOS-10 is a product-surface slice</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">AIOS-9 ready</div>
-          <p>multimodal mission assets now have a machine-readable evidence contract</p>
+          <div class="metric-value">AIOS-10 ready</div>
+          <p>asset contract is now rendered as learner-root JSON/HTML deck and linked from report/cockpit</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next goal</div>
           <div class="metric-value">PR + pilot/runtime</div>
-          <p>merge #171, then use the contract for real pilot sessions or richer generated artifact runtime</p>
+          <p>merge #174, then use the deck in real owner/self pilot or deeper rich asset runtime work</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
-          <div class="metric-value">#171 in progress</div>
-          <p>M12 Multimodal Mission Asset Contract is the current PR-sized issue</p>
+          <div class="metric-value">#174 in progress</div>
+          <p>M13 Rich Generated Asset Runtime is the current PR-sized issue</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
-          <div class="metric-value">Evidence-bearing multimodal</div>
-          <p>HTML, image, voice transcript, and Remotion-style assets must require learner output and session evidence</p>
+          <div class="metric-value">Learner-operable assets</div>
+          <p>generated multimodal assets are a visible deck but cannot claim completion without learner evidence</p>
         </article>
     </section>
 
@@ -3362,12 +3407,12 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>scripts/multimodal-mission-asset-contract-smoke.mjs, docs/ops/project-state.json</span>
+                <span>scripts/generated-mission-asset-deck-smoke.mjs, docs/ops/project-state.json</span>
               </div>
-              <h3>AIOS-9 PR 검증과 병합</h3>
-              <div class="card-row"><b>왜</b><p>contract mechanics는 구현됐지만 main evidence로 남기려면 #171 PR-first closeout이 필요하다.</p></div>
-              <div class="card-row"><b>완료</b><p>multimodal asset contract, generated scene, first-use variants, product/ops dashboard, scaffold smoke와 diff check를 실행한다.</p></div>
-              <div class="card-row"><b>검증</b><p>PR이 #171을 닫고 main에서 핵심 smoke를 재실행해야 한다.</p></div>
+              <h3>AIOS-10 PR 검증과 병합</h3>
+              <div class="card-row"><b>왜</b><p>asset deck mechanics는 구현됐지만 main evidence로 남기려면 #174 PR-first closeout이 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>asset deck, contract, scene, practice, product/ops dashboard, scaffold smoke와 diff check를 실행한다.</p></div>
+              <div class="card-row"><b>검증</b><p>PR이 #174를 닫고 main에서 핵심 smoke를 재실행해야 한다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3381,13 +3426,13 @@
             </article>
             <article class="work-card">
               <div class="work-meta">
-                <strong>RICH-ASSET-RUNTIME</strong>
+                <strong>ADAPTIVE-DECK-SEQUENCING</strong>
                 <span>scripts/lib/english-learning-store.mjs, docs/phase-11-evidence/</span>
               </div>
-              <h3>contract 기반 rich asset runtime 고도화</h3>
-              <div class="card-row"><b>왜</b><p>AIOS-9는 contract를 만들었다. 다음에는 이 contract를 기반으로 실제 richer HTML/Remotion-style artifact를 더 깊게 생성하고 검증할 수 있다.</p></div>
-              <div class="card-row"><b>완료</b><p>asset contract entries에서 richer generated artifact를 만들고, learner output이 없으면 완료되지 않게 한다.</p></div>
-              <div class="card-row"><b>검증</b><p>rich asset runtime smoke가 text-first fallback과 optional artifact evidence linkage를 함께 검증해야 한다.</p></div>
+              <h3>asset deck sequencing을 adaptive journey에 연결</h3>
+              <div class="card-row"><b>왜</b><p>deck은 생성됐지만 7일/30일 journey 안에서 어떤 asset을 언제 다시 보여줄지 아직 학습 전략으로 닫히지 않았다.</p></div>
+              <div class="card-row"><b>완료</b><p>recent evidence와 Speaking Skill OS 상태에 따라 deck asset priority를 바꾸고 learner cockpit에 다음 asset action을 제안한다.</p></div>
+              <div class="card-row"><b>검증</b><p>adaptive deck sequencing smoke가 repeated session evidence에 따라 priority가 바뀌는지 검증해야 한다.</p></div>
             </article>
         </div>
       </section>
@@ -3398,16 +3443,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>AIOS-6</strong>
-                <span>skills/daily-session/SKILL.md, scripts/skill-conversation-simulation-smoke.mjs, docs/phase-11-evidence/AIOS-6-skill-conversation-simulation.md</span>
-              </div>
-              <h3>Skill-level learner conversation simulation을 추가함</h3>
-              <div class="card-row"><b>왜</b><p>엔진이 좋아져도 첫 학습 대화가 명령어/프로젝트 설명처럼 보이면 제품 목표가 깨진다. skill transcript 자체를 검증하는 gate가 필요했다.</p></div>
-              <div class="card-row"><b>완료</b><p>daily-session skill에 transcript guardrail을 추가하고, simulated learner transcript가 everyday prompt, learner answer, mini mirror, practice artifact generation을 통과하는 smoke를 만들었다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/skill-conversation-simulation-smoke.mjs`가 통과했고, 실제 `practice` 엔진으로 mission/scene/session/report/cockpit을 생성했다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-7</strong>
@@ -3457,6 +3492,16 @@
               <div class="card-row"><b>왜</b><p>멀티모달 asset이 장식으로 흐르면 기존 영어 챗봇과 차별점이 약해진다. 모든 asset은 learner output과 session evidence로 돌아와야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>mission JSON에 asset_contract를 추가하고 text/html/image/voice/remotion/future realtime entries를 같은 Speaking Skill OS target과 evidence requirement에 연결했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/multimodal-mission-asset-contract-smoke.mjs`가 positive contract, rendered HTML summary, scene evidence alignment, decorative negative fixtures를 검증한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-10</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/generated-mission-asset-deck-smoke.mjs, docs/phase-11-evidence/AIOS-10-generated-mission-asset-deck.md</span>
+              </div>
+              <h3>#174 learner-operable mission asset deck 구현</h3>
+              <div class="card-row"><b>왜</b><p>AIOS-9 contract가 JSON에만 있으면 학습자가 체감하는 AI-native artifact가 약하다.</p></div>
+              <div class="card-row"><b>완료</b><p>asset-deck command와 practice deck refresh를 추가하고, learner report/cockpit에서 최신 deck을 연결했다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/generated-mission-asset-deck-smoke.mjs`가 deck render, asset cards, completion policy, report/cockpit linkage, leak guards를 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -3623,6 +3668,11 @@
               <td><strong>GATE-24</strong><span>Multimodal mission asset contract</span></td>
               <td><strong>Pass</strong><span>#171, multimodal-mission-asset-contract-smoke, generated-scene-artifact-smoke, skill-conversation-variants-smoke</span></td>
               <td>mission assets include canonical text, interactive HTML, image information-gap, voice transcript, Remotion-style storyboard, and future realtime hook entries that require learner output and session evidence; decorative/generated-only assets are rejected</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-25</strong><span>Learner-operable mission asset deck</span></td>
+              <td><strong>Pass</strong><span>#174, generated-mission-asset-deck-smoke, multimodal-mission-asset-contract-smoke, generated-scene-artifact-smoke</span></td>
+              <td>asset-deck writes learner-root JSON/HTML, practice refreshes the deck, report/cockpit link it, and the deck refuses completion claims without session evidence</td>
             </tr>
         </tbody>
       </table>
@@ -3897,6 +3947,14 @@
               <strong>scripts/multimodal-mission-asset-contract-smoke.mjs</strong>
               <span>multimodal mission asset contract smoke</span>
             </a>
+            <a class="link-card source" href="../phase-11-evidence/AIOS-10-generated-mission-asset-deck.md">
+              <strong>docs/phase-11-evidence/AIOS-10-generated-mission-asset-deck.md</strong>
+              <span>AIOS-10 generated mission asset deck evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/generated-mission-asset-deck-smoke.mjs">
+              <strong>scripts/generated-mission-asset-deck-smoke.mjs</strong>
+              <span>generated mission asset deck smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3904,10 +3962,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-4 Codex-operated daily practice flow</td>
-              <td><strong>Pass</strong><span>codex-operated-practice-flow smoke validates one internal practice run creates mission, session artifact, weekly mirror, learner report, cockpit, Speaking Skill OS evidence, and command-leak-free learner summary.</span></td>
-            </tr>
             <tr>
               <td>AIOS-5 generated scene artifacts</td>
               <td><strong>Pass</strong><span>generated-scene-artifact smoke validates scene JSON/HTML generation, Playwright frame controls, evidence requirement, practice generation, report/cockpit linkage, and claim guards.</span></td>
@@ -3936,14 +3990,14 @@
               <td>AIOS-9 multimodal mission asset contract</td>
               <td><strong>Pass</strong><span>multimodal-mission-asset-contract smoke validates canonical text-first fallback, HTML scene, image, voice transcript, Remotion-style storyboard, future realtime hook entries, scene evidence alignment, rendered HTML summary, and decorative negative fixtures.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-10 generated mission asset deck</td>
+              <td><strong>Pass</strong><span>generated-mission-asset-deck smoke validates asset-deck command output, all contract asset cards, no completion without session evidence, practice deck refresh, learner report linkage, cockpit linkage, and product/claim leak guards.</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>View AIOS-4 issue</span>
-              <code>gh issue view 160</code>
-            </div>
             <div class="command">
               <span>View AIOS-5 issue</span>
               <code>gh issue view 162</code>
@@ -3972,6 +4026,10 @@
               <span>View AIOS-9 issue</span>
               <code>gh issue view 171</code>
             </div>
+            <div class="command">
+              <span>View AIOS-10 issue</span>
+              <code>gh issue view 174</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3980,7 +4038,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 97개 보기</summary>
+        <summary>완료 이력 98개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4953,10 +5011,20 @@
               <div class="card-row"><b>완료</b><p>`scene` 명령이 `artifacts/scenes/daily-scene-YYYY-MM-DD.json/html`을 만들고, `practice`, learner report, cockpit이 최신 scene을 연결한다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/generated-scene-artifact-smoke.mjs`, `node scripts/codex-operated-practice-flow-smoke.mjs`, `node scripts/interactive-artifact-report-smoke.mjs`가 통과했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-6</strong>
+                <span>skills/daily-session/SKILL.md, scripts/skill-conversation-simulation-smoke.mjs, docs/phase-11-evidence/AIOS-6-skill-conversation-simulation.md</span>
+              </div>
+              <h3>Skill-level learner conversation simulation을 추가함</h3>
+              <div class="card-row"><b>왜</b><p>엔진이 좋아져도 첫 학습 대화가 명령어/프로젝트 설명처럼 보이면 제품 목표가 깨진다. skill transcript 자체를 검증하는 gate가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>daily-session skill에 transcript guardrail을 추가하고, simulated learner transcript가 everyday prompt, learner answer, mini mirror, practice artifact generation을 통과하는 smoke를 만들었다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/skill-conversation-simulation-smoke.mjs`가 통과했고, 실제 `practice` 엔진으로 mission/scene/session/report/cockpit을 생성했다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 94개 보기</summary>
+        <summary>전체 검증 95개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -5337,12 +5405,16 @@
               <td>AIOS-9 multimodal mission asset contract</td>
               <td><strong>Pass</strong><span>multimodal-mission-asset-contract smoke validates canonical text-first fallback, HTML scene, image, voice transcript, Remotion-style storyboard, future realtime hook entries, scene evidence alignment, rendered HTML summary, and decorative negative fixtures.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-10 generated mission asset deck</td>
+              <td><strong>Pass</strong><span>generated-mission-asset-deck smoke validates asset-deck command output, all contract asset cards, no completion without session evidence, practice deck refresh, learner report linkage, cockpit linkage, and product/claim leak guards.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 90개 보기</summary>
+        <summary>전체 명령 92개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5704,6 +5776,14 @@
             <div class="command">
               <span>View AIOS-9 issue</span>
               <code>gh issue view 171</code>
+            </div>
+            <div class="command">
+              <span>Run generated mission asset deck smoke</span>
+              <code>node scripts/generated-mission-asset-deck-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-10 issue</span>
+              <code>gh issue view 174</code>
             </div>
         </div>
       </details>

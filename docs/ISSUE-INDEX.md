@@ -511,6 +511,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #166 | AIOS-7: Add adaptive generated scene variants | continue |
 | #169 | AIOS-8: Add first-use conversation variant gate | continue |
 | #171 | AIOS-9: Define multimodal mission asset contract | continue |
+| #174 | AIOS-10: Generate learner-operable mission asset deck | continue |
 
 #154 evidence currently shows:
 
@@ -583,3 +584,12 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `validateMissionAssetContract()` rejects decorative assets, assets that do not require learner output, contracts without canonical text, missing session evidence, and unsupported claims.
 - `scripts/multimodal-mission-asset-contract-smoke.mjs` verifies the positive contract, rendered mission HTML summary, scene evidence alignment, and negative fixtures.
 - realtime voice and generated-media learning gains remain blocked claims unless separately proven.
+
+#174 evidence currently shows:
+
+- `node scripts/english-learning-harness.mjs asset-deck` writes learner-root `artifacts/assets/mission-assets-YYYY-MM-DD.json/html`.
+- `practice` now refreshes the mission asset deck together with mission, scene, session, weekly mirror, learner report, and cockpit.
+- The deck renders all contract assets, including text-first, interactive HTML scene, image information-gap, voice transcript, Remotion-style storyboard, and future realtime hook.
+- The deck completion policy says it cannot complete the mission without learner output saved as session evidence.
+- Learner report and cockpit link the latest mission asset deck.
+- `scripts/generated-mission-asset-deck-smoke.mjs` verifies command path, practice path, report/cockpit linkage, no engineering language leakage, and blocked unsupported claims.

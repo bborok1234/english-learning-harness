@@ -316,6 +316,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-7: Add adaptive scene variants (#166). Generated scenes now include skill/date-based variant metadata and cue styles, with smoke coverage proving clarification, repair, and soft-disagreement variants preserve Speaking Skill OS evidence links.
 - [x] AIOS-8: Add first-use conversation variant gate (#169). The daily-session skill now defines first-use variant coverage, and `skill-conversation-variants-smoke` verifies office clarification, cafe repair, object description, and soft-disagreement transcripts through the real `practice` artifact loop.
 - [x] AIOS-9: Define multimodal mission asset contract (#171). Mission JSON now includes an `asset_contract` for text-first fallback plus interactive HTML scene, image information-gap, voice transcript, Remotion-style storyboard, and future realtime hooks; `multimodal-mission-asset-contract-smoke` rejects decorative/generated-only assets.
+- [x] AIOS-10: Generate learner-operable mission asset deck (#174). `asset-deck` writes `artifacts/assets/mission-assets-YYYY-MM-DD.json/html`, `practice` refreshes the deck, and learner report/cockpit link the latest deck without claiming completion before session evidence.
 
 ## SSOT Structure
 
