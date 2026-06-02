@@ -616,6 +616,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #200 | AIOS-12: Show learner-ready prompt in pilot next-card HTML | continue |
 | #202 | AIOS-12: Add quick reply choices to pilot next card | continue |
 | #204 | AIOS-12: Save pilot replies from quick reply selection | continue |
+| #206 | AIOS-12: Make pilot quick replies visually selectable | continue |
 
 #179 planned evidence should show:
 
@@ -635,8 +636,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-next` now writes a learner-facing `artifacts/pilot/pilot-next-card.html/json` card for the current pilot prompt without exposing internal commands.
 - `pilot-next` now returns `assistantPrompt.text`, a Korean-first prompt Codex can say directly to the learner without assembling scattered state fields.
 - `pilot-next-card.html` now renders the same learner-ready prompt section so the local HTML card and Codex conversation prompt stay aligned.
-- `pilot-next` now returns quick reply choices and renders them in `pilot-next-card.html` so blocked learners can copy or lightly edit one sentence.
-- `scripts/phase15-owner-pilot-next-card-smoke.mjs` verifies baseline/day card generation, learner-ready assistant prompt, quick replies, rendered prompt and quick-reply sections, cockpit linkage, progress advance, learner-facing privacy copy, and no internal command leakage.
+- `pilot-next` now returns quick reply choices and renders them as numbered choices in `pilot-next-card.html` so blocked learners can answer with a visible option number, copy, or lightly edit one sentence.
+- `scripts/phase15-owner-pilot-next-card-smoke.mjs` verifies baseline/day card generation, learner-ready assistant prompt, quick replies, rendered prompt and numbered quick-reply choices, cockpit linkage, progress advance, learner-facing privacy copy, and no internal command leakage.
 - `pilot-reply --quick-reply` now resolves the selected current quick reply and saves its English sentence through the existing capture path.
 - `scripts/phase15-owner-pilot-reply-routing-smoke.mjs` verifies invalid quick-reply selections fail before saving, `quick-1` persists Day 1 clarification, and numeric selection persists Day 2 repair.
 - The first five daily pilot missions now cover clarification, repair, image/scene description, soft disagreement, and follow-up instead of repeating the same prompt.

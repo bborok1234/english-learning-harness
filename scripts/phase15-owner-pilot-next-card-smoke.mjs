@@ -115,7 +115,9 @@ function main() {
   assert(day.quickReplies.some((reply) => reply.text === "Which place do you mean?"), "day 1 quick replies should include the shortest clarification answer");
   assert(read(day.htmlPath).includes("Which place do you mean?"), "daily card should show learner-facing example");
   assert(read(day.htmlPath).includes("Codex가 바로 말할 다음 문장"), "daily card should show learner-ready prompt section");
-  assert(read(day.htmlPath).includes("바로 보낼 수 있는 답변 후보"), "daily card should show quick replies section");
+  assert(read(day.htmlPath).includes("번호로 고를 수 있는 답변 후보"), "daily card should show numbered quick replies section");
+  assert(read(day.htmlPath).includes("aria-label=\"1번 선택지\""), "daily card should render first quick reply as a selectable numbered choice");
+  assert(read(day.htmlPath).includes("aria-label=\"2번 선택지\""), "daily card should render second quick reply as a selectable numbered choice");
   assert(read(day.htmlPath).includes("답은 영어 한 문장만 보내주세요"), "daily card should render assistant prompt answer rule");
   assert(day.nextCard.title === "확인 질문 만들기", "day 1 should test clarification");
   assertCleanLearnerHtml(read(day.htmlPath));

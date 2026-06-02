@@ -1642,8 +1642,9 @@ function pilotNext(options) {
     .quick { margin-top: 18px; }
     .quick h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
     .quick ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-    .quick li { padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
-    .quick strong { display: block; font-size: 16px; }
+    .quick li { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .quick .choice { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 780; }
+    .quick strong { display: block; font-size: 16px; overflow-wrap: anywhere; }
     .quick span { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
     .example, .rule, .privacy { margin-top: 14px; color: var(--muted); }
     .progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
@@ -1674,9 +1675,13 @@ function pilotNext(options) {
       ${
         quickReplies.length
           ? `<section class="quick" aria-label="quick replies">
-        <h2>바로 보낼 수 있는 답변 후보</h2>
+        <h2>번호로 고를 수 있는 답변 후보</h2>
         <ul>
-          ${quickReplies.map((reply) => `<li><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></li>`).join("")}
+          ${quickReplies
+            .map(
+              (reply, index) => `<li><b class="choice" aria-label="${index + 1}번 선택지">${index + 1}</b><div><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></div></li>`,
+            )
+            .join("")}
         </ul>
       </section>`
           : ""
