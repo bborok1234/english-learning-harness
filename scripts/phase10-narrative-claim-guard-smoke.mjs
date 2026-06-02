@@ -22,8 +22,8 @@ function readText(path) {
 function main() {
   const prd = readText("docs/M10-NARRATIVE-MISSION-PRD.md").toLowerCase();
   const spec = readText("docs/M10-NARRATIVE-MISSION-TEST-SPEC.md").toLowerCase();
-  const state = readText("docs/project-state.json").toLowerCase();
-  const dashboard = readText("docs/dashboard.html").toLowerCase();
+  const state = readText("docs/ops/project-state.json").toLowerCase();
+  const dashboard = readText("docs/ops/engineering-dashboard.html").toLowerCase();
 
   assert(prd.includes("allowed claim"), "PRD must include allowed claim section");
   assert(prd.includes("blocked claims"), "PRD must include blocked claims section");

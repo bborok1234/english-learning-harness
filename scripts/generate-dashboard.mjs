@@ -3,8 +3,9 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const statePath = resolve(root, "docs/project-state.json");
-const outputPath = resolve(root, "docs/dashboard.html");
+const statePath = resolve(root, "docs/ops/project-state.json");
+const outputPath = resolve(root, "docs/ops/engineering-dashboard.html");
+const legacyOutputPath = resolve(root, "docs/dashboard.html");
 
 const state = JSON.parse(readFileSync(statePath, "utf8"));
 
@@ -19,6 +20,12 @@ const escapeHtml = (value) =>
 const jsonScript = JSON.stringify(state, null, 2).replaceAll("<", "\\u003c");
 const toneClass = (tone = "blue") => `tone-${escapeHtml(tone)}`;
 const boardColumn = (id) => state.board.find((column) => column.id === id) ?? { cards: [] };
+const dashboardHref = (path) => {
+  if (/^(https?:|mailto:|#)/.test(path)) return path;
+  if (path.startsWith("./")) return `.${path}`;
+  if (path.startsWith("../")) return `../${path}`;
+  return path;
+};
 
 function renderCard(card) {
   const files = card.files ? `<span>${escapeHtml(card.files.join(", "))}</span>` : "";
@@ -54,7 +61,7 @@ const topRisks = riskCards.slice(0, 3).map(renderCard).join("");
 const archivedDone = archivedDoneCards.map(renderCard).join("");
 
 const ssot = state.ssot.map((item) => `
-            <a class="link-card ${escapeHtml(item.kind)}" href="${escapeHtml(item.path)}">
+            <a class="link-card ${escapeHtml(item.kind)}" href="${escapeHtml(dashboardHref(item.path))}">
               <strong>${escapeHtml(item.label)}</strong>
               <span>${escapeHtml(item.role)}</span>
             </a>`).join("");
@@ -101,7 +108,7 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="scripts/generate-dashboard.mjs">
-  <title>${escapeHtml(state.project.name)} Board</title>
+  <title>${escapeHtml(state.project.name)} Engineering Board</title>
   <style>
     :root {
       color-scheme: light;
@@ -495,14 +502,14 @@ const html = `<!doctype html>
   </style>
 </head>
 <body>
-  <!-- GENERATED FILE. Edit docs/project-state.json, then run scripts/generate-dashboard.mjs. -->
+  <!-- GENERATED FILE. Edit docs/ops/project-state.json, then run scripts/generate-dashboard.mjs. -->
   <script type="application/json" id="project-state">
 ${jsonScript}
   </script>
   <div class="page">
     <header class="top">
       <div>
-        <h1>${escapeHtml(state.project.name)} Canvas Board</h1>
+        <h1>${escapeHtml(state.project.name)} Engineering Board</h1>
         <p class="summary">${escapeHtml(state.project.summary)}</p>
       </div>
       <div class="stamp">
@@ -616,11 +623,29 @@ ${commands}
       </details>
     </section>
 
-    <p class="generated-note">Generated from <code>docs/project-state.json</code>. Do not edit this HTML directly.</p>
+    <p class="generated-note">Generated from <code>docs/ops/project-state.json</code>. Do not edit this HTML directly. This is the engineering/ops board, not the learner-facing product cockpit.</p>
   </div>
 </body>
 </html>
 `;
 
 writeFileSync(outputPath, html, "utf8");
+writeFileSync(
+  legacyOutputPath,
+  `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url=./ops/engineering-dashboard.html">
+  <title>Engineering Dashboard moved</title>
+</head>
+<body>
+  <p>This engineering dashboard moved to <a href="./ops/engineering-dashboard.html">docs/ops/engineering-dashboard.html</a>.</p>
+  <p>The learner-facing product cockpit lives at <a href="./product/learner-cockpit.html">docs/product/learner-cockpit.html</a>.</p>
+</body>
+</html>
+`,
+  "utf8",
+);
 console.log(`generated ${outputPath}`);
+console.log(`generated ${legacyOutputPath}`);

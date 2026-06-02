@@ -3,11 +3,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M10 Narrative Mission Layer complete",
-    "status": "M10 is complete as a local narrative-transfer mechanics gate: validator, decorative rejection, parity, no-generation fallback, claim guard, dashboard closeout, and milestone review are in place.",
+    "stage": "Product/Ops surface split complete",
+    "status": "Learner-facing product cockpit and engineering/ops dashboard are separated with dedicated SSOT files and smoke checks.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a complete M10 Narrative Mission Layer mechanics gate. Narrative missions can be admitted only when they preserve Speaking Skill OS transfer evidence, complete in text-only mode, and keep blocked claims visible.",
-    "nextGoal": "Return to M9 Real Learner Pilot Bridge: #137 owner pilot report/transcript review bridge and #139 pilot readiness gate.",
+    "summary": "English Learning Harness now keeps learner product surfaces separate from engineering operations. Learner cockpit state lives under docs/product, while goal/issue/evidence operations live under docs/ops.",
+    "nextGoal": "Complete product/ops surface split, then resume the next large learner-value goal against the separated product cockpit and ops board.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -45,9 +45,9 @@
       "kind": "source"
     },
     {
-      "label": "docs/project-state.json",
-      "path": "./project-state.json",
-      "role": "대시보드 상태 데이터",
+      "label": "docs/ops/project-state.json",
+      "path": "./ops/project-state.json",
+      "role": "engineering/ops dashboard structured state",
       "kind": "source"
     },
     {
@@ -60,6 +60,12 @@
       "label": "docs/STATUS.md",
       "path": "./STATUS.md",
       "role": "사람이 읽는 진행 상태 요약",
+      "kind": "source"
+    },
+    {
+      "label": "docs/SURFACE-BOUNDARY.md",
+      "path": "./SURFACE-BOUNDARY.md",
+      "role": "product surface vs engineering/ops surface boundary",
       "kind": "source"
     },
     {
@@ -183,9 +189,9 @@
       "kind": "source"
     },
     {
-      "label": "docs/dashboard.html",
-      "path": "./dashboard.html",
-      "role": "생성된 공유 대시보드",
+      "label": "docs/ops/engineering-dashboard.html",
+      "path": "./ops/engineering-dashboard.html",
+      "role": "generated internal engineering/ops dashboard",
       "kind": "generated"
     },
     {
@@ -271,6 +277,18 @@
       "path": "./phase-10-evidence/M10-6-narrative-mission-closeout.md",
       "role": "M10 closeout and milestone direction review",
       "kind": "source"
+    },
+    {
+      "label": "docs/product/learner-cockpit-state.json",
+      "path": "./product/learner-cockpit-state.json",
+      "role": "learner-facing product cockpit structured state",
+      "kind": "source"
+    },
+    {
+      "label": "docs/product/learner-cockpit.html",
+      "path": "./product/learner-cockpit.html",
+      "role": "generated learner-facing product cockpit preview",
+      "kind": "generated"
     }
   ],
   "metrics": [
@@ -498,7 +516,7 @@
             "docs/PHASE-0-SPIKE.md",
             "docs/phase-0-evidence/README.md",
             "docs/STATUS.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -609,7 +627,7 @@
           "files": [
             "docs/phase-1-evidence/PH1-review-gap-audit.md",
             "docs/STATUS.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -648,7 +666,7 @@
           "files": [
             "docs/ADAPTIVE-EXECUTION-PLAN.md",
             "docs/STATUS.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -743,12 +761,12 @@
           "id": "PH1-FIX-6",
           "title": "First-usable gate evidence를 대시보드에 정렬함",
           "why": "대시보드는 진행상황을 보여주되, clean-clone proof 전까지 first-usable claim을 만들면 안 된다.",
-          "done": "`docs/project-state.json`에 First-Usable Gate를 추가하고, generated dashboard가 gate별 status/evidence/claim boundary를 렌더링하게 했다.",
-          "verification": "`node scripts/generate-dashboard.mjs`와 `rg 'First-Usable Gate|GATE-6|clean clone' docs/dashboard.html`로 생성 결과를 확인한다.",
+          "done": "`docs/ops/project-state.json`에 First-Usable Gate를 추가하고, generated dashboard가 gate별 status/evidence/claim boundary를 렌더링하게 했다.",
+          "verification": "`node scripts/generate-dashboard.mjs`와 `rg 'First-Usable Gate|GATE-6|clean clone' docs/ops/engineering-dashboard.html`로 생성 결과를 확인한다.",
           "files": [
-            "docs/project-state.json",
+            "docs/ops/project-state.json",
             "scripts/generate-dashboard.mjs",
-            "docs/dashboard.html"
+            "docs/ops/engineering-dashboard.html"
           ]
         },
         {
@@ -771,7 +789,7 @@
           "verification": "`docs/ISSUE-INDEX.md`가 #25-#29를 기록하고 dashboard next work가 #25를 가리킨다.",
           "files": [
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json",
+            "docs/ops/project-state.json",
             "docs/STATUS.md"
           ]
         },
@@ -849,7 +867,7 @@
           "files": [
             "docs/ISSUE-INDEX.md",
             "docs/phase-3-evidence/M3-0-roadmap-issue-alignment.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -914,7 +932,7 @@
           "files": [
             "scripts/phase3-m3-gate-smoke.mjs",
             "docs/phase-3-evidence/M3-5-clone-to-daily-gate.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -926,7 +944,7 @@
           "files": [
             "docs/MULTIMODAL-GENAI-PLAN.md",
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json",
+            "docs/ops/project-state.json",
             "docs/phase-4-evidence/M4-0-multimodal-task-reconciliation.md"
           ]
         },
@@ -992,7 +1010,7 @@
             "scripts/phase4-multimodal-gate-smoke.mjs",
             "docs/phase-4-evidence/M4-5-multimodal-gate.md",
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1003,7 +1021,7 @@
           "verification": "`gh issue list --milestone \"M5 Real Learning Validation\"`가 #9와 #62-#66을 보여주고, dashboard가 #62를 next target으로 렌더한다.",
           "files": [
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json",
+            "docs/ops/project-state.json",
             "docs/phase-5-evidence/M5-0-validation-issue-split.md"
           ]
         },
@@ -1016,7 +1034,7 @@
           "files": [
             "docs/M5-SEVEN-DAY-VALIDATION-PROTOCOL.md",
             "docs/phase-5-evidence/M5-1-validation-protocol.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1054,7 +1072,7 @@
           "files": [
             "scripts/phase5-persona-validation-smoke.mjs",
             "docs/phase-5-evidence/M5-4-persona-validation.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1067,7 +1085,7 @@
             "scripts/phase5-m5-gate-smoke.mjs",
             "docs/phase-5-evidence/M5-5-validation-gate.md",
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1080,7 +1098,7 @@
             "scripts/phase6-marketplace-install-smoke.mjs",
             "docs/phase-6-evidence/M6-2-marketplace-install.md",
             "README.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1105,7 +1123,7 @@
           "files": [
             "scripts/phase6-release-gate-smoke.mjs",
             "docs/phase-6-evidence/M6-4-release-gate.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1188,7 +1206,7 @@
           "files": [
             "docs/distribution-policy.json",
             "docs/ISSUE-INDEX.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1260,7 +1278,7 @@
           "files": [
             ".github/workflows/public-artifact.yml",
             "docs/phase-7-evidence/M7-6-no-publish-workflow-run.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1272,7 +1290,7 @@
           "files": [
             "scripts/phase7-publication-preflight.mjs",
             "docs/phase-7-evidence/M7-7-publication-preflight.md",
-            "docs/project-state.json"
+            "docs/ops/project-state.json"
           ]
         },
         {
@@ -1572,6 +1590,23 @@
             "scripts/phase10-narrative-claim-guard-smoke.mjs",
             "scripts/phase10-narrative-mission-gate-smoke.mjs",
             "docs/phase-10-evidence/M10-6-narrative-mission-closeout.md"
+          ]
+        },
+        {
+          "id": "GOAL-PREP-SURFACE-SPLIT",
+          "title": "제품 표면과 엔지니어링 운영 표면 분리",
+          "why": "학습자가 보는 제품 cockpit과 Codex/maintainer가 보는 issue·PR·gate 운영판이 섞이면 진행상황도 제품 경험도 모두 혼란스러워진다.",
+          "done": "docs/product 아래 learner cockpit SSOT/HTML을 만들고, docs/ops 아래 engineering dashboard SSOT/HTML을 분리했다. docs/dashboard.html은 legacy redirect로 축소했다.",
+          "verification": "node scripts/product-surface-smoke.mjs, node scripts/ops-dashboard-smoke.mjs, node scripts/phase10-narrative-mission-gate-smoke.mjs, node scripts/phase1-scaffold-smoke.mjs, git diff --check.",
+          "files": [
+            "docs/SURFACE-BOUNDARY.md",
+            "docs/product/learner-cockpit-state.json",
+            "docs/product/learner-cockpit.html",
+            "docs/ops/project-state.json",
+            "docs/ops/engineering-dashboard.html",
+            "scripts/generate-learner-cockpit.mjs",
+            "scripts/product-surface-smoke.mjs",
+            "scripts/ops-dashboard-smoke.mjs"
           ]
         }
       ]
@@ -2083,6 +2118,11 @@
       "name": "M10 closeout gate",
       "status": "Pass",
       "detail": "planning, world-state, validator, parity, fallback, claim guard, dashboard, and milestone review are aligned"
+    },
+    {
+      "name": "Product/Ops surface split smoke",
+      "status": "Pass",
+      "detail": "product-surface-smoke, ops-dashboard-smoke, M10 closeout gate, phase1 scaffold smoke, and git diff --check passed."
     }
   ],
   "commands": [
@@ -2284,7 +2324,7 @@
     },
     {
       "label": "Open dashboard",
-      "command": "open docs/dashboard.html"
+      "command": "open docs/ops/engineering-dashboard.html"
     },
     {
       "label": "View next public distribution issue",
@@ -2345,6 +2385,22 @@
     {
       "label": "View next M9 pilot report issue",
       "command": "gh issue view 137"
+    },
+    {
+      "label": "Regenerate engineering dashboard",
+      "command": "node scripts/generate-dashboard.mjs"
+    },
+    {
+      "label": "Regenerate learner cockpit",
+      "command": "node scripts/generate-learner-cockpit.mjs"
+    },
+    {
+      "label": "Run product surface smoke",
+      "command": "node scripts/product-surface-smoke.mjs"
+    },
+    {
+      "label": "Run ops dashboard smoke",
+      "command": "node scripts/ops-dashboard-smoke.mjs"
     }
   ]
 }

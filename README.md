@@ -368,4 +368,10 @@ node scripts/phase7-open-source-history-audit-smoke.mjs
 node scripts/phase7-publication-preflight.mjs
 node scripts/phase1-scaffold-smoke.mjs
 node scripts/generate-dashboard.mjs
+node scripts/generate-learner-cockpit.mjs
+node scripts/ops-dashboard-smoke.mjs
+node scripts/product-surface-smoke.mjs
 ```
+
+`node scripts/generate-dashboard.mjs`는 내부 엔지니어링 운영판 `docs/ops/engineering-dashboard.html`을 갱신합니다.
+`node scripts/generate-learner-cockpit.mjs`는 학습자용 제품 cockpit 미리보기 `docs/product/learner-cockpit.html`을 갱신합니다.

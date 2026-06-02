@@ -77,9 +77,18 @@ function main() {
   assert(validate.status === "pass", "fresh clone progress validation failed");
 
   run("node", ["scripts/generate-dashboard.mjs"], { cwd: cloneRoot });
-  const dashboard = readFileSync(resolve(cloneRoot, "docs/dashboard.html"), "utf8");
+  const dashboard = readFileSync(resolve(cloneRoot, "docs/ops/engineering-dashboard.html"), "utf8");
+  const legacyDashboard = readFileSync(resolve(cloneRoot, "docs/dashboard.html"), "utf8");
   assert(dashboard.includes("First-Usable Gate"), "dashboard missing first-usable gate");
   assert(dashboard.includes("GATE-6"), "dashboard missing clean-clone gate");
+  assert(
+    legacyDashboard.includes("./ops/engineering-dashboard.html"),
+    "legacy dashboard missing engineering dashboard redirect",
+  );
+  assert(
+    legacyDashboard.includes("./product/learner-cockpit.html"),
+    "legacy dashboard missing learner cockpit pointer",
+  );
 
   const status = run("git", ["status", "--short"], { cwd: cloneRoot });
   assert(!status.includes("tmp/"), "runtime tmp files should remain ignored in clean clone");

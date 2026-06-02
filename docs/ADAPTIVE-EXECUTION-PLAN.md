@@ -25,7 +25,9 @@ The source of truth is:
 - `docs/PRODUCT-ROADMAP.md`
 - `docs/RALPLAN-CONSENSUS-STARTUP-GRADE.md`
 - `docs/MULTIMODAL-GENAI-PLAN.md`
-- `docs/project-state.json`
+- `docs/SURFACE-BOUNDARY.md`
+- `docs/ops/project-state.json`
+- `docs/product/learner-cockpit-state.json` when learner-facing cockpit behavior changes
 - current GitHub issues and review decisions
 
 ## External Practice Anchors
@@ -76,8 +78,9 @@ Before closing a milestone, run a direction review:
 Output:
 
 - milestone review comment,
-- updated `docs/project-state.json`,
-- updated dashboard,
+- updated `docs/ops/project-state.json`,
+- regenerated `docs/ops/engineering-dashboard.html`,
+- updated product cockpit state/generated HTML when learner-facing behavior changes,
 - new/split/killed issues as needed.
 
 ### Weekly Or Every 5 Issues: Product Steering Review
@@ -390,7 +393,7 @@ Before autonomous implementation begins:
 4. Create M1 executable issues.
 5. Add issue templates or reusable issue body snippets.
 6. Create a `docs/ISSUE-INDEX.md` mapping epics to milestones.
-7. Require every implementation PR to update `docs/project-state.json` and regenerate `docs/dashboard.html`.
+7. Require every implementation PR to update `docs/ops/project-state.json` and regenerate `docs/ops/engineering-dashboard.html`; product-surface PRs must also update `docs/product/learner-cockpit-state.json` and regenerate `docs/product/learner-cockpit.html`.
 
 ## Stop Conditions
 

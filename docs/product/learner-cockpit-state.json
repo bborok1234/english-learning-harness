@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-06-02",
+  "surface": {
+    "name": "English Learning Harness Learner Cockpit",
+    "audience": "한국인 영어 회화 학습자",
+    "purpose": "Codex와 함께 오늘의 영어 말하기 미션을 시작하고, 약점과 여정을 확인하는 제품 표면입니다.",
+    "claimBoundary": "이 화면은 학습 루프와 로컬 증거를 보여줍니다. 실제 회화 능력 향상이나 장기 학습 성과를 보장하지 않습니다."
+  },
+  "today": {
+    "title": "오늘의 미션",
+    "mission": "친구가 \"Let's meet at the usual place after work.\"라고 말했습니다.",
+    "ask": "어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장으로 말해보세요.",
+    "example": "Which place do you mean?",
+    "mode": "text-first narrative mission",
+    "startPrompt": "Codex, 오늘 영어 미션 시작하자. 내가 한 문장으로 답하면 부드럽게 이어가고 기록해줘."
+  },
+  "skillFocus": {
+    "name": "Ask for clarification",
+    "why": "뜻이 애매할 때 멈추지 않고 확인 질문을 하는 능력은 실제 회화 유지에 직접 연결됩니다.",
+    "transferTest": "Can you ask what the other person means?"
+  },
+  "journey": {
+    "currentArc": "첫 7일: 말문이 막히지 않는 작은 대화 행동 만들기",
+    "day": 1,
+    "targetDays": 7,
+    "nextMilestone": "7일 후 로컬 리포트에서 내가 더 자연스럽게 묻고 이어갔는지 확인합니다."
+  },
+  "surfaces": [
+    {
+      "label": "오늘 연습",
+      "description": "Codex가 상황을 주고, 사용자는 한 문장으로 말합니다."
+    },
+    {
+      "label": "내 약점 카드",
+      "description": "Speaking Skill OS가 지금 필요한 말하기 행동을 하나씩 관리합니다."
+    },
+    {
+      "label": "미니 미러",
+      "description": "세션 뒤 자연스러운 표현과 다음에 써볼 문장을 짧게 받습니다."
+    },
+    {
+      "label": "7일 리포트",
+      "description": "로컬 기록을 바탕으로 학습 여정을 정리합니다."
+    }
+  ],
+  "internalBoundary": {
+    "engineeringDashboard": "../ops/engineering-dashboard.html",
+    "note": "개발 진행판은 학습자 cockpit과 분리됩니다."
+  }
+}
