@@ -41,6 +41,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     reviewQueue: resolve(root, "review-queue.json"),
     journalDir: resolve(root, "journal"),
     artifactDir: resolve(root, "artifacts/sessions"),
+    missionArtifactDir: resolve(root, "artifacts/missions"),
     speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
@@ -105,6 +106,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   const paths = learnerPaths(learnerRoot);
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
+  mkdirSync(paths.missionArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -1691,6 +1693,326 @@ export function writeLearnerHome(learnerRoot = defaultLearnerRoot(), date = new 
   };
 }
 
+function latestGeneratedMissionPath(learnerRoot = defaultLearnerRoot()) {
+  const paths = learnerPaths(learnerRoot);
+  if (!existsSync(paths.missionArtifactDir)) return "";
+  const entries = readdirSync(paths.missionArtifactDir)
+    .filter((entry) => /^daily-mission-.*\.json$/.test(entry))
+    .sort();
+  return entries.length ? resolve(paths.missionArtifactDir, entries.at(-1)) : "";
+}
+
+function readLatestGeneratedMission(learnerRoot = defaultLearnerRoot()) {
+  const missionPath = latestGeneratedMissionPath(learnerRoot);
+  if (!missionPath) return null;
+  const state = JSON.parse(readFileSync(missionPath, "utf8"));
+  return {
+    path: relative(learnerPaths(learnerRoot).root, missionPath),
+    html: relative(learnerPaths(learnerRoot).root, missionPath.replace(/\.json$/, ".html")),
+    mission_id: state.mission_id,
+    title: state.learner_visible_scene?.title ?? "",
+    target_skill: state.target_skill,
+    transfer_test: state.transfer_test,
+    start_command: state.start_commands?.text ?? "",
+    generated_at: state.generated_at,
+  };
+}
+
+function sceneForSkill(skill, fallbackGoal) {
+  if (skill === "clarification") {
+    return {
+      title: "The Unclear Plan",
+      setup: "친구가 약속 장소를 애매하게 말했습니다.",
+      situation: '친구: "Let\'s meet at the usual place after work."',
+      ask: "어디에서 만나자는 뜻인지 확인하는 질문을 영어로 한 문장 말해보세요.",
+      example: "Which place do you mean?",
+      image_prompt:
+        "A simple everyday scene card: two friends planning after work near a subway station, one speech bubble is intentionally unclear.",
+      hidden_detail: "the exact meeting place is missing",
+    };
+  }
+  if (skill === "repair") {
+    return {
+      title: "Keep Talking When Stuck",
+      setup: "말하려는 단어가 바로 떠오르지 않는 상황입니다.",
+      situation: "상대가 지금 있는 곳이 어떤 느낌인지 물었습니다.",
+      ask: '"정확한 단어는 모르겠지만..."으로 시작해서 한 문장 더 이어가세요.',
+      example: "I do not know the exact word, but it feels comfortable.",
+      image_prompt:
+        "A cozy desk scene with a laptop, mug, and notebook; the learner must describe the feeling without knowing one exact word.",
+      hidden_detail: "the learner does not know the exact word for the atmosphere",
+    };
+  }
+  if (skill === "follow_ups") {
+    return {
+      title: "One More Question",
+      setup: "상대가 주말 이야기를 짧게 했습니다.",
+      situation: '상대: "I went to a small cafe this weekend."',
+      ask: "대화를 이어가기 위해 follow-up question을 하나 말해보세요.",
+      example: "What did you order there?",
+      image_prompt:
+        "A warm small cafe weekend scene with a counter and two cups; the learner asks one follow-up question.",
+      hidden_detail: "the learner needs one more question to keep the conversation going",
+    };
+  }
+  if (skill === "soft_disagreement") {
+    return {
+      title: "Say It Gently",
+      setup: "친구가 별로 동의하기 어려운 제안을 했습니다.",
+      situation: '친구: "Let\'s skip lunch and work more."',
+      ask: "부드럽게 다른 의견을 영어로 한 문장 말해보세요.",
+      example: "I see your point, but I think we should eat something first.",
+      image_prompt:
+        "A quiet office lunch decision scene; the learner gently disagrees without making conflict.",
+      hidden_detail: "the learner disagrees but wants to keep the tone friendly",
+    };
+  }
+  return {
+    title: "Start Small Today",
+    setup: "오늘 있었던 작은 일을 누군가에게 말하는 상황입니다.",
+    situation: "상대가 오늘 하루가 어땠는지 물었습니다.",
+    ask: fallbackGoal || "오늘 실제로 한 일을 영어로 한 문장 말해보세요.",
+    example: "I had coffee and worked on one important task today.",
+    image_prompt:
+      "A simple daily life scene with a calendar, coffee, and a short to-do note; the learner starts with one sentence.",
+    hidden_detail: "the learner only needs one small start",
+  };
+}
+
+function buildGeneratedMissionState(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const dailyCockpit = buildDailyCockpit(paths.root, date);
+  const backlogItem = dailyCockpit.speaking_os.next_item;
+  const skill = backlogItem?.skill || dailyCockpit.suggested_scenario.speaking_backlog?.skill || dailyCockpit.suggested_scenario.cefr_skill || "starts";
+  const scene = sceneForSkill(skill, dailyCockpit.suggested_scenario.goal);
+  const dateKey = todayStamp(date);
+  const missionId = `daily-generated-${dateKey}-${skill}`;
+  const startText = backlogItem?.drill_prompt || scene.example;
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    mission_id: missionId,
+    source: {
+      type: backlogItem ? "speaking-skill-os" : "daily-scenario",
+      backlog_item_id: backlogItem?.id || "",
+      scenario_id: dailyCockpit.suggested_scenario.id,
+      selection_reason: dailyCockpit.suggested_scenario.selection_reason,
+    },
+    target_skill: skill,
+    learner_visible_scene: scene,
+    required_learner_action: backlogItem?.target_behavior || dailyCockpit.suggested_scenario.goal,
+    transfer_test: backlogItem?.transfer_test || "Can you complete one small English turn?",
+    start_commands: {
+      text: commandLine(paths.root, "today", ["--say", JSON.stringify(startText)]),
+      voice: commandLine(paths.root, "voice", [
+        "--transcript",
+        JSON.stringify("path/to/voice-transcript.txt"),
+        "--say",
+        JSON.stringify(startText),
+      ]),
+      image: commandLine(paths.root, "image", [
+        "--image-file",
+        JSON.stringify("path/to/local-image.png"),
+        "--hidden-detail",
+        JSON.stringify(scene.hidden_detail),
+        "--say",
+        JSON.stringify(startText),
+      ]),
+    },
+    optional_artifacts: {
+      image_prompt: scene.image_prompt,
+      voice_prompt: "Read the scene out loud, then answer in one sentence. Save the transcript through the voice command.",
+      html_card_required: true,
+    },
+    expected_evidence: {
+      session_artifact: "artifacts/sessions/*.json",
+      interaction_event_modalities: ["text", "voice", "image"],
+      speaking_backlog_item_id: backlogItem?.id || "",
+      transfer_test: backlogItem?.transfer_test || "",
+    },
+    claim_boundary:
+      "This generated mission is a local practice scene. It can guide Speaking Skill OS transfer evidence, but it does not prove fluency, retention, or generated-world learning gains.",
+  };
+}
+
+function generatedMissionHtml(state) {
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Daily Mission</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #142019;
+      --muted: #5d685f;
+      --line: #d7ded8;
+      --paper: #f7f8f3;
+      --panel: #ffffff;
+      --green: #2f7655;
+      --blue: #2e6689;
+      --amber: #9a6400;
+      --soft: #e8f3ec;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1040px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 48px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.05; letter-spacing: 0; }
+    h2 { font-size: 22px; }
+    h3 { font-size: 16px; }
+    header {
+      display: grid;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 20px;
+    }
+    section {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+    .scene {
+      background: var(--soft);
+      border-color: #cfe2d5;
+    }
+    .ask {
+      margin-top: 12px;
+      font-size: 24px;
+      font-weight: 760;
+      line-height: 1.25;
+    }
+    .subtle { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfa;
+    }
+    code {
+      display: block;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #162019;
+      color: #f7fbf7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    details {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfa;
+    }
+    summary { cursor: pointer; font-weight: 700; }
+    .boundary { border-left: 6px solid var(--amber); }
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="subtle">Generated daily mission</p>
+      <h1>${escapeHtml(state.learner_visible_scene.title)}</h1>
+      <p>${escapeHtml(state.learner_visible_scene.setup)}</p>
+    </header>
+
+    <section class="scene">
+      <h2>오늘의 장면</h2>
+      <p>${escapeHtml(state.learner_visible_scene.situation)}</p>
+      <p class="ask">${escapeHtml(state.learner_visible_scene.ask)}</p>
+      <p class="subtle">예시: ${escapeHtml(state.learner_visible_scene.example)}</p>
+    </section>
+
+    <section>
+      <h2>Speaking Skill OS 연결</h2>
+      <div class="grid">
+        <div class="card"><h3>Target</h3><p>${escapeHtml(state.target_skill)}</p></div>
+        <div class="card"><h3>Action</h3><p>${escapeHtml(state.required_learner_action)}</p></div>
+        <div class="card"><h3>Transfer test</h3><p>${escapeHtml(state.transfer_test)}</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>바로 시작</h2>
+      <details open>
+        <summary>Text-first</summary>
+        <code>${escapeHtml(state.start_commands.text)}</code>
+      </details>
+      <details>
+        <summary>Voice transcript</summary>
+        <code>${escapeHtml(state.start_commands.voice)}</code>
+      </details>
+      <details>
+        <summary>Image information-gap</summary>
+        <code>${escapeHtml(state.start_commands.image)}</code>
+      </details>
+    </section>
+
+    <section>
+      <h2>생성형 확장 프롬프트</h2>
+      <p class="subtle">이미지나 음성은 선택적 장면 보강입니다. 학습 증거는 learner output과 interaction event에 남습니다.</p>
+      <details>
+        <summary>Image prompt</summary>
+        <p>${escapeHtml(state.optional_artifacts.image_prompt)}</p>
+      </details>
+      <details>
+        <summary>Voice prompt</summary>
+        <p>${escapeHtml(state.optional_artifacts.voice_prompt)}</p>
+      </details>
+    </section>
+
+    <section class="boundary">
+      <h2>경계</h2>
+      <p>${escapeHtml(state.claim_boundary)}</p>
+    </section>
+  </main>
+</body>
+</html>
+`;
+}
+
+export function writeGeneratedDailyMission(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const state = buildGeneratedMissionState(paths.root, date);
+  const stamp = todayStamp(date);
+  const missionStatePath = resolve(paths.missionArtifactDir, `daily-mission-${stamp}.json`);
+  const missionHtmlPath = resolve(paths.missionArtifactDir, `daily-mission-${stamp}.html`);
+  writeFileSync(missionStatePath, `${JSON.stringify(state, null, 2)}\n`);
+  writeFileSync(missionHtmlPath, generatedMissionHtml(state));
+  return {
+    missionStatePath,
+    missionHtmlPath,
+    missionUrl: `file://${missionHtmlPath}`,
+    state,
+  };
+}
+
 function dateWithinDays(dateValue, now, days) {
   if (!dateValue || !Number.isFinite(Date.parse(dateValue))) return false;
   const then = new Date(dateValue.length === 10 ? `${dateValue}T00:00:00.000Z` : dateValue);
@@ -1744,6 +2066,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const interactionEvents = interactionEventsFromArtifacts(artifacts);
   const weeklyMirror = readLatestWeeklyMirror(paths.root);
   const latestReport = latestPilotReport(paths);
+  const latestMission = readLatestGeneratedMission(paths.root);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
   const nextCommand = commandLine(paths.root, "today", [
     "--say",
@@ -1808,6 +2131,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
           }
         : null,
       latest_report: latestReport,
+      latest_generated_mission: latestMission,
     },
     next_actions: [
       {
@@ -1833,6 +2157,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       home: relative(paths.root, paths.learnerHome),
       latest_journal: dailyCockpit.latest_journal,
       latest_weekly_mirror: dailyCockpit.latest_weekly_mirror,
+      latest_generated_mission: latestMission?.html ?? "",
     },
     claim_boundary:
       "This cockpit is a local learner product surface. It connects practice evidence and next actions, but does not certify fluency or guarantee improvement.",
@@ -2009,6 +2334,21 @@ function personalLearnerCockpitHtml(state) {
           <p class="ask">${escapeHtml(state.today.goal)}</p>
           <p class="subtle">막히면: ${escapeHtml(state.today.rescue_phrase)}</p>
           <code class="command">${escapeHtml(state.today.start_command)}</code>
+        </section>
+
+        <section aria-labelledby="generated-mission">
+          <h2 id="generated-mission">생성된 장면 artifact</h2>
+          ${
+            state.journey.latest_generated_mission
+              ? `<div class="panel blue">
+            <h3>${escapeHtml(state.journey.latest_generated_mission.title)}</h3>
+            <p>${escapeHtml(state.journey.latest_generated_mission.transfer_test)}</p>
+            <p class="subtle">file: ${escapeHtml(state.journey.latest_generated_mission.html)}</p>
+            <code class="command">${escapeHtml(state.journey.latest_generated_mission.start_command)}</code>
+          </div>`
+              : `<p class="subtle">아직 생성된 장면 artifact가 없습니다.</p>
+          <code class="command">${escapeHtml(`node scripts/english-learning-harness.mjs mission --learner-root "${state.learner_root}" --json`)}</code>`
+          }
         </section>
 
         <section aria-labelledby="speaking-os">

@@ -102,6 +102,7 @@ What is complete:
 - M9 Real Learner Pilot Bridge is open. M9-1 adds owner/self pilot state and command surface without assuming a personal name. M9-3 now replaces internal pilot labels with learner-facing mission cards.
 - M10 Narrative Mission Layer is complete as a local mechanics gate. M10-1 defines the PRD/test contract, M10-2 adds machine-readable contracts, M10-3 rejects decorative missions, M10-4 proves narrative/plain transfer parity, M10-5 proves no-generation fallback, and M10-6 records closeout with blocked claims still visible.
 - AIOS-1 personal cockpit runtime is implemented for #154. It connects real learner-root state to `cockpit-state.json` and `cockpit.html` so today's mission, Speaking Skill OS, multimodal evidence, and 7-day/30-day journey windows appear in one learner product surface.
+- AIOS-2 generated daily mission artifacts are implemented for #156. The `mission` command writes learner-root mission state/html, links it to the current Speaking Skill OS item, and the personal cockpit points to the latest generated mission.
 
 What is not started:
 - Real user validation.
@@ -307,6 +308,7 @@ Start from the verified/fallback Phase 0 constraints.
 ### Phase 11 AI-Native Learning OS
 
 - [x] AIOS-1: Generate a personal learner cockpit from real learner-root state. `cockpit` writes `cockpit-state.json` and `cockpit.html`, connecting today's mission, Speaking Skill OS, due review, multimodal interaction evidence, and 7-day/30-day journey windows.
+- [x] AIOS-2: Generate daily mission artifacts linked to the learner cockpit. `mission` writes `artifacts/missions/daily-mission-YYYY-MM-DD.json/html`, includes text/voice/image start paths, and preserves the claim boundary that generated scenes are practice prompts, not outcome proof.
 
 ## SSOT Structure
 

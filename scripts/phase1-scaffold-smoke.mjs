@@ -41,6 +41,7 @@ const requiredFiles = [
   "scripts/generate-learner-cockpit.mjs",
   "scripts/product-surface-smoke.mjs",
   "scripts/ops-dashboard-smoke.mjs",
+  "scripts/generated-daily-mission-smoke.mjs",
   "scripts/personal-learner-cockpit-smoke.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
   "scripts/phase1-vocabulary-history-smoke.mjs",

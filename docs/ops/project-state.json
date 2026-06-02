@@ -4,10 +4,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-1 personal learner cockpit runtime is implemented and verified for #154.",
+    "status": "AIOS-2 generated daily mission artifacts are implemented and under verification for #156.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now has a learner-root personal cockpit that connects daily mission, Speaking Skill OS, multimodal interaction evidence, and 7-day/30-day journey windows. The larger AI-native OS goal remains active.",
-    "nextGoal": "Expand the personal cockpit into richer generated missions/artifacts while keeping product surface and ops dashboard separated.",
+    "summary": "English Learning Harness now generates learner-root daily mission artifacts that connect the current Speaking Skill OS target to text-first practice, optional voice/image paths, and the personal cockpit.",
+    "nextGoal": "Connect generated mission artifacts to richer interactive/Remotion-style artifacts and learner reports without weakening claim boundaries.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -306,6 +306,18 @@
       "label": "scripts/personal-learner-cockpit-smoke.mjs",
       "path": "../scripts/personal-learner-cockpit-smoke.mjs",
       "role": "personal learner cockpit runtime smoke",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md",
+      "path": "./phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md",
+      "role": "AIOS-2 generated daily mission artifact evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/generated-daily-mission-smoke.mjs",
+      "path": "../scripts/generated-daily-mission-smoke.mjs",
+      "role": "generated daily mission artifact smoke",
       "kind": "source"
     }
   ],
@@ -1641,6 +1653,21 @@
             "docs/ISSUE-INDEX.md",
             "README.md"
           ]
+        },
+        {
+          "id": "AIOS-2",
+          "title": "#156 generated daily mission artifact 구현",
+          "why": "개인 cockpit이 상태만 보여주면 AI-native OS가 아니라 dashboard에 머문다. 매일 새 학습 장면이 생성되고 Speaking Skill OS evidence로 이어져야 한다.",
+          "done": "`mission` command가 learner-root `artifacts/missions/daily-mission-YYYY-MM-DD.json/html`을 생성하고, current Speaking Skill OS target, transfer test, text/voice/image start paths, optional prompt material, personal cockpit latest mission pointer를 연결한다.",
+          "verification": "`node scripts/generated-daily-mission-smoke.mjs`가 mission generation, rendered HTML, product-surface leak guard, post-mission today evidence, cockpit linkage를 검증한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/generated-daily-mission-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-2-generated-daily-mission-artifacts.md",
+            "docs/ISSUE-INDEX.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1680,10 +1707,10 @@
         },
         {
           "id": "AIOS-NEXT",
-          "title": "Next: generated mission/artifact layer를 personal cockpit에 연결",
-          "why": "큰 goal은 매일 새로운 학습 장면과 증거를 생성하는 AI-native OS다. 개인 cockpit 다음에는 narrative/multimodal/generated artifacts가 같은 표면에서 자연스럽게 시작되어야 한다.",
+          "title": "Next: interactive/Remotion-style artifact layer와 learner report 강화",
+          "why": "큰 goal에는 generated interactive HTML/Remotion artifacts와 learner reports가 포함된다. 다음은 mission artifact를 더 풍부한 시각/시간 기반 학습 산출물과 리포트로 확장하는 것이다.",
           "done": "아직 미구현.",
-          "verification": "다음 PR에서 generated mission artifact smoke와 product cockpit integration smoke로 검증한다.",
+          "verification": "다음 PR에서 interactive artifact smoke, report linkage smoke, product cockpit render checks로 검증한다.",
           "files": [
             "docs/ops/project-state.json"
           ]
@@ -2171,6 +2198,11 @@
       "name": "AIOS-1 personal learner cockpit",
       "status": "Pass",
       "detail": "personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard."
+    },
+    {
+      "name": "AIOS-2 generated daily mission artifacts",
+      "status": "Pass",
+      "detail": "generated mission smoke creates learner-root mission state/html, renders it, runs post-mission today evidence, and verifies cockpit linkage."
     }
   ],
   "commands": [
@@ -2457,6 +2489,14 @@
     {
       "label": "View AIOS-1 issue",
       "command": "gh issue view 154"
+    },
+    {
+      "label": "Run generated daily mission smoke",
+      "command": "node scripts/generated-daily-mission-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-2 issue",
+      "command": "gh issue view 156"
     }
   ]
 }
