@@ -1469,7 +1469,7 @@ function buildPilotAssistantPrompt(nextCard, summary) {
     nextCard.example ? `막히면 이렇게 시작해도 됩니다: ${nextCard.example}` : "",
     nextCard.phase === "complete"
       ? "답변을 새로 만들기보다 로컬 리포트를 먼저 확인하면 됩니다."
-      : "답은 영어 한 문장만 보내주세요. 예시를 그대로 조금 바꿔도 괜찮습니다.",
+      : "답은 영어 한 문장만 보내주세요. 아래 후보 중 하나를 그대로 보내거나 조금 바꿔도 괜찮습니다.",
   ];
   return {
     language: "ko",
@@ -1488,6 +1488,68 @@ function buildPilotAssistantPrompt(nextCard, summary) {
   };
 }
 
+function buildPilotQuickReplies(nextCard) {
+  if (nextCard.phase === "complete") return [];
+  const byTitle = {
+    "오늘의 한 컷": [
+      "I worked on my project today.",
+      "I had a normal workday today.",
+      "I wrote some notes and cleaned up my tasks today.",
+    ],
+    "잠깐, 무슨 뜻이야?": [
+      "Which place do you mean?",
+      "Where exactly should we meet?",
+      "Do you mean the usual cafe or somewhere else?",
+    ],
+    "막혔을 때 도망가지 않기": [
+      "I do not know the exact word, but I mean a small room.",
+      "I do not know the exact word, but I can explain it.",
+      "I am not sure of the word, but it is like a quiet place.",
+    ],
+    "내 주변 스냅샷": [
+      "I am in an office with many desks and monitors.",
+      "There are chairs, desks, and people working around me.",
+      "It looks like a busy office.",
+    ],
+    "오늘의 체감": [
+      "My comfort score is 3 because I can answer slowly.",
+      "My comfort score is 2 because I still pause a lot.",
+      "My comfort score is 4 because this sentence feels easy.",
+    ],
+    "확인 질문 만들기": [
+      "Which place do you mean?",
+      "Where exactly should we meet?",
+      "Do you mean the usual cafe or somewhere else?",
+    ],
+    "말실수 고치기": [
+      "Sorry, I meant iced latte, not hot latte.",
+      "Sorry, I said that wrong. I meant iced latte.",
+      "Actually, I wanted an iced latte.",
+    ],
+    "보이는 정보 설명하기": [
+      "It looks like a meeting room with a long table.",
+      "There is a screen on the wall and chairs around the table.",
+      "It seems like a quiet office meeting room.",
+    ],
+    "부드럽게 다르게 말하기": [
+      "I understand, but I cannot stay late today.",
+      "I get it, but today is difficult for me.",
+      "I am sorry, but I need to leave on time today.",
+    ],
+    "대화를 이어가기": [
+      "That sounds nice. Where did you go hiking?",
+      "How was the hiking trail?",
+      "Did you go there with friends?",
+    ],
+  };
+  const replies = byTitle[nextCard.title] ?? [nextCard.example].filter(Boolean);
+  return replies.map((text, index) => ({
+    id: `quick-${index + 1}`,
+    text,
+    note: index === 0 ? "가장 짧고 안전한 답변" : "조금 더 구체적인 변형",
+  }));
+}
+
 function pilotNext(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -1495,6 +1557,7 @@ function pilotNext(options) {
   const summary = pilotStatusSummary(state);
   const nextCard = learnerFacingNextCard(summary.nextAction);
   const assistantPrompt = buildPilotAssistantPrompt(nextCard, summary);
+  const quickReplies = buildPilotQuickReplies(nextCard);
   const cockpitSnapshot = pilotCockpitRefresh(paths, date);
   const artifact = {
     schema_version: 1,
@@ -1510,6 +1573,7 @@ function pilotNext(options) {
     },
     next_card: nextCard,
     assistant_prompt: assistantPrompt,
+    quick_replies: quickReplies,
     answer_rule: "영어 한 문장만 답하면 됩니다. 틀려도 현재 말하기 증거로 충분합니다.",
     after_answer: "Codex가 답변을 내부적으로 저장하고 cockpit/report를 갱신합니다.",
     privacy: "답변 원문은 기본적으로 내 컴퓨터의 학습 기록에만 저장됩니다. 공개 협업 기록에는 올리지 않습니다.",
@@ -1545,6 +1609,12 @@ function pilotNext(options) {
     .prompt { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
     .prompt h2 { margin: 0 0 8px; font-size: 16px; letter-spacing: 0; }
     .prompt pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; color: var(--ink); font: inherit; }
+    .quick { margin-top: 18px; }
+    .quick h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
+    .quick ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .quick li { padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .quick strong { display: block; font-size: 16px; }
+    .quick span { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
     .example, .rule, .privacy { margin-top: 14px; color: var(--muted); }
     .progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
     .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
@@ -1571,6 +1641,16 @@ function pilotNext(options) {
         <h2>Codex가 바로 말할 다음 문장</h2>
         <pre>${escapeHtml(assistantPrompt.text)}</pre>
       </section>
+      ${
+        quickReplies.length
+          ? `<section class="quick" aria-label="quick replies">
+        <h2>바로 보낼 수 있는 답변 후보</h2>
+        <ul>
+          ${quickReplies.map((reply) => `<li><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></li>`).join("")}
+        </ul>
+      </section>`
+          : ""
+      }
       <p class="rule">${escapeHtml(artifact.answer_rule)}</p>
       <p class="privacy">${escapeHtml(artifact.privacy)}</p>
     </section>
@@ -1591,6 +1671,7 @@ function pilotNext(options) {
     cockpit: cockpitSnapshot,
     nextCard,
     assistantPrompt,
+    quickReplies,
     claimBoundary: artifact.claim_boundary,
   };
 }
