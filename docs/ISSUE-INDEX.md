@@ -473,3 +473,18 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - pass and needs-review fixture pairs produce the same backlog item id, skill, transfer result, backlog status, and transfer test.
 - story consequence is persisted only after `speaking_backlog_evidence` exists and records the matching transfer result.
 - This proves one text-first narrative mission parity fixture; it does not yet add richer generation, realtime voice, or multimodal scenes.
+
+#147 evidence currently shows:
+
+- `routeMissionCapabilities()` routes missions to `light`, `rich`, or `cinematic` presentation mode from available Codex capabilities.
+- text remains the required learning path; generated media, voice, web, browser, and MCP stay optional presentation capabilities.
+- `scripts/phase10-no-gen-fallback-smoke.mjs` proves `usual-place-clarification` completes and writes evidence with text-only capabilities.
+- the same smoke rejects required image, required realtime voice, and missing text scene fallback.
+- This proves no-generation fallback; it does not prove multimodal efficacy.
+
+#148 evidence currently shows:
+
+- `scripts/phase10-narrative-claim-guard-smoke.mjs` verifies blocked narrative, engagement, child-mode, and realtime claims remain visible without becoming allowed claims.
+- `scripts/phase10-narrative-mission-gate-smoke.mjs` runs M10 planning, world-state, validator, parity, fallback, and claim-guard smokes.
+- `docs/phase-10-evidence/M10-6-narrative-mission-closeout.md` records the M10 direction review and next goal candidate.
+- M10 can close as local narrative-transfer mechanics complete, not as real learner outcome proof.

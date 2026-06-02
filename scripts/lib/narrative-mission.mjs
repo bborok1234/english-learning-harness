@@ -19,6 +19,8 @@ const unsupportedClaimPhrases = [
   "realtime voice adventure is supported",
 ];
 const mediaCapabilities = ["image", "voice", "video", "web", "browser", "mcp", "realtime_voice"];
+const richCapabilities = ["image_generation", "image_input", "voice_transcript"];
+const cinematicCapabilities = ["web_search", "browser", "mcp"];
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -312,6 +314,70 @@ export function validateNarrativeMissionBundle({
   ];
 }
 
+function hasCapability(toolCapabilities, capability) {
+  return toolCapabilities?.capabilities?.[capability] === true;
+}
+
+function optionalCapabilityAvailable(toolCapabilities, capability) {
+  const capabilityMap = {
+    image: ["image_generation", "image_input"],
+    voice: ["voice_transcript"],
+    web: ["web_search"],
+    browser: ["browser"],
+    mcp: ["mcp"],
+    realtime_voice: ["realtime_voice"],
+  };
+  return (capabilityMap[capability] || [capability]).some((mapped) => hasCapability(toolCapabilities, mapped));
+}
+
+export function routeMissionCapabilities(missionSpec, toolCapabilities) {
+  const capabilityErrors = validateToolCapabilities(toolCapabilities);
+  if (capabilityErrors.length) {
+    throw new Error(capabilityErrors.join("; "));
+  }
+  const missionRequired = missionSpec?.capability_requirements?.required ?? [];
+  if (!missionRequired.includes("text")) {
+    throw new Error("mission capability route requires text as the required capability");
+  }
+  for (const capability of missionRequired) {
+    if (capability !== "text") {
+      throw new Error(`mission capability route rejects required generated/media capability: ${capability}`);
+    }
+  }
+  if (toolCapabilities.fallback?.text_scene_card_required !== true) {
+    throw new Error("mission capability route requires a text scene card fallback");
+  }
+
+  const optional = missionSpec?.capability_requirements?.optional ?? [];
+  const availableOptional = optional.filter((capability) => optionalCapabilityAvailable(toolCapabilities, capability));
+  const hasCinematic = cinematicCapabilities.some((capability) => hasCapability(toolCapabilities, capability));
+  const hasRich = richCapabilities.some((capability) => hasCapability(toolCapabilities, capability));
+  const requestedMode = missionSpec?.fallback_mode || toolCapabilities.fallback.default_mode || "light";
+  const presentationMode =
+    toolCapabilities.cost_mode === "cinematic" && hasCinematic
+      ? "cinematic"
+      : toolCapabilities.cost_mode !== "light" && hasRich
+        ? "rich"
+        : "light";
+
+  return {
+    mission_id: missionSpec.mission_id,
+    requested_mode: requestedMode,
+    presentation_mode: presentationMode,
+    can_complete_without_generation: true,
+    required: ["text"],
+    optional_requested: optional,
+    optional_available: availableOptional,
+    text_scene_card_required: true,
+    fallback_reason:
+      presentationMode === "light"
+        ? "No generated media is required; text scene card is the canonical learning path."
+        : "Optional capabilities may enrich presentation, but text scene card remains the learning path.",
+    claim_boundary:
+      "Capability routing changes presentation only. Speaking Skill OS transfer evidence remains text-first and local.",
+  };
+}
+
 export function buildNarrativeScenario(missionSpec, backlogItem) {
   return {
     id: missionSpec.mission_id,
@@ -371,6 +437,7 @@ export function persistNarrativeMissionSession({
   }
 
   const backlogItem = speakingBacklog.items.find((item) => item.id === missionSpec.backlog_item_id);
+  const capabilityRoute = routeMissionCapabilities(missionSpec, toolCapabilities);
   const scenario = buildNarrativeScenario(missionSpec, backlogItem);
   const session = buildSession(learnerTurns, {
     sessionId: sessionId || `${date.toISOString().slice(0, 10)}-${date.getTime()}-narrative`,
@@ -388,6 +455,7 @@ export function persistNarrativeMissionSession({
     mission_id: missionSpec.mission_id,
     world_ref: missionSpec.world_ref,
     npc_ref: missionSpec.npc_ref,
+    capability_route: capabilityRoute,
     learner_visible_scene: missionSpec.learner_visible_scene,
     story_consequence: null,
     claim_boundary: missionSpec.claim_boundary,
