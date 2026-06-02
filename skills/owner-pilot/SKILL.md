@@ -37,6 +37,14 @@ node scripts/english-learning-harness.mjs pilot-next --json
 
 This refreshes the learner cockpit and writes a local `artifacts/pilot/pilot-next-card.html` card. Use it as a product-surface aid, but do not ask the learner to run the command.
 
+After the learner answers the current card, prefer the automatic reply router internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-reply --say "<learner answer>" --json
+```
+
+If the answer belongs to a daily pilot card and the learner mentioned a friction point, add `--friction-note "<short note>"`. The router reads current pilot state and saves the answer to the next baseline, daily, or final card. Do not ask the learner to choose a phase, card id, or day number.
+
 ## Pilot Phases
 
 ### Day 0 Baseline
@@ -51,10 +59,10 @@ Learner-facing opening:
 첫 질문: 친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.
 ```
 
-After each Day 0 answer, persist internally:
+After each Day 0 answer, persist internally through the automatic router:
 
 ```bash
-node scripts/english-learning-harness.mjs pilot-capture --phase baseline --card-id "<card id>" --say "<answer>" --json
+node scripts/english-learning-harness.mjs pilot-reply --say "<answer>" --json
 ```
 
 The fifth captured card automatically commits the Day 0 baseline through the pilot engine. If the learner gives a comfort rating, include `--comfort-rating "<0-5>"` on the latest capture.
@@ -66,7 +74,7 @@ Use `pilot-status --json` internally. If the baseline exists and fewer than five
 After collecting the learner answer and one short friction note, persist internally:
 
 ```bash
-node scripts/english-learning-harness.mjs pilot-capture --phase day --day "<n>" --say "<learner answer>" --friction-note "<short note>" --json
+node scripts/english-learning-harness.mjs pilot-reply --say "<learner answer>" --friction-note "<short note>" --json
 ```
 
 The engine should update mission, scene, asset deck, learner report, cockpit, session evidence, and the day's next asset action. Summarize this in learner language without exposing commands.
@@ -76,7 +84,7 @@ The engine should update mission, scene, asset deck, learner report, cockpit, se
 When five daily sessions exist, ask the Day 7 snapshot cards one at a time. After each final answer, persist internally:
 
 ```bash
-node scripts/english-learning-harness.mjs pilot-capture --phase final --card-id "<card id>" --say "<answer>" --json
+node scripts/english-learning-harness.mjs pilot-reply --say "<answer>" --json
 ```
 
 The fifth captured final card automatically commits the final sample through the pilot engine. If the learner gives a comfort rating, include `--comfort-rating "<0-5>"` on the latest capture.
@@ -93,7 +101,7 @@ Then summarize:
 - Ask only one card at a time.
 - If a learner-facing next-card artifact exists, use it to keep the prompt short and concrete.
 - Avoid meta labels like "baseline", "rubric", "artifact bridge", or "product_journey_audit" in the learner prompt.
-- Do not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
+- Do not expose `pilot-next`, `pilot-reply`, `pilot-capture`, `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
 - If tool execution fails, continue the conversation and say durable saving was not confirmed.
 - If the user wants to stop early, save nothing extra unless they already answered a pilot prompt; then explain what was or was not saved.
 

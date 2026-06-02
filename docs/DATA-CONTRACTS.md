@@ -593,6 +593,32 @@ The learner-facing cockpit must not expose `pilot-capture`, `pilot-start`, `pilo
 
 The cockpit refresh is a product-surface convenience contract. It is not evidence that the real owner/self pilot has been completed.
 
+`pilot-reply --json` is a Codex-internal routing helper. It lets Codex save the learner's current answer without asking the learner to choose baseline/day/final, card id, or day number:
+
+```json
+{
+  "status": "pass",
+  "action": "pilot-reply",
+  "routedTo": {
+    "phase": "baseline|day|final",
+    "cardId": "today_snapshot",
+    "day": 1
+  },
+  "result": {
+    "action": "pilot-capture",
+    "committed": false
+  },
+  "cockpit": {
+    "statePath": "learner-root/cockpit-state.json",
+    "htmlPath": "learner-root/cockpit.html",
+    "url": "file:///absolute/path/to/cockpit.html"
+  },
+  "claimBoundary": "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion."
+}
+```
+
+The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. It is not a learner-facing command and must not appear in generated learner HTML.
+
 `pilot-next --json` writes the current learner-facing pilot card:
 
 ```json

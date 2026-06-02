@@ -19,6 +19,8 @@ function main() {
     "Do not ask the learner to run `node`",
     "Use that engine yourself. Do not hand the command to the learner.",
     "pilot-next",
+    "pilot-reply",
+    "Do not ask the learner to choose a phase, card id, or day number.",
     "artifacts/pilot/pilot-next-card.html",
     "ask the five Day 0 mission cards one at a time",
     "pilot-capture",
