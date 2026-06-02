@@ -687,11 +687,18 @@ The router must delegate to `pilot-capture` rather than write pilot state direct
       "minimum_valid_daily_sessions": 5
     }
   },
+  "quickReplies": [
+    {
+      "id": "quick-1",
+      "text": "Which place do you mean?",
+      "note": "가장 짧고 안전한 답변"
+    }
+  ],
   "claimBoundary": "This card helps continue the local owner/self pilot. It does not prove learning outcomes or pilot completion."
 }
 ```
 
-The generated HTML must render `assistantPrompt.text` in a dedicated learner-ready prompt section, while preserving the shorter next-card prompt and progress. The generated HTML and `assistantPrompt.text` must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, rubric labels, artifact labels, or `product_journey_audit` internals. `assistantPrompt.text` is the preferred prompt for Codex to say directly to the learner when continuing the real pilot.
+The generated HTML must render `assistantPrompt.text` in a dedicated learner-ready prompt section, render `quickReplies` as copyable one-sentence answer candidates, while preserving the shorter next-card prompt and progress. The generated HTML, `assistantPrompt.text`, and quick replies must not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, `pilot-finish`, PR/issue labels, rubric labels, artifact labels, or `product_journey_audit` internals. `assistantPrompt.text` is the preferred prompt for Codex to say directly to the learner when continuing the real pilot.
 
 The first five `pilot-next` daily cards must cover distinct speaking actions:
 
