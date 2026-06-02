@@ -3475,6 +3475,100 @@ function latestPilotReport(paths) {
   };
 }
 
+function pilotCards() {
+  return [
+    {
+      id: "today_snapshot",
+      title: "오늘의 한 컷",
+      ask: "오늘 실제로 한 일을 영어로 한 문장만 말해보세요.",
+      example: "I had lunch and took a short walk today.",
+    },
+    {
+      id: "meaning_check",
+      title: "잠깐, 무슨 뜻이야?",
+      ask: "어디에서 만나자는 뜻인지 영어로 한 번만 다시 물어보세요.",
+      example: "Which place do you mean?",
+    },
+    {
+      id: "stuck_rescue",
+      title: "막혔을 때 도망가지 않기",
+      ask: '영어로 "정확한 단어는 모르겠지만..." 하고 계속 이어가 보세요.',
+      example: "I do not know the exact word, but I mean this place feels comfortable.",
+    },
+    {
+      id: "scene_snap",
+      title: "내 주변 스냅샷",
+      ask: "주변에 보이는 장소나 물건을 영어로 한두 문장 묘사해보세요.",
+      example: "I am in an office. There are many desks, chairs, and monitors.",
+    },
+    {
+      id: "comfort_check",
+      title: "오늘의 체감",
+      ask: "0부터 5까지 점수와 이유를 아주 짧게 말해보세요.",
+      example: "My comfort score is 3. I feel okay, but I am a little tired.",
+    },
+  ];
+}
+
+function readActivePilotState(paths) {
+  const pilotStatePath = resolve(paths.root, "pilot-state.json");
+  if (!existsSync(pilotStatePath)) return null;
+  const state = JSON.parse(readFileSync(pilotStatePath, "utf8"));
+  if (state.status === "complete") return null;
+  const cards = pilotCards();
+  const completedDailySessions = (state.days ?? []).filter((day) => day.status === "complete").length;
+  const baselineAnswers = state.partial?.baseline?.answers?.length ?? 0;
+  const finalAnswers = state.partial?.final?.answers?.length ?? 0;
+  const minimumValidDailySessions = state.minimum_valid_daily_sessions ?? 5;
+  let nextPhase = "baseline";
+  let nextCard = cards[Math.min(baselineAnswers, cards.length - 1)];
+  let nextDay = null;
+
+  if (state.baseline && completedDailySessions < minimumValidDailySessions) {
+    nextPhase = "day";
+    nextDay = completedDailySessions + 1;
+    nextCard = {
+      id: `day-${nextDay}`,
+      title: `Pilot Day ${nextDay}`,
+      ask: '친구가 "Let\'s meet at the usual place after work."라고 말했습니다. 어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장만 해보세요.',
+      example: "Which place do you mean?",
+    };
+  } else if (state.baseline && completedDailySessions >= minimumValidDailySessions && !state.final_sample) {
+    nextPhase = "final";
+    nextCard = cards[Math.min(finalAnswers, cards.length - 1)];
+  }
+
+  return {
+    pilot_id: state.pilot_id,
+    status: state.status,
+    participant: state.participant?.label ?? "repository owner / self pilot participant",
+    baseline_ready: Boolean(state.baseline),
+    completed_daily_sessions: completedDailySessions,
+    minimum_valid_daily_sessions: minimumValidDailySessions,
+    target_days: state.target_days ?? 7,
+    partial: {
+      baseline_answers: baselineAnswers,
+      final_answers: finalAnswers,
+      day_captures: state.partial?.days?.length ?? 0,
+    },
+    next_card: {
+      phase: nextPhase,
+      day: nextDay,
+      card_id: nextCard?.id ?? "",
+      title: nextCard?.title ?? "",
+      ask: nextCard?.ask ?? "",
+      example: nextCard?.example ?? "",
+    },
+    learner_prompt:
+      nextPhase === "baseline" && baselineAnswers === 0
+        ? '친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.'
+        : nextCard?.ask ?? "",
+    state_file: relative(paths.root, pilotStatePath),
+    claim_boundary:
+      "Active pilot status shows local owner/self pilot progress only. It does not prove learning outcomes.",
+  };
+}
+
 export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), date = new Date()) {
   const paths = ensureLearnerStore(learnerRoot);
   const dailyCockpit = buildDailyCockpit(paths.root, date);
@@ -3491,6 +3585,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const latestMission = readLatestGeneratedMission(paths.root);
   const latestScene = readLatestGeneratedScene(paths.root);
   const latestAssetDeck = readLatestMissionAssetDeck(paths.root);
+  const activePilot = readActivePilotState(paths);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
   const nextCommand = commandLine(paths.root, "today", [
     "--say",
@@ -3559,7 +3654,9 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_generated_mission: latestMission,
       latest_generated_scene: latestScene,
       latest_mission_asset_deck: latestAssetDeck,
+      active_pilot: activePilot,
     },
+    active_pilot: activePilot,
     next_asset_action: latestAssetDeck?.top_asset_action
       ? {
           deck: latestAssetDeck.html,
@@ -3606,6 +3703,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_generated_scene: latestScene?.html ?? "",
       latest_mission_asset_deck: latestAssetDeck?.html ?? "",
       latest_learner_report: latestLearnerReport?.html ?? "",
+      active_pilot_state: activePilot?.state_file ?? "",
     },
     claim_boundary:
       "This cockpit is a local learner product surface. It connects practice evidence and next actions, but does not certify fluency or guarantee improvement.",
@@ -3783,6 +3881,21 @@ function personalLearnerCockpitHtml(state) {
           <p class="subtle">막히면: ${escapeHtml(state.today.rescue_phrase)}</p>
           <code class="command">${escapeHtml(state.today.start_command)}</code>
         </section>
+
+        ${
+          state.active_pilot
+            ? `<section class="amber" aria-labelledby="active-pilot">
+          <h2 id="active-pilot">진행 중인 owner pilot</h2>
+          <p class="subtle">${escapeHtml(state.active_pilot.completed_daily_sessions)} / ${escapeHtml(state.active_pilot.minimum_valid_daily_sessions)} daily sessions · Day 0 cards ${escapeHtml(state.active_pilot.partial.baseline_answers)} / 5</p>
+          <div class="panel">
+            <h3>${escapeHtml(state.active_pilot.next_card.title)}</h3>
+            <p class="ask">${escapeHtml(state.active_pilot.learner_prompt)}</p>
+            <p class="subtle">예시: ${escapeHtml(state.active_pilot.next_card.example)}</p>
+          </div>
+          <p class="subtle">${escapeHtml(state.active_pilot.claim_boundary)}</p>
+        </section>`
+            : ""
+        }
 
         <section aria-labelledby="generated-mission">
           <h2 id="generated-mission">생성된 장면 artifact</h2>

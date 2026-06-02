@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 card-level pilot capture implemented; real owner pilot still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, a Codex-facing owner-pilot skill, and card-level pilot-capture persistence. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 active pilot cockpit implemented; real owner pilot still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, and active pilot visibility in learner cockpit. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations: each Day 0/final card answer is captured durably, and the fifth card automatically commits through the existing pilot engine. The next step is the real owner/self learner run.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible in the product cockpit: each partial Day 0/final answer is captured durably, and the cockpit shows the next learner-facing pilot card.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, active pilot cockpit visibility, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -883,19 +883,31 @@
       "path": "../scripts/phase15-owner-pilot-capture-smoke.mjs",
       "role": "owner pilot card-level capture smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md",
+      "path": "./phase-15-evidence/AIOS-12-active-pilot-cockpit.md",
+      "role": "AIOS-12 active pilot cockpit evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+      "path": "../scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+      "role": "active pilot cockpit smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "pilot-capture, pilot skill, and audit mechanics implemented; #179 stays open",
+      "detail": "capture, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
       "label": "Pilot surface",
-      "value": "Codex skill",
-      "detail": "english-learning-owner-pilot installed by setup",
+      "value": "Cockpit-visible",
+      "detail": "active pilot next card appears in learner cockpit",
       "tone": "green"
     },
     {
@@ -1120,6 +1132,13 @@
       "status": "Pass",
       "evidence": "pilot-capture command, phase15-owner-pilot-capture-smoke, phase9-owner-pilot-smoke",
       "claim": "pilot-capture durably stores one card answer at a time, auto-commits Day 0/final samples on the fifth card, and daily capture preserves next asset action evidence; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-30",
+      "label": "Active pilot learner cockpit visibility",
+      "status": "Pass",
+      "evidence": "personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke",
+      "claim": "learner cockpit shows active pilot progress and the next learner-facing pilot card without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1128,6 +1147,18 @@
       "title": "Done",
       "tone": "green",
       "cards": [
+        {
+          "id": "AIOS-12-ACTIVE-PILOT-COCKPIT",
+          "title": "AIOS-12 active pilot cockpit 통과",
+          "why": "실제 pilot이 진행 중일 때 학습자는 현재 카드와 다음 질문을 cockpit에서 확인할 수 있어야 한다.",
+          "done": "cockpit state/html이 active_pilot progress와 next learner-facing card를 보여준다.",
+          "verification": "personal learner cockpit active pilot smoke passed and checks no internal pilot command leakage.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md"
+          ]
+        },
         {
           "id": "AIOS-12-CARD-CAPTURE",
           "title": "AIOS-12 card-level pilot capture 통과",
@@ -2526,9 +2557,9 @@
         {
           "id": "REAL-AIOS-12-PILOT",
           "title": "실제 owner/self 5일 pilot 실행",
-          "why": "이제 Codex가 한 카드씩 저장하며 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.",
+          "why": "이제 Codex가 한 카드씩 저장하고 cockpit에 다음 pilot 카드를 보여줄 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.",
           "done": "Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.",
-          "verification": "#179 remains open until real owner/self evidence exists; capture, fixture, and skill smokes are not enough.",
+          "verification": "#179 remains open until real owner/self evidence exists; cockpit/capture/fixture smokes are not enough.",
           "files": [
             "pilot-state.json",
             "artifacts/pilot/",
@@ -3132,6 +3163,11 @@
       "name": "AIOS-12 owner pilot card-level capture",
       "status": "Pass",
       "detail": "phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence."
+    },
+    {
+      "name": "AIOS-12 active pilot cockpit",
+      "status": "Pass",
+      "detail": "personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage."
     }
   ],
   "commands": [
@@ -3534,6 +3570,10 @@
     {
       "label": "Run AIOS-12 owner pilot capture smoke",
       "command": "node scripts/phase15-owner-pilot-capture-smoke.mjs"
+    },
+    {
+      "label": "Run active pilot cockpit smoke",
+      "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
     }
   ]
 }
@@ -3542,12 +3582,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations: each Day 0/final card answer is captured durably, and the fifth card automatically commits through the existing pilot engine. The next step is the real owner/self learner run.</p>
+        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and remain visible in the product cockpit: each partial Day 0/final answer is captured durably, and the cockpit shows the next learner-facing pilot card.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-12 card-level pilot capture implemented; real owner pilot still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics, a Codex-facing owner-pilot skill, and card-level pilot-capture persistence. #179 remains open until real owner/self transcript evidence is collected.
+        AIOS-12 active pilot cockpit implemented; real owner pilot still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, and active pilot visibility in learner cockpit. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -3556,12 +3596,12 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current slice</div>
           <div class="metric-value">AIOS-12</div>
-          <p>pilot-capture, pilot skill, and audit mechanics implemented; #179 stays open</p>
+          <p>capture, skill, cockpit visibility, and audit mechanics implemented; #179 stays open</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Pilot surface</div>
-          <div class="metric-value">Codex skill</div>
-          <p>english-learning-owner-pilot installed by setup</p>
+          <div class="metric-value">Cockpit-visible</div>
+          <p>active pilot next card appears in learner cockpit</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Persistence</div>
@@ -3607,9 +3647,9 @@
                 <span>pilot-state.json, artifacts/pilot/, cockpit.html, artifacts/reports/</span>
               </div>
               <h3>실제 owner/self 5일 pilot 실행</h3>
-              <div class="card-row"><b>왜</b><p>이제 Codex가 한 카드씩 저장하며 pilot을 진행할 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.</p></div>
+              <div class="card-row"><b>왜</b><p>이제 Codex가 한 카드씩 저장하고 cockpit에 다음 pilot 카드를 보여줄 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.</p></div>
-              <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; capture, fixture, and skill smokes are not enough.</p></div>
+              <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; cockpit/capture/fixture smokes are not enough.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -3898,6 +3938,11 @@
               <td><strong>GATE-29</strong><span>Owner pilot card-level capture</span></td>
               <td><strong>Pass</strong><span>pilot-capture command, phase15-owner-pilot-capture-smoke, phase9-owner-pilot-smoke</span></td>
               <td>pilot-capture durably stores one card answer at a time, auto-commits Day 0/final samples on the fifth card, and daily capture preserves next asset action evidence; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-30</strong><span>Active pilot learner cockpit visibility</span></td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke</span></td>
+              <td>learner cockpit shows active pilot progress and the next learner-facing pilot card without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -4212,6 +4257,14 @@
               <strong>scripts/phase15-owner-pilot-capture-smoke.mjs</strong>
               <span>owner pilot card-level capture smoke</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-12-active-pilot-cockpit.md">
+              <strong>docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md</strong>
+              <span>AIOS-12 active pilot cockpit evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/personal-learner-cockpit-active-pilot-smoke.mjs">
+              <strong>scripts/personal-learner-cockpit-active-pilot-smoke.mjs</strong>
+              <span>active pilot cockpit smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -4219,10 +4272,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-8 first-use conversation variants</td>
-              <td><strong>Pass</strong><span>skill-conversation-variants smoke validates four concrete first-use transcripts, no command/rubric/project leakage, real practice artifacts, report/cockpit linkage, and matching mission/scene preset IDs.</span></td>
-            </tr>
             <tr>
               <td>AIOS-9 multimodal mission asset contract</td>
               <td><strong>Pass</strong><span>multimodal-mission-asset-contract smoke validates canonical text-first fallback, HTML scene, image, voice transcript, Remotion-style storyboard, future realtime hook entries, scene evidence alignment, rendered HTML summary, and decorative negative fixtures.</span></td>
@@ -4250,6 +4299,10 @@
             <tr>
               <td>AIOS-12 owner pilot card-level capture</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 active pilot cockpit</td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage.</span></td>
             </tr>
           </tbody>
         </table>
@@ -4295,9 +4348,19 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 103개 보기</summary>
+        <summary>완료 이력 104개 보기</summary>
         <div class="archive-body column-cards">
 
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-ACTIVE-PILOT-COCKPIT</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md</span>
+              </div>
+              <h3>AIOS-12 active pilot cockpit 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot이 진행 중일 때 학습자는 현재 카드와 다음 질문을 cockpit에서 확인할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>cockpit state/html이 active_pilot progress와 next learner-facing card를 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>personal learner cockpit active pilot smoke passed and checks no internal pilot command leakage.</p></div>
+            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-12-CARD-CAPTURE</strong>
@@ -5331,7 +5394,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 100개 보기</summary>
+        <summary>전체 검증 101개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -5736,12 +5799,16 @@
               <td>AIOS-12 owner pilot card-level capture</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-12 active pilot cockpit</td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 100개 보기</summary>
+        <summary>전체 명령 101개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -6143,6 +6210,10 @@
             <div class="command">
               <span>Run AIOS-12 owner pilot capture smoke</span>
               <code>node scripts/phase15-owner-pilot-capture-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run active pilot cockpit smoke</span>
+              <code>node scripts/personal-learner-cockpit-active-pilot-smoke.mjs</code>
             </div>
         </div>
       </details>

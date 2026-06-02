@@ -53,6 +53,7 @@ const requiredFiles = [
   "scripts/generated-daily-mission-smoke.mjs",
   "scripts/interactive-artifact-report-smoke.mjs",
   "scripts/personal-learner-cockpit-smoke.mjs",
+  "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
   "scripts/phase1-command-wrapper-smoke.mjs",
   "scripts/phase1-vocabulary-history-smoke.mjs",
   "scripts/phase1-scenario-loop-smoke.mjs",

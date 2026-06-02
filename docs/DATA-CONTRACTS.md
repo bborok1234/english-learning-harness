@@ -515,6 +515,37 @@ Required JSON fields:
 
 The participant label must stay generic unless the learner explicitly provides a name for public-facing output. The pilot state must not assume a personal name. Reports may include transcript text locally, but public issue/PR summaries should use redacted or summarized evidence unless the learner explicitly approves sharing.
 
+When a pilot is active, `cockpit-state.json` may include:
+
+```json
+{
+  "active_pilot": {
+    "pilot_id": "owner-self-YYYY-MM-DD",
+    "status": "awaiting_baseline|in_progress|ready_to_finish|incomplete",
+    "baseline_ready": false,
+    "completed_daily_sessions": 0,
+    "minimum_valid_daily_sessions": 5,
+    "partial": {
+      "baseline_answers": 1,
+      "final_answers": 0,
+      "day_captures": 0
+    },
+    "next_card": {
+      "phase": "baseline|day|final",
+      "day": null,
+      "card_id": "meaning_check",
+      "title": "잠깐, 무슨 뜻이야?",
+      "ask": "learner-facing next prompt",
+      "example": "Which place do you mean?"
+    },
+    "learner_prompt": "learner-facing next prompt",
+    "state_file": "pilot-state.json"
+  }
+}
+```
+
+The learner-facing cockpit must not expose `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, or `product_journey_audit` internals.
+
 ## M10 Narrative Mission Contracts
 
 Narrative mission state is valid only when story progress is bound to a Speaking Skill OS transfer test.
