@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M10 mission validator implemented",
-    "status": "M10-2/#144 machine-readable mission/world/capability contracts exist, and M10-3/#145 rejects decorative missions that are not tied to Speaking Skill OS transfer evidence.",
+    "stage": "M10 narrative parity implemented",
+    "status": "M10-4/#146 proves one text-first narrative mission records the same Speaking Skill OS transfer evidence as plain today for pass and needs-review outputs.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer admission gate. The harness can validate a text-first narrative mission spec before any generated story affects learner state; narrative session parity remains next."
+    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer admission plus parity gate. The first narrative mission is not just roleplay: it preserves the same backlog transfer evidence as plain practice, then records story consequence after the transfer result."
   },
   "ssot": [
     {
@@ -212,37 +212,49 @@
       "path": "../scripts/lib/narrative-mission.mjs",
       "role": "runtime validator for mission/world/capability contracts",
       "kind": "source"
+    },
+    {
+      "label": "scripts/phase10-narrative-mission-parity-smoke.mjs",
+      "path": "../scripts/phase10-narrative-mission-parity-smoke.mjs",
+      "role": "Narrative mission parity smoke for plain today vs validated mission wrapper",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-10-evidence/M10-4-narrative-mission-parity.md",
+      "path": "./phase-10-evidence/M10-4-narrative-mission-parity.md",
+      "role": "M10-4 parity evidence note",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "In progress",
-      "detail": "public source is live; Speaking Skill OS exists; narrative mission admission control now exists",
+      "detail": "public source is live; Speaking Skill OS exists; first narrative mission parity now passes",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "M10 validator",
-      "detail": "#144/#145 add schemas, fixtures, capability fallback checks, and decorative mission rejection",
+      "value": "M10 parity",
+      "detail": "#146 proves usual-place-clarification matches plain Speaking OS evidence before story consequence",
       "tone": "blue"
     },
     {
       "label": "Next decision",
-      "value": "Build parity",
-      "detail": "next work is #146: prove one narrative mission updates the same Speaking Skill OS evidence as plain today",
+      "value": "Fallback/router",
+      "detail": "next work is #147: capability router and no-generation fallback gate",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
       "value": "74 issues",
-      "detail": "#144/#145 are implemented on this branch; #146 is the next M10 implementation target",
+      "detail": "#146 implemented on this branch; #147/#148 remain in M10",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Verified transfer wrapper",
-      "detail": "mission validator rejects story progress without a matching backlog transfer test",
+      "value": "Narrative transfer parity",
+      "detail": "story consequence is written only after matching Speaking Skill OS transfer evidence exists",
       "tone": "green"
     }
   ],
@@ -330,6 +342,13 @@
       "status": "Pass",
       "evidence": "#145, narrative mission validator, phase10-mission-spec-validator-smoke",
       "claim": "missions must link to Speaking Skill OS backlog transfer evidence before story progress can count"
+    },
+    {
+      "id": "GATE-13",
+      "label": "Narrative mission parity",
+      "status": "Pass",
+      "evidence": "#146, phase10-narrative-mission-parity-smoke",
+      "claim": "one text-first narrative mission produces the same Speaking Skill OS transfer evidence as plain today before story consequence is recorded"
     }
   ],
   "board": [
@@ -1457,6 +1476,18 @@
             "scripts/phase10-mission-spec-validator-smoke.mjs",
             "docs/phase-10-evidence/M10-3-mission-validator.md"
           ]
+        },
+        {
+          "id": "M10-4",
+          "title": "#146 narrative mission parity fixture를 구현함",
+          "why": "validated mission이 실제 학습 evidence를 plain Speaking OS와 다르게 기록하면 narrative layer는 장식이 된다.",
+          "done": "`usual-place-clarification` narrative wrapper가 기존 `persistSession()` 경로를 재사용하고, pass/needs_review 모두 plain today와 같은 backlog evidence를 남기는지 검증했다.",
+          "verification": "`node scripts/phase10-narrative-mission-parity-smoke.mjs`가 pass와 needs-review pair를 비교하고 story consequence가 transfer evidence 뒤에 기록되는지 확인한다.",
+          "files": [
+            "scripts/lib/narrative-mission.mjs",
+            "scripts/phase10-narrative-mission-parity-smoke.mjs",
+            "docs/phase-10-evidence/M10-4-narrative-mission-parity.md"
+          ]
         }
       ]
     },
@@ -1467,14 +1498,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "M10 admission gate implemented",
-          "why": "generated narrative를 만들기 전에 admission validator가 장식용 역할극을 막아야 한다.",
-          "done": "#144/#145 구현은 끝났고, 다음은 validator를 실제 today/narrative session parity로 연결하는 #146이다.",
-          "verification": "world-state smoke, mission-spec validator smoke, scaffold smoke, dashboard render check가 필요하다.",
+          "title": "M10 narrative parity implemented",
+          "why": "이제 첫 narrative mission은 단순 roleplay가 아니라 Speaking Skill OS evidence와 동등한 transfer wrapper로 검증된다.",
+          "done": "#146 구현은 끝났고, 다음은 capability router/no-gen fallback gate인 #147이다.",
+          "verification": "parity smoke, mission validator smoke, scaffold smoke, dashboard render check가 필요하다.",
           "files": [
-            "scripts/lib/narrative-mission.mjs",
-            "scripts/phase10-world-state-smoke.mjs",
-            "scripts/phase10-mission-spec-validator-smoke.mjs"
+            "scripts/phase10-narrative-mission-parity-smoke.mjs",
+            "scripts/lib/narrative-mission.mjs"
           ]
         }
       ]
@@ -1486,13 +1516,13 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "#146 narrative mission parity fixture",
-          "why": "validator가 통과한 미션이 실제 세션에서 plain Speaking Skill OS와 같은 backlog evidence를 남기는지 증명해야 한다.",
-          "done": "아직 미구현. 다음 PR에서 usual-place-clarification mission을 today flow에 연결하거나 parity smoke로 같은 transfer result를 증명한다.",
-          "verification": "narrative mission parity smoke must update the same backlog item status for equivalent learner output.",
+          "title": "#147 capability router and no-gen fallback",
+          "why": "Codex 도구가 있든 없든 narrative mission은 text-first로 완료되어야 하고, 이미지/음성/웹은 optional presentation layer여야 한다.",
+          "done": "아직 미구현. 다음 PR에서 capability router와 no-generation fallback smoke를 추가한다.",
+          "verification": "no-gen fallback smoke must pass with text only and reject missions that require generated media.",
           "files": [
             "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
-            "scripts/lib/narrative-mission.mjs"
+            "docs/narrative-missions/fixtures/light.tool-capabilities.json"
           ]
         }
       ]
@@ -1953,6 +1983,11 @@
       "name": "M10-3 mission validator",
       "status": "Pass",
       "detail": "mission validator smoke rejects missing backlog links, skill/win-condition mismatch, required media, unsupported claims, and decorative mission completion"
+    },
+    {
+      "name": "M10-4 narrative parity",
+      "status": "Pass",
+      "detail": "plain today and usual-place narrative mission match backlog evidence for pass and needs-review outputs; story consequence follows transfer evidence"
     }
   ],
   "commands": [
@@ -2191,6 +2226,14 @@
     {
       "label": "View next M10 parity issue",
       "command": "gh issue view 146"
+    },
+    {
+      "label": "Run M10 narrative parity smoke",
+      "command": "node scripts/phase10-narrative-mission-parity-smoke.mjs"
+    },
+    {
+      "label": "View next M10 fallback issue",
+      "command": "gh issue view 147"
     }
   ]
 }

@@ -91,6 +91,7 @@ const requiredFiles = [
   "scripts/phase10-narrative-mission-plan-smoke.mjs",
   "scripts/phase10-world-state-smoke.mjs",
   "scripts/phase10-mission-spec-validator-smoke.mjs",
+  "scripts/phase10-narrative-mission-parity-smoke.mjs",
   "scripts/lib/narrative-mission.mjs",
   "docs/narrative-missions/schemas/mission-spec.schema.json",
   "docs/narrative-missions/schemas/world-state.schema.json",
