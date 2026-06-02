@@ -16,6 +16,7 @@ The real owner/self pilot should feel like a product conversation, not a hidden 
 - `pilot-next --json` now returns `assistantPrompt.text`, a Korean-first prompt Codex can say directly to the learner without reassembling scattered state fields.
 - The generated HTML renders the same `assistantPrompt.text` in a dedicated learner-ready prompt section.
 - `pilot-next` now returns `quickReplies`, 2-3 copyable one-sentence English answer candidates, and the HTML renders them as numbered choices in a dedicated section.
+- Each rendered quick reply includes a small copy button that copies the English sentence locally when browser clipboard access is available.
 - The command refreshes the learner cockpit before writing the next-card artifact.
 - The owner-pilot skill now allows Codex to generate this next-card artifact internally without asking the learner to run commands.
 
@@ -30,7 +31,7 @@ node scripts/phase15-owner-pilot-capture-smoke.mjs
 node scripts/personal-learner-cockpit-active-pilot-smoke.mjs
 ```
 
-The next-card smoke verifies baseline and daily next-card generation, learner-ready `assistantPrompt.text`, quick replies, rendered assistant prompt and numbered quick-reply choices in HTML, cockpit linkage, progress advance after one fixture day, learner-facing privacy copy, and no leakage of internal pilot commands or PR/issue language into learner HTML or the prompt Codex should say.
+The next-card smoke verifies baseline and daily next-card generation, learner-ready `assistantPrompt.text`, quick replies, rendered assistant prompt, numbered quick-reply choices, copy button wiring in HTML, cockpit linkage, progress advance after one fixture day, learner-facing privacy copy, and no leakage of internal pilot commands or PR/issue language into learner HTML or the prompt Codex should say.
 
 ## Claim Boundary
 

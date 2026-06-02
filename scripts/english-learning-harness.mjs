@@ -1642,17 +1642,19 @@ function pilotNext(options) {
     .quick { margin-top: 18px; }
     .quick h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
     .quick ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-    .quick li { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .quick li { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
     .quick .choice { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 780; }
     .quick strong { display: block; font-size: 16px; overflow-wrap: anywhere; }
     .quick span { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .copy-reply { appearance: none; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; color: var(--ink); padding: 7px 10px; font: inherit; font-size: 13px; font-weight: 720; cursor: pointer; white-space: nowrap; }
+    .copy-reply:focus-visible { outline: 3px solid rgba(47, 125, 85, 0.24); outline-offset: 2px; }
     .example, .rule, .privacy { margin-top: 14px; color: var(--muted); }
     .progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
     .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
     .metric span { display: block; color: var(--muted); font-size: 13px; }
     .metric strong { display: block; margin-top: 2px; font-size: 22px; }
     footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
-    @media (max-width: 640px) { .progress { grid-template-columns: 1fr; } .ask { font-size: 19px; } }
+    @media (max-width: 640px) { .progress { grid-template-columns: 1fr; } .quick li { grid-template-columns: auto 1fr; } .copy-reply { grid-column: 2; justify-self: start; } .ask { font-size: 19px; } }
   </style>
 </head>
 <body>
@@ -1679,7 +1681,7 @@ function pilotNext(options) {
         <ul>
           ${quickReplies
             .map(
-              (reply, index) => `<li><b class="choice" aria-label="${index + 1}번 선택지">${index + 1}</b><div><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></div></li>`,
+              (reply, index) => `<li><b class="choice" aria-label="${index + 1}번 선택지">${index + 1}</b><div><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></div><button class="copy-reply" type="button" data-reply="${escapeHtml(reply.text)}">복사</button></li>`,
             )
             .join("")}
         </ul>
@@ -1691,6 +1693,19 @@ function pilotNext(options) {
     </section>
     <footer>${escapeHtml(artifact.claim_boundary)}</footer>
   </main>
+  <script>
+    for (const button of document.querySelectorAll(".copy-reply")) {
+      button.addEventListener("click", async () => {
+        const text = button.dataset.reply || "";
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = "복사됨";
+        } catch {
+          button.textContent = "선택해서 복사";
+        }
+      });
+    }
+  </script>
 </body>
 </html>
 `,
