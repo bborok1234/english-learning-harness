@@ -562,12 +562,17 @@ When a pilot is active, `cockpit-state.json` may include:
       "example": "Which place do you mean?"
     },
     "learner_prompt": "learner-facing next prompt",
+    "latest_reply_card": {
+      "json": "artifacts/pilot/pilot-reply-card.json",
+      "html": "artifacts/pilot/pilot-reply-card.html",
+      "url": "file:///absolute/path/to/pilot-reply-card.html"
+    },
     "state_file": "pilot-state.json"
   }
 }
 ```
 
-The learner-facing cockpit must not expose `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, or `product_journey_audit` internals.
+The learner-facing cockpit may link `latest_reply_card` when a saved-reply card exists. It must not expose `pilot-reply` command text, `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, transcript internals, or `product_journey_audit` internals.
 
 `pilot-capture --json` returns the refreshed learner cockpit location after each captured card:
 

@@ -3560,6 +3560,16 @@ function readActivePilotState(paths) {
   if (!existsSync(pilotStatePath)) return null;
   const state = JSON.parse(readFileSync(pilotStatePath, "utf8"));
   if (state.status === "complete") return null;
+  const replyCardJsonPath = resolve(paths.root, "artifacts/pilot/pilot-reply-card.json");
+  const replyCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-reply-card.html");
+  const latestReplyCard =
+    existsSync(replyCardJsonPath) && existsSync(replyCardHtmlPath)
+      ? {
+          json: relative(paths.root, replyCardJsonPath),
+          html: relative(paths.root, replyCardHtmlPath),
+          url: `file://${replyCardHtmlPath}`,
+        }
+      : null;
   const cards = pilotCards();
   const completedDailySessions = (state.days ?? []).filter((day) => day.status === "complete").length;
   const baselineAnswers = state.partial?.baseline?.answers?.length ?? 0;
@@ -3611,6 +3621,7 @@ function readActivePilotState(paths) {
       nextPhase === "baseline" && baselineAnswers === 0
         ? '친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.'
         : nextCard?.ask ?? "",
+    latest_reply_card: latestReplyCard,
     state_file: relative(paths.root, pilotStatePath),
     claim_boundary:
       "Active pilot status shows local owner/self pilot progress only. It does not prove learning outcomes.",
@@ -3940,6 +3951,11 @@ function personalLearnerCockpitHtml(state) {
             <p class="ask">${escapeHtml(state.active_pilot.learner_prompt)}</p>
             <p class="subtle">예시: ${escapeHtml(state.active_pilot.next_card.example)}</p>
           </div>
+          ${
+            state.active_pilot.latest_reply_card
+              ? `<p class="subtle">방금 저장된 답변 카드: <a href="${escapeHtml(state.active_pilot.latest_reply_card.url)}">${escapeHtml(state.active_pilot.latest_reply_card.html)}</a></p>`
+              : ""
+          }
           <p class="subtle">${escapeHtml(state.active_pilot.claim_boundary)}</p>
         </section>`
             : ""

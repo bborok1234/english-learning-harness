@@ -406,7 +406,7 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AIOS-12 pilot reply-card surface implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, and saved-reply HTML card, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
     "summary": "The learner pilot lane can now survive interrupted Codex conversations and natural learner replies: Codex can route the next answer to baseline, daily, or final pilot state internally, refresh the next learner-facing card, return a learner-safe coaching summary, write a saved-reply card, and keep each pilot day's sampled speaking action, generated artifacts, and product-surface links without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, learner-safe summary, saved-reply HTML card, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot reply routing with next-card refresh, learner-safe summary, saved-reply HTML card, automatic pilot cockpit refresh, active pilot cockpit visibility with latest reply-card link, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -1198,7 +1198,7 @@
       "label": "Active pilot learner cockpit visibility",
       "status": "Pass",
       "evidence": "personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke",
-      "claim": "learner cockpit shows active pilot progress and the next learner-facing pilot card without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed"
+      "claim": "learner cockpit shows active pilot progress, the next learner-facing pilot card, and the latest saved-reply card link without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed"
     },
     {
       "id": "GATE-31",
@@ -1260,8 +1260,8 @@
           "id": "AIOS-12-ACTIVE-PILOT-COCKPIT",
           "title": "AIOS-12 active pilot cockpit 통과",
           "why": "실제 pilot이 진행 중일 때 학습자는 현재 카드와 다음 질문을 cockpit에서 확인할 수 있어야 한다.",
-          "done": "cockpit state/html이 active_pilot progress와 next learner-facing card를 보여준다.",
-          "verification": "personal learner cockpit active pilot smoke passed and checks no internal pilot command leakage.",
+          "done": "cockpit state/html이 active_pilot progress, next learner-facing card, latest saved-reply card link를 보여준다.",
+          "verification": "personal learner cockpit active pilot smoke validates active pilot progress, next card, latest reply-card link, and no internal pilot command leakage.",
           "files": [
             "scripts/lib/english-learning-store.mjs",
             "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
@@ -3362,7 +3362,7 @@
     {
       "name": "AIOS-12 active pilot cockpit",
       "status": "Pass",
-      "detail": "personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage."
+      "detail": "personal-learner-cockpit-active-pilot smoke validates one pilot-reply Day 0 card appears as active pilot progress in learner cockpit, points to the next learner-facing card, and links the latest saved-reply card without command or engineering leakage."
     },
     {
       "name": "AIOS-12 redacted local pilot dashboard sync",
@@ -3844,7 +3844,7 @@
       <div class="stamp">
         <strong>2026-06-02</strong>
         AIOS-12 pilot reply-card surface implemented; real owner pilot Day 1 answer still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, and saved-reply HTML card, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
+        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, automatic pilot-reply routing with next-card refresh, learner-safe reply summary, saved-reply HTML card, active pilot cockpit visibility with latest reply-card link, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -4199,7 +4199,7 @@
             <tr>
               <td><strong>GATE-30</strong><span>Active pilot learner cockpit visibility</span></td>
               <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke</span></td>
-              <td>learner cockpit shows active pilot progress and the next learner-facing pilot card without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed</td>
+              <td>learner cockpit shows active pilot progress, the next learner-facing pilot card, and the latest saved-reply card link without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed</td>
             </tr>
             <tr>
               <td><strong>GATE-31</strong><span>Pilot capture cockpit refresh</span></td>
@@ -4610,7 +4610,7 @@
             </tr>
             <tr>
               <td>AIOS-12 active pilot cockpit</td>
-              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage.</span></td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one pilot-reply Day 0 card appears as active pilot progress in learner cockpit, points to the next learner-facing card, and links the latest saved-reply card without command or engineering leakage.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 redacted local pilot dashboard sync</td>
@@ -4690,8 +4690,8 @@
               </div>
               <h3>AIOS-12 active pilot cockpit 통과</h3>
               <div class="card-row"><b>왜</b><p>실제 pilot이 진행 중일 때 학습자는 현재 카드와 다음 질문을 cockpit에서 확인할 수 있어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>cockpit state/html이 active_pilot progress와 next learner-facing card를 보여준다.</p></div>
-              <div class="card-row"><b>검증</b><p>personal learner cockpit active pilot smoke passed and checks no internal pilot command leakage.</p></div>
+              <div class="card-row"><b>완료</b><p>cockpit state/html이 active_pilot progress, next learner-facing card, latest saved-reply card link를 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>personal learner cockpit active pilot smoke validates active pilot progress, next card, latest reply-card link, and no internal pilot command leakage.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -6203,7 +6203,7 @@
             </tr>
             <tr>
               <td>AIOS-12 active pilot cockpit</td>
-              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage.</span></td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates one pilot-reply Day 0 card appears as active pilot progress in learner cockpit, points to the next learner-facing card, and links the latest saved-reply card without command or engineering leakage.</span></td>
             </tr>
             <tr>
               <td>AIOS-12 redacted local pilot dashboard sync</td>

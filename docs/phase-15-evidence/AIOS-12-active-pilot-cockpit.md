@@ -17,6 +17,7 @@ The real owner/self pilot needs to be visible as a learner product journey, not 
   - Day 0/final card progress,
   - next learner-facing card prompt,
   - example answer,
+  - latest saved-reply card link when `pilot-reply-card.html` exists,
   - local claim boundary.
 - Cockpit file metadata now includes `active_pilot_state`.
 
@@ -28,7 +29,7 @@ Passed:
 node scripts/personal-learner-cockpit-active-pilot-smoke.mjs
 ```
 
-The smoke captures one Day 0 card, generates the cockpit, and verifies the cockpit points to the next Day 0 card without leaking `pilot-capture`, `pilot-start`, `product_journey_audit`, PR, or issue language into the learner HTML.
+The smoke captures one Day 0 card through `pilot-reply`, generates the cockpit, and verifies the cockpit points to the next Day 0 card plus the latest saved-reply card without leaking `pilot-capture`, `pilot-reply` command text, `pilot-start`, `product_journey_audit`, PR, or issue language into the learner HTML.
 
 ## Claim Boundary
 
