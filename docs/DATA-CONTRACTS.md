@@ -1,6 +1,6 @@
 # Data Contracts
 
-Last updated: 2026-05-29
+Last updated: 2026-06-02
 Status: Active planning contract
 
 ## Purpose
@@ -473,6 +473,24 @@ The participant label must stay generic unless the learner explicitly provides a
 
 Narrative mission state is valid only when story progress is bound to a Speaking Skill OS transfer test.
 
+Canonical schemas and fixtures:
+
+- `docs/narrative-missions/schemas/mission-spec.schema.json`
+- `docs/narrative-missions/schemas/world-state.schema.json`
+- `docs/narrative-missions/schemas/tool-capabilities.schema.json`
+- `docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json`
+- `docs/narrative-missions/fixtures/daily-life.world-state.json`
+- `docs/narrative-missions/fixtures/light.tool-capabilities.json`
+
+Runtime validator:
+
+- `scripts/lib/narrative-mission.mjs`
+
+Smoke:
+
+- `node scripts/phase10-world-state-smoke.mjs`
+- `node scripts/phase10-mission-spec-validator-smoke.mjs`
+
 ### Mission Spec
 
 `mission-spec.json` is the contract a model-generated or deterministic mission must satisfy before learner state can change.
@@ -504,10 +522,10 @@ Required JSON fields:
     "on_needs_review": "The friend gives a simpler hint and asks you to try again."
   },
   "real_world_transfer_target": ["planning conversation", "meeting arrangement"],
+  "fallback_mode": "light",
   "capability_requirements": {
     "required": ["text"],
-    "optional": ["image", "voice"],
-    "fallback_mode": "light"
+    "optional": ["image", "voice"]
   },
   "claim_boundary": "This mission can record local transfer evidence only. Narrative immersion is not proof of fluency."
 }
@@ -519,6 +537,7 @@ Validator rules:
 - `target_skill` must match the linked backlog item.
 - `win_condition.must_pass_backlog_item` must equal `backlog_item_id`.
 - `real_world_transfer_target` must be non-empty and practical.
+- `fallback_mode` must be `light` or `rich`.
 - `capability_requirements.required` must include `text`.
 - generated media may be optional only.
 - story consequence may be written only after learner output.

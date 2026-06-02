@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-02T00:00:00.000Z",
+  "cost_mode": "light",
+  "capabilities": {
+    "text": true,
+    "image_generation": false,
+    "image_input": false,
+    "voice_transcript": false,
+    "realtime_voice": false,
+    "web_search": false,
+    "browser": false,
+    "mcp": false
+  },
+  "fallback": {
+    "default_mode": "light",
+    "text_scene_card_required": true
+  },
+  "claim_boundary": "Capabilities route mission presentation only. Missing tools must not block text-first local transfer evidence and are not proof of learning."
+}

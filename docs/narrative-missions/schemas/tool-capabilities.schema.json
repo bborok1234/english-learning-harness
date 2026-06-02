@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bborok1234/english-learning-harness/docs/narrative-missions/schemas/tool-capabilities.schema.json",
+  "title": "English Learning Harness Narrative Tool Capabilities",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "cost_mode",
+    "capabilities",
+    "fallback",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "cost_mode": { "enum": ["light", "rich", "cinematic"] },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": { "type": "boolean" },
+      "required": [
+        "text",
+        "image_generation",
+        "image_input",
+        "voice_transcript",
+        "realtime_voice",
+        "web_search",
+        "browser",
+        "mcp"
+      ],
+      "properties": {
+        "text": { "const": true },
+        "image_generation": { "type": "boolean" },
+        "image_input": { "type": "boolean" },
+        "voice_transcript": { "type": "boolean" },
+        "realtime_voice": { "type": "boolean" },
+        "web_search": { "type": "boolean" },
+        "browser": { "type": "boolean" },
+        "mcp": { "type": "boolean" }
+      }
+    },
+    "fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default_mode", "text_scene_card_required"],
+      "properties": {
+        "default_mode": { "enum": ["light", "rich"] },
+        "text_scene_card_required": { "const": true }
+      }
+    },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  }
+}

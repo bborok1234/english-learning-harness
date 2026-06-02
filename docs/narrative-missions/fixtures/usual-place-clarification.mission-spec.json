@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mission_id": "usual-place-clarification",
+  "world_ref": "world-state.json#daily-life",
+  "npc_ref": "friend-1",
+  "backlog_item_id": "speaking-clarification",
+  "target_skill": "clarification",
+  "learner_visible_scene": {
+    "title": "The Usual Place",
+    "setup": "친구가 이렇게 말했습니다: \"Let's meet at the usual place after work.\"",
+    "ask": "어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장으로 해보세요.",
+    "example": "Which place do you mean?"
+  },
+  "required_learner_action": "Ask one clarification question before answering.",
+  "transfer_test": "Can you ask what the other person means?",
+  "win_condition": {
+    "type": "speaking_transfer_test",
+    "must_pass_backlog_item": "speaking-clarification"
+  },
+  "story_consequence": {
+    "on_pass": "The friend names the meeting place.",
+    "on_needs_review": "The friend gives a simpler hint and asks you to try again."
+  },
+  "real_world_transfer_target": ["planning conversation", "meeting arrangement"],
+  "fallback_mode": "light",
+  "capability_requirements": {
+    "required": ["text"],
+    "optional": ["image", "voice"]
+  },
+  "claim_boundary": "This mission can record local transfer evidence only. Narrative context is not proof of fluency."
+}

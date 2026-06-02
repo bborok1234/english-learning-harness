@@ -100,7 +100,7 @@ What is complete:
 - M8-3 Speaking Skill OS seven-day gate proves the local multi-day loop: seeded backlog, daily queue targeting, failed transfer retry, weekly mirror, and evidence export.
 - M8-4 research basis citation map ties output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, and claim boundaries to visible product surfaces.
 - M9 Real Learner Pilot Bridge is open. M9-1 adds owner/self pilot state and command surface without assuming a personal name. M9-3 now replaces internal pilot labels with learner-facing mission cards.
-- M10 Narrative Mission Layer is open. M10-1 defines the PRD, test spec, data contracts, issue plan, and smoke gate that make narrative missions a verified transfer wrapper over Speaking Skill OS rather than decorative worldbuilding.
+- M10 Narrative Mission Layer is open. M10-1 defines the PRD/test contract, M10-2 adds machine-readable mission/world/capability schemas and fixtures, and M10-3 adds a validator that rejects decorative missions not tied to Speaking Skill OS transfer evidence.
 
 What is not started:
 - Real user validation.
@@ -297,8 +297,8 @@ Start from the verified/fallback Phase 0 constraints.
 ### Phase 10 Narrative Mission Layer
 
 - [x] M10-1: Define Narrative Mission Layer PRD and test spec (#143). Narrative missions must prove that story progress requires the target Speaking Skill OS transfer behavior.
-- [ ] M10-2: Add mission-spec and world-state data contracts (#144).
-- [ ] M10-3: Implement mission validator and decorative-mission rejection (#145).
+- [x] M10-2: Add mission-spec and world-state data contracts (#144). JSON schemas, positive fixtures, world-state smoke, and capability fallback checks are in place.
+- [x] M10-3: Implement mission validator and decorative-mission rejection (#145). Mission validator rejects missing backlog links, skill/win-condition mismatches, required media, unsupported claims, and decorative story completion.
 - [ ] M10-4: Implement one narrative mission parity fixture (#146).
 - [ ] M10-5: Add capability router and no-gen fallback gate (#147).
 - [ ] M10-6: Close narrative mission gate and dashboard (#148).
