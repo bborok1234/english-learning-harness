@@ -438,6 +438,7 @@ function cockpit(options) {
     cockpitUrl: result.cockpitUrl,
     todayAction: result.state.today,
     speakingSkillOS: result.state.speaking_skill_os,
+    activePilot: result.state.active_pilot,
     nextAssetAction: result.state.next_asset_action,
     nextActions: result.state.next_actions,
     journey: result.state.journey,
@@ -887,6 +888,16 @@ function replaceByCardId(records, record) {
   );
 }
 
+function pilotCockpitRefresh(paths, date) {
+  const result = cockpit({ learnerRoot: paths.root, date });
+  return {
+    statePath: result.cockpitStatePath,
+    htmlPath: result.cockpitPath,
+    url: result.cockpitUrl,
+    activePilot: result.activePilot ?? null,
+  };
+}
+
 function pilotCapture(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -923,6 +934,7 @@ function pilotCapture(options) {
       date,
     );
     const dayResult = pilotDay({ ...options, learnerRoot: paths.root, day: dayNumber, input: [answer], date });
+    const cockpitSnapshot = pilotCockpitRefresh(paths, date);
     return {
       status: "pass",
       action: "pilot-capture",
@@ -930,6 +942,7 @@ function pilotCapture(options) {
       committed: true,
       capture: capturedDay,
       result: dayResult,
+      cockpit: cockpitSnapshot,
       summary: dayResult.summary,
       conversationGuide: dayResult.conversationGuide,
       claimBoundary: state.claim_boundary,
@@ -965,6 +978,7 @@ function pilotCapture(options) {
       date,
       comfortRating: options.comfortRating ?? state.partial?.baseline?.comfort_rating ?? null,
     });
+    const cockpitSnapshot = pilotCockpitRefresh(paths, date);
     return {
       status: "pass",
       action: "pilot-capture",
@@ -973,6 +987,7 @@ function pilotCapture(options) {
       capture: record,
       capturedCount: updatedAnswers.length,
       result,
+      cockpit: cockpitSnapshot,
       summary: result.summary,
       conversationGuide: result.conversationGuide,
       claimBoundary: result.claimBoundary,
@@ -986,6 +1001,7 @@ function pilotCapture(options) {
       date,
       comfortRating: options.comfortRating ?? state.partial?.final?.comfort_rating ?? null,
     });
+    const cockpitSnapshot = pilotCockpitRefresh(paths, date);
     return {
       status: "pass",
       action: "pilot-capture",
@@ -994,12 +1010,14 @@ function pilotCapture(options) {
       capture: record,
       capturedCount: updatedAnswers.length,
       result,
+      cockpit: cockpitSnapshot,
       summary: result.summary,
       claimBoundary: result.claimBoundary,
     };
   }
 
   const nextCard = cards[Math.min(updatedAnswers.length, cards.length - 1)];
+  const cockpitSnapshot = pilotCockpitRefresh(paths, date);
   return {
     status: "pass",
     action: "pilot-capture",
@@ -1017,6 +1035,7 @@ function pilotCapture(options) {
         }
       : null,
     summary: pilotStatusSummary(state),
+    cockpit: cockpitSnapshot,
     claimBoundary: state.claim_boundary,
   };
 }

@@ -73,6 +73,8 @@ function main() {
     assert(capture.phase === "baseline", `baseline capture ${index + 1} phase mismatch`);
     assert(capture.capturedCount === index + 1, `baseline capture ${index + 1} count mismatch`);
     assert(capture.committed === (index === baselineCards.length - 1), `baseline capture ${index + 1} commit mismatch`);
+    assert(capture.cockpit?.htmlPath && existsSync(capture.cockpit.htmlPath), `baseline capture ${index + 1} cockpit missing`);
+    assert(capture.cockpit.activePilot, `baseline capture ${index + 1} should expose active pilot cockpit snapshot`);
   }
 
   const afterBaseline = readState();
@@ -97,6 +99,7 @@ function main() {
   ]);
   assert(dayCapture.committed === true, "daily capture should commit through pilot-day");
   assert(dayCapture.result.day.aios_artifacts.next_asset_action?.asset_id, "daily capture should preserve next asset action");
+  assert(dayCapture.cockpit?.htmlPath && existsSync(dayCapture.cockpit.htmlPath), "daily capture should refresh cockpit");
 
   const finalStatus = runJson(["scripts/english-learning-harness.mjs", "pilot-status", "--json"]);
   assert(finalStatus.summary.partial.baselineAnswers === 5, "status should expose partial baseline count");

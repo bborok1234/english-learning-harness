@@ -629,7 +629,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `skills/owner-pilot/SKILL.md` lets Codex run Day 0, daily pilot days, and final sample collection inside conversation while using the local engine internally.
 - `scripts/phase15-owner-pilot-skill-smoke.mjs` verifies the skill contract and keeps real pilot completion separate from fixture mechanics.
 - `pilot-capture` now durably stores one pilot card answer at a time and auto-commits the Day 0/final sample when the fifth card is captured.
-- `scripts/phase15-owner-pilot-capture-smoke.mjs` verifies card-level baseline capture, automatic baseline commit, daily capture, and next asset action preservation.
+- `pilot-capture` now refreshes the learner cockpit after each captured card, including partial Day 0/final answers and daily pilot captures.
+- `scripts/phase15-owner-pilot-capture-smoke.mjs` verifies card-level baseline capture, automatic baseline commit, daily capture, next asset action preservation, and cockpit refresh.
 - `docs/phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md` records the Codex-facing pilot skill and install evidence.
 - Personal cockpit now exposes active pilot progress and the next learner-facing pilot card while avoiding internal pilot command leakage.
 - `scripts/personal-learner-cockpit-active-pilot-smoke.mjs` verifies one captured Day 0 card appears as active pilot progress in cockpit.

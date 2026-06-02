@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 active pilot cockpit implemented; real owner pilot still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, and active pilot visibility in learner cockpit. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 pilot capture cockpit refresh implemented; real owner pilot still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, active pilot visibility, and automatic cockpit refresh after each captured pilot answer. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible in the product cockpit: each partial Day 0/final answer is captured durably, and the cockpit shows the next learner-facing pilot card.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible in the product cockpit: each partial Day 0/final answer is captured durably, and the cockpit refreshes after each captured card to show current progress and the next learner-facing pilot card.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, active pilot cockpit visibility, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -479,7 +479,13 @@
     {
       "label": "scripts/phase15-owner-pilot-capture-smoke.mjs",
       "path": "../scripts/phase15-owner-pilot-capture-smoke.mjs",
-      "role": "owner pilot card-level capture smoke",
+      "role": "owner pilot card-level capture and cockpit refresh smoke",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-12-pilot-capture-cockpit-refresh.md",
+      "path": "./phase-15-evidence/AIOS-12-pilot-capture-cockpit-refresh.md",
+      "role": "AIOS-12 pilot capture cockpit refresh evidence",
       "kind": "source"
     },
     {
@@ -499,7 +505,7 @@
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "capture, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "capture, cockpit refresh, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -737,6 +743,13 @@
       "status": "Pass",
       "evidence": "personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke",
       "claim": "learner cockpit shows active pilot progress and the next learner-facing pilot card without leaking internal pilot commands or engineering labels; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-31",
+      "label": "Pilot capture cockpit refresh",
+      "status": "Pass",
+      "evidence": "phase15-owner-pilot-capture-smoke, personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke",
+      "claim": "pilot-capture refreshes cockpit-state.json and cockpit.html after each captured pilot card and returns the refreshed cockpit pointer; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -755,6 +768,18 @@
             "scripts/lib/english-learning-store.mjs",
             "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-CAPTURE-COCKPIT-REFRESH",
+          "title": "AIOS-12 pilot-capture cockpit 자동 갱신 통과",
+          "why": "실제 pilot은 한 번에 끝나지 않는다. 각 답변 뒤 cockpit이 즉시 바뀌어야 학습자가 현재 상태와 다음 질문을 한눈에 확인할 수 있다.",
+          "done": "pilot-capture가 partial baseline/final 카드와 daily capture 뒤에 cockpit-state.json/cockpit.html을 자동 갱신하고, command response에 cockpit pointer를 포함한다.",
+          "verification": "phase15 owner pilot capture smoke verifies baseline and daily capture cockpit refresh; product and ops surface smokes still pass.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-capture-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-pilot-capture-cockpit-refresh.md"
           ]
         },
         {
@@ -2760,7 +2785,7 @@
     {
       "name": "AIOS-12 owner pilot card-level capture",
       "status": "Pass",
-      "detail": "phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, and preserves next asset action evidence."
+      "detail": "phase15-owner-pilot-capture smoke validates pilot-capture stores Day 0 answers card by card, auto-commits baseline after five cards, commits a daily pilot answer, preserves next asset action evidence, and refreshes cockpit after capture."
     },
     {
       "name": "AIOS-12 active pilot cockpit",
@@ -3172,6 +3197,14 @@
     {
       "label": "Run active pilot cockpit smoke",
       "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
+    },
+    {
+      "label": "Run product surface smoke",
+      "command": "node scripts/product-surface-smoke.mjs"
+    },
+    {
+      "label": "Run ops dashboard smoke",
+      "command": "node scripts/ops-dashboard-smoke.mjs"
     }
   ]
 }
