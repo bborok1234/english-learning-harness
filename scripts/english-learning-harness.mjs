@@ -1542,6 +1542,9 @@ function pilotNext(options) {
     p { margin: 0; }
     .setup { color: var(--muted); font-size: 16px; }
     .ask { margin-top: 20px; padding: 18px; border-radius: 8px; background: var(--warm); font-size: 22px; font-weight: 760; line-height: 1.32; }
+    .prompt { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .prompt h2 { margin: 0 0 8px; font-size: 16px; letter-spacing: 0; }
+    .prompt pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; color: var(--ink); font: inherit; }
     .example, .rule, .privacy { margin-top: 14px; color: var(--muted); }
     .progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
     .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
@@ -1564,6 +1567,10 @@ function pilotNext(options) {
       </div>
       <p class="ask">${escapeHtml(nextCard.ask)}</p>
       ${nextCard.example ? `<p class="example">예시: ${escapeHtml(nextCard.example)}</p>` : ""}
+      <section class="prompt" aria-label="learner-ready prompt">
+        <h2>Codex가 바로 말할 다음 문장</h2>
+        <pre>${escapeHtml(assistantPrompt.text)}</pre>
+      </section>
       <p class="rule">${escapeHtml(artifact.answer_rule)}</p>
       <p class="privacy">${escapeHtml(artifact.privacy)}</p>
     </section>
