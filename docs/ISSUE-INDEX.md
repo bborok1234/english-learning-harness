@@ -638,8 +638,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-capture` now durably stores one pilot card answer at a time and auto-commits the Day 0/final sample when the fifth card is captured.
 - `pilot-capture` now refreshes the learner cockpit after each captured card, including partial Day 0/final answers and daily pilot captures.
 - `scripts/phase15-owner-pilot-capture-smoke.mjs` verifies card-level baseline capture, automatic baseline commit, daily capture, next asset action preservation, and cockpit refresh.
-- `pilot-reply` now lets Codex route the learner's current answer to the next baseline, daily, or final pilot slot without asking the learner for phase/card/day internals.
-- `scripts/phase15-owner-pilot-reply-routing-smoke.mjs` verifies baseline, daily, and final routing through `pilot-capture`, cockpit refresh, and no learner-facing command-token leakage.
+- `pilot-reply` now lets Codex route the learner's current answer to the next baseline, daily, or final pilot slot without asking the learner for phase/card/day internals, then refreshes the next learner-facing card artifact.
+- `scripts/phase15-owner-pilot-reply-routing-smoke.mjs` verifies baseline, daily, and final routing through `pilot-capture`, cockpit refresh, next-card refresh, and no learner-facing command-token leakage.
 - `docs/phase-15-evidence/AIOS-12-owner-pilot-codex-skill.md` records the Codex-facing pilot skill and install evidence.
 - Personal cockpit now exposes active pilot progress and the next learner-facing pilot card while avoiding internal pilot command leakage.
 - `scripts/personal-learner-cockpit-active-pilot-smoke.mjs` verifies one captured Day 0 card appears as active pilot progress in cockpit.

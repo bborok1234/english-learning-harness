@@ -613,11 +613,22 @@ The cockpit refresh is a product-surface convenience contract. It is not evidenc
     "htmlPath": "learner-root/cockpit.html",
     "url": "file:///absolute/path/to/cockpit.html"
   },
+  "nextCardArtifact": {
+    "action": "pilot-next",
+    "jsonPath": "learner-root/artifacts/pilot/pilot-next-card.json",
+    "htmlPath": "learner-root/artifacts/pilot/pilot-next-card.html",
+    "url": "file:///absolute/path/to/pilot-next-card.html",
+    "nextCard": {
+      "phase": "baseline|day|final|complete",
+      "day": 1,
+      "title": "learner-facing next card title"
+    }
+  },
   "claimBoundary": "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion."
 }
 ```
 
-The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. It is not a learner-facing command and must not appear in generated learner HTML.
+The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale. It is not a learner-facing command and must not appear in generated learner HTML.
 
 `pilot-next --json` writes the current learner-facing pilot card:
 

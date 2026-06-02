@@ -70,15 +70,21 @@ function main() {
   assert(firstBaseline.routedTo.cardId === "today_snapshot", "fresh reply should route to first baseline card");
   assert(firstBaseline.result.committed === false, "first baseline card should not commit the baseline");
   assert(firstBaseline.cockpit?.htmlPath && existsSync(firstBaseline.cockpit.htmlPath), "baseline reply should refresh cockpit");
+  assert(firstBaseline.nextCardArtifact?.htmlPath, "baseline reply should return refreshed next-card artifact");
+  assert(existsSync(firstBaseline.nextCardArtifact.htmlPath), "baseline reply next-card HTML missing");
+  assert(firstBaseline.nextCardArtifact.nextCard.phase === "baseline", "first reply next card should stay in baseline phase");
+  assert(firstBaseline.nextCardArtifact.nextCard.title === "잠깐, 무슨 뜻이야?", "first reply should advance to second baseline card");
   assertNoLearnerCommandLeak(firstBaseline.cockpit.htmlPath);
+  assertNoLearnerCommandLeak(firstBaseline.nextCardArtifact.htmlPath);
 
+  let baselineCommit = null;
   for (const answer of [
     "Which place do you mean?",
     "I do not know the exact word, but I mean the small room.",
     "There are desks, monitors, chairs, and people working.",
     "My comfort score is three because I can answer but I pause.",
   ]) {
-    runJson([
+    baselineCommit = runJson([
       "scripts/english-learning-harness.mjs",
       "pilot-reply",
       "--date",
@@ -88,6 +94,9 @@ function main() {
       "--json",
     ]);
   }
+  assert(baselineCommit?.nextCardArtifact?.nextCard.phase === "day", "baseline commit should refresh next card to daily phase");
+  assert(baselineCommit.nextCardArtifact.nextCard.day === 1, "baseline commit next card should be day 1");
+  assertNoLearnerCommandLeak(baselineCommit.nextCardArtifact.htmlPath);
   const afterBaseline = readState();
   assert(afterBaseline.baseline?.transcript?.length === 5, "pilot-reply should commit baseline after five cards");
   assert(afterBaseline.partial.baseline.answers.length === 5, "partial baseline answers should remain auditable");
@@ -119,8 +128,11 @@ function main() {
   assert(dayOne.result.committed === true, "daily reply should commit through pilot-day");
   assert(dayOne.result.result.day.pilot_mission?.target_skill === "clarification", "daily reply should preserve pilot mission metadata");
   assert(dayOne.result.result.day.learner_coaching?.next_phrase, "daily reply should preserve learner coaching metadata");
+  assert(dayOne.nextCardArtifact?.nextCard.day === 2, "day 1 reply should refresh next card to day 2");
   assertNoLearnerCommandLeak(dayOne.cockpit.htmlPath);
+  assertNoLearnerCommandLeak(dayOne.nextCardArtifact.htmlPath);
 
+  let dayFive = null;
   for (const [index, answer] of [
     "Sorry, I meant iced latte, not hot latte.",
     "It looks like a meeting room with a whiteboard.",
@@ -142,7 +154,10 @@ function main() {
     assert(reply.routedTo.phase === "day", `day ${day} should route to day phase`);
     assert(reply.routedTo.day === day, `day ${day} route mismatch`);
     assert(reply.result.committed === true, `day ${day} should commit`);
+    dayFive = reply;
   }
+  assert(dayFive?.nextCardArtifact?.nextCard.phase === "final", "day 5 reply should refresh next card to final phase");
+  assertNoLearnerCommandLeak(dayFive.nextCardArtifact.htmlPath);
 
   const finalOne = runJson([
     "scripts/english-learning-harness.mjs",
@@ -157,7 +172,10 @@ function main() {
   assert(finalOne.routedTo.cardId === "today_snapshot", "first final reply should route to first final card");
   assert(finalOne.result.committed === false, "first final card should not commit final sample");
   assert(finalOne.summary.partial.finalAnswers === 1, "summary should expose one captured final answer");
+  assert(finalOne.nextCardArtifact?.nextCard.phase === "final", "first final reply should refresh next final card");
+  assert(finalOne.nextCardArtifact.nextCard.title === "잠깐, 무슨 뜻이야?", "first final reply should advance to second final card");
   assertNoLearnerCommandLeak(finalOne.cockpit.htmlPath);
+  assertNoLearnerCommandLeak(finalOne.nextCardArtifact.htmlPath);
 
   const finalState = runJson(["scripts/english-learning-harness.mjs", "pilot-status", "--json"]);
   assert(finalState.summary.completedDailySessions === 5, "pilot should have five completed daily sessions");

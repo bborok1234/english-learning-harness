@@ -45,6 +45,8 @@ node scripts/english-learning-harness.mjs pilot-reply --say "<learner answer>" -
 
 If the answer belongs to a daily pilot card and the learner mentioned a friction point, add `--friction-note "<short note>"`. The router reads current pilot state and saves the answer to the next baseline, daily, or final card. Do not ask the learner to choose a phase, card id, or day number.
 
+After saving, the router refreshes both cockpit and the next local `pilot-next-card.html`. Use the returned `nextCardArtifact.nextCard` to ask the next learner-facing card when continuing immediately.
+
 ## Pilot Phases
 
 ### Day 0 Baseline

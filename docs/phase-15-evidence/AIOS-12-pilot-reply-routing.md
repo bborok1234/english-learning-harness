@@ -15,6 +15,7 @@ The learner should not need to know whether the current pilot answer belongs to 
 - Baseline and final cards are routed by card id.
 - Daily cards are routed by day number and may include a friction note.
 - The existing `pilot-capture` cockpit refresh path remains the only persistence path, so the router does not duplicate storage logic.
+- After saving, the router regenerates `artifacts/pilot/pilot-next-card.json/html` through `pilot-next`.
 - Updated the owner-pilot skill to prefer `pilot-reply` and avoid asking the learner to choose phase, card id, or day number.
 
 ## Verification
@@ -30,6 +31,7 @@ The smoke validates:
 - the next reply after baseline routes to daily Day 1 and preserves `pilot_mission` plus `learner_coaching`,
 - replies for days 2-5 advance automatically,
 - the next reply after five days routes to the first final card,
+- each reply returns a refreshed `nextCardArtifact` so the learner-facing next card is not stale,
 - learner-facing cockpit HTML does not expose internal pilot command tokens.
 
 ## Claim Boundary
