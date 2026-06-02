@@ -103,6 +103,12 @@ function parseArgs(argv) {
         throw new Error(`Invalid --day: ${argv[index + 1]}`);
       }
       index += 1;
+    } else if (arg === "--phase") {
+      options.phase = argv[index + 1];
+      index += 1;
+    } else if (arg === "--card-id") {
+      options.cardId = argv[index + 1];
+      index += 1;
     } else if (arg === "--comfort-rating") {
       options.comfortRating = Number(argv[index + 1]);
       if (!Number.isFinite(options.comfortRating) || options.comfortRating < 0 || options.comfortRating > 5) {
@@ -177,6 +183,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-day [--day 1-7] [--say TEXT ...] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-finish [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs today [--say TEXT ...] [--transcript FILE] [--scenario ID] [--learner-root DIR] [--date ISO]",
@@ -639,6 +646,11 @@ function defaultPilotState(paths, date = new Date()) {
     baseline: null,
     days: [],
     final_sample: null,
+    partial: {
+      baseline: { answers: [] },
+      final: { answers: [] },
+      days: [],
+    },
     report: null,
     claim_boundary:
       "This owner/self pilot can produce early local behavioral evidence only. It does not prove generalized fluency or real-world speaking ability.",
@@ -661,6 +673,17 @@ function normalizePilotState(state, paths, date = new Date()) {
     },
     prompt_set: Array.isArray(state?.prompt_set) ? state.prompt_set : base.prompt_set,
     days: Array.isArray(state?.days) ? state.days : [],
+    partial: {
+      baseline: {
+        answers: Array.isArray(state?.partial?.baseline?.answers) ? state.partial.baseline.answers : [],
+        comfort_rating: state?.partial?.baseline?.comfort_rating ?? null,
+      },
+      final: {
+        answers: Array.isArray(state?.partial?.final?.answers) ? state.partial.final.answers : [],
+        comfort_rating: state?.partial?.final?.comfort_rating ?? null,
+      },
+      days: Array.isArray(state?.partial?.days) ? state.partial.days : [],
+    },
   };
   if (normalized.schema_version !== 1) {
     throw new Error(`${paths.pilotState}: schema_version must be 1`);
@@ -777,10 +800,17 @@ function finalConversationGuide() {
 
 function pilotNextAction(state) {
   if (!state.baseline) {
+    const captured = state.partial?.baseline?.answers?.length ?? 0;
+    const cards = day0MissionCards();
+    const nextCard = cards[Math.min(captured, cards.length - 1)];
     return {
-      command: "pilot-start",
+      command: "pilot-capture",
+      phase: "baseline",
+      cardId: nextCard?.id,
       prompt:
-        '3분 영어 스냅샷을 시작합니다. 첫 질문: 친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.',
+        captured > 0
+          ? `${captured + 1}번째 스냅샷입니다. ${nextCard?.ask ?? "영어로 한 문장만 말해보세요."}`
+          : '3분 영어 스냅샷을 시작합니다. 첫 질문: 친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.',
       guide: day0ConversationGuide(),
     };
   }
@@ -795,10 +825,17 @@ function pilotNextAction(state) {
     };
   }
   if (!state.final_sample) {
+    const captured = state.partial?.final?.answers?.length ?? 0;
+    const cards = day0MissionCards();
+    const nextCard = cards[Math.min(captured, cards.length - 1)];
     return {
-      command: "pilot-finish",
+      command: "pilot-capture",
+      phase: "final",
+      cardId: nextCard?.id,
       prompt:
-        "마지막 영어 스냅샷입니다. Day 0과 비슷한 다섯 장면을 한 문장씩 다시 말해보겠습니다.",
+        captured > 0
+          ? `마지막 스냅샷 ${captured + 1}번째입니다. ${nextCard?.ask ?? "영어로 한 문장만 말해보세요."}`
+          : "마지막 영어 스냅샷입니다. Day 0과 비슷한 다섯 장면을 한 문장씩 다시 말해보겠습니다.",
       guide: finalConversationGuide(),
     };
   }
@@ -820,9 +857,166 @@ function pilotStatusSummary(state) {
     minimumValidDailySessions: state.minimum_valid_daily_sessions,
     targetDays: state.target_days,
     finalReady: Boolean(state.final_sample),
+    partial: {
+      baselineAnswers: state.partial?.baseline?.answers?.length ?? 0,
+      finalAnswers: state.partial?.final?.answers?.length ?? 0,
+      dayCaptures: state.partial?.days?.length ?? 0,
+    },
     reportReady: Boolean(state.report),
     readyToFinish,
     nextAction: pilotNextAction(state),
+    claimBoundary: state.claim_boundary,
+  };
+}
+
+function pilotAnswerRecord({ phase, card, answer, date, day, frictionNote = "" }) {
+  return {
+    phase,
+    day: day ?? null,
+    card_id: card?.id ?? "",
+    title: card?.title ?? "",
+    answer,
+    friction_note: frictionNote,
+    captured_at: date.toISOString(),
+  };
+}
+
+function replaceByCardId(records, record) {
+  return [...records.filter((item) => item.card_id !== record.card_id), record].sort((a, b) =>
+    String(a.card_id).localeCompare(String(b.card_id)),
+  );
+}
+
+function pilotCapture(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  let state = readPilotState(paths, date);
+  const answer = transcriptInputs(options).filter(Boolean)[0] || "";
+  if (!answer) {
+    throw new Error("pilot-capture requires one --say answer.");
+  }
+  const completedDays = state.days.filter((day) => day.status === "complete").length;
+  const phase = options.phase || (!state.baseline ? "baseline" : completedDays < state.minimum_valid_daily_sessions ? "day" : "final");
+  if (!["baseline", "day", "final"].includes(phase)) {
+    throw new Error("--phase must be baseline, day, or final");
+  }
+
+  if (phase === "day") {
+    const dayNumber = options.day ?? completedDays + 1;
+    const capturedDay = pilotAnswerRecord({
+      phase,
+      day: dayNumber,
+      card: { id: `day-${dayNumber}`, title: `Pilot Day ${dayNumber}` },
+      answer,
+      frictionNote: options.frictionNote || "",
+      date,
+    });
+    state = writePilotState(
+      paths,
+      {
+        ...state,
+        partial: {
+          ...state.partial,
+          days: [...(state.partial?.days ?? []).filter((item) => item.day !== dayNumber), capturedDay].sort((a, b) => a.day - b.day),
+        },
+      },
+      date,
+    );
+    const dayResult = pilotDay({ ...options, learnerRoot: paths.root, day: dayNumber, input: [answer], date });
+    return {
+      status: "pass",
+      action: "pilot-capture",
+      phase,
+      committed: true,
+      capture: capturedDay,
+      result: dayResult,
+      summary: dayResult.summary,
+      conversationGuide: dayResult.conversationGuide,
+      claimBoundary: state.claim_boundary,
+    };
+  }
+
+  const cards = day0MissionCards();
+  const existing = phase === "baseline" ? state.partial?.baseline?.answers ?? [] : state.partial?.final?.answers ?? [];
+  const card = cards.find((item) => item.id === options.cardId) || cards[Math.min(existing.length, cards.length - 1)];
+  const record = pilotAnswerRecord({ phase, card, answer, date });
+  const updatedAnswers = replaceByCardId(existing, record);
+  state = writePilotState(
+    paths,
+    {
+      ...state,
+      partial: {
+        ...state.partial,
+        [phase]: {
+          answers: updatedAnswers,
+          comfort_rating: options.comfortRating ?? state.partial?.[phase]?.comfort_rating ?? null,
+        },
+      },
+    },
+    date,
+  );
+
+  const readyToCommit = updatedAnswers.length >= cards.length;
+  if (phase === "baseline" && readyToCommit) {
+    const result = pilotStart({
+      ...options,
+      learnerRoot: paths.root,
+      input: updatedAnswers.map((item) => item.answer),
+      date,
+      comfortRating: options.comfortRating ?? state.partial?.baseline?.comfort_rating ?? null,
+    });
+    return {
+      status: "pass",
+      action: "pilot-capture",
+      phase,
+      committed: true,
+      capture: record,
+      capturedCount: updatedAnswers.length,
+      result,
+      summary: result.summary,
+      conversationGuide: result.conversationGuide,
+      claimBoundary: result.claimBoundary,
+    };
+  }
+  if (phase === "final" && readyToCommit) {
+    const result = pilotFinish({
+      ...options,
+      learnerRoot: paths.root,
+      input: updatedAnswers.map((item) => item.answer),
+      date,
+      comfortRating: options.comfortRating ?? state.partial?.final?.comfort_rating ?? null,
+    });
+    return {
+      status: "pass",
+      action: "pilot-capture",
+      phase,
+      committed: true,
+      capture: record,
+      capturedCount: updatedAnswers.length,
+      result,
+      summary: result.summary,
+      claimBoundary: result.claimBoundary,
+    };
+  }
+
+  const nextCard = cards[Math.min(updatedAnswers.length, cards.length - 1)];
+  return {
+    status: "pass",
+    action: "pilot-capture",
+    phase,
+    committed: false,
+    capture: record,
+    capturedCount: updatedAnswers.length,
+    requiredCount: cards.length,
+    nextPrompt: nextCard
+      ? {
+          card_id: nextCard.id,
+          title: nextCard.title,
+          ask: nextCard.ask,
+          example: nextCard.example,
+        }
+      : null,
+    summary: pilotStatusSummary(state),
     claimBoundary: state.claim_boundary,
   };
 }
@@ -1681,6 +1875,10 @@ function run() {
   }
   if (command === "pilot-status") {
     output(pilotStatus(options), options.json);
+    return;
+  }
+  if (command === "pilot-capture") {
+    output(pilotCapture(options), options.json);
     return;
   }
   if (command === "pilot-day") {

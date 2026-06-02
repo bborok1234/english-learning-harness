@@ -469,6 +469,33 @@ Required JSON fields:
     "comfort_rating": 3,
     "report": "artifacts/pilot/pilot-report-YYYY-MM-DD.json"
   },
+  "partial": {
+    "baseline": {
+      "answers": [
+        {
+          "phase": "baseline",
+          "card_id": "today_snapshot",
+          "title": "오늘의 한 컷",
+          "answer": "learner answer",
+          "captured_at": "ISO-8601"
+        }
+      ],
+      "comfort_rating": 2
+    },
+    "final": {
+      "answers": []
+    },
+    "days": [
+      {
+        "phase": "day",
+        "day": 1,
+        "card_id": "day-1",
+        "answer": "learner answer",
+        "friction_note": "short local note",
+        "captured_at": "ISO-8601"
+      }
+    ]
+  },
   "report": {
     "json": "artifacts/pilot/pilot-report-YYYY-MM-DD.json",
     "markdown": "artifacts/pilot/pilot-report-YYYY-MM-DD.md",
