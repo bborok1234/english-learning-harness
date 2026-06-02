@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02T00:00:00+09:00",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-13 generated mission storyboard artifact added; real owner pilot Day 1 answer still required",
-    "status": "AIOS-13 adds a generated Remotion-style mission storyboard artifact while AIOS-12 (#179) remains open for real owner/self transcript evidence. The harness now has mission, scene, asset deck, storyboard, learner report, cockpit, owner-pilot prompt/quick-reply mechanics, and adaptive governance surfaces with claim boundaries intact.",
+    "stage": "AIOS-13 storyboard artifacts are linked into report and cockpit; real owner pilot Day 1 answer still required",
+    "status": "AIOS-13 now generates a Remotion-style mission storyboard artifact and links it from asset deck, learner report, and personal cockpit while AIOS-12 (#179) remains open for real owner/self transcript evidence.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The AI-native artifact lane now creates an actual local storyboard artifact instead of leaving remotion-storyboard as only a deck card. The storyboard is generated from the current mission, target Speaking Skill OS skill, required learner action, transfer test, and session evidence requirement; asset-deck links it from the remotion-storyboard card while text-first learner output remains canonical.",
+    "summary": "The AI-native artifact lane now creates an actual local storyboard artifact and keeps it visible across the learner journey. The storyboard is generated from the current mission, target Speaking Skill OS skill, required learner action, transfer test, and session evidence requirement; asset-deck, learner report, and cockpit all link the latest storyboard while text-first learner output remains canonical.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, and owner-pilot cards as local product surfaces, with the storyboard linked from the mission asset deck and bounded as preparation only. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, and owner-pilot cards as local product surfaces, with the storyboard linked from the mission asset deck, learner report, and personal cockpit and bounded as preparation only. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -1246,6 +1246,13 @@
       "status": "Pass",
       "evidence": "#210, generated-mission-storyboard-smoke, generated-mission-asset-deck-smoke",
       "claim": "storyboard writes learner-root JSON/HTML with four evidence-guided frames and asset-deck links it from the remotion-storyboard card while preserving text-first session evidence and unsupported-claim guards"
+    },
+    {
+      "id": "GATE-46",
+      "label": "Storyboard report and cockpit linkage",
+      "status": "Pass",
+      "evidence": "#212, generated-mission-storyboard-smoke, personal-learner-cockpit-smoke",
+      "claim": "learner reports and personal cockpit expose the latest storyboard artifact from generated artifact sections while preserving product-surface leak guards and canonical session evidence boundaries"
     },
     {
       "id": "GATE-35",
@@ -2900,11 +2907,23 @@
           "id": "AIOS-13-GENERATED-MISSION-STORYBOARD",
           "title": "AIOS-13 generated mission storyboard 통과",
           "why": "Remotion-style storyboard가 asset deck 텍스트 카드에만 있으면 AI-native generated artifact 주장이 약하다. 독립 HTML artifact로 열리고 조작되어야 한다.",
-          "done": "storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck이 remotion-storyboard asset에서 해당 artifact를 링크한다.",
-          "verification": "generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, product leak guards, and unsupported-claim guards.",
+          "done": "storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck, learner report, personal cockpit이 최신 storyboard artifact를 링크한다.",
+          "verification": "generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, learner report linkage, personal cockpit linkage, product leak guards, and unsupported-claim guards.",
           "files": [
             "scripts/lib/english-learning-store.mjs",
             "scripts/english-learning-harness.mjs",
+            "scripts/generated-mission-storyboard-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md"
+          ]
+        },
+        {
+          "id": "AIOS-13-STORYBOARD-REPORT-COCKPIT-LINKAGE",
+          "title": "AIOS-13 storyboard report/cockpit linkage 통과",
+          "why": "storyboard가 생성되어도 learner report와 cockpit에서 보이지 않으면 daily journey 표면과 분리된다.",
+          "done": "learner report generated_artifacts와 personal cockpit journey/files가 latest storyboard artifact를 노출한다.",
+          "verification": "generated mission storyboard smoke validates report state/html and cockpit state/html link the storyboard path while preserving product-surface leak guards.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
             "scripts/generated-mission-storyboard-smoke.mjs",
             "docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md"
           ]
@@ -3512,6 +3531,11 @@
       "detail": "generated-mission-storyboard smoke validates storyboard command output, JSON/HTML existence, four evidence-guided frames, interactive controls, session evidence requirement, asset-deck linkage, product-surface leak guards, and unsupported-claim guards."
     },
     {
+      "name": "AIOS-13 storyboard report/cockpit linkage",
+      "status": "Pass",
+      "detail": "generated-mission-storyboard smoke validates learner reports and personal cockpit expose the latest storyboard artifact path in state and HTML while preserving product-surface leak guards and unsupported-claim guards."
+    },
+    {
       "name": "M14 adaptive asset journey closeout",
       "status": "Pass",
       "detail": "PR #178 merged AIOS-11, #176 closed, M14 closed, and main smoke passed for adaptive asset priority, asset deck, cockpit, product surface, ops dashboard, scaffold, and git diff hygiene."
@@ -4044,12 +4068,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The AI-native artifact lane now creates an actual local storyboard artifact instead of leaving remotion-storyboard as only a deck card. The storyboard is generated from the current mission, target Speaking Skill OS skill, required learner action, transfer test, and session evidence requirement; asset-deck links it from the remotion-storyboard card while text-first learner output remains canonical.</p>
+        <p class="summary">The AI-native artifact lane now creates an actual local storyboard artifact and keeps it visible across the learner journey. The storyboard is generated from the current mission, target Speaking Skill OS skill, required learner action, transfer test, and session evidence requirement; asset-deck, learner report, and cockpit all link the latest storyboard while text-first learner output remains canonical.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02T00:00:00+09:00</strong>
-        AIOS-13 generated mission storyboard artifact added; real owner pilot Day 1 answer still required<br>
-        AIOS-13 adds a generated Remotion-style mission storyboard artifact while AIOS-12 (#179) remains open for real owner/self transcript evidence. The harness now has mission, scene, asset deck, storyboard, learner report, cockpit, owner-pilot prompt/quick-reply mechanics, and adaptive governance surfaces with claim boundaries intact.
+        AIOS-13 storyboard artifacts are linked into report and cockpit; real owner pilot Day 1 answer still required<br>
+        AIOS-13 now generates a Remotion-style mission storyboard artifact and links it from asset deck, learner report, and personal cockpit while AIOS-12 (#179) remains open for real owner/self transcript evidence.
       </div>
     </header>
 
@@ -4152,16 +4176,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>M9-2</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/phase9-pilot-aios-readiness-smoke.mjs, docs/phase-9-evidence/M9-2-pilot-report-aios-bridge.md</span>
-              </div>
-              <h3>#137 pilot report를 AIOS artifact bridge로 연결함</h3>
-              <div class="card-row"><b>왜</b><p>pilot report가 transcript rubric만 보여주면 현재 제품 표면인 mission, scene, learner report, cockpit과 분리된다.</p></div>
-              <div class="card-row"><b>완료</b><p>pilot-day가 practice를 실행하고, pilot-finish가 daily/final AIOS artifact links를 JSON/Markdown report에 기록한다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-aios-readiness-smoke.mjs`와 `node scripts/phase9-owner-pilot-smoke.mjs`가 통과해야 한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>M9-4</strong>
                 <span>docs/STATUS.md, docs/ISSUE-INDEX.md, docs/ops/project-state.json, docs/phase-9-evidence/M9-4-owner-pilot-readiness-closeout.md</span>
               </div>
@@ -4207,8 +4221,18 @@
               </div>
               <h3>AIOS-13 generated mission storyboard 통과</h3>
               <div class="card-row"><b>왜</b><p>Remotion-style storyboard가 asset deck 텍스트 카드에만 있으면 AI-native generated artifact 주장이 약하다. 독립 HTML artifact로 열리고 조작되어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck이 remotion-storyboard asset에서 해당 artifact를 링크한다.</p></div>
-              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, product leak guards, and unsupported-claim guards.</p></div>
+              <div class="card-row"><b>완료</b><p>storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck, learner report, personal cockpit이 최신 storyboard artifact를 링크한다.</p></div>
+              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, learner report linkage, personal cockpit linkage, product leak guards, and unsupported-claim guards.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-13-STORYBOARD-REPORT-COCKPIT-LINKAGE</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/generated-mission-storyboard-smoke.mjs, docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md</span>
+              </div>
+              <h3>AIOS-13 storyboard report/cockpit linkage 통과</h3>
+              <div class="card-row"><b>왜</b><p>storyboard가 생성되어도 learner report와 cockpit에서 보이지 않으면 daily journey 표면과 분리된다.</p></div>
+              <div class="card-row"><b>완료</b><p>learner report generated_artifacts와 personal cockpit journey/files가 latest storyboard artifact를 노출한다.</p></div>
+              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates report state/html and cockpit state/html link the storyboard path while preserving product-surface leak guards.</p></div>
             </article>
         </div>
       </section>
@@ -4430,6 +4454,11 @@
               <td><strong>GATE-45</strong><span>Generated mission storyboard artifact</span></td>
               <td><strong>Pass</strong><span>#210, generated-mission-storyboard-smoke, generated-mission-asset-deck-smoke</span></td>
               <td>storyboard writes learner-root JSON/HTML with four evidence-guided frames and asset-deck links it from the remotion-storyboard card while preserving text-first session evidence and unsupported-claim guards</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-46</strong><span>Storyboard report and cockpit linkage</span></td>
+              <td><strong>Pass</strong><span>#212, generated-mission-storyboard-smoke, personal-learner-cockpit-smoke</span></td>
+              <td>learner reports and personal cockpit expose the latest storyboard artifact from generated artifact sections while preserving product-surface leak guards and canonical session evidence boundaries</td>
             </tr>
             <tr>
               <td><strong>GATE-35</strong><span>Pilot mission audit metadata</span></td>
@@ -4933,7 +4962,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 119개 보기</summary>
+        <summary>완료 이력 120개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6126,10 +6155,20 @@
               <div class="card-row"><b>완료</b><p>scene state에 skill/date 기반 variant metadata를 추가하고, clarification/repair/soft-disagreement variant가 다른 setting/cue style을 갖도록 했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/adaptive-scene-variants-smoke.mjs`가 세 skill variant, evidence link, claim guard를 검증했다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M9-2</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase9-pilot-aios-readiness-smoke.mjs, docs/phase-9-evidence/M9-2-pilot-report-aios-bridge.md</span>
+              </div>
+              <h3>#137 pilot report를 AIOS artifact bridge로 연결함</h3>
+              <div class="card-row"><b>왜</b><p>pilot report가 transcript rubric만 보여주면 현재 제품 표면인 mission, scene, learner report, cockpit과 분리된다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-day가 practice를 실행하고, pilot-finish가 daily/final AIOS artifact links를 JSON/Markdown report에 기록한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase9-pilot-aios-readiness-smoke.mjs`와 `node scripts/phase9-owner-pilot-smoke.mjs`가 통과해야 한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 113개 보기</summary>
+        <summary>전체 검증 114개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -6521,6 +6560,10 @@
             <tr>
               <td>AIOS-13 generated mission storyboard artifact</td>
               <td><strong>Pass</strong><span>generated-mission-storyboard smoke validates storyboard command output, JSON/HTML existence, four evidence-guided frames, interactive controls, session evidence requirement, asset-deck linkage, product-surface leak guards, and unsupported-claim guards.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-13 storyboard report/cockpit linkage</td>
+              <td><strong>Pass</strong><span>generated-mission-storyboard smoke validates learner reports and personal cockpit expose the latest storyboard artifact path in state and HTML while preserving product-surface leak guards and unsupported-claim guards.</span></td>
             </tr>
             <tr>
               <td>M14 adaptive asset journey closeout</td>

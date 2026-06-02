@@ -124,6 +124,43 @@ function main() {
   assertNoProductSurfaceLeak(deckHtml, "deck HTML");
   assertNoUnsupportedClaims(deckHtml, "deck HTML");
 
+  const report = runJson([
+    "scripts/english-learning-harness.mjs",
+    "report",
+    "--learner-root",
+    learnerRoot,
+    "--date",
+    "2026-06-02T12:05:00.000Z",
+    "--json",
+  ]);
+  const reportState = readJson(report.reportPath);
+  const reportHtml = readFileSync(report.reportHtmlPath, "utf8");
+  assert(reportState.generated_artifacts.latest_storyboard?.html === remotionAsset.artifact.html, "report should link latest storyboard");
+  assert(reportHtml.includes(remotionAsset.artifact.html), "report HTML should render storyboard path");
+  assertNoProductSurfaceLeak(JSON.stringify(reportState), "report state");
+  assertNoProductSurfaceLeak(reportHtml, "report HTML");
+  assertNoUnsupportedClaims(JSON.stringify(reportState), "report state");
+  assertNoUnsupportedClaims(reportHtml, "report HTML");
+
+  const cockpit = runJson([
+    "scripts/english-learning-harness.mjs",
+    "cockpit",
+    "--learner-root",
+    learnerRoot,
+    "--date",
+    "2026-06-02T12:10:00.000Z",
+    "--json",
+  ]);
+  const cockpitState = readJson(cockpit.cockpitStatePath);
+  const cockpitHtml = readFileSync(cockpit.cockpitPath, "utf8");
+  assert(cockpitState.journey.latest_generated_storyboard?.html === remotionAsset.artifact.html, "cockpit should link latest storyboard");
+  assert(cockpitState.files.latest_generated_storyboard === remotionAsset.artifact.html, "cockpit files should expose latest storyboard");
+  assert(cockpitHtml.includes(remotionAsset.artifact.html), "cockpit HTML should render storyboard path");
+  assertNoProductSurfaceLeak(JSON.stringify(cockpitState), "cockpit state");
+  assertNoProductSurfaceLeak(cockpitHtml, "cockpit HTML");
+  assertNoUnsupportedClaims(JSON.stringify(cockpitState), "cockpit state");
+  assertNoUnsupportedClaims(cockpitHtml, "cockpit HTML");
+
   console.log(
     JSON.stringify(
       {
@@ -135,6 +172,8 @@ function main() {
         deckStatePath: deck.deckStatePath,
         deckHtmlPath: deck.deckHtmlPath,
         linkedStoryboard: remotionAsset.artifact.html,
+        linkedReportStoryboard: reportState.generated_artifacts.latest_storyboard.html,
+        linkedCockpitStoryboard: cockpitState.journey.latest_generated_storyboard.html,
         frameCount: storyboard.storyboard.frameCount,
         claimBoundary: storyboard.claimBoundary,
       },

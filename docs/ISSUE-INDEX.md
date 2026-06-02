@@ -514,6 +514,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #174 | AIOS-10: Generate learner-operable mission asset deck | continue |
 | #176 | AIOS-11: Adapt mission asset priorities from learner evidence | continue |
 | #210 | AIOS-13: Generate mission storyboard artifact | continue |
+| #212 | AIOS-13: Link storyboard artifacts into report and cockpit | continue |
 | #179 | AIOS-12: Run real owner/self AIOS pilot and journey audit | continue |
 
 #154 evidence currently shows:
@@ -612,7 +613,8 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - The generated storyboard is derived from the current generated mission, Speaking Skill OS target, required learner action, transfer test, and session evidence requirement.
 - Storyboard HTML includes Previous / Play / Next controls over scene setup, speaking cue, model answer, and evidence checkpoint frames.
 - `asset-deck` links the generated storyboard from the `remotion-storyboard` asset card.
-- `scripts/generated-mission-storyboard-smoke.mjs` verifies command output, JSON/HTML existence, frame structure, interactive controls, asset deck linkage, product-surface leak guards, and unsupported-claim guards.
+- Learner reports and the personal cockpit link the latest storyboard artifact from their generated artifact sections.
+- `scripts/generated-mission-storyboard-smoke.mjs` verifies command output, JSON/HTML existence, frame structure, interactive controls, asset deck linkage, learner report linkage, personal cockpit linkage, product-surface leak guards, and unsupported-claim guards.
 - This proves local Remotion-style storyboard artifact mechanics only. It does not prove video rendering, realtime voice, retention, fluency, or real-world speaking improvement.
 
 M14 Adaptive Asset Journey is closed with #176 complete.

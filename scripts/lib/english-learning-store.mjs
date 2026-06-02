@@ -1754,6 +1754,34 @@ function readLatestMissionAssetDeck(learnerRoot = defaultLearnerRoot()) {
   };
 }
 
+function latestGeneratedStoryboardPath(learnerRoot = defaultLearnerRoot()) {
+  const paths = learnerPaths(learnerRoot);
+  if (!existsSync(paths.storyboardArtifactDir)) return "";
+  const entries = readdirSync(paths.storyboardArtifactDir)
+    .filter((entry) => /^mission-storyboard-.*\.json$/.test(entry))
+    .sort();
+  return entries.length ? resolve(paths.storyboardArtifactDir, entries.at(-1)) : "";
+}
+
+function readLatestGeneratedStoryboard(learnerRoot = defaultLearnerRoot()) {
+  const storyboardPath = latestGeneratedStoryboardPath(learnerRoot);
+  if (!storyboardPath) return null;
+  const paths = learnerPaths(learnerRoot);
+  const storyboard = JSON.parse(readFileSync(storyboardPath, "utf8"));
+  return {
+    path: relative(paths.root, storyboardPath),
+    html: relative(paths.root, storyboardPath.replace(/\.json$/, ".html")),
+    storyboard_id: storyboard.storyboard_id,
+    mission_id: storyboard.mission_id,
+    title: storyboard.mission_title,
+    target_skill: storyboard.target_skill,
+    evidence_required: storyboard.expected_evidence?.session_artifact ?? "",
+    frame_count: storyboard.frames?.length ?? 0,
+    generated_at: storyboard.generated_at,
+    claim_boundary: storyboard.claim_boundary,
+  };
+}
+
 function sceneForSkill(skill, fallbackGoal) {
   if (skill === "clarification") {
     return {
@@ -3437,6 +3465,7 @@ export function buildLearnerReport(learnerRoot = defaultLearnerRoot(), date = ne
     generated_artifacts: {
       latest_mission: readLatestGeneratedMission(paths.root),
       latest_scene: readLatestGeneratedScene(paths.root),
+      latest_storyboard: readLatestGeneratedStoryboard(paths.root),
       latest_asset_deck: readLatestMissionAssetDeck(paths.root),
       latest_weekly_mirror: weeklyMirror
         ? {
@@ -3630,6 +3659,11 @@ function learnerReportHtml(report) {
         report.generated_artifacts.latest_asset_deck
           ? `<p>Mission asset deck · ${escapeHtml(report.generated_artifacts.latest_asset_deck.asset_count)} assets</p><code>${escapeHtml(report.generated_artifacts.latest_asset_deck.html)}</code>`
           : '<p class="subtle">아직 연결된 asset deck이 없습니다.</p>'
+      }
+      ${
+        report.generated_artifacts.latest_storyboard
+          ? `<p>Mission storyboard · ${escapeHtml(report.generated_artifacts.latest_storyboard.frame_count)} frames</p><code>${escapeHtml(report.generated_artifacts.latest_storyboard.html)}</code>`
+          : '<p class="subtle">아직 연결된 storyboard artifact가 없습니다.</p>'
       }
     </section>
 
@@ -3844,6 +3878,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const latestLearnerReport = readLatestLearnerReport(paths.root);
   const latestMission = readLatestGeneratedMission(paths.root);
   const latestScene = readLatestGeneratedScene(paths.root);
+  const latestStoryboard = readLatestGeneratedStoryboard(paths.root);
   const latestAssetDeck = readLatestMissionAssetDeck(paths.root);
   const activePilot = readActivePilotState(paths);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
@@ -3913,6 +3948,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_learner_report: latestLearnerReport,
       latest_generated_mission: latestMission,
       latest_generated_scene: latestScene,
+      latest_generated_storyboard: latestStoryboard,
       latest_mission_asset_deck: latestAssetDeck,
       active_pilot: activePilot,
     },
@@ -3961,6 +3997,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_weekly_mirror: dailyCockpit.latest_weekly_mirror,
       latest_generated_mission: latestMission?.html ?? "",
       latest_generated_scene: latestScene?.html ?? "",
+      latest_generated_storyboard: latestStoryboard?.html ?? "",
       latest_mission_asset_deck: latestAssetDeck?.html ?? "",
       latest_learner_report: latestLearnerReport?.html ?? "",
       active_pilot_state: activePilot?.state_file ?? "",
@@ -4182,6 +4219,15 @@ function personalLearnerCockpitHtml(state) {
             <p class="subtle">${escapeHtml(state.journey.latest_generated_scene.variant_label)}</p>
             <p>${escapeHtml(state.journey.latest_generated_scene.transfer_test)}</p>
             <p class="subtle">scene: ${escapeHtml(state.journey.latest_generated_scene.html)}</p>
+          </div>`
+              : ""
+          }
+          ${
+            state.journey.latest_generated_storyboard
+              ? `<div class="panel blue">
+            <h3>Mission storyboard</h3>
+            <p>${escapeHtml(state.journey.latest_generated_storyboard.frame_count)} frames · ${escapeHtml(state.journey.latest_generated_storyboard.evidence_required)}</p>
+            <p class="subtle">storyboard: ${escapeHtml(state.journey.latest_generated_storyboard.html)}</p>
           </div>`
               : ""
           }
