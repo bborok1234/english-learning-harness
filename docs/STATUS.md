@@ -309,6 +309,7 @@ Start from the verified/fallback Phase 0 constraints.
 
 - [x] AIOS-1: Generate a personal learner cockpit from real learner-root state. `cockpit` writes `cockpit-state.json` and `cockpit.html`, connecting today's mission, Speaking Skill OS, due review, multimodal interaction evidence, and 7-day/30-day journey windows.
 - [x] AIOS-2: Generate daily mission artifacts linked to the learner cockpit. `mission` writes `artifacts/missions/daily-mission-YYYY-MM-DD.json/html`, includes text/voice/image start paths, and preserves the claim boundary that generated scenes are practice prompts, not outcome proof.
+- [x] AIOS-3: Add interactive mission artifacts and learner reports (#158). `mission` HTML now has selectable text/voice/image practice modes, `report` writes `artifacts/reports/learner-report-YYYY-MM-DD.json/html`, and `cockpit` links the latest learner report.
 
 ## SSOT Structure
 

@@ -83,6 +83,8 @@ async function render(url) {
     text: document.body.innerText,
     sectionCount: document.querySelectorAll("section").length,
     detailsCount: document.querySelectorAll("details").length,
+    tabCount: document.querySelectorAll("[data-mode-tab]").length,
+    panelCount: document.querySelectorAll("[data-mode-panel]").length,
   }));
   await browser.close();
   return result;
@@ -151,7 +153,9 @@ async function main() {
   const renderedMission = await render(mission.missionUrl);
   assert(renderedMission.title === "English Learning Daily Mission", "rendered mission title mismatch");
   assert(renderedMission.sectionCount >= 5, "mission should render key sections");
-  assert(renderedMission.detailsCount >= 4, "mission should render interactive details");
+  assert(renderedMission.tabCount === 3, "mission should render practice mode tabs");
+  assert(renderedMission.panelCount === 3, "mission should render practice mode panels");
+  assert(renderedMission.detailsCount >= 2, "mission should render expandable prompt material");
   assert(renderedMission.text.includes("바로 시작"), "rendered mission missing start section");
   assertNoProductSurfaceLeak(renderedMission.text);
   assertNoUnsupportedClaims(renderedMission.text);

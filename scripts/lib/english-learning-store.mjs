@@ -42,6 +42,7 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     journalDir: resolve(root, "journal"),
     artifactDir: resolve(root, "artifacts/sessions"),
     missionArtifactDir: resolve(root, "artifacts/missions"),
+    reportArtifactDir: resolve(root, "artifacts/reports"),
     speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
@@ -107,6 +108,7 @@ export function ensureLearnerStore(learnerRoot = defaultLearnerRoot()) {
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
   mkdirSync(paths.missionArtifactDir, { recursive: true });
+  mkdirSync(paths.reportArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -1902,6 +1904,49 @@ function generatedMissionHtml(state) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
+    .mode-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .mode-tabs button {
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      color: var(--ink);
+      padding: 9px 12px;
+      font: inherit;
+      font-weight: 720;
+      cursor: pointer;
+    }
+    .mode-tabs button[aria-selected="true"] {
+      border-color: var(--green);
+      background: var(--soft);
+      color: var(--green);
+    }
+    .mode-panel {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfa;
+    }
+    .mode-panel[hidden] { display: none; }
+    .practice-note {
+      width: 100%;
+      min-height: 86px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
     .card {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -1960,18 +2005,27 @@ function generatedMissionHtml(state) {
 
     <section>
       <h2>바로 시작</h2>
-      <details open>
-        <summary>Text-first</summary>
+      <div class="mode-tabs" role="tablist" aria-label="practice modes">
+        <button type="button" role="tab" aria-selected="true" data-mode-tab="text">Text</button>
+        <button type="button" role="tab" aria-selected="false" data-mode-tab="voice">Voice transcript</button>
+        <button type="button" role="tab" aria-selected="false" data-mode-tab="image">Image info-gap</button>
+      </div>
+      <div class="mode-panel" data-mode-panel="text" role="tabpanel">
+        <h3>Text-first path</h3>
+        <p>지금 한 문장으로 시작합니다. 완벽한 답보다 먼저 말하는 것이 목표입니다.</p>
+        <textarea class="practice-note" aria-label="text practice draft" placeholder="${escapeHtml(state.learner_visible_scene.example)}"></textarea>
         <code>${escapeHtml(state.start_commands.text)}</code>
-      </details>
-      <details>
-        <summary>Voice transcript</summary>
+      </div>
+      <div class="mode-panel" data-mode-panel="voice" role="tabpanel" hidden>
+        <h3>Voice transcript path</h3>
+        <p>소리 내어 말한 뒤 transcript를 저장합니다. 발음 점수는 매기지 않습니다.</p>
         <code>${escapeHtml(state.start_commands.voice)}</code>
-      </details>
-      <details>
-        <summary>Image information-gap</summary>
+      </div>
+      <div class="mode-panel" data-mode-panel="image" role="tabpanel" hidden>
+        <h3>Image information-gap path</h3>
+        <p>이미지에서 빠진 정보를 묻는 한 문장을 만듭니다.</p>
         <code>${escapeHtml(state.start_commands.image)}</code>
-      </details>
+      </div>
     </section>
 
     <section>
@@ -1992,6 +2046,21 @@ function generatedMissionHtml(state) {
       <p>${escapeHtml(state.claim_boundary)}</p>
     </section>
   </main>
+  <script>
+    const tabs = [...document.querySelectorAll("[data-mode-tab]")];
+    const panels = [...document.querySelectorAll("[data-mode-panel]")];
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => {
+        const mode = tab.dataset.modeTab;
+        for (const candidate of tabs) {
+          candidate.setAttribute("aria-selected", String(candidate === tab));
+        }
+        for (const panel of panels) {
+          panel.hidden = panel.dataset.modePanel !== mode;
+        }
+      });
+    }
+  </script>
 </body>
 </html>
 `;
@@ -2036,6 +2105,292 @@ function buildJourneyWindow(artifacts, now, days) {
   };
 }
 
+function latestLearnerReportPath(learnerRoot = defaultLearnerRoot()) {
+  const paths = learnerPaths(learnerRoot);
+  if (!existsSync(paths.reportArtifactDir)) return "";
+  const entries = readdirSync(paths.reportArtifactDir)
+    .filter((entry) => /^learner-report-.*\.json$/.test(entry))
+    .sort();
+  return entries.length ? resolve(paths.reportArtifactDir, entries.at(-1)) : "";
+}
+
+function readLatestLearnerReport(learnerRoot = defaultLearnerRoot()) {
+  const reportPath = latestLearnerReportPath(learnerRoot);
+  if (!reportPath) return null;
+  const report = JSON.parse(readFileSync(reportPath, "utf8"));
+  const paths = learnerPaths(learnerRoot);
+  return {
+    path: relative(paths.root, reportPath),
+    html: relative(paths.root, reportPath.replace(/\.json$/, ".html")),
+    generated_at: report.generated_at,
+    seven_day: report.windows?.seven_day,
+    thirty_day: report.windows?.thirty_day,
+    next_focus: report.next_focus,
+    claim_boundary: report.claim_boundary,
+  };
+}
+
+export function buildLearnerReport(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const progress = readProgress(paths.progress);
+  const learnerModel = readLearnerModel(paths.learnerModel);
+  const speakingBacklog = readSpeakingBacklog(paths.speakingBacklog);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const artifacts = readSessionArtifacts(paths, progress);
+  const events = interactionEventsFromArtifacts(artifacts);
+  const weeklyMirror = readLatestWeeklyMirror(paths.root);
+  const nextBacklog = nextSpeakingBacklogItem(paths.root);
+  const sevenDay = buildJourneyWindow(artifacts, date, 7);
+  const thirtyDay = buildJourneyWindow(artifacts, date, 30);
+
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    report_id: `learner-report-${todayStamp(date)}`,
+    windows: {
+      seven_day: sevenDay,
+      thirty_day: thirtyDay,
+    },
+    practice_evidence: {
+      total_sessions: Array.isArray(progress.sessions) ? progress.sessions.length : 0,
+      total_events: events.length,
+      interaction_summary: buildInteractionEventSummary(events),
+      recent_saved_phrases: uniqueRecent(vocabulary.personal_phrases, 8),
+      due_review_count: listDueReviewItems(paths.root, date).length,
+      total_review_items: reviewQueue.items.length,
+    },
+    speaking_skill_os: {
+      backlog_count: speakingBacklog.items.length,
+      open_count: speakingBacklog.items.filter((item) => ["open", "needs_review", "in_progress"].includes(item.status)).length,
+      passed_count: speakingBacklog.items.filter((item) => item.status === "passed").length,
+      next_item: nextBacklog,
+      skill_evidence: skillEvidenceSummary(learnerModel),
+      average_utterance_words: learnerModel.baseline.average_utterance_words,
+      repair_phrase_count: learnerModel.baseline.repair_phrase_count,
+    },
+    next_focus: weeklyMirror?.next_focus ?? {
+      skill: nextBacklog?.skill || "starts",
+      reason: nextBacklog
+        ? `Current Speaking Skill OS item: ${nextBacklog.label}`
+        : "No weekly mirror yet; begin with one small English turn.",
+      suggested_phrase:
+        vocabulary.personal_phrases.at(-1) || nextBacklog?.drill_prompt || "I want to practice a little today.",
+      prompt: nextBacklog?.drill_prompt || "Say one small sentence about today, then save one useful phrase.",
+    },
+    generated_artifacts: {
+      latest_mission: readLatestGeneratedMission(paths.root),
+      latest_weekly_mirror: weeklyMirror
+        ? {
+            generated_at: weeklyMirror.generated_at,
+            window: weeklyMirror.window,
+            next_focus: weeklyMirror.next_focus,
+          }
+        : null,
+    },
+    claim_boundary:
+      "This report summarizes local practice evidence only. It does not certify fluency, guarantee improvement, or replace real-world conversation evidence.",
+  };
+}
+
+function learnerReportHtml(report) {
+  const seven = report.windows.seven_day;
+  const thirty = report.windows.thirty_day;
+  const evidence = report.practice_evidence;
+  const os = report.speaking_skill_os;
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Learner Report</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #162019;
+      --muted: #5d685f;
+      --line: #d7ded8;
+      --paper: #f7f8f3;
+      --panel: #ffffff;
+      --green: #2f7655;
+      --blue: #2e6689;
+      --amber: #9a6400;
+      --soft: #e8f3ec;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 48px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(32px, 5vw, 56px); line-height: 1.06; letter-spacing: 0; }
+    h2 { font-size: 21px; }
+    h3 { font-size: 15px; }
+    header {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    section {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fbfcfa;
+    }
+    .metric b {
+      display: block;
+      color: var(--green);
+      font-size: 28px;
+      line-height: 1.1;
+    }
+    .focus {
+      background: var(--soft);
+      border-color: #cfe2d5;
+    }
+    .subtle { color: var(--muted); }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: #fbfcfa;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 8px; }
+    code {
+      display: block;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #162019;
+      color: #f7fbf7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+    }
+    .boundary { border-left: 6px solid var(--amber); }
+    @media (max-width: 820px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="subtle">Learner report · ${escapeHtml(report.generated_at.slice(0, 10))}</p>
+      <h1>내 영어 회화 여정 리포트</h1>
+      <p>최근 연습 증거를 7일과 30일 창으로 나누어 보여줍니다.</p>
+    </header>
+
+    <section class="focus">
+      <h2>다음 focus</h2>
+      <p>${escapeHtml(report.next_focus.prompt)}</p>
+      <p class="subtle">${escapeHtml(report.next_focus.reason)}</p>
+    </section>
+
+    <section>
+      <h2>7일 / 30일 변화</h2>
+      <div class="grid">
+        <div class="metric"><span>7일 세션</span><b>${escapeHtml(seven.session_count)}</b><span class="subtle">${escapeHtml(seven.event_count)} events</span></div>
+        <div class="metric"><span>30일 세션</span><b>${escapeHtml(thirty.session_count)}</b><span class="subtle">${escapeHtml(thirty.event_count)} events</span></div>
+        <div class="metric"><span>저장 표현</span><b>${escapeHtml(evidence.recent_saved_phrases.length)}</b><span class="subtle">${escapeHtml(evidence.due_review_count)} due</span></div>
+      </div>
+      <div class="chips">
+        ${(thirty.modalities.length ? thirty.modalities : ["text-first"]).map((mode) => `<span class="chip">${escapeHtml(mode)}</span>`).join("")}
+      </div>
+    </section>
+
+    <section>
+      <h2>Speaking Skill OS</h2>
+      <div class="grid">
+        <div class="metric"><span>Open</span><b>${escapeHtml(os.open_count)}</b></div>
+        <div class="metric"><span>Passed</span><b>${escapeHtml(os.passed_count)}</b></div>
+        <div class="metric"><span>Avg words</span><b>${escapeHtml(os.average_utterance_words)}</b></div>
+      </div>
+      ${
+        os.next_item
+          ? `<h3>다음 약점 카드</h3><p>${escapeHtml(os.next_item.label)}</p><p class="subtle">${escapeHtml(os.next_item.transfer_test)}</p>`
+          : '<p class="subtle">아직 다음 약점 카드가 없습니다.</p>'
+      }
+    </section>
+
+    <section>
+      <h2>내가 남긴 표현과 전이 목표</h2>
+      ${htmlList(
+        evidence.recent_saved_phrases,
+        (phrase) => escapeHtml(phrase),
+        "아직 저장된 표현이 없습니다.",
+      )}
+      <h3>Transfer targets</h3>
+      ${htmlList(
+        evidence.interaction_summary.transfer_targets,
+        (target) => escapeHtml(target),
+        "아직 전이 목표가 없습니다.",
+      )}
+    </section>
+
+    <section>
+      <h2>연결된 artifact</h2>
+      ${
+        report.generated_artifacts.latest_mission
+          ? `<p>${escapeHtml(report.generated_artifacts.latest_mission.title)}</p><code>${escapeHtml(report.generated_artifacts.latest_mission.html)}</code>`
+          : '<p class="subtle">아직 연결된 mission artifact가 없습니다.</p>'
+      }
+    </section>
+
+    <section class="boundary">
+      <h2>경계</h2>
+      <p>${escapeHtml(report.claim_boundary)}</p>
+    </section>
+  </main>
+</body>
+</html>
+`;
+}
+
+export function writeLearnerReport(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const report = buildLearnerReport(paths.root, date);
+  const reportPath = resolve(paths.reportArtifactDir, `learner-report-${todayStamp(date)}.json`);
+  const reportHtmlPath = resolve(paths.reportArtifactDir, `learner-report-${todayStamp(date)}.html`);
+  writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  writeFileSync(reportHtmlPath, learnerReportHtml(report));
+  return {
+    reportPath,
+    reportHtmlPath,
+    reportUrl: `file://${reportHtmlPath}`,
+    report,
+  };
+}
+
 function latestPilotReport(paths) {
   const pilotDir = resolve(paths.root, "artifacts/pilot");
   if (!existsSync(pilotDir)) return null;
@@ -2066,6 +2421,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const interactionEvents = interactionEventsFromArtifacts(artifacts);
   const weeklyMirror = readLatestWeeklyMirror(paths.root);
   const latestReport = latestPilotReport(paths);
+  const latestLearnerReport = readLatestLearnerReport(paths.root);
   const latestMission = readLatestGeneratedMission(paths.root);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
   const nextCommand = commandLine(paths.root, "today", [
@@ -2131,6 +2487,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
           }
         : null,
       latest_report: latestReport,
+      latest_learner_report: latestLearnerReport,
       latest_generated_mission: latestMission,
     },
     next_actions: [
@@ -2147,6 +2504,10 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
         command: commandLine(paths.root, "weekly"),
       },
       {
+        label: "학습 리포트 만들기",
+        command: commandLine(paths.root, "report"),
+      },
+      {
         label: "증거 리포트 내보내기",
         command: commandLine(paths.root, "export", ["--json"]),
       },
@@ -2158,6 +2519,7 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       latest_journal: dailyCockpit.latest_journal,
       latest_weekly_mirror: dailyCockpit.latest_weekly_mirror,
       latest_generated_mission: latestMission?.html ?? "",
+      latest_learner_report: latestLearnerReport?.html ?? "",
     },
     claim_boundary:
       "This cockpit is a local learner product surface. It connects practice evidence and next actions, but does not certify fluency or guarantee improvement.",
@@ -2396,6 +2758,15 @@ function personalLearnerCockpitHtml(state) {
             <div class="metric"><span>30일 세션</span><b>${escapeHtml(thirty.session_count)}</b></div>
             <div class="metric"><span>저장 표현</span><b>${escapeHtml(state.review.saved_phrase_count)}</b></div>
           </div>
+          ${
+            state.journey.latest_learner_report
+              ? `<div class="panel amber">
+            <h3>최근 learner report</h3>
+            <p>${escapeHtml(state.journey.latest_learner_report.next_focus?.prompt || "다음 focus가 준비되어 있습니다.")}</p>
+            <p class="subtle">file: ${escapeHtml(state.journey.latest_learner_report.html)}</p>
+          </div>`
+              : ""
+          }
           <details open>
             <summary>다음 focus</summary>
             <p>${escapeHtml(state.journey.latest_weekly_mirror?.next_focus?.prompt || "오늘 한 문장을 말하고 weekly mirror를 만들어보세요.")}</p>

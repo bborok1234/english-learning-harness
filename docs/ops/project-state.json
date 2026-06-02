@@ -4,10 +4,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-2 generated daily mission artifacts are implemented and under verification for #156.",
+    "status": "AIOS-3 interactive mission artifacts and learner reports are implemented for #158 and ready for PR verification.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now generates learner-root daily mission artifacts that connect the current Speaking Skill OS target to text-first practice, optional voice/image paths, and the personal cockpit.",
-    "nextGoal": "Connect generated mission artifacts to richer interactive/Remotion-style artifacts and learner reports without weakening claim boundaries.",
+    "summary": "English Learning Harness now generates learner-root interactive daily mission cards and 7-day/30-day learner reports that connect Speaking Skill OS, multimodal interaction evidence, saved phrases, and the personal cockpit.",
+    "nextGoal": "Continue toward the full AI-native Learning OS by making Codex-operated daily skill flow and richer generated/Remotion-style artifacts feel unmistakably different from generic English chat.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can validate and run one text-first narrative mission that requires a targeted Speaking Skill OS behavior and records local transfer evidence.",
+    "allowedClaim": "The harness can generate local interactive mission artifacts and learner reports from recorded practice evidence; it does not certify fluency or prove generated-world learning gains.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local narrative-transfer mechanics only; remaining blocked claims stay visible and unclaimed."
+    "claimBoundary": "Allowed claim is local AI-native learning OS mechanics and evidence aggregation only; outcome, realtime voice, child-mode, and retention claims remain blocked."
   },
   "ssot": [
     {
@@ -319,37 +319,49 @@
       "path": "../scripts/generated-daily-mission-smoke.mjs",
       "role": "generated daily mission artifact smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-3-interactive-artifact-reports.md",
+      "path": "./phase-11-evidence/AIOS-3-interactive-artifact-reports.md",
+      "role": "AIOS-3 interactive mission artifact and learner report evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/interactive-artifact-report-smoke.mjs",
+      "path": "../scripts/interactive-artifact-report-smoke.mjs",
+      "role": "interactive mission artifact and learner report smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
-      "value": "In progress",
-      "detail": "public source is live; Speaking Skill OS exists; M10 narrative-transfer mechanics are complete",
+      "value": "Active",
+      "detail": "full AI-native English Learning OS remains open; AIOS-1/2/3 are implemented slices, not final product completion",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "M10 complete",
-      "detail": "validator, parity, no-gen fallback, claim guard, and milestone review pass locally",
+      "value": "AIOS-3 ready",
+      "detail": "interactive mission card, learner report command, cockpit report linkage, and smoke coverage pass locally",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "M9 pilot bridge",
-      "detail": "#137/#139 should turn local mechanics into owner/self pilot report and readiness evidence",
+      "value": "Codex-operated learning flow",
+      "detail": "make skills/onboarding/daily session operate the new artifacts so learners stay in conversation instead of touching engine commands",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "74 issues",
-      "detail": "#147/#148 are implemented on this branch; M10 can close after PR merge",
+      "value": "#158 in progress",
+      "detail": "AIOS-3 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Narrative transfer gate",
-      "detail": "story progress must preserve Speaking Skill OS transfer evidence and text-only fallback",
+      "value": "Evidence-generating missions",
+      "detail": "daily scenes now become local interactive artifacts and learner reports tied to Speaking Skill OS evidence",
       "tone": "green"
     }
   ],
@@ -458,6 +470,13 @@
       "status": "Pass",
       "evidence": "#148, phase10-narrative-claim-guard-smoke, phase10-narrative-mission-gate-smoke",
       "claim": "M10 may claim local narrative-transfer mechanics only; blocked outcome, child-mode, and realtime claims remain visible"
+    },
+    {
+      "id": "GATE-16",
+      "label": "Interactive mission and learner report surface",
+      "status": "Pass",
+      "evidence": "#158, interactive-artifact-report-smoke, generated-daily-mission-smoke, personal-learner-cockpit-smoke",
+      "claim": "generated daily missions render selectable practice modes, learner reports summarize 7-day/30-day local evidence, and cockpit links the latest report without product/ops surface leakage"
     }
   ],
   "board": [
@@ -1668,6 +1687,19 @@
             "docs/ISSUE-INDEX.md",
             "README.md"
           ]
+        },
+        {
+          "id": "AIOS-3",
+          "title": "Interactive mission artifact와 learner report를 구현함",
+          "why": "AI-native OS가 단순 챗봇과 다르려면 매일 생성된 장면이 실제로 조작 가능한 학습 artifact가 되고, 7일/30일 증거가 learner report로 돌아와야 했다.",
+          "done": "`mission` HTML에 text/voice/image practice mode tab을 추가하고, `report` 명령으로 `artifacts/reports/learner-report-YYYY-MM-DD.json/html`을 생성하며, cockpit에서 최신 report를 연결했다.",
+          "verification": "`node scripts/interactive-artifact-report-smoke.mjs`, `node scripts/generated-daily-mission-smoke.mjs`, `node scripts/personal-learner-cockpit-smoke.mjs`가 통과했다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/interactive-artifact-report-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-3-interactive-artifact-reports.md"
+          ]
         }
       ]
     },
@@ -1678,13 +1710,13 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "M10 Narrative Mission Layer complete",
-          "why": "Narrative layer is now a validated transfer wrapper, not a cosmetic story layer.",
-          "done": "#147/#148 close M10 as local mechanics complete; richer generated worlds remain blocked until real pilot evidence and future scope.",
-          "verification": "M10 gate smoke, claim guard, scaffold smoke, dashboard render check.",
+          "title": "AIOS-3 PR 검증과 병합",
+          "why": "interactive mission/report 기능은 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.",
+          "done": "새 smoke, 기존 mission/cockpit smoke, dashboard generation, product/ops smoke, diff check를 실행한다.",
+          "verification": "PR #158 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
           "files": [
-            "docs/phase-10-evidence/M10-6-narrative-mission-closeout.md",
-            "scripts/phase10-narrative-mission-gate-smoke.mjs"
+            "scripts/interactive-artifact-report-smoke.mjs",
+            "docs/ops/project-state.json"
           ]
         }
       ]
@@ -1695,24 +1727,26 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "NEXT-1",
-          "title": "Next goal: M9 real learner pilot bridge",
-          "why": "M10 has fixture-level mechanics. The product now needs owner/self pilot report and readiness evidence before richer narrative or multimodal expansion.",
-          "done": "아직 미구현. 다음 goal은 #137 owner pilot report/transcript bridge와 #139 readiness gate를 묶는 것이 적절하다.",
-          "verification": "pilot report smoke, pilot readiness gate smoke, dashboard render check.",
+          "id": "AIOS-NEXT",
+          "title": "Codex-operated daily learning flow 강화",
+          "why": "사용자가 Node 명령을 만지는 순간 제품성이 깨진다. 다음 단위는 skills/onboarding/daily-session이 mission/report/cockpit 엔진을 자연어 대화 뒤에서 운영하게 만드는 것이다.",
+          "done": "처음 온 학습자가 Codex와 대화만 해도 generated mission, session evidence, mini mirror, report/cockpit 갱신이 이어진다.",
+          "verification": "skill contract smoke와 clean learner run smoke가 command-line chore를 learner-facing copy에 노출하지 않는지 확인한다.",
           "files": [
-            "docs/STATUS.md",
-            "docs/phase-9-evidence/"
+            "skills/",
+            "scripts/english-learning-harness.mjs",
+            "README.md"
           ]
         },
         {
-          "id": "AIOS-NEXT",
-          "title": "Next: interactive/Remotion-style artifact layer와 learner report 강화",
-          "why": "큰 goal에는 generated interactive HTML/Remotion artifacts와 learner reports가 포함된다. 다음은 mission artifact를 더 풍부한 시각/시간 기반 학습 산출물과 리포트로 확장하는 것이다.",
-          "done": "아직 미구현.",
-          "verification": "다음 PR에서 interactive artifact smoke, report linkage smoke, product cockpit render checks로 검증한다.",
+          "id": "AIOS-RICH-ARTIFACTS",
+          "title": "Generated/Remotion-style rich artifact 탐색",
+          "why": "Codex 위 harness 차별점은 대화 중 필요한 순간 HTML/영상/이미지 artifact를 즉시 생성하는 능력이다.",
+          "done": "학습 증거를 약화하지 않는 범위에서 interactive HTML 또는 Remotion-style scene artifact 후보를 설계하고 하나를 fixture로 검증한다.",
+          "verification": "text-first fallback, claim guard, product/ops boundary smoke가 함께 통과해야 한다.",
           "files": [
-            "docs/ops/project-state.json"
+            "docs/phase-11-evidence/",
+            "scripts/"
           ]
         }
       ]
@@ -2203,6 +2237,11 @@
       "name": "AIOS-2 generated daily mission artifacts",
       "status": "Pass",
       "detail": "generated mission smoke creates learner-root mission state/html, renders it, runs post-mission today evidence, and verifies cockpit linkage."
+    },
+    {
+      "name": "AIOS-3 interactive artifacts and reports",
+      "status": "Pass",
+      "detail": "interactive-artifact-report smoke validates mission mode tabs, 7-day/30-day report generation, text/voice/image evidence counts, cockpit report linkage, and product-surface leak guards."
     }
   ],
   "commands": [
@@ -2497,6 +2536,14 @@
     {
       "label": "View AIOS-2 issue",
       "command": "gh issue view 156"
+    },
+    {
+      "label": "Run interactive artifact/report smoke",
+      "command": "node scripts/interactive-artifact-report-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-3 issue",
+      "command": "gh issue view 158"
     }
   ]
 }
