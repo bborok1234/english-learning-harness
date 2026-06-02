@@ -1,13 +1,80 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const statePath = resolve(root, "docs/ops/project-state.json");
-const outputPath = resolve(root, "docs/ops/engineering-dashboard.html");
-const legacyOutputPath = resolve(root, "docs/dashboard.html");
+const args = process.argv.slice(2);
+const localMode = args.includes("--local");
+
+function argValue(flag, fallback) {
+  const index = args.indexOf(flag);
+  return index === -1 ? fallback : resolve(root, args[index + 1]);
+}
+
+const outputPath = argValue(
+  "--output",
+  localMode ? "docs/ops/local-engineering-dashboard.html" : "docs/ops/engineering-dashboard.html",
+);
+const legacyOutputPath = argValue("--legacy-output", localMode ? "docs/local-dashboard.html" : "docs/dashboard.html");
+const localStatusPath = argValue("--local-status", "docs/ops/local-pilot-status.json");
 
 const state = JSON.parse(readFileSync(statePath, "utf8"));
+
+function localPilotOverlay(path) {
+  if (!localMode || !existsSync(path)) return null;
+  return JSON.parse(readFileSync(path, "utf8"));
+}
+
+function applyLocalPilotOverlay(target, overlay) {
+  if (!overlay?.pilot) return target;
+  const stateWithOverlay = JSON.parse(JSON.stringify(target));
+  const pilot = overlay.pilot;
+  const next = pilot.next ?? {};
+  const dayText = next.day ? `Day ${next.day}` : next.phase ?? "Next";
+  const statusValue = pilot.readyToFinish
+    ? "Final sample ready"
+    : pilot.baselineReady
+      ? `${pilot.completedDailySessions}/${pilot.minimumValidDailySessions} days`
+      : "Day 0 needed";
+
+  stateWithOverlay.metrics = [
+    {
+      label: "Local real pilot",
+      value: statusValue,
+      detail: `${pilot.status}; ${dayText} waiting. Redacted local overlay, no transcript committed.`,
+      tone: pilot.readyToFinish ? "green" : "blue",
+    },
+    ...stateWithOverlay.metrics,
+  ];
+
+  const nowColumn = stateWithOverlay.board.find((column) => column.id === "now");
+  if (nowColumn) {
+    nowColumn.cards = [
+      {
+        id: "LOCAL-REAL-PILOT",
+        title: "로컬 실제 pilot 진행 상태",
+        why: "실제 학습 데이터는 repo에 커밋하지 않는다. 이 카드는 local overlay에서 redacted 진행률만 보여준다.",
+        done: `현재 ${pilot.completedDailySessions} / ${pilot.minimumValidDailySessions} daily sessions. 다음 카드: ${next.title ?? dayText}.`,
+        verification: overlay.redaction ?? "No transcript, private notes, audio, image, or local learner path is included.",
+        files: ["docs/ops/local-pilot-status.json", "docs/ops/local-engineering-dashboard.html"],
+      },
+      ...nowColumn.cards,
+    ];
+  }
+
+  stateWithOverlay.commands = [
+    {
+      label: "Sync local pilot dashboard",
+      command: "node scripts/sync-local-pilot-dashboard.mjs",
+    },
+    ...stateWithOverlay.commands,
+  ];
+  return stateWithOverlay;
+}
+
+const localOverlay = localPilotOverlay(localStatusPath);
+const renderState = applyLocalPilotOverlay(state, localOverlay);
 
 const escapeHtml = (value) =>
   String(value ?? "")
@@ -17,9 +84,9 @@ const escapeHtml = (value) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
-const jsonScript = JSON.stringify(state, null, 2).replaceAll("<", "\\u003c");
+const jsonScript = JSON.stringify(renderState, null, 2).replaceAll("<", "\\u003c");
 const toneClass = (tone = "blue") => `tone-${escapeHtml(tone)}`;
-const boardColumn = (id) => state.board.find((column) => column.id === id) ?? { cards: [] };
+const boardColumn = (id) => renderState.board.find((column) => column.id === id) ?? { cards: [] };
 const dashboardHref = (path) => {
   if (/^(https?:|mailto:|#)/.test(path)) return path;
   if (path.startsWith("./")) return `.${path}`;
@@ -41,7 +108,7 @@ function renderCard(card) {
             </article>`;
 }
 
-const metrics = state.metrics.map((item) => `
+const metrics = renderState.metrics.map((item) => `
         <article class="metric-card ${toneClass(item.tone)}">
           <div class="eyebrow"><span class="dot"></span>${escapeHtml(item.label)}</div>
           <div class="metric-value">${escapeHtml(item.value)}</div>
@@ -60,25 +127,25 @@ const recentDone = recentDoneCards.map(renderCard).join("");
 const topRisks = riskCards.slice(0, 3).map(renderCard).join("");
 const archivedDone = archivedDoneCards.map(renderCard).join("");
 
-const ssot = state.ssot.map((item) => `
+const ssot = renderState.ssot.map((item) => `
             <a class="link-card ${escapeHtml(item.kind)}" href="${escapeHtml(dashboardHref(item.path))}">
               <strong>${escapeHtml(item.label)}</strong>
               <span>${escapeHtml(item.role)}</span>
             </a>`).join("");
 
-const verification = state.verification.map((item) => `
+const verification = renderState.verification.map((item) => `
             <tr>
               <td>${escapeHtml(item.name)}</td>
               <td><strong>${escapeHtml(item.status)}</strong><span>${escapeHtml(item.detail)}</span></td>
             </tr>`).join("");
 
-const visibleVerification = state.verification.slice(-8).map((item) => `
+const visibleVerification = renderState.verification.slice(-8).map((item) => `
             <tr>
               <td>${escapeHtml(item.name)}</td>
               <td><strong>${escapeHtml(item.status)}</strong><span>${escapeHtml(item.detail)}</span></td>
             </tr>`).join("");
 
-const visibleCommands = state.commands
+const visibleCommands = renderState.commands
   .filter((item) =>
     /generate-dashboard|clean-clone|phase2-|phase4-|ISSUE-INDEX|dashboard|gh issue view/.test(item.command),
   )
@@ -89,13 +156,13 @@ const visibleCommands = state.commands
               <code>${escapeHtml(item.command)}</code>
             </div>`).join("");
 
-const commands = state.commands.map((item) => `
+const commands = renderState.commands.map((item) => `
             <div class="command">
               <span>${escapeHtml(item.label)}</span>
               <code>${escapeHtml(item.command)}</code>
             </div>`).join("");
 
-const gates = (state.gates ?? []).map((item) => `
+const gates = (renderState.gates ?? []).map((item) => `
             <tr>
               <td><strong>${escapeHtml(item.id)}</strong><span>${escapeHtml(item.label)}</span></td>
               <td><strong>${escapeHtml(item.status)}</strong><span>${escapeHtml(item.evidence)}</span></td>
@@ -108,7 +175,7 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="scripts/generate-dashboard.mjs">
-  <title>${escapeHtml(state.project.name)} Engineering Board</title>
+  <title>${escapeHtml(renderState.project.name)} Engineering Board</title>
   <style>
     :root {
       color-scheme: light;
@@ -509,13 +576,13 @@ ${jsonScript}
   <div class="page">
     <header class="top">
       <div>
-        <h1>${escapeHtml(state.project.name)} Engineering Board</h1>
-        <p class="summary">${escapeHtml(state.project.summary)}</p>
+        <h1>${escapeHtml(renderState.project.name)} Engineering Board</h1>
+        <p class="summary">${escapeHtml(renderState.project.summary)}</p>
       </div>
       <div class="stamp">
-        <strong>${escapeHtml(state.updatedAt)}</strong>
-        ${escapeHtml(state.project.stage)}<br>
-        ${escapeHtml(state.project.status)}
+        <strong>${escapeHtml(renderState.updatedAt)}</strong>
+        ${escapeHtml(renderState.project.stage)}<br>
+        ${escapeHtml(renderState.project.status)}
       </div>
     </header>
 
@@ -526,7 +593,7 @@ ${metrics}
     <section class="north-star">
       <article class="panel">
         <h2>제품 북극성</h2>
-        <div class="star-box">${escapeHtml(state.project.northStar)}</div>
+        <div class="star-box">${escapeHtml(renderState.project.northStar)}</div>
         <p>실제 외국인 앞 자신감은 부수 효과로 가능하지만 보장하지 않는다. 모든 구현 판단은 이 문장을 기준으로 검증한다.</p>
       </article>
       <article class="panel">
@@ -606,7 +673,7 @@ ${archivedDone}
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 ${state.verification.length}개 보기</summary>
+        <summary>전체 검증 ${renderState.verification.length}개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -616,7 +683,7 @@ ${verification}
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 ${state.commands.length}개 보기</summary>
+        <summary>전체 명령 ${renderState.commands.length}개 보기</summary>
         <div class="archive-body commands">
 ${commands}
         </div>
@@ -640,7 +707,7 @@ writeFileSync(
   <title>Engineering Dashboard moved</title>
 </head>
 <body>
-  <p>This engineering dashboard moved to <a href="./ops/engineering-dashboard.html">docs/ops/engineering-dashboard.html</a>.</p>
+  <p>This engineering dashboard moved to <a href="./ops/${localMode ? "local-engineering-dashboard.html" : "engineering-dashboard.html"}">docs/ops/${localMode ? "local-engineering-dashboard.html" : "engineering-dashboard.html"}</a>.</p>
   <p>The learner-facing product cockpit lives at <a href="./product/learner-cockpit.html">docs/product/learner-cockpit.html</a>.</p>
 </body>
 </html>

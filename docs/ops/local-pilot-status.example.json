@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-06-02T00:00:00.000Z",
+  "source": "scripts/sync-local-pilot-dashboard.mjs",
+  "redaction": "Transcript, private notes, audio, image, and local learner paths are intentionally excluded.",
+  "pilot": {
+    "status": "in_progress",
+    "baselineReady": true,
+    "completedDailySessions": 0,
+    "minimumValidDailySessions": 5,
+    "targetDays": 7,
+    "finalReady": false,
+    "reportReady": false,
+    "readyToFinish": false,
+    "next": {
+      "phase": "day",
+      "day": 1,
+      "title": "Pilot Day 1",
+      "cardId": "day-1"
+    }
+  }
+}

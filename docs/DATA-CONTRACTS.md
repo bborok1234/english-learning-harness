@@ -570,6 +570,39 @@ The learner-facing cockpit must not expose `pilot-capture`, `pilot-start`, `pilo
 
 The cockpit refresh is a product-surface convenience contract. It is not evidence that the real owner/self pilot has been completed.
 
+## Local Pilot Dashboard Overlay
+
+`scripts/sync-local-pilot-dashboard.mjs` may write `docs/ops/local-pilot-status.json` and `docs/ops/local-engineering-dashboard.html` for local operations. These files are ignored by git. The tracked example is `docs/ops/local-pilot-status.example.json`.
+
+The local overlay must be redacted:
+
+```json
+{
+  "schemaVersion": 1,
+  "updatedAt": "ISO-8601",
+  "source": "scripts/sync-local-pilot-dashboard.mjs",
+  "redaction": "Transcript, private notes, audio, image, and local learner paths are intentionally excluded.",
+  "pilot": {
+    "status": "in_progress",
+    "baselineReady": true,
+    "completedDailySessions": 0,
+    "minimumValidDailySessions": 5,
+    "targetDays": 7,
+    "finalReady": false,
+    "reportReady": false,
+    "readyToFinish": false,
+    "next": {
+      "phase": "day",
+      "day": 1,
+      "title": "Pilot Day 1",
+      "cardId": "day-1"
+    }
+  }
+}
+```
+
+This overlay is for local progress visibility only. It must not be used as public proof of learner outcomes or as a substitute for the actual five-day pilot evidence.
+
 ## M10 Narrative Mission Contracts
 
 Narrative mission state is valid only when story progress is bound to a Speaking Skill OS transfer test.

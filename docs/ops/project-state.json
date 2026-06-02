@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 pilot capture cockpit refresh implemented; real owner pilot still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, active pilot visibility, and automatic cockpit refresh after each captured pilot answer. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 local pilot dashboard sync implemented; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible in the product cockpit: each partial Day 0/final answer is captured durably, and the cockpit refreshes after each captured card to show current progress and the next learner-facing pilot card.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible without leaking private data into the public repo: each partial Day 0/final answer is captured durably, the learner cockpit refreshes after each captured card, and local ops can sync redacted pilot progress into an ignored dashboard overlay.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -499,13 +499,31 @@
       "path": "../scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
       "role": "active pilot cockpit smoke",
       "kind": "source"
+    },
+    {
+      "label": "scripts/sync-local-pilot-dashboard.mjs",
+      "path": "../scripts/sync-local-pilot-dashboard.mjs",
+      "role": "redacted local pilot dashboard sync",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/local-pilot-dashboard-sync-smoke.mjs",
+      "path": "../scripts/local-pilot-dashboard-sync-smoke.mjs",
+      "role": "redacted local pilot dashboard sync smoke",
+      "kind": "source"
+    },
+    {
+      "label": "docs/ops/local-pilot-status.example.json",
+      "path": "./ops/local-pilot-status.example.json",
+      "role": "tracked example for ignored local pilot overlay",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "capture, cockpit refresh, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -750,6 +768,13 @@
       "status": "Pass",
       "evidence": "phase15-owner-pilot-capture-smoke, personal-learner-cockpit-active-pilot-smoke, product-surface-smoke, ops-dashboard-smoke",
       "claim": "pilot-capture refreshes cockpit-state.json and cockpit.html after each captured pilot card and returns the refreshed cockpit pointer; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-32",
+      "label": "Redacted local pilot dashboard sync",
+      "status": "Pass",
+      "evidence": "sync-local-pilot-dashboard, local-pilot-dashboard-sync-smoke, generate-dashboard --local",
+      "claim": "local pilot progress can be synced into ignored local dashboard files without committing transcripts, private notes, media, or local learner paths; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -768,6 +793,18 @@
             "scripts/lib/english-learning-store.mjs",
             "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-LOCAL-PILOT-DASHBOARD-SYNC",
+          "title": "AIOS-12 local pilot dashboard sync 통과",
+          "why": "실제 pilot 진행률은 우리가 볼 수 있어야 하지만, transcript나 개인 경로가 공개 repo dashboard에 섞이면 안 된다.",
+          "done": "sync-local-pilot-dashboard가 learner cockpit을 갱신하고, redacted local-pilot-status.json과 ignored local-engineering-dashboard.html을 생성한다.",
+          "verification": "local-pilot-dashboard-sync smoke verifies redacted status, local dashboard overlay, no transcript leakage, and no local learner path leakage.",
+          "files": [
+            "scripts/sync-local-pilot-dashboard.mjs",
+            "scripts/local-pilot-dashboard-sync-smoke.mjs",
+            "docs/ops/local-pilot-status.example.json"
           ]
         },
         {
@@ -2791,12 +2828,25 @@
       "name": "AIOS-12 active pilot cockpit",
       "status": "Pass",
       "detail": "personal-learner-cockpit-active-pilot smoke validates one captured Day 0 card appears as active pilot progress in learner cockpit and points to the next learner-facing card without command or engineering leakage."
+    },
+    {
+      "name": "AIOS-12 redacted local pilot dashboard sync",
+      "status": "Pass",
+      "detail": "local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage."
     }
   ],
   "commands": [
     {
       "label": "Regenerate dashboard",
       "command": "node scripts/generate-dashboard.mjs"
+    },
+    {
+      "label": "Sync local pilot dashboard",
+      "command": "node scripts/sync-local-pilot-dashboard.mjs"
+    },
+    {
+      "label": "Run local pilot dashboard sync smoke",
+      "command": "node scripts/local-pilot-dashboard-sync-smoke.mjs"
     },
     {
       "label": "Run scaffold smoke",

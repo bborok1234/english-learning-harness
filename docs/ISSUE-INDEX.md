@@ -635,3 +635,5 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - Personal cockpit now exposes active pilot progress and the next learner-facing pilot card while avoiding internal pilot command leakage.
 - `scripts/personal-learner-cockpit-active-pilot-smoke.mjs` verifies one captured Day 0 card appears as active pilot progress in cockpit.
 - `docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md` records the active pilot cockpit evidence.
+- `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
+- `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

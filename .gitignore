@@ -16,3 +16,7 @@ tmp/
 english-learning/
 learner/
 
+# Local-only ops overlays generated from private learner state
+docs/ops/local-pilot-status.json
+docs/ops/local-engineering-dashboard.html
+docs/local-dashboard.html
