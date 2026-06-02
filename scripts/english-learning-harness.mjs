@@ -1113,6 +1113,45 @@ function pilotCapture(options) {
   };
 }
 
+function pilotReplyLearnerFacing({ routedTo, captureResult, nextCardArtifact }) {
+  const nextCard = nextCardArtifact?.nextCard ?? null;
+  const next = nextCard
+    ? {
+        title: nextCard.title,
+        ask: nextCard.ask,
+        example: nextCard.example,
+        phase: nextCard.phase,
+        day: nextCard.day,
+      }
+    : null;
+  const dayRecord = captureResult.result?.day ?? null;
+  const coaching = dayRecord?.learner_coaching ?? null;
+  if (coaching) {
+    return {
+      saved: true,
+      phase: routedTo.phase,
+      day: routedTo.day,
+      communicated: coaching.communicated,
+      recast: coaching.recast,
+      nextPhrase: coaching.next_phrase,
+      nextFocus: coaching.next_focus,
+      artifactHint: coaching.artifact_hint,
+      nextCard: next,
+      learnerRule: "방금 답변은 저장됐습니다. 다음에도 영어 한 문장만 답하면 됩니다.",
+    };
+  }
+
+  return {
+    saved: true,
+    phase: routedTo.phase,
+    day: routedTo.day,
+    capturedCount: captureResult.capturedCount ?? null,
+    committed: Boolean(captureResult.committed),
+    nextCard: next,
+    learnerRule: "방금 답변은 저장됐습니다. 다음 카드도 영어 한 문장이면 충분합니다.",
+  };
+}
+
 function pilotReply(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -1146,18 +1185,20 @@ function pilotReply(options) {
 
   const result = pilotCapture(captureOptions);
   const nextCardArtifact = pilotNext({ learnerRoot: paths.root, date });
+  const routedTo = {
+    phase: captureOptions.phase,
+    cardId: captureOptions.cardId ?? null,
+    day: captureOptions.day ?? null,
+  };
   return {
     status: "pass",
     action: "pilot-reply",
-    routedTo: {
-      phase: captureOptions.phase,
-      cardId: captureOptions.cardId ?? null,
-      day: captureOptions.day ?? null,
-    },
+    routedTo,
     result,
     summary: result.summary,
     cockpit: result.cockpit,
     nextCardArtifact,
+    learnerFacing: pilotReplyLearnerFacing({ routedTo, captureResult: result, nextCardArtifact }),
     claimBoundary:
       result.claimBoundary ||
       "This routes the next local pilot answer. It does not prove learning outcomes or pilot completion.",
