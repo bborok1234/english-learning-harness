@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from "node:fs";
 import { basename, relative, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import {
   buildAdditionalContext,
   buildDailyCockpit,
@@ -183,6 +184,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-day [--day 1-7] [--say TEXT ...] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-finish [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
@@ -209,6 +211,15 @@ function commandWithRoot(command, learnerRoot, extraArgs = []) {
     JSON.stringify(learnerRoot),
     ...extraArgs,
   ].join(" ");
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 function supportDiagnostics(options, paths) {
@@ -1116,6 +1127,154 @@ function pilotStatus(options) {
   };
 }
 
+function learnerFacingNextCard(nextAction) {
+  const guide = nextAction.guide ?? {};
+  if (nextAction.command === "pilot-capture" && nextAction.phase === "baseline") {
+    const cards = guide.cards ?? [];
+    const card = cards.find((item) => item.id === nextAction.cardId) ?? guide.firstQuestion ?? {};
+    return {
+      phase: "baseline",
+      day: null,
+      title: card.title ?? guide.title ?? "오늘의 영어 스냅샷",
+      setup: card.setup ?? guide.opening ?? "",
+      ask: card.ask ?? nextAction.prompt,
+      example: card.example ?? "",
+      learner_rule: guide.learnerRule ?? "한 문장이면 충분합니다.",
+    };
+  }
+  if (nextAction.command === "pilot-day") {
+    const card = guide.firstQuestion ?? {};
+    return {
+      phase: "day",
+      day: nextAction.day,
+      title: card.title ?? guide.title ?? `Pilot Day ${nextAction.day}`,
+      setup: card.setup ?? guide.opening ?? "",
+      ask: card.ask ?? nextAction.prompt,
+      example: card.example ?? "",
+      learner_rule: guide.learnerRule ?? "한 문장이면 충분합니다.",
+    };
+  }
+  if (nextAction.command === "pilot-capture" && nextAction.phase === "final") {
+    const cards = guide.cards ?? [];
+    const card = cards.find((item) => item.id === nextAction.cardId) ?? cards[0] ?? {};
+    return {
+      phase: "final",
+      day: null,
+      title: card.title ?? guide.title ?? "마지막 영어 스냅샷",
+      setup: card.setup ?? guide.opening ?? "",
+      ask: card.ask ?? nextAction.prompt,
+      example: card.example ?? "",
+      learner_rule: guide.learnerRule ?? "한 문장이면 충분합니다.",
+    };
+  }
+  return {
+    phase: "complete",
+    day: null,
+    title: "Pilot report ready",
+    setup: "",
+    ask: nextAction.prompt,
+    example: "",
+    learner_rule: "로컬 리포트를 먼저 확인합니다.",
+  };
+}
+
+function pilotNext(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const state = readPilotState(paths, date);
+  const summary = pilotStatusSummary(state);
+  const nextCard = learnerFacingNextCard(summary.nextAction);
+  const cockpitSnapshot = pilotCockpitRefresh(paths, date);
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "learner-facing pilot next card",
+    pilot: {
+      status: summary.status,
+      baseline_ready: summary.baselineReady,
+      completed_daily_sessions: summary.completedDailySessions,
+      minimum_valid_daily_sessions: summary.minimumValidDailySessions,
+      target_days: summary.targetDays,
+      ready_to_finish: summary.readyToFinish,
+    },
+    next_card: nextCard,
+    answer_rule: "영어 한 문장만 답하면 됩니다. 틀려도 현재 말하기 증거로 충분합니다.",
+    after_answer: "Codex가 답변을 내부적으로 저장하고 cockpit/report를 갱신합니다.",
+    privacy: "답변 원문은 기본적으로 로컬 pilot state에만 저장됩니다. 공개 PR/issue에는 올리지 않습니다.",
+    cockpit: {
+      html: relativeToRoot(paths, cockpitSnapshot.htmlPath),
+      url: cockpitSnapshot.url,
+    },
+    claim_boundary:
+      "This card helps continue the local owner/self pilot. It does not prove learning outcomes or pilot completion.",
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-next-card.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-next-card.html");
+  writeFileSync(jsonPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(nextCard.title)}</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #657067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(760px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; text-transform: uppercase; }
+    h1 { margin: 8px 0 10px; font-size: clamp(28px, 5vw, 42px); line-height: 1.12; letter-spacing: 0; }
+    p { margin: 0; }
+    .setup { color: var(--muted); font-size: 16px; }
+    .ask { margin-top: 20px; padding: 18px; border-radius: 8px; background: var(--warm); font-size: 22px; font-weight: 760; line-height: 1.32; }
+    .example, .rule, .privacy { margin-top: 14px; color: var(--muted); }
+    .progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 22px; }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 640px) { .progress { grid-template-columns: 1fr; } .ask { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <p class="eyebrow">English Learning Harness · Owner Pilot</p>
+      <h1>${escapeHtml(nextCard.title)}</h1>
+      <p class="setup">${escapeHtml(nextCard.setup)}</p>
+      <div class="progress" aria-label="pilot progress">
+        <div class="metric"><span>Daily sessions</span><strong>${escapeHtml(summary.completedDailySessions)} / ${escapeHtml(summary.minimumValidDailySessions)}</strong></div>
+        <div class="metric"><span>Phase</span><strong>${escapeHtml(nextCard.phase)}</strong></div>
+        <div class="metric"><span>Target days</span><strong>${escapeHtml(summary.targetDays)}</strong></div>
+      </div>
+      <p class="ask">${escapeHtml(nextCard.ask)}</p>
+      ${nextCard.example ? `<p class="example">예시: ${escapeHtml(nextCard.example)}</p>` : ""}
+      <p class="rule">${escapeHtml(artifact.answer_rule)}</p>
+      <p class="privacy">${escapeHtml(artifact.privacy)}</p>
+    </section>
+    <footer>${escapeHtml(artifact.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-next",
+    learnerRoot: paths.root,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    cockpit: cockpitSnapshot,
+    nextCard,
+    claimBoundary: artifact.claim_boundary,
+  };
+}
+
 function pilotDay(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -1894,6 +2053,10 @@ function run() {
   }
   if (command === "pilot-status") {
     output(pilotStatus(options), options.json);
+    return;
+  }
+  if (command === "pilot-next") {
+    output(pilotNext(options), options.json);
     return;
   }
   if (command === "pilot-capture") {

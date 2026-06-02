@@ -29,6 +29,14 @@ When persistence is needed, find the local engine in this order:
 
 Use that engine yourself. Do not hand the command to the learner.
 
+Before asking the next learner-facing card, you may generate the local next-card artifact internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-next --json
+```
+
+This refreshes the learner cockpit and writes a local `artifacts/pilot/pilot-next-card.html` card. Use it as a product-surface aid, but do not ask the learner to run the command.
+
 ## Pilot Phases
 
 ### Day 0 Baseline
@@ -83,8 +91,9 @@ Then summarize:
 ## Learner-Facing Rules
 
 - Ask only one card at a time.
+- If a learner-facing next-card artifact exists, use it to keep the prompt short and concrete.
 - Avoid meta labels like "baseline", "rubric", "artifact bridge", or "product_journey_audit" in the learner prompt.
-- Do not expose `pilot-capture`, `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
+- Do not expose `pilot-next`, `pilot-capture`, `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
 - If tool execution fails, continue the conversation and say durable saving was not confirmed.
 - If the user wants to stop early, save nothing extra unless they already answered a pilot prompt; then explain what was or was not saved.
 

@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 local pilot dashboard sync implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 learner-facing pilot next card implemented; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible without leaking private data into the public repo: each partial Day 0/final answer is captured durably, the learner cockpit refreshes after each captured card, and local ops can sync redacted pilot progress into an ignored dashboard overlay.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and remain visible without leaking private data into the public repo: the next prompt can be opened as a learner-facing local card, each partial Day 0/final answer is captured durably, the learner cockpit refreshes after each captured card, and local ops can sync redacted pilot progress into an ignored dashboard overlay.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -879,6 +879,18 @@
       "kind": "source"
     },
     {
+      "label": "scripts/phase15-owner-pilot-next-card-smoke.mjs",
+      "path": "../scripts/phase15-owner-pilot-next-card-smoke.mjs",
+      "role": "owner pilot learner-facing next-card smoke",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-12-pilot-next-card.md",
+      "path": "./phase-15-evidence/AIOS-12-pilot-next-card.md",
+      "role": "AIOS-12 pilot next-card evidence",
+      "kind": "source"
+    },
+    {
       "label": "scripts/phase15-owner-pilot-capture-smoke.mjs",
       "path": "../scripts/phase15-owner-pilot-capture-smoke.mjs",
       "role": "owner pilot card-level capture and cockpit refresh smoke",
@@ -925,7 +937,7 @@
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -1177,6 +1189,13 @@
       "status": "Pass",
       "evidence": "sync-local-pilot-dashboard, local-pilot-dashboard-sync-smoke, generate-dashboard --local",
       "claim": "local pilot progress can be synced into ignored local dashboard files without committing transcripts, private notes, media, or local learner paths; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-33",
+      "label": "Learner-facing pilot next card",
+      "status": "Pass",
+      "evidence": "pilot-next command, phase15-owner-pilot-next-card-smoke, phase15-owner-pilot-skill-smoke",
+      "claim": "pilot-next writes a local learner-facing next-card HTML/JSON artifact and refreshes cockpit without leaking internal commands or issue/PR language; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -1195,6 +1214,18 @@
             "scripts/lib/english-learning-store.mjs",
             "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
             "docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-PILOT-NEXT-CARD",
+          "title": "AIOS-12 learner-facing pilot next card 통과",
+          "why": "실제 pilot에서 다음 질문이 JSON status나 cockpit 한 섹션에만 묻혀 있으면 제품 표면이 약하다. 바로 열 수 있는 오늘의 카드가 필요하다.",
+          "done": "pilot-next가 artifacts/pilot/pilot-next-card.json/html을 생성하고 cockpit을 갱신한다.",
+          "verification": "phase15 owner pilot next-card smoke verifies baseline/day cards, cockpit linkage, day advance, privacy boundary, and no internal command leakage.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-next-card-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-pilot-next-card.md"
           ]
         },
         {
@@ -3235,6 +3266,11 @@
       "name": "AIOS-12 redacted local pilot dashboard sync",
       "status": "Pass",
       "detail": "local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage."
+    },
+    {
+      "name": "AIOS-12 learner-facing pilot next card",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage."
     }
   ],
   "commands": [
@@ -3249,6 +3285,10 @@
     {
       "label": "Run local pilot dashboard sync smoke",
       "command": "node scripts/local-pilot-dashboard-sync-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-12 pilot next-card smoke",
+      "command": "node scripts/phase15-owner-pilot-next-card-smoke.mjs"
     },
     {
       "label": "Run scaffold smoke",
@@ -3665,12 +3705,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and remain visible without leaking private data into the public repo: each partial Day 0/final answer is captured durably, the learner cockpit refreshes after each captured card, and local ops can sync redacted pilot progress into an ignored dashboard overlay.</p>
+        <p class="summary">The learner pilot lane can now survive interrupted Codex conversations and remain visible without leaking private data into the public repo: the next prompt can be opened as a learner-facing local card, each partial Day 0/final answer is captured durably, the learner cockpit refreshes after each captured card, and local ops can sync redacted pilot progress into an ignored dashboard overlay.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        AIOS-12 local pilot dashboard sync implemented; real owner pilot Day 1 answer still required<br>
-        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
+        AIOS-12 learner-facing pilot next card implemented; real owner pilot Day 1 answer still required<br>
+        AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.
       </div>
     </header>
 
@@ -3679,7 +3719,7 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current slice</div>
           <div class="metric-value">AIOS-12</div>
-          <p>capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open</p>
+          <p>next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Pilot surface</div>
@@ -4037,6 +4077,11 @@
               <td><strong>Pass</strong><span>sync-local-pilot-dashboard, local-pilot-dashboard-sync-smoke, generate-dashboard --local</span></td>
               <td>local pilot progress can be synced into ignored local dashboard files without committing transcripts, private notes, media, or local learner paths; real pilot completion remains unclaimed</td>
             </tr>
+            <tr>
+              <td><strong>GATE-33</strong><span>Learner-facing pilot next card</span></td>
+              <td><strong>Pass</strong><span>pilot-next command, phase15-owner-pilot-next-card-smoke, phase15-owner-pilot-skill-smoke</span></td>
+              <td>pilot-next writes a local learner-facing next-card HTML/JSON artifact and refreshes cockpit without leaking internal commands or issue/PR language; real pilot completion remains unclaimed</td>
+            </tr>
         </tbody>
       </table>
     </section>
@@ -4346,6 +4391,14 @@
               <strong>scripts/phase15-owner-pilot-skill-smoke.mjs</strong>
               <span>owner pilot Codex skill smoke</span>
             </a>
+            <a class="link-card source" href="../../scripts/phase15-owner-pilot-next-card-smoke.mjs">
+              <strong>scripts/phase15-owner-pilot-next-card-smoke.mjs</strong>
+              <span>owner pilot learner-facing next-card smoke</span>
+            </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-12-pilot-next-card.md">
+              <strong>docs/phase-15-evidence/AIOS-12-pilot-next-card.md</strong>
+              <span>AIOS-12 pilot next-card evidence</span>
+            </a>
             <a class="link-card source" href="../../scripts/phase15-owner-pilot-capture-smoke.mjs">
               <strong>scripts/phase15-owner-pilot-capture-smoke.mjs</strong>
               <span>owner pilot card-level capture and cockpit refresh smoke</span>
@@ -4382,10 +4435,6 @@
           <tbody>
 
             <tr>
-              <td>AIOS-10 generated mission asset deck</td>
-              <td><strong>Pass</strong><span>generated-mission-asset-deck smoke validates asset-deck command output, all contract asset cards, no completion without session evidence, practice deck refresh, learner report linkage, cockpit linkage, and product/claim leak guards.</span></td>
-            </tr>
-            <tr>
               <td>AIOS-11 adaptive mission asset priority</td>
               <td><strong>Pass</strong><span>adaptive-mission-asset-priority smoke validates learner evidence states choose text-practice, image-information-gap, voice-transcript, and interactive-html-scene in order; cockpit JSON/HTML exposes the latest next asset action.</span></td>
             </tr>
@@ -4412,6 +4461,10 @@
             <tr>
               <td>AIOS-12 redacted local pilot dashboard sync</td>
               <td><strong>Pass</strong><span>local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-12 learner-facing pilot next card</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage.</span></td>
             </tr>
           </tbody>
         </table>
@@ -4457,7 +4510,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 106개 보기</summary>
+        <summary>완료 이력 107개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4469,6 +4522,16 @@
               <div class="card-row"><b>왜</b><p>실제 pilot이 진행 중일 때 학습자는 현재 카드와 다음 질문을 cockpit에서 확인할 수 있어야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>cockpit state/html이 active_pilot progress와 next learner-facing card를 보여준다.</p></div>
               <div class="card-row"><b>검증</b><p>personal learner cockpit active pilot smoke passed and checks no internal pilot command leakage.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-12-PILOT-NEXT-CARD</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-next-card-smoke.mjs, docs/phase-15-evidence/AIOS-12-pilot-next-card.md</span>
+              </div>
+              <h3>AIOS-12 learner-facing pilot next card 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot에서 다음 질문이 JSON status나 cockpit 한 섹션에만 묻혀 있으면 제품 표면이 약하다. 바로 열 수 있는 오늘의 카드가 필요하다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-next가 artifacts/pilot/pilot-next-card.json/html을 생성하고 cockpit을 갱신한다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke verifies baseline/day cards, cockpit linkage, day advance, privacy boundary, and no internal command leakage.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -5523,7 +5586,7 @@
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 102개 보기</summary>
+        <summary>전체 검증 103개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -5936,12 +5999,16 @@
               <td>AIOS-12 redacted local pilot dashboard sync</td>
               <td><strong>Pass</strong><span>local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-12 learner-facing pilot next card</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next writes learner-facing HTML/JSON next-card artifacts, refreshes cockpit, advances day prompts, and avoids internal command leakage.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 105개 보기</summary>
+        <summary>전체 명령 106개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -5955,6 +6022,10 @@
             <div class="command">
               <span>Run local pilot dashboard sync smoke</span>
               <code>node scripts/local-pilot-dashboard-sync-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-12 pilot next-card smoke</span>
+              <code>node scripts/phase15-owner-pilot-next-card-smoke.mjs</code>
             </div>
             <div class="command">
               <span>Run scaffold smoke</span>
