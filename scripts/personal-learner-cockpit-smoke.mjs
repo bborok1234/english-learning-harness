@@ -36,6 +36,9 @@ function assertNoProductSurfaceLeak(text) {
     "smoke pass",
     "implementation log",
     "m10 narrative mission layer complete",
+    "node scripts/english-learning-harness.mjs",
+    "--learner-root",
+    "start_command",
   ]) {
     assert(!lower.includes(forbidden), `personal cockpit leaked engineering language: ${forbidden}`);
   }
@@ -168,7 +171,8 @@ async function main() {
   assert(cockpit.journey.thirty_day.modalities.includes("voice"), "journey missing voice modality");
   assert(cockpit.journey.thirty_day.modalities.includes("image"), "journey missing image modality");
   assert(cockpit.speakingSkillOS.backlog_count >= 1, "cockpit should include speaking backlog");
-  assert(cockpit.todayAction.start_command.includes(" today "), "cockpit should expose today start command");
+  assert(cockpit.todayAction.codex_start_prompt.includes("오늘"), "cockpit should expose learner Codex prompt");
+  assert(!("start_command" in cockpit.todayAction), "cockpit today action must not expose internal start command");
 
   const stateText = readFileSync(cockpit.cockpitStatePath, "utf8");
   const html = readFileSync(cockpit.cockpitPath, "utf8");
@@ -178,6 +182,7 @@ async function main() {
     "멀티모달 학습 증거",
     "7일 / 30일 여정",
     "다음 행동",
+    "Codex에게 이렇게 말하세요",
     "Which place do you mean?",
   ]) {
     assert(html.includes(expected), `cockpit HTML missing: ${expected}`);

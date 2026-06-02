@@ -35,6 +35,9 @@ function main() {
     "smoke pass",
     "phase10",
     "M10 Narrative Mission Layer complete",
+    "node scripts/english-learning-harness.mjs",
+    "--learner-root",
+    "start_command",
   ]) {
     assert(!html.includes(forbidden), `learner cockpit leaks engineering language: ${forbidden}`);
   }

@@ -1721,7 +1721,6 @@ function readLatestGeneratedMission(learnerRoot = defaultLearnerRoot()) {
     title: state.learner_visible_scene?.title ?? "",
     target_skill: state.target_skill,
     transfer_test: state.transfer_test,
-    start_command: state.start_commands?.text ?? "",
     generated_at: state.generated_at,
   };
 }
@@ -1740,6 +1739,15 @@ function readLatestMissionAssetDeck(learnerRoot = defaultLearnerRoot()) {
   if (!deckPath) return null;
   const paths = learnerPaths(learnerRoot);
   const deck = JSON.parse(readFileSync(deckPath, "utf8"));
+  const topAssetAction = deck.top_asset_action
+    ? {
+        asset_id: deck.top_asset_action.asset_id,
+        mode: deck.top_asset_action.mode,
+        label: deck.top_asset_action.label,
+        reason: deck.top_asset_action.reason,
+        expected_evidence: deck.top_asset_action.expected_evidence,
+      }
+    : null;
   return {
     path: relative(paths.root, deckPath),
     html: relative(paths.root, deckPath.replace(/\.json$/, ".html")),
@@ -1749,7 +1757,7 @@ function readLatestMissionAssetDeck(learnerRoot = defaultLearnerRoot()) {
     asset_count: deck.assets?.length ?? 0,
     canonical_completion_path: deck.canonical_completion_path,
     evidence_required: deck.evidence_required,
-    top_asset_action: deck.top_asset_action,
+    top_asset_action: topAssetAction,
     generated_at: deck.generated_at,
   };
 }
@@ -3882,10 +3890,12 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
   const latestAssetDeck = readLatestMissionAssetDeck(paths.root);
   const activePilot = readActivePilotState(paths);
   const nextBacklog = dailyCockpit.speaking_os.next_item;
-  const nextCommand = commandLine(paths.root, "today", [
-    "--say",
-    JSON.stringify(nextBacklog?.drill_prompt || "I want to practice today."),
-  ]);
+  const todayCodexPrompt = nextBacklog
+    ? `오늘은 "${nextBacklog.label}" 연습을 한 문장씩 해볼래. 내가 답하면 바로 자연스럽게 고쳐주고, 마지막에 다음에 쓸 표현 하나만 남겨줘.`
+    : "오늘 5분 영어 미션 시작해줘. 한 문장씩 묻고, 내가 답하면 자연스럽게 고쳐줘.";
+  const missionCodexPrompt = dailyCockpit.suggested_scenario.goal
+    ? `오늘 미션으로 "${dailyCockpit.suggested_scenario.goal}" 상황을 영어로 연습하고 싶어.`
+    : todayCodexPrompt;
 
   return {
     schema_version: 1,
@@ -3902,7 +3912,8 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
       rescue_phrase: dailyCockpit.suggested_scenario.rescue_phrase,
       mode: dailyCockpit.suggested_scenario.mode,
       selection_reason: dailyCockpit.suggested_scenario.selection_reason,
-      start_command: nextCommand,
+      codex_start_prompt: todayCodexPrompt,
+      mission_prompt: missionCodexPrompt,
     },
     return_state: dailyCockpit.return_state,
     speaking_skill_os: {
@@ -3956,37 +3967,42 @@ export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), 
     next_asset_action: latestAssetDeck?.top_asset_action
       ? {
           deck: latestAssetDeck.html,
-          ...latestAssetDeck.top_asset_action,
+          asset_id: latestAssetDeck.top_asset_action.asset_id,
+          mode: latestAssetDeck.top_asset_action.mode,
+          label: latestAssetDeck.top_asset_action.label,
+          reason: latestAssetDeck.top_asset_action.reason,
+          expected_evidence: latestAssetDeck.top_asset_action.expected_evidence,
         }
       : null,
     next_actions: [
       {
         label: "오늘 미션 시작",
-        command: nextCommand,
+        codex_prompt: todayCodexPrompt,
       },
       ...(latestAssetDeck?.top_asset_action
         ? [
             {
               label: latestAssetDeck.top_asset_action.label,
-              command: latestAssetDeck.top_asset_action.start_command || commandLine(paths.root, "asset-deck", ["--json"]),
+              codex_prompt: `오늘 미션에 맞춰 ${latestAssetDeck.top_asset_action.label} 활동을 Codex 대화 안에서 바로 시작해줘.`,
+              reason: latestAssetDeck.top_asset_action.reason,
             },
           ]
         : []),
       {
         label: "복습 확인",
-        command: commandLine(paths.root, "review"),
+        codex_prompt: "오늘 복습할 표현이 있으면 하나만 골라서 짧게 말하기 연습하자.",
       },
       {
         label: "7일 요약 만들기",
-        command: commandLine(paths.root, "weekly"),
+        codex_prompt: "최근 7일 영어 연습을 내가 이해하기 쉽게 요약해줘.",
       },
       {
         label: "학습 리포트 만들기",
-        command: commandLine(paths.root, "report"),
+        codex_prompt: "내 최근 영어 학습 리포트를 짧게 보여주고 다음 focus를 알려줘.",
       },
       {
         label: "증거 리포트 내보내기",
-        command: commandLine(paths.root, "export", ["--json"]),
+        codex_prompt: "내 로컬 학습 증거를 정리해서 어떤 자료가 쌓였는지 설명해줘.",
       },
     ],
     files: {
@@ -4093,15 +4109,15 @@ function personalLearnerCockpitHtml(state) {
       font-weight: 760;
       line-height: 1.25;
     }
-    .command {
+    .prompt {
       display: block;
       margin-top: 12px;
       padding: 12px;
       border-radius: 8px;
-      background: #162019;
-      color: #f7fbf7;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 13px;
+      background: #f7fbf7;
+      color: var(--ink);
+      border: 1px solid #cfe2d5;
+      font-size: 15px;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
@@ -4176,7 +4192,7 @@ function personalLearnerCockpitHtml(state) {
           <h2 id="today-mission">오늘의 미션</h2>
           <p class="ask">${escapeHtml(state.today.goal)}</p>
           <p class="subtle">막히면: ${escapeHtml(state.today.rescue_phrase)}</p>
-          <code class="command">${escapeHtml(state.today.start_command)}</code>
+          <p class="prompt"><strong>Codex에게 이렇게 말하세요</strong><br>${escapeHtml(state.today.codex_start_prompt)}</p>
         </section>
 
         ${
@@ -4207,10 +4223,9 @@ function personalLearnerCockpitHtml(state) {
             <h3>${escapeHtml(state.journey.latest_generated_mission.title)}</h3>
             <p>${escapeHtml(state.journey.latest_generated_mission.transfer_test)}</p>
             <p class="subtle">file: ${escapeHtml(state.journey.latest_generated_mission.html)}</p>
-            <code class="command">${escapeHtml(state.journey.latest_generated_mission.start_command)}</code>
           </div>`
               : `<p class="subtle">아직 생성된 장면 artifact가 없습니다.</p>
-          <code class="command">${escapeHtml(`node scripts/english-learning-harness.mjs mission --learner-root "${state.learner_root}" --json`)}</code>`
+          <p class="prompt"><strong>Codex에게 이렇게 말하세요</strong><br>${escapeHtml(state.today.mission_prompt)}</p>`
           }
           ${
             state.journey.latest_generated_scene
@@ -4329,7 +4344,8 @@ function personalLearnerCockpitHtml(state) {
             .map(
               (action) => `<details>
             <summary>${escapeHtml(action.label)}</summary>
-            <code class="command">${escapeHtml(action.command)}</code>
+            ${action.reason ? `<p class="subtle">${escapeHtml(action.reason)}</p>` : ""}
+            <p class="prompt">${escapeHtml(action.codex_prompt)}</p>
           </details>`,
             )
             .join("")}
