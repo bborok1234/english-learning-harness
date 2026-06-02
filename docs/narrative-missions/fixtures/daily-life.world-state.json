@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "world_id": "daily-life",
+  "taste_tags": ["low-pressure", "daily-life", "practical"],
+  "level_band": "lower-intermediate",
+  "current_arc": {
+    "id": "first-week",
+    "summary": "Practice small real-life interactions without heavy lore."
+  },
+  "npc_canon": [
+    {
+      "id": "friend-1",
+      "name": "a friend",
+      "role": "low-pressure conversation partner",
+      "memory": ["prefers clear meeting plans"]
+    }
+  ],
+  "safety_constraints": {
+    "child_mode": false,
+    "avoid_topics": ["sexual content", "graphic violence", "public ranking"],
+    "max_lore_sentences_before_output": 2
+  },
+  "updated_at": "2026-06-02T00:00:00.000Z"
+}

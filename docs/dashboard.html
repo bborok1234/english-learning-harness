@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "M10 Narrative Mission Layer design",
-    "status": "M10-1 defines narrative missions as a verified transfer wrapper over Speaking Skill OS; generated worlds remain blocked until mission validator and no-gen fallback gates pass.",
+    "stage": "M10 mission validator implemented",
+    "status": "M10-2/#144 machine-readable mission/world/capability contracts exist, and M10-3/#145 rejects decorative missions that are not tied to Speaking Skill OS transfer evidence.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer design gate. The next differentiator is not generic roleplay: a story mission must advance only when the learner performs the target speaking skill and leaves transfer evidence."
+    "summary": "The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer admission gate. The harness can validate a text-first narrative mission spec before any generated story affects learner state; narrative session parity remains next."
   },
   "ssot": [
     {
@@ -596,37 +596,55 @@
       "path": "./phase-10-evidence/",
       "role": "Phase 10 narrative mission layer evidence notes",
       "kind": "source"
+    },
+    {
+      "label": "docs/narrative-missions/schemas/",
+      "path": "./narrative-missions/schemas/",
+      "role": "Narrative Mission Layer JSON schemas",
+      "kind": "source"
+    },
+    {
+      "label": "docs/narrative-missions/fixtures/",
+      "path": "./narrative-missions/fixtures/",
+      "role": "Narrative Mission Layer positive fixtures",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/lib/narrative-mission.mjs",
+      "path": "../scripts/lib/narrative-mission.mjs",
+      "role": "runtime validator for mission/world/capability contracts",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "In progress",
-      "detail": "public source is live; Speaking Skill OS exists; narrative missions are being designed as verified transfer wrappers",
+      "detail": "public source is live; Speaking Skill OS exists; narrative mission admission control now exists",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "M10 design",
-      "detail": "mission/world/capability contracts now define what AI-generated narrative must prove before implementation",
+      "value": "M10 validator",
+      "detail": "#144/#145 add schemas, fixtures, capability fallback checks, and decorative mission rejection",
       "tone": "blue"
     },
     {
       "label": "Next decision",
-      "value": "Build validator",
-      "detail": "next work is #144/#145: machine-check mission specs and reject decorative missions",
+      "value": "Build parity",
+      "detail": "next work is #146: prove one narrative mission updates the same Speaking Skill OS evidence as plain today",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
       "value": "74 issues",
-      "detail": "#143-#148 opened for M10 Narrative Mission Layer",
+      "detail": "#144/#145 are implemented on this branch; #146 is the next M10 implementation target",
       "tone": "green"
     },
     {
       "label": "Differentiator",
       "value": "Verified transfer wrapper",
-      "detail": "story progress must require the same speaking behavior that the backlog item trains",
+      "detail": "mission validator rejects story progress without a matching backlog transfer test",
       "tone": "green"
     }
   ],
@@ -700,6 +718,20 @@
       "status": "Pass",
       "evidence": "#143, docs/M10-NARRATIVE-MISSION-PRD.md, phase10-narrative-mission-plan-smoke",
       "claim": "M10 defines narrative as a verified transfer wrapper only; generated worlds and learning outcomes remain unclaimed"
+    },
+    {
+      "id": "GATE-11",
+      "label": "Narrative data contracts",
+      "status": "Pass",
+      "evidence": "#144, narrative mission schemas/fixtures, phase10-world-state-smoke",
+      "claim": "mission/world/capability contracts and light-mode fallback are machine-checkable; no outcome claim is made"
+    },
+    {
+      "id": "GATE-12",
+      "label": "Decorative mission rejection",
+      "status": "Pass",
+      "evidence": "#145, narrative mission validator, phase10-mission-spec-validator-smoke",
+      "claim": "missions must link to Speaking Skill OS backlog transfer evidence before story progress can count"
     }
   ],
   "board": [
@@ -1801,6 +1833,32 @@
             "docs/phase-10-evidence/M10-1-narrative-mission-design.md",
             "scripts/phase10-narrative-mission-plan-smoke.mjs"
           ]
+        },
+        {
+          "id": "M10-2",
+          "title": "#144 mission/world/capability contracts를 구현함",
+          "why": "모델 생성 미션이 learner state에 영향을 주기 전에 기계가 읽을 수 있는 계약과 fallback 경로가 필요했다.",
+          "done": "mission-spec, world-state, tool-capabilities JSON Schema와 positive fixture를 추가하고, world/capability validator smoke를 만들었다.",
+          "verification": "`node scripts/phase10-world-state-smoke.mjs`가 one-NPC, child-mode false, lore length, text fallback을 검사한다.",
+          "files": [
+            "docs/narrative-missions/schemas/mission-spec.schema.json",
+            "docs/narrative-missions/schemas/world-state.schema.json",
+            "docs/narrative-missions/schemas/tool-capabilities.schema.json",
+            "docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json",
+            "scripts/phase10-world-state-smoke.mjs"
+          ]
+        },
+        {
+          "id": "M10-3",
+          "title": "#145 decorative mission rejection을 구현함",
+          "why": "스토리가 멋져도 목표 speaking skill 없이 완료되면 기존 역할극과 차별점이 없다.",
+          "done": "mission validator가 backlog link, target skill, transfer test, win condition, real-world target, text fallback, claim boundary를 검사한다.",
+          "verification": "`node scripts/phase10-mission-spec-validator-smoke.mjs`가 7개 invalid mission fixture를 reject한다.",
+          "files": [
+            "scripts/lib/narrative-mission.mjs",
+            "scripts/phase10-mission-spec-validator-smoke.mjs",
+            "docs/phase-10-evidence/M10-3-mission-validator.md"
+          ]
         }
       ]
     },
@@ -1811,14 +1869,14 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "M10 Narrative Mission Layer",
-          "why": "사용자가 원하는 차별점은 일반 영어 챗봇이 아니라 Codex-native, AI-generated, multimodal-capable speaking harness다.",
-          "done": "M10-1은 설계 계약을 닫고, 다음 구현은 mission spec validator와 decorative roleplay rejection으로 들어간다.",
-          "verification": "M10-1 smoke와 dashboard render check가 통과해야 #143을 닫는다.",
+          "title": "M10 admission gate implemented",
+          "why": "generated narrative를 만들기 전에 admission validator가 장식용 역할극을 막아야 한다.",
+          "done": "#144/#145 구현은 끝났고, 다음은 validator를 실제 today/narrative session parity로 연결하는 #146이다.",
+          "verification": "world-state smoke, mission-spec validator smoke, scaffold smoke, dashboard render check가 필요하다.",
           "files": [
-            "docs/M10-NARRATIVE-MISSION-PRD.md",
-            "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
-            "docs/DATA-CONTRACTS.md"
+            "scripts/lib/narrative-mission.mjs",
+            "scripts/phase10-world-state-smoke.mjs",
+            "scripts/phase10-mission-spec-validator-smoke.mjs"
           ]
         }
       ]
@@ -1830,13 +1888,13 @@
       "cards": [
         {
           "id": "NEXT-1",
-          "title": "#144/#145 mission contracts and validator",
-          "why": "세계관 생성 전에 mission-spec이 backlog item, win condition, real-world transfer target, capability fallback을 만족하는지 자동으로 걸러야 한다.",
-          "done": "아직 미구현. 다음 PR에서 fixture schema, validator, invalid decorative mission examples를 추가한다.",
-          "verification": "validator smoke must reject missions that can be completed without the target speaking skill.",
+          "title": "#146 narrative mission parity fixture",
+          "why": "validator가 통과한 미션이 실제 세션에서 plain Speaking Skill OS와 같은 backlog evidence를 남기는지 증명해야 한다.",
+          "done": "아직 미구현. 다음 PR에서 usual-place-clarification mission을 today flow에 연결하거나 parity smoke로 같은 transfer result를 증명한다.",
+          "verification": "narrative mission parity smoke must update the same backlog item status for equivalent learner output.",
           "files": [
-            "docs/DATA-CONTRACTS.md",
-            "scripts/phase10-narrative-mission-plan-smoke.mjs"
+            "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
+            "scripts/lib/narrative-mission.mjs"
           ]
         }
       ]
@@ -2287,6 +2345,16 @@
       "name": "M10-1 narrative mission plan",
       "status": "Pass",
       "detail": "PRD/test spec/data contracts define narrative as Verified transfer wrapper; smoke verifies docs, issue links, dashboard state, and claim boundaries"
+    },
+    {
+      "name": "M10-2 narrative data contracts",
+      "status": "Pass",
+      "detail": "world-state/tool-capability smoke rejects multiple NPCs, child mode, long lore, disabled text, and missing text fallback"
+    },
+    {
+      "name": "M10-3 mission validator",
+      "status": "Pass",
+      "detail": "mission validator smoke rejects missing backlog links, skill/win-condition mismatch, required media, unsupported claims, and decorative mission completion"
     }
   ],
   "commands": [
@@ -2513,6 +2581,18 @@
     {
       "label": "View M10 issue plan",
       "command": "gh issue list --milestone \"M10 Narrative Mission Layer\""
+    },
+    {
+      "label": "Run M10 world state smoke",
+      "command": "node scripts/phase10-world-state-smoke.mjs"
+    },
+    {
+      "label": "Run M10 mission validator smoke",
+      "command": "node scripts/phase10-mission-spec-validator-smoke.mjs"
+    },
+    {
+      "label": "View next M10 parity issue",
+      "command": "gh issue view 146"
     }
   ]
 }
@@ -2521,12 +2601,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Canvas Board</h1>
-        <p class="summary">The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer design gate. The next differentiator is not generic roleplay: a story mission must advance only when the learner performs the target speaking skill and leaves transfer evidence.</p>
+        <p class="summary">The repository is PUBLIC and Codex-native onboarding is live. Speaking Skill OS has fixture evidence, research citations, owner/self pilot mechanics, learner-facing pilot mission cards, and now a Narrative Mission Layer admission gate. The harness can validate a text-first narrative mission spec before any generated story affects learner state; narrative session parity remains next.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        M10 Narrative Mission Layer design<br>
-        M10-1 defines narrative missions as a verified transfer wrapper over Speaking Skill OS; generated worlds remain blocked until mission validator and no-gen fallback gates pass.
+        M10 mission validator implemented<br>
+        M10-2/#144 machine-readable mission/world/capability contracts exist, and M10-3/#145 rejects decorative missions that are not tied to Speaking Skill OS transfer evidence.
       </div>
     </header>
 
@@ -2535,27 +2615,27 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Ultragoal</div>
           <div class="metric-value">In progress</div>
-          <p>public source is live; Speaking Skill OS exists; narrative missions are being designed as verified transfer wrappers</p>
+          <p>public source is live; Speaking Skill OS exists; narrative mission admission control now exists</p>
         </article>
         <article class="metric-card tone-blue">
           <div class="eyebrow"><span class="dot"></span>Current stage</div>
-          <div class="metric-value">M10 design</div>
-          <p>mission/world/capability contracts now define what AI-generated narrative must prove before implementation</p>
+          <div class="metric-value">M10 validator</div>
+          <p>#144/#145 add schemas, fixtures, capability fallback checks, and decorative mission rejection</p>
         </article>
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Next decision</div>
-          <div class="metric-value">Build validator</div>
-          <p>next work is #144/#145: machine-check mission specs and reject decorative missions</p>
+          <div class="metric-value">Build parity</div>
+          <p>next work is #146: prove one narrative mission updates the same Speaking Skill OS evidence as plain today</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>GitHub plan</div>
           <div class="metric-value">74 issues</div>
-          <p>#143-#148 opened for M10 Narrative Mission Layer</p>
+          <p>#144/#145 are implemented on this branch; #146 is the next M10 implementation target</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Differentiator</div>
           <div class="metric-value">Verified transfer wrapper</div>
-          <p>story progress must require the same speaking behavior that the backlog item trains</p>
+          <p>mission validator rejects story progress without a matching backlog transfer test</p>
         </article>
     </section>
 
@@ -2583,22 +2663,22 @@
             <article class="work-card">
               <div class="work-meta">
                 <strong>NOW-1</strong>
-                <span>docs/M10-NARRATIVE-MISSION-PRD.md, docs/M10-NARRATIVE-MISSION-TEST-SPEC.md, docs/DATA-CONTRACTS.md</span>
+                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-world-state-smoke.mjs, scripts/phase10-mission-spec-validator-smoke.mjs</span>
               </div>
-              <h3>M10 Narrative Mission Layer</h3>
-              <div class="card-row"><b>왜</b><p>사용자가 원하는 차별점은 일반 영어 챗봇이 아니라 Codex-native, AI-generated, multimodal-capable speaking harness다.</p></div>
-              <div class="card-row"><b>완료</b><p>M10-1은 설계 계약을 닫고, 다음 구현은 mission spec validator와 decorative roleplay rejection으로 들어간다.</p></div>
-              <div class="card-row"><b>검증</b><p>M10-1 smoke와 dashboard render check가 통과해야 #143을 닫는다.</p></div>
+              <h3>M10 admission gate implemented</h3>
+              <div class="card-row"><b>왜</b><p>generated narrative를 만들기 전에 admission validator가 장식용 역할극을 막아야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>#144/#145 구현은 끝났고, 다음은 validator를 실제 today/narrative session parity로 연결하는 #146이다.</p></div>
+              <div class="card-row"><b>검증</b><p>world-state smoke, mission-spec validator smoke, scaffold smoke, dashboard render check가 필요하다.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>NEXT-1</strong>
-                <span>docs/DATA-CONTRACTS.md, scripts/phase10-narrative-mission-plan-smoke.mjs</span>
+                <span>docs/M10-NARRATIVE-MISSION-TEST-SPEC.md, scripts/lib/narrative-mission.mjs</span>
               </div>
-              <h3>#144/#145 mission contracts and validator</h3>
-              <div class="card-row"><b>왜</b><p>세계관 생성 전에 mission-spec이 backlog item, win condition, real-world transfer target, capability fallback을 만족하는지 자동으로 걸러야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>아직 미구현. 다음 PR에서 fixture schema, validator, invalid decorative mission examples를 추가한다.</p></div>
-              <div class="card-row"><b>검증</b><p>validator smoke must reject missions that can be completed without the target speaking skill.</p></div>
+              <h3>#146 narrative mission parity fixture</h3>
+              <div class="card-row"><b>왜</b><p>validator가 통과한 미션이 실제 세션에서 plain Speaking Skill OS와 같은 backlog evidence를 남기는지 증명해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>아직 미구현. 다음 PR에서 usual-place-clarification mission을 today flow에 연결하거나 parity smoke로 같은 transfer result를 증명한다.</p></div>
+              <div class="card-row"><b>검증</b><p>narrative mission parity smoke must update the same backlog item status for equivalent learner output.</p></div>
             </article>
         </div>
       </section>
@@ -2609,26 +2689,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M8-2</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/phase8-speaking-skill-os-queue-smoke.mjs, docs/phase-8-evidence/M8-2-speaking-skill-os-queue.md, docs/ISSUE-INDEX.md</span>
-              </div>
-              <h3>#130 multi-skill diagnosis와 adaptive queue를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>실제 학습자는 한 번에 하나의 약점만 보이지 않는다. 한 샘플에서 여러 회화 약점을 잡고, 실패한 transfer work를 다음 연습 앞에 남겨야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>`diagnose`가 여러 backlog item을 만들고, queue는 needs_review/high-priority/unresolved item을 passed item보다 먼저 보여준다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 multi-skill diagnosis, repair pass 후 clarification advance, clarification fail 후 needs_review 유지까지 통과한다.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M8-3</strong>
-                <span>scripts/phase8-speaking-skill-os-seven-day-smoke.mjs, scripts/phase1-scaffold-smoke.mjs, docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md, docs/STATUS.md, docs/ISSUE-INDEX.md</span>
-              </div>
-              <h3>#132 seven-day Speaking Skill OS gate를 추가함</h3>
-              <div class="card-row"><b>왜</b><p>하루짜리 smoke만으로는 하네스가 학습 여정을 운영한다고 말하기 어렵다. 여러 날 동안 queue, retry, weekly mirror, export가 이어지는지 확인해야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>7일 fixture가 multi-skill backlog를 seed하고, daily/today를 반복하며, 실패한 clarification transfer를 retry 후 pass시키고, weekly/export evidence를 만든다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 7 sessions, backlog 4개, pass 4개, transfer attempts 5개, weekly mirror, evidence pack을 확인한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M8-4</strong>
@@ -2668,6 +2728,26 @@
               <div class="card-row"><b>왜</b><p>몰입형 세계관이 장식으로 흐르면 ChatGPT 역할극과 차이가 없다. 스토리 진행이 목표 회화 행동을 요구해야 제품 차별점이 된다.</p></div>
               <div class="card-row"><b>완료</b><p>PRD, test spec, mission/world/capability data contracts, issue plan, Claude cross-review evidence, planning smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>phase10-narrative-mission-plan-smoke가 M10 문서, 이슈 색인, 상태판, claim boundary를 검사한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-2</strong>
+                <span>docs/narrative-missions/schemas/mission-spec.schema.json, docs/narrative-missions/schemas/world-state.schema.json, docs/narrative-missions/schemas/tool-capabilities.schema.json, docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json, scripts/phase10-world-state-smoke.mjs</span>
+              </div>
+              <h3>#144 mission/world/capability contracts를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>모델 생성 미션이 learner state에 영향을 주기 전에 기계가 읽을 수 있는 계약과 fallback 경로가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>mission-spec, world-state, tool-capabilities JSON Schema와 positive fixture를 추가하고, world/capability validator smoke를 만들었다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-world-state-smoke.mjs`가 one-NPC, child-mode false, lore length, text fallback을 검사한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-3</strong>
+                <span>scripts/lib/narrative-mission.mjs, scripts/phase10-mission-spec-validator-smoke.mjs, docs/phase-10-evidence/M10-3-mission-validator.md</span>
+              </div>
+              <h3>#145 decorative mission rejection을 구현함</h3>
+              <div class="card-row"><b>왜</b><p>스토리가 멋져도 목표 speaking skill 없이 완료되면 기존 역할극과 차별점이 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>mission validator가 backlog link, target skill, transfer test, win condition, real-world target, text fallback, claim boundary를 검사한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-mission-spec-validator-smoke.mjs`가 7개 invalid mission fixture를 reject한다.</p></div>
             </article>
         </div>
       </section>
@@ -2764,6 +2844,16 @@
               <td><strong>GATE-10</strong><span>Narrative mission planning contract</span></td>
               <td><strong>Pass</strong><span>#143, docs/M10-NARRATIVE-MISSION-PRD.md, phase10-narrative-mission-plan-smoke</span></td>
               <td>M10 defines narrative as a verified transfer wrapper only; generated worlds and learning outcomes remain unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-11</strong><span>Narrative data contracts</span></td>
+              <td><strong>Pass</strong><span>#144, narrative mission schemas/fixtures, phase10-world-state-smoke</span></td>
+              <td>mission/world/capability contracts and light-mode fallback are machine-checkable; no outcome claim is made</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-12</strong><span>Decorative mission rejection</span></td>
+              <td><strong>Pass</strong><span>#145, narrative mission validator, phase10-mission-spec-validator-smoke</span></td>
+              <td>missions must link to Speaking Skill OS backlog transfer evidence before story progress can count</td>
             </tr>
         </tbody>
       </table>
@@ -2898,6 +2988,18 @@
               <strong>docs/phase-10-evidence/</strong>
               <span>Phase 10 narrative mission layer evidence notes</span>
             </a>
+            <a class="link-card source" href="./narrative-missions/schemas/">
+              <strong>docs/narrative-missions/schemas/</strong>
+              <span>Narrative Mission Layer JSON schemas</span>
+            </a>
+            <a class="link-card source" href="./narrative-missions/fixtures/">
+              <strong>docs/narrative-missions/fixtures/</strong>
+              <span>Narrative Mission Layer positive fixtures</span>
+            </a>
+            <a class="link-card source" href="../scripts/lib/narrative-mission.mjs">
+              <strong>scripts/lib/narrative-mission.mjs</strong>
+              <span>runtime validator for mission/world/capability contracts</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -2905,14 +3007,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M7-17 Korean-primary README</td>
-              <td><strong>Pass</strong><span>README.md is Korean-first, README.en.md is secondary, and bilingual public artifact/readiness smokes pass</span></td>
-            </tr>
-            <tr>
-              <td>M8-1 Speaking Skill OS core</td>
-              <td><strong>Pass</strong><span>diagnose -&gt; speaking backlog -&gt; targeted today session -&gt; transfer evidence smoke passes</span></td>
-            </tr>
             <tr>
               <td>M8-2 Speaking Skill OS queue</td>
               <td><strong>Pass</strong><span>multi-skill diagnosis and failed-transfer queue priority smoke passes</span></td>
@@ -2937,14 +3031,18 @@
               <td>M10-1 narrative mission plan</td>
               <td><strong>Pass</strong><span>PRD/test spec/data contracts define narrative as Verified transfer wrapper; smoke verifies docs, issue links, dashboard state, and claim boundaries</span></td>
             </tr>
+            <tr>
+              <td>M10-2 narrative data contracts</td>
+              <td><strong>Pass</strong><span>world-state/tool-capability smoke rejects multiple NPCs, child mode, long lore, disabled text, and missing text fallback</span></td>
+            </tr>
+            <tr>
+              <td>M10-3 mission validator</td>
+              <td><strong>Pass</strong><span>mission validator smoke rejects missing backlog links, skill/win-condition mismatch, required media, unsupported claims, and decorative mission completion</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>Run voice event import smoke</span>
-              <code>node scripts/phase4-voice-event-import-smoke.mjs</code>
-            </div>
             <div class="command">
               <span>Run image information-gap smoke</span>
               <code>node scripts/phase4-image-information-gap-smoke.mjs</code>
@@ -2973,6 +3071,10 @@
               <span>View next public distribution issue</span>
               <code>gh issue view 83</code>
             </div>
+            <div class="command">
+              <span>View next M10 parity issue</span>
+              <code>gh issue view 146</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -2981,7 +3083,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 80개 보기</summary>
+        <summary>완료 이력 82개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -3784,10 +3886,30 @@
               <div class="card-row"><b>완료</b><p>`speaking-backlog.json`, `diagnose`, `backlog`, backlog-driven `daily`/`today`, session transfer evidence, export summary를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-smoke.mjs`가 diagnose -&gt; backlog -&gt; targeted practice -&gt; transfer pass -&gt; export summary 루프를 통과한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M8-2</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/phase8-speaking-skill-os-queue-smoke.mjs, docs/phase-8-evidence/M8-2-speaking-skill-os-queue.md, docs/ISSUE-INDEX.md</span>
+              </div>
+              <h3>#130 multi-skill diagnosis와 adaptive queue를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>실제 학습자는 한 번에 하나의 약점만 보이지 않는다. 한 샘플에서 여러 회화 약점을 잡고, 실패한 transfer work를 다음 연습 앞에 남겨야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`diagnose`가 여러 backlog item을 만들고, queue는 needs_review/high-priority/unresolved item을 passed item보다 먼저 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-queue-smoke.mjs`가 multi-skill diagnosis, repair pass 후 clarification advance, clarification fail 후 needs_review 유지까지 통과한다.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M8-3</strong>
+                <span>scripts/phase8-speaking-skill-os-seven-day-smoke.mjs, scripts/phase1-scaffold-smoke.mjs, docs/phase-8-evidence/M8-3-speaking-skill-os-seven-day.md, docs/STATUS.md, docs/ISSUE-INDEX.md</span>
+              </div>
+              <h3>#132 seven-day Speaking Skill OS gate를 추가함</h3>
+              <div class="card-row"><b>왜</b><p>하루짜리 smoke만으로는 하네스가 학습 여정을 운영한다고 말하기 어렵다. 여러 날 동안 queue, retry, weekly mirror, export가 이어지는지 확인해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>7일 fixture가 multi-skill backlog를 seed하고, daily/today를 반복하며, 실패한 clarification transfer를 retry 후 pass시키고, weekly/export evidence를 만든다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase8-speaking-skill-os-seven-day-smoke.mjs`가 7 sessions, backlog 4개, pass 4개, transfer attempts 5개, weekly mirror, evidence pack을 확인한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 77개 보기</summary>
+        <summary>전체 검증 79개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -4100,12 +4222,20 @@
               <td>M10-1 narrative mission plan</td>
               <td><strong>Pass</strong><span>PRD/test spec/data contracts define narrative as Verified transfer wrapper; smoke verifies docs, issue links, dashboard state, and claim boundaries</span></td>
             </tr>
+            <tr>
+              <td>M10-2 narrative data contracts</td>
+              <td><strong>Pass</strong><span>world-state/tool-capability smoke rejects multiple NPCs, child mode, long lore, disabled text, and missing text fallback</span></td>
+            </tr>
+            <tr>
+              <td>M10-3 mission validator</td>
+              <td><strong>Pass</strong><span>mission validator smoke rejects missing backlog links, skill/win-condition mismatch, required media, unsupported claims, and decorative mission completion</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 56개 보기</summary>
+        <summary>전체 명령 59개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -4331,6 +4461,18 @@
             <div class="command">
               <span>View M10 issue plan</span>
               <code>gh issue list --milestone &quot;M10 Narrative Mission Layer&quot;</code>
+            </div>
+            <div class="command">
+              <span>Run M10 world state smoke</span>
+              <code>node scripts/phase10-world-state-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run M10 mission validator smoke</span>
+              <code>node scripts/phase10-mission-spec-validator-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View next M10 parity issue</span>
+              <code>gh issue view 146</code>
             </div>
         </div>
       </details>

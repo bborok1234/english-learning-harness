@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bborok1234/english-learning-harness/docs/narrative-missions/schemas/world-state.schema.json",
+  "title": "English Learning Harness Narrative World State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "world_id",
+    "taste_tags",
+    "level_band",
+    "current_arc",
+    "npc_canon",
+    "safety_constraints",
+    "updated_at"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "world_id": { "type": "string", "minLength": 1 },
+    "taste_tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "level_band": {
+      "enum": ["beginner", "lower-intermediate", "intermediate", "advanced"]
+    },
+    "current_arc": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "summary"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string", "minLength": 1 }
+      }
+    },
+    "npc_canon": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "role", "memory"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 },
+          "memory": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "safety_constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["child_mode", "avoid_topics", "max_lore_sentences_before_output"],
+      "properties": {
+        "child_mode": { "const": false },
+        "avoid_topics": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "max_lore_sentences_before_output": {
+          "type": "number",
+          "maximum": 2
+        }
+      }
+    },
+    "updated_at": { "type": "string", "minLength": 1 }
+  }
+}

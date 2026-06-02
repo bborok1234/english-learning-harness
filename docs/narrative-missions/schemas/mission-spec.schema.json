@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/bborok1234/english-learning-harness/docs/narrative-missions/schemas/mission-spec.schema.json",
+  "title": "English Learning Harness Narrative Mission Spec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "mission_id",
+    "world_ref",
+    "npc_ref",
+    "backlog_item_id",
+    "target_skill",
+    "learner_visible_scene",
+    "required_learner_action",
+    "transfer_test",
+    "win_condition",
+    "story_consequence",
+    "real_world_transfer_target",
+    "fallback_mode",
+    "capability_requirements",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "mission_id": { "type": "string", "minLength": 1 },
+    "world_ref": { "type": "string", "minLength": 1 },
+    "npc_ref": { "type": "string", "minLength": 1 },
+    "backlog_item_id": { "type": "string", "minLength": 1 },
+    "target_skill": {
+      "enum": ["starts", "follow_ups", "clarification", "repair", "soft_disagreement"]
+    },
+    "learner_visible_scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "setup", "ask", "example"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "setup": { "type": "string", "minLength": 1 },
+        "ask": { "type": "string", "minLength": 1 },
+        "example": { "type": "string", "minLength": 1 }
+      }
+    },
+    "required_learner_action": { "type": "string", "minLength": 1 },
+    "transfer_test": { "type": "string", "minLength": 1 },
+    "win_condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "must_pass_backlog_item"],
+      "properties": {
+        "type": { "const": "speaking_transfer_test" },
+        "must_pass_backlog_item": { "type": "string", "minLength": 1 }
+      }
+    },
+    "story_consequence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["on_pass", "on_needs_review"],
+      "properties": {
+        "on_pass": { "type": "string", "minLength": 1 },
+        "on_needs_review": { "type": "string", "minLength": 1 }
+      }
+    },
+    "real_world_transfer_target": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "fallback_mode": { "enum": ["light", "rich"] },
+    "capability_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "optional"],
+      "properties": {
+        "required": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "optional": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  }
+}

@@ -449,3 +449,19 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `docs/phase-10-evidence/M10-1-narrative-mission-design.md` records the Claude cross-review finding that a mission win condition must be equivalent to a Speaking Skill OS transfer test.
 - `scripts/phase10-narrative-mission-plan-smoke.mjs` verifies the planning artifacts, issue linkage, status/dashboard state, and claim boundaries.
 - This does not implement generated worlds yet; it creates the gate that future generated worlds must pass.
+
+#144 evidence currently shows:
+
+- `docs/narrative-missions/schemas/mission-spec.schema.json`, `world-state.schema.json`, and `tool-capabilities.schema.json` define the machine-readable M10 contracts.
+- `docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json`, `daily-life.world-state.json`, and `light.tool-capabilities.json` provide the first positive text-first fixture.
+- `scripts/lib/narrative-mission.mjs` validates world state and tool capabilities before mission state can progress.
+- `scripts/phase10-world-state-smoke.mjs` rejects multiple NPCs, child mode, long lore before output, disabled text capability, and missing text scene fallback.
+- This proves data-contract admission only; it does not implement narrative session parity.
+
+#145 evidence currently shows:
+
+- `scripts/lib/narrative-mission.mjs` validates mission specs against a Speaking Skill OS backlog item.
+- `target_skill`, `transfer_test`, and `win_condition.must_pass_backlog_item` must match the linked backlog item.
+- generated/media capabilities are optional only; text must be the required path.
+- `scripts/phase10-mission-spec-validator-smoke.mjs` rejects missing backlog links, skill mismatch, win-condition mismatch, missing real-world transfer target, media-required missions, unsupported learning claims, and decorative story-completion missions.
+- This proves decorative-mission rejection; it does not yet persist narrative mission learner evidence.

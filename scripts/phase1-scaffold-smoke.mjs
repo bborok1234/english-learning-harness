@@ -89,6 +89,15 @@ const requiredFiles = [
   "scripts/phase9-owner-pilot-smoke.mjs",
   "scripts/phase9-pilot-prompt-ux-smoke.mjs",
   "scripts/phase10-narrative-mission-plan-smoke.mjs",
+  "scripts/phase10-world-state-smoke.mjs",
+  "scripts/phase10-mission-spec-validator-smoke.mjs",
+  "scripts/lib/narrative-mission.mjs",
+  "docs/narrative-missions/schemas/mission-spec.schema.json",
+  "docs/narrative-missions/schemas/world-state.schema.json",
+  "docs/narrative-missions/schemas/tool-capabilities.schema.json",
+  "docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json",
+  "docs/narrative-missions/fixtures/daily-life.world-state.json",
+  "docs/narrative-missions/fixtures/light.tool-capabilities.json",
 ];
 
 function readJson(path) {
