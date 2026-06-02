@@ -60,6 +60,8 @@ function main() {
   const dashboard = readFileSync(resolve(repoRoot, dashboardOutput), "utf8");
   assert(localStatus.pilot.baselineReady === true, "baseline should be redacted as ready");
   assert(localStatus.pilot.completedDailySessions === 0, "daily count should be redacted");
+  assert(localStatus.pilot.next.title === "확인 질문 만들기", "local status should expose redacted next mission title");
+  assert(localStatus.pilot.next.targetSkill === "clarification", "local status should expose redacted target skill");
   assert(!JSON.stringify(localStatus).includes("I opened the app"), "local status must not include transcript");
   assert(!JSON.stringify(localStatus).includes(learnerRoot), "local status must not include local learner path");
   assert(dashboard.includes("Local real pilot"), "local dashboard should include local pilot metric");

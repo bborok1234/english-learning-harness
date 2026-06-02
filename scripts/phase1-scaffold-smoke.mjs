@@ -112,6 +112,7 @@ const requiredFiles = [
   "scripts/phase15-owner-pilot-skill-smoke.mjs",
   "scripts/phase15-owner-pilot-capture-smoke.mjs",
   "scripts/phase15-owner-pilot-next-card-smoke.mjs",
+  "scripts/phase15-owner-pilot-varied-day-missions-smoke.mjs",
   "scripts/phase10-narrative-mission-plan-smoke.mjs",
   "scripts/phase10-world-state-smoke.mjs",
   "scripts/phase10-mission-spec-validator-smoke.mjs",

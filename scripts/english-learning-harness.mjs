@@ -779,21 +779,79 @@ function day0ConversationGuide() {
   };
 }
 
-function dayPracticeGuide(dayNumber, state) {
-  const nextTitle = state.baseline ? `Pilot Day ${dayNumber}` : "Day 0 먼저 필요";
-  return {
-    title: nextTitle,
-    opening:
-      "오늘은 하나의 실제 대화 행동만 연습합니다. 긴 답보다 자연스럽게 한 번 물어보거나 이어가는 것이 목표입니다.",
-    howToRun:
-      "Codex should give a concrete situation, ask for one English sentence, then save the attempt through pilot-day.",
-    firstQuestion: {
+function pilotDayMissions() {
+  return [
+    {
+      id: "clarify-usual-place",
+      skill: "clarification",
       title: "확인 질문 만들기",
       setup:
         '친구가 이렇게 말했습니다: "Let\'s meet at the usual place after work."',
       ask: "어디에서 만나자는 뜻인지 확인하는 영어 질문을 한 문장으로 해보세요.",
       example: "Which place do you mean?",
+      evidence: "Learner asks a concrete clarification question instead of pretending to understand.",
     },
+    {
+      id: "repair-wrong-order",
+      skill: "repair",
+      title: "말실수 고치기",
+      setup: "카페에서 주문하다가 음료 이름을 잘못 말했습니다.",
+      ask: "방금 말한 주문을 정정하는 영어 문장을 한 문장으로 해보세요.",
+      example: "Sorry, I meant iced latte, not hot latte.",
+      evidence: "Learner uses a repair phrase and continues the conversation.",
+    },
+    {
+      id: "image-info-gap",
+      skill: "image_description",
+      title: "보이는 정보 설명하기",
+      setup: "상대가 사진을 못 보고 있고, 당신만 회의실 사진을 보고 있습니다.",
+      ask: "사진 속 장소를 상대가 상상할 수 있게 영어 한두 문장으로 설명해보세요.",
+      example: "It looks like a meeting room. There is a long table and a screen on the wall.",
+      evidence: "Learner transfers visible details into concrete English description.",
+    },
+    {
+      id: "soft-disagreement",
+      skill: "soft_disagreement",
+      title: "부드럽게 다르게 말하기",
+      setup: "동료가 지금 바로 야근하자고 제안했지만, 당신은 오늘은 어렵습니다.",
+      ask: "상대 기분을 상하게 하지 않고 오늘은 어렵다고 영어로 한 문장 말해보세요.",
+      example: "I understand, but I cannot stay late today.",
+      evidence: "Learner uses a soft disagreement phrase with a clear boundary.",
+    },
+    {
+      id: "follow-up-invitation",
+      skill: "follow_up",
+      title: "대화를 이어가기",
+      setup: "새로 만난 사람이 주말에 등산을 갔다고 말했습니다.",
+      ask: "그 이야기를 이어가기 위한 자연스러운 follow-up 질문을 영어로 한 문장 해보세요.",
+      example: "That sounds nice. Where did you go hiking?",
+      evidence: "Learner asks a relevant follow-up question that keeps the conversation moving.",
+    },
+  ];
+}
+
+function pilotDayMission(dayNumber) {
+  const missions = pilotDayMissions();
+  return missions[(Math.max(1, dayNumber) - 1) % missions.length];
+}
+
+function dayPracticeGuide(dayNumber, state) {
+  const nextTitle = state.baseline ? `Pilot Day ${dayNumber}` : "Day 0 먼저 필요";
+  const mission = pilotDayMission(dayNumber);
+  return {
+    title: nextTitle,
+    opening:
+      `오늘은 ${mission.title}만 연습합니다. 긴 답보다 실제 대화에서 쓸 수 있는 한 문장이 목표입니다.`,
+    howToRun:
+      "Codex should give the concrete situation, ask for one English sentence, then save the attempt through pilot-day.",
+    firstQuestion: {
+      title: mission.title,
+      setup: mission.setup,
+      ask: mission.ask,
+      example: mission.example,
+    },
+    targetSkill: mission.skill,
+    transferEvidence: mission.evidence,
     learnerRule: "답은 한 문장이면 됩니다. 예시를 그대로 조금 바꿔도 됩니다.",
   };
 }
@@ -828,12 +886,15 @@ function pilotNextAction(state) {
   }
   const completedDays = state.days.filter((day) => day.status === "complete").length;
   if (completedDays < state.minimum_valid_daily_sessions) {
+    const dayNumber = completedDays + 1;
+    const mission = pilotDayMission(dayNumber);
     return {
       command: "pilot-day",
-      day: completedDays + 1,
-      prompt:
-        '친구가 "Let\'s meet at the usual place after work."라고 말했습니다. 어디에서 만나자는 뜻인지 확인하는 질문을 영어로 한 문장만 해보세요.',
-      guide: dayPracticeGuide(completedDays + 1, state),
+      day: dayNumber,
+      missionId: mission.id,
+      targetSkill: mission.skill,
+      prompt: mission.ask,
+      guide: dayPracticeGuide(dayNumber, state),
     };
   }
   if (!state.final_sample) {

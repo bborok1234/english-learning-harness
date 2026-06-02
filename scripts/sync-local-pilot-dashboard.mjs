@@ -46,11 +46,13 @@ function runHarness(command, options) {
 
 function summarizeNextAction(nextAction) {
   if (!nextAction) return null;
+  const firstQuestion = nextAction.guide?.firstQuestion;
   return {
     phase: nextAction.command === "pilot-capture" ? nextAction.phase : nextAction.command?.replace(/^pilot-/, ""),
     day: nextAction.day ?? null,
-    title: nextAction.guide?.title ?? nextAction.card?.title ?? nextAction.command ?? "Next pilot action",
-    cardId: nextAction.card?.id ?? (nextAction.day ? `day-${nextAction.day}` : null),
+    title: firstQuestion?.title ?? nextAction.guide?.title ?? nextAction.card?.title ?? nextAction.command ?? "Next pilot action",
+    targetSkill: nextAction.targetSkill ?? nextAction.guide?.targetSkill ?? null,
+    cardId: nextAction.missionId ?? nextAction.card?.id ?? (nextAction.day ? `day-${nextAction.day}` : null),
   };
 }
 
