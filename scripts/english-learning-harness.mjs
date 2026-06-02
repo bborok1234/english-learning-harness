@@ -29,6 +29,7 @@ import {
   writeWeeklyMirror,
   writeLearnerModel,
   writeProgress,
+  writePersonalLearnerCockpit,
   writeReviewQueue,
   writeSpeakingBacklog,
   writeVocabulary,
@@ -158,6 +159,7 @@ function helpText() {
     "Usage:",
     "  node scripts/english-learning-harness.mjs setup [--name NAME] [--motivation TEXT] [--learner-root DIR] [--repair]",
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
@@ -212,6 +214,7 @@ function supportDiagnostics(options, paths) {
     nativeHooksStatus: "optional",
     nextCommands: [
       commandWithRoot("daily", learnerRoot, ["--json"]),
+      commandWithRoot("cockpit", learnerRoot, ["--json"]),
       commandWithRoot("diagnose", learnerRoot, ["--say", JSON.stringify("I get stuck when I speak."), "--json"]),
       commandWithRoot("backlog", learnerRoot, ["--json"]),
       commandWithRoot("pilot-status", learnerRoot, ["--json"]),
@@ -322,6 +325,22 @@ function daily(options) {
     learnerRoot: cockpit.learner_root,
     cockpit,
     claimBoundary: cockpit.claim_boundary,
+  };
+}
+
+function cockpit(options) {
+  const result = writePersonalLearnerCockpit(options.learnerRoot, options.date || new Date());
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: result.state.learner_root,
+    cockpitStatePath: result.cockpitStatePath,
+    cockpitPath: result.cockpitPath,
+    cockpitUrl: result.cockpitUrl,
+    todayAction: result.state.today,
+    speakingSkillOS: result.state.speaking_skill_os,
+    journey: result.state.journey,
+    claimBoundary: result.state.claim_boundary,
   };
 }
 
@@ -1315,6 +1334,10 @@ function run() {
   }
   if (command === "daily") {
     output(daily(options), options.json);
+    return;
+  }
+  if (command === "cockpit") {
+    output(cockpit(options), options.json);
     return;
   }
   if (command === "home") {

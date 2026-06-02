@@ -85,7 +85,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - 복습할 표현과 다음 상황 연습을 제안합니다.
 - 연습 후 mini mirror를 만듭니다.
 - 주간 mirror로 학습 흐름을 보여줍니다.
-- 필요하면 learner home page를 로컬에 생성합니다.
+- 매일 열어볼 수 있는 개인 cockpit을 로컬에 생성합니다.
 
 이 repo의 스크립트는 그 경험 아래에서 움직이는 엔진입니다. Codex, maintainer, setup, verification을 위한 것이지 학습자가 직접 조작해야 하는 제품 표면이 아닙니다.
 
@@ -138,6 +138,8 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 ├── speaking-backlog.json
 ├── vocabulary.json
 ├── review-queue.json
+├── cockpit-state.json
+├── cockpit.html
 ├── home.html
 ├── journal/
 └── artifacts/
@@ -154,6 +156,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - review queue 상태
 - learner model signal
 - weekly mirror
+- personal cockpit state/html
 - local validation export
 
 ## 첫 세션 후 기대하는 느낌
@@ -165,6 +168,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - 업데이트된 progress file
 - 세션을 설명하는 mini mirror
 - 다음 연습 제안
+- 매일 다시 열어볼 수 있는 `cockpit.html`
 - 선택적으로 열어볼 수 있는 `home.html` journey view
 
 경험은 단순해야 합니다. 조금 말하고, 유용한 mirror를 받고, 표현 하나를 남기고, 내일 다시 돌아옵니다.
@@ -234,6 +238,7 @@ node scripts/english-learning-harness.mjs setup
 node scripts/english-learning-harness.mjs diagnose --say "I don't know how to say it, but coffee good." --json
 node scripts/english-learning-harness.mjs backlog --json
 node scripts/english-learning-harness.mjs daily --json
+node scripts/english-learning-harness.mjs cockpit --json
 node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
 node scripts/english-learning-harness.mjs weekly --json
 node scripts/english-learning-harness.mjs home --json
@@ -367,6 +372,7 @@ node scripts/phase7-open-source-readiness-smoke.mjs
 node scripts/phase7-open-source-history-audit-smoke.mjs
 node scripts/phase7-publication-preflight.mjs
 node scripts/phase1-scaffold-smoke.mjs
+node scripts/personal-learner-cockpit-smoke.mjs
 node scripts/generate-dashboard.mjs
 node scripts/generate-learner-cockpit.mjs
 node scripts/ops-dashboard-smoke.mjs

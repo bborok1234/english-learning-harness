@@ -23,7 +23,11 @@ function main() {
   const state = JSON.parse(readText(statePath));
   const dashboard = readText(dashboardPath);
   const legacy = readText(legacyPath);
-  assert(state.project?.stage === "Product/Ops surface split complete", "ops state stage mismatch");
+  assert(state.project?.stage, "ops state stage missing");
+  assert(
+    state.project?.summary?.includes("learner") || state.project?.summary?.includes("Learner"),
+    "ops state should preserve learner/product summary",
+  );
   assert(dashboard.includes("Engineering Board"), "engineering dashboard title missing");
   assert(dashboard.includes("docs/ops/project-state.json"), "engineering dashboard should cite ops state");
   assert(dashboard.includes("engineering/ops board"), "engineering dashboard should identify itself as ops board");

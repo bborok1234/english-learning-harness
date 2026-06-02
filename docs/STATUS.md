@@ -101,6 +101,7 @@ What is complete:
 - M8-4 research basis citation map ties output practice, interaction repair, corrective feedback, retrieval, task-based scenarios, CEFR online interaction, and claim boundaries to visible product surfaces.
 - M9 Real Learner Pilot Bridge is open. M9-1 adds owner/self pilot state and command surface without assuming a personal name. M9-3 now replaces internal pilot labels with learner-facing mission cards.
 - M10 Narrative Mission Layer is complete as a local mechanics gate. M10-1 defines the PRD/test contract, M10-2 adds machine-readable contracts, M10-3 rejects decorative missions, M10-4 proves narrative/plain transfer parity, M10-5 proves no-generation fallback, and M10-6 records closeout with blocked claims still visible.
+- AIOS-1 personal cockpit runtime is implemented for #154. It connects real learner-root state to `cockpit-state.json` and `cockpit.html` so today's mission, Speaking Skill OS, multimodal evidence, and 7-day/30-day journey windows appear in one learner product surface.
 
 What is not started:
 - Real user validation.
@@ -303,6 +304,10 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] M10-5: Add capability router and no-gen fallback gate (#147). Text-only missions complete and write evidence; required image/realtime voice and missing text fallback are rejected.
 - [x] M10-6: Close narrative mission gate and dashboard (#148). M10 gate smoke, claim guard, dashboard closeout, and milestone direction review are in place.
 
+### Phase 11 AI-Native Learning OS
+
+- [x] AIOS-1: Generate a personal learner cockpit from real learner-root state. `cockpit` writes `cockpit-state.json` and `cockpit.html`, connecting today's mission, Speaking Skill OS, due review, multimodal interaction evidence, and 7-day/30-day journey windows.
+
 ## SSOT Structure
 
 - `DESIGN.md` — product/design/UX source of truth.
@@ -328,6 +333,7 @@ Start from the verified/fallback Phase 0 constraints.
 - `docs/M10-NARRATIVE-MISSION-PRD.md` — Narrative Mission Layer product boundary and claim guardrails.
 - `docs/M10-NARRATIVE-MISSION-TEST-SPEC.md` — M10 planning, validator, fallback, parity, and closeout gates.
 - `docs/phase-10-evidence/` — Phase 10 narrative mission layer evidence notes.
+- `docs/phase-11-evidence/` — AI-native learning operating-system integration evidence notes.
 - `docs/PILOT-PROMPTS.md` — learner-facing owner pilot prompt contract and rejected bad-prompt examples.
 - `docs/STATUS.md` — human-readable execution status and next-step summary.
 - `design/` — detailed design library and historical decision records.

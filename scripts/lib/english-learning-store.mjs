@@ -44,6 +44,8 @@ export function learnerPaths(learnerRoot = defaultLearnerRoot()) {
     speakingOsDir: resolve(root, "artifacts/speaking-os"),
     weeklyMirrorDir: resolve(root, "artifacts/weekly"),
     learnerHome: resolve(root, "home.html"),
+    learnerCockpitState: resolve(root, "cockpit-state.json"),
+    learnerCockpit: resolve(root, "cockpit.html"),
   };
 }
 
@@ -1686,6 +1688,428 @@ export function writeLearnerHome(learnerRoot = defaultLearnerRoot(), date = new 
     homePath: paths.learnerHome,
     homeUrl: `file://${paths.learnerHome}`,
     cockpit,
+  };
+}
+
+function dateWithinDays(dateValue, now, days) {
+  if (!dateValue || !Number.isFinite(Date.parse(dateValue))) return false;
+  const then = new Date(dateValue.length === 10 ? `${dateValue}T00:00:00.000Z` : dateValue);
+  const delta = now.getTime() - then.getTime();
+  return delta >= 0 && delta <= days * 86400000;
+}
+
+function buildJourneyWindow(artifacts, now, days) {
+  const windowArtifacts = artifacts.filter((artifact) => dateWithinDays(artifact.date, now, days));
+  const events = interactionEventsFromArtifacts(windowArtifacts);
+  return {
+    days,
+    session_count: windowArtifacts.length,
+    event_count: events.length,
+    modalities: buildInteractionEventSummary(events).modalities,
+    saved_phrases: uniqueRecent(
+      windowArtifacts.map((artifact) => artifact.mirror?.reviewPhrase ?? artifact.mirror?.recast ?? ""),
+      8,
+    ),
+    transfer_targets: buildInteractionEventSummary(events).transfer_targets,
+  };
+}
+
+function latestPilotReport(paths) {
+  const pilotDir = resolve(paths.root, "artifacts/pilot");
+  if (!existsSync(pilotDir)) return null;
+  const reports = readdirSync(pilotDir)
+    .filter((entry) => /^pilot-report-.*\.json$/.test(entry))
+    .sort();
+  if (!reports.length) return null;
+  const reportPath = resolve(pilotDir, reports.at(-1));
+  const report = JSON.parse(readFileSync(reportPath, "utf8"));
+  return {
+    path: relative(paths.root, reportPath),
+    generated_at: report.generated_at,
+    daily_session_count: report.daily_session_count,
+    decision: report.rubric?.decision ?? "",
+    claim_boundary: report.claim_boundary,
+  };
+}
+
+export function buildPersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const dailyCockpit = buildDailyCockpit(paths.root, date);
+  const progress = readProgress(paths.progress);
+  const learnerModel = readLearnerModel(paths.learnerModel);
+  const reviewQueue = readReviewQueue(paths.reviewQueue);
+  const speakingBacklog = readSpeakingBacklog(paths.speakingBacklog);
+  const vocabulary = readVocabulary(paths.vocabulary);
+  const artifacts = readSessionArtifacts(paths, progress);
+  const interactionEvents = interactionEventsFromArtifacts(artifacts);
+  const weeklyMirror = readLatestWeeklyMirror(paths.root);
+  const latestReport = latestPilotReport(paths);
+  const nextBacklog = dailyCockpit.speaking_os.next_item;
+  const nextCommand = commandLine(paths.root, "today", [
+    "--say",
+    JSON.stringify(nextBacklog?.drill_prompt || "I want to practice today."),
+  ]);
+
+  return {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    learner_root: paths.root,
+    surface: {
+      name: "English Learning Harness Personal Cockpit",
+      audience: "한국인 영어 회화 학습자",
+      purpose: "오늘의 말하기 미션, 내 약점, 복습, 멀티모달 증거, 7일/30일 여정을 한 화면에서 이어줍니다.",
+    },
+    today: {
+      title: dailyCockpit.suggested_scenario.title,
+      goal: dailyCockpit.suggested_scenario.goal,
+      rescue_phrase: dailyCockpit.suggested_scenario.rescue_phrase,
+      mode: dailyCockpit.suggested_scenario.mode,
+      selection_reason: dailyCockpit.suggested_scenario.selection_reason,
+      start_command: nextCommand,
+    },
+    return_state: dailyCockpit.return_state,
+    speaking_skill_os: {
+      backlog_count: speakingBacklog.items.length,
+      open_count: speakingBacklog.items.filter((item) => ["open", "needs_review", "in_progress"].includes(item.status)).length,
+      passed_count: speakingBacklog.items.filter((item) => item.status === "passed").length,
+      next_item: nextBacklog,
+      skill_evidence: skillEvidenceSummary(learnerModel),
+      average_utterance_words: learnerModel.baseline.average_utterance_words,
+      repair_phrase_count: learnerModel.baseline.repair_phrase_count,
+    },
+    review: {
+      due_count: dailyCockpit.due_review.count,
+      due_items: dailyCockpit.due_review.items,
+      total_review_items: reviewQueue.items.length,
+      saved_phrase_count: vocabulary.personal_phrases.length,
+      recent_saved_phrases: phraseVault(paths.root).slice(-5).reverse(),
+    },
+    multimodal: {
+      summary: buildInteractionEventSummary(interactionEvents),
+      recent_events: interactionEvents.slice(-5).map((event) => ({
+        modality: event.modality,
+        learner_intent: event.learner_intent,
+        trouble_source: event.trouble_source,
+        saved_phrase: event.saved_phrase,
+        transfer_targets: event.transfer_targets ?? [],
+      })),
+      claim_boundary:
+        "Multimodal entries are local interaction events. They do not judge pronunciation, image understanding, or real-world transfer.",
+    },
+    journey: {
+      seven_day: buildJourneyWindow(artifacts, date, 7),
+      thirty_day: buildJourneyWindow(artifacts, date, 30),
+      latest_weekly_mirror: weeklyMirror
+        ? {
+            generated_at: weeklyMirror.generated_at,
+            window: weeklyMirror.window,
+            next_focus: weeklyMirror.next_focus,
+            interaction_event_summary: weeklyMirror.interaction_event_summary,
+          }
+        : null,
+      latest_report: latestReport,
+    },
+    next_actions: [
+      {
+        label: "오늘 미션 시작",
+        command: nextCommand,
+      },
+      {
+        label: "복습 확인",
+        command: commandLine(paths.root, "review"),
+      },
+      {
+        label: "7일 요약 만들기",
+        command: commandLine(paths.root, "weekly"),
+      },
+      {
+        label: "증거 리포트 내보내기",
+        command: commandLine(paths.root, "export", ["--json"]),
+      },
+    ],
+    files: {
+      state: relative(paths.root, paths.learnerCockpitState),
+      html: relative(paths.root, paths.learnerCockpit),
+      home: relative(paths.root, paths.learnerHome),
+      latest_journal: dailyCockpit.latest_journal,
+      latest_weekly_mirror: dailyCockpit.latest_weekly_mirror,
+    },
+    claim_boundary:
+      "This cockpit is a local learner product surface. It connects practice evidence and next actions, but does not certify fluency or guarantee improvement.",
+  };
+}
+
+function personalLearnerCockpitHtml(state) {
+  const os = state.speaking_skill_os;
+  const nextItem = os.next_item;
+  const multimodal = state.multimodal.summary;
+  const seven = state.journey.seven_day;
+  const thirty = state.journey.thirty_day;
+
+  return `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>English Learning Personal Cockpit</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #152019;
+      --muted: #5a675f;
+      --line: #d7ded8;
+      --paper: #f6f8f2;
+      --panel: #ffffff;
+      --green: #2f7655;
+      --blue: #2e6689;
+      --amber: #9a6400;
+      --soft-green: #e8f3ec;
+      --soft-blue: #eaf2f7;
+      --soft-amber: #fff1d7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(30px, 5vw, 52px); line-height: 1.08; letter-spacing: 0; }
+    h2 { font-size: 21px; line-height: 1.2; }
+    h3 { font-size: 15px; }
+    header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 20px;
+    }
+    .subtle { color: var(--muted); }
+    .badge {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-width: 190px;
+    }
+    .badge strong { display: block; font-size: 22px; color: var(--green); }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.75fr);
+      gap: 16px;
+      margin-top: 18px;
+      align-items: start;
+    }
+    .stack { display: grid; gap: 16px; }
+    section, .panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .mission {
+      background: var(--soft-green);
+      border-color: #cfe2d5;
+    }
+    .mission .ask {
+      margin-top: 12px;
+      font-size: 24px;
+      font-weight: 760;
+      line-height: 1.25;
+    }
+    .command {
+      display: block;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #162019;
+      color: #f7fbf7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfa;
+    }
+    .metric b {
+      display: block;
+      color: var(--green);
+      font-size: 24px;
+      line-height: 1.1;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: #fbfcfa;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 8px; }
+    li strong { color: var(--green); }
+    details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 12px;
+    }
+    details + details { margin-top: 8px; }
+    summary { cursor: pointer; font-weight: 700; }
+    .blue { background: var(--soft-blue); border-color: #d2e3ec; }
+    .amber { background: var(--soft-amber); border-color: #ead5a8; }
+    .boundary { border-left: 6px solid var(--amber); }
+    @media (max-width: 880px) {
+      header, .layout { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>오늘의 영어 cockpit</h1>
+        <p class="subtle">${escapeHtml(state.surface.purpose)}</p>
+      </div>
+      <div class="badge">
+        <span>30일 여정</span>
+        <strong>${escapeHtml(thirty.session_count)}회</strong>
+        <span class="subtle">${escapeHtml(state.return_state.message)}</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="mission" aria-labelledby="today-mission">
+          <h2 id="today-mission">오늘의 미션</h2>
+          <p class="ask">${escapeHtml(state.today.goal)}</p>
+          <p class="subtle">막히면: ${escapeHtml(state.today.rescue_phrase)}</p>
+          <code class="command">${escapeHtml(state.today.start_command)}</code>
+        </section>
+
+        <section aria-labelledby="speaking-os">
+          <h2 id="speaking-os">Speaking Skill OS</h2>
+          ${
+            nextItem
+              ? `<div class="panel blue">
+            <h3>${escapeHtml(nextItem.label)}</h3>
+            <p>${escapeHtml(nextItem.target_behavior)}</p>
+            <p class="subtle">Transfer test: ${escapeHtml(nextItem.transfer_test)}</p>
+          </div>`
+              : '<p class="subtle">아직 약점 카드가 없습니다. diagnose로 첫 speaking backlog를 만들 수 있습니다.</p>'
+          }
+          <div class="metrics">
+            <div class="metric"><span>Open</span><b>${escapeHtml(os.open_count)}</b></div>
+            <div class="metric"><span>Passed</span><b>${escapeHtml(os.passed_count)}</b></div>
+            <div class="metric"><span>Avg words</span><b>${escapeHtml(os.average_utterance_words)}</b></div>
+          </div>
+        </section>
+
+        <section aria-labelledby="multimodal">
+          <h2 id="multimodal">멀티모달 학습 증거</h2>
+          <div class="metrics">
+            <div class="metric"><span>Events</span><b>${escapeHtml(multimodal.event_count)}</b></div>
+            <div class="metric"><span>7일</span><b>${escapeHtml(seven.event_count)}</b></div>
+            <div class="metric"><span>30일</span><b>${escapeHtml(thirty.event_count)}</b></div>
+          </div>
+          <div class="chips">
+            ${(multimodal.modalities.length ? multimodal.modalities : ["text-first"]).map((item) => `<span class="chip">${escapeHtml(item)}</span>`).join("")}
+          </div>
+          <details>
+            <summary>최근 interaction events</summary>
+            ${htmlList(
+              state.multimodal.recent_events,
+              (event) => `<strong>${escapeHtml(event.modality)}</strong> ${escapeHtml(event.learner_intent)}<br><span class="subtle">${escapeHtml(event.saved_phrase)}</span>`,
+              "아직 interaction event가 없습니다.",
+            )}
+          </details>
+        </section>
+
+        <section aria-labelledby="journey">
+          <h2 id="journey">7일 / 30일 여정</h2>
+          <div class="metrics">
+            <div class="metric"><span>7일 세션</span><b>${escapeHtml(seven.session_count)}</b></div>
+            <div class="metric"><span>30일 세션</span><b>${escapeHtml(thirty.session_count)}</b></div>
+            <div class="metric"><span>저장 표현</span><b>${escapeHtml(state.review.saved_phrase_count)}</b></div>
+          </div>
+          <details open>
+            <summary>다음 focus</summary>
+            <p>${escapeHtml(state.journey.latest_weekly_mirror?.next_focus?.prompt || "오늘 한 문장을 말하고 weekly mirror를 만들어보세요.")}</p>
+          </details>
+        </section>
+      </div>
+
+      <aside class="stack">
+        <section aria-labelledby="review">
+          <h2 id="review">복습과 내 표현</h2>
+          <p class="subtle">오늘 due review: ${escapeHtml(state.review.due_count)}개</p>
+          ${htmlList(
+            state.review.due_items,
+            (item) => `<strong>${escapeHtml(item.text)}</strong><br><span class="subtle">${escapeHtml(item.prompt)}</span>`,
+            "지금 복습할 문장은 없습니다.",
+          )}
+        </section>
+
+        <section aria-labelledby="actions">
+          <h2 id="actions">다음 행동</h2>
+          ${state.next_actions
+            .map(
+              (action) => `<details>
+            <summary>${escapeHtml(action.label)}</summary>
+            <code class="command">${escapeHtml(action.command)}</code>
+          </details>`,
+            )
+            .join("")}
+        </section>
+
+        <section class="boundary" aria-labelledby="boundary">
+          <h2 id="boundary">경계</h2>
+          <p>${escapeHtml(state.claim_boundary)}</p>
+          <p class="subtle">${escapeHtml(state.multimodal.claim_boundary)}</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
+`;
+}
+
+export function writePersonalLearnerCockpit(learnerRoot = defaultLearnerRoot(), date = new Date()) {
+  const paths = ensureLearnerStore(learnerRoot);
+  const state = buildPersonalLearnerCockpit(paths.root, date);
+  const html = personalLearnerCockpitHtml(state);
+  writeFileSync(paths.learnerCockpitState, `${JSON.stringify(state, null, 2)}\n`);
+  writeFileSync(paths.learnerCockpit, html);
+  return {
+    cockpitStatePath: paths.learnerCockpitState,
+    cockpitPath: paths.learnerCockpit,
+    cockpitUrl: `file://${paths.learnerCockpit}`,
+    state,
   };
 }
 

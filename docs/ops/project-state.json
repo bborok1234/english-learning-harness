@@ -3,11 +3,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Product/Ops surface split complete",
-    "status": "Learner-facing product cockpit and engineering/ops dashboard are separated with dedicated SSOT files and smoke checks.",
+    "stage": "AI-native Learning OS in progress",
+    "status": "AIOS-1 personal learner cockpit runtime is implemented and verified for #154.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now keeps learner product surfaces separate from engineering operations. Learner cockpit state lives under docs/product, while goal/issue/evidence operations live under docs/ops.",
-    "nextGoal": "Complete product/ops surface split, then resume the next large learner-value goal against the separated product cockpit and ops board.",
+    "summary": "English Learning Harness now has a learner-root personal cockpit that connects daily mission, Speaking Skill OS, multimodal interaction evidence, and 7-day/30-day journey windows. The larger AI-native OS goal remains active.",
+    "nextGoal": "Expand the personal cockpit into richer generated missions/artifacts while keeping product surface and ops dashboard separated.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -289,6 +289,24 @@
       "path": "./product/learner-cockpit.html",
       "role": "generated learner-facing product cockpit preview",
       "kind": "generated"
+    },
+    {
+      "label": "docs/phase-11-evidence/",
+      "path": "./phase-11-evidence/",
+      "role": "AI-native learning OS integration evidence notes",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md",
+      "path": "./phase-11-evidence/AIOS-1-personal-cockpit-runtime.md",
+      "role": "AIOS-1 personal cockpit runtime evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/personal-learner-cockpit-smoke.mjs",
+      "path": "../scripts/personal-learner-cockpit-smoke.mjs",
+      "role": "personal learner cockpit runtime smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -1608,6 +1626,21 @@
             "scripts/product-surface-smoke.mjs",
             "scripts/ops-dashboard-smoke.mjs"
           ]
+        },
+        {
+          "id": "AIOS-1",
+          "title": "#154 개인 learner cockpit runtime 구현",
+          "why": "repo-level preview만으로는 학습자가 매일 들어오는 제품 표면이 아니다. 실제 learner root의 evidence와 next action을 한 화면에 연결해야 한다.",
+          "done": "`cockpit` command가 learner-root `cockpit-state.json`과 `cockpit.html`을 생성하고 daily mission, Speaking Skill OS, due review, text/voice/image interaction evidence, 7일/30일 journey window를 연결한다.",
+          "verification": "`node scripts/personal-learner-cockpit-smoke.mjs`가 fixture learner에서 diagnosis, text/voice/image sessions, weekly mirror, cockpit render, product-surface leak guard를 검증한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/personal-learner-cockpit-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md",
+            "docs/ISSUE-INDEX.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -1643,6 +1676,16 @@
           "files": [
             "docs/STATUS.md",
             "docs/phase-9-evidence/"
+          ]
+        },
+        {
+          "id": "AIOS-NEXT",
+          "title": "Next: generated mission/artifact layer를 personal cockpit에 연결",
+          "why": "큰 goal은 매일 새로운 학습 장면과 증거를 생성하는 AI-native OS다. 개인 cockpit 다음에는 narrative/multimodal/generated artifacts가 같은 표면에서 자연스럽게 시작되어야 한다.",
+          "done": "아직 미구현.",
+          "verification": "다음 PR에서 generated mission artifact smoke와 product cockpit integration smoke로 검증한다.",
+          "files": [
+            "docs/ops/project-state.json"
           ]
         }
       ]
@@ -2123,6 +2166,11 @@
       "name": "Product/Ops surface split smoke",
       "status": "Pass",
       "detail": "product-surface-smoke, ops-dashboard-smoke, M10 closeout gate, phase1 scaffold smoke, and git diff --check passed."
+    },
+    {
+      "name": "AIOS-1 personal learner cockpit",
+      "status": "Pass",
+      "detail": "personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard."
     }
   ],
   "commands": [
@@ -2401,6 +2449,14 @@
     {
       "label": "Run ops dashboard smoke",
       "command": "node scripts/ops-dashboard-smoke.mjs"
+    },
+    {
+      "label": "Run personal learner cockpit smoke",
+      "command": "node scripts/personal-learner-cockpit-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-1 issue",
+      "command": "gh issue view 154"
     }
   ]
 }

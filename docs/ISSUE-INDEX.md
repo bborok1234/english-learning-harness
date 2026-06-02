@@ -488,3 +488,16 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `scripts/phase10-narrative-mission-gate-smoke.mjs` runs M10 planning, world-state, validator, parity, fallback, and claim-guard smokes.
 - `docs/phase-10-evidence/M10-6-narrative-mission-closeout.md` records the M10 direction review and next goal candidate.
 - M10 can close as local narrative-transfer mechanics complete, not as real learner outcome proof.
+
+## Phase 11 AI-Native Learning OS
+
+| Issue | Work | Default Decision |
+|---|---|---|
+| #154 | AIOS-1: Generate personal learner cockpit from runtime state | continue |
+
+#154 evidence currently shows:
+
+- `node scripts/english-learning-harness.mjs cockpit` writes `cockpit-state.json` and `cockpit.html` under the learner root.
+- The cockpit connects today's mission, Speaking Skill OS, due review, multimodal interaction evidence, and 7-day/30-day journey windows.
+- `scripts/personal-learner-cockpit-smoke.mjs` creates text, voice, and image session evidence, generates a weekly mirror, renders the cockpit HTML, and verifies no engineering PR/issue/smoke language leaks into the learner product surface.
+- This proves local personal cockpit mechanics and evidence aggregation only. It does not prove learning outcomes or realtime voice.
