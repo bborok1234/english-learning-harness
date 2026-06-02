@@ -405,11 +405,11 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "Product/Ops surface split complete",
-    "status": "Learner-facing product cockpit and engineering/ops dashboard are separated with dedicated SSOT files and smoke checks.",
+    "stage": "AI-native Learning OS in progress",
+    "status": "AIOS-1 personal learner cockpit runtime is implemented and verified for #154.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now keeps learner product surfaces separate from engineering operations. Learner cockpit state lives under docs/product, while goal/issue/evidence operations live under docs/ops.",
-    "nextGoal": "Complete product/ops surface split, then resume the next large learner-value goal against the separated product cockpit and ops board.",
+    "summary": "English Learning Harness now has a learner-root personal cockpit that connects daily mission, Speaking Skill OS, multimodal interaction evidence, and 7-day/30-day journey windows. The larger AI-native OS goal remains active.",
+    "nextGoal": "Expand the personal cockpit into richer generated missions/artifacts while keeping product surface and ops dashboard separated.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -691,6 +691,24 @@
       "path": "./product/learner-cockpit.html",
       "role": "generated learner-facing product cockpit preview",
       "kind": "generated"
+    },
+    {
+      "label": "docs/phase-11-evidence/",
+      "path": "./phase-11-evidence/",
+      "role": "AI-native learning OS integration evidence notes",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md",
+      "path": "./phase-11-evidence/AIOS-1-personal-cockpit-runtime.md",
+      "role": "AIOS-1 personal cockpit runtime evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/personal-learner-cockpit-smoke.mjs",
+      "path": "../scripts/personal-learner-cockpit-smoke.mjs",
+      "role": "personal learner cockpit runtime smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -2010,6 +2028,21 @@
             "scripts/product-surface-smoke.mjs",
             "scripts/ops-dashboard-smoke.mjs"
           ]
+        },
+        {
+          "id": "AIOS-1",
+          "title": "#154 개인 learner cockpit runtime 구현",
+          "why": "repo-level preview만으로는 학습자가 매일 들어오는 제품 표면이 아니다. 실제 learner root의 evidence와 next action을 한 화면에 연결해야 한다.",
+          "done": "`cockpit` command가 learner-root `cockpit-state.json`과 `cockpit.html`을 생성하고 daily mission, Speaking Skill OS, due review, text/voice/image interaction evidence, 7일/30일 journey window를 연결한다.",
+          "verification": "`node scripts/personal-learner-cockpit-smoke.mjs`가 fixture learner에서 diagnosis, text/voice/image sessions, weekly mirror, cockpit render, product-surface leak guard를 검증한다.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/english-learning-harness.mjs",
+            "scripts/personal-learner-cockpit-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md",
+            "docs/ISSUE-INDEX.md",
+            "README.md"
+          ]
         }
       ]
     },
@@ -2045,6 +2078,16 @@
           "files": [
             "docs/STATUS.md",
             "docs/phase-9-evidence/"
+          ]
+        },
+        {
+          "id": "AIOS-NEXT",
+          "title": "Next: generated mission/artifact layer를 personal cockpit에 연결",
+          "why": "큰 goal은 매일 새로운 학습 장면과 증거를 생성하는 AI-native OS다. 개인 cockpit 다음에는 narrative/multimodal/generated artifacts가 같은 표면에서 자연스럽게 시작되어야 한다.",
+          "done": "아직 미구현.",
+          "verification": "다음 PR에서 generated mission artifact smoke와 product cockpit integration smoke로 검증한다.",
+          "files": [
+            "docs/ops/project-state.json"
           ]
         }
       ]
@@ -2525,6 +2568,11 @@
       "name": "Product/Ops surface split smoke",
       "status": "Pass",
       "detail": "product-surface-smoke, ops-dashboard-smoke, M10 closeout gate, phase1 scaffold smoke, and git diff --check passed."
+    },
+    {
+      "name": "AIOS-1 personal learner cockpit",
+      "status": "Pass",
+      "detail": "personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard."
     }
   ],
   "commands": [
@@ -2803,6 +2851,14 @@
     {
       "label": "Run ops dashboard smoke",
       "command": "node scripts/ops-dashboard-smoke.mjs"
+    },
+    {
+      "label": "Run personal learner cockpit smoke",
+      "command": "node scripts/personal-learner-cockpit-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-1 issue",
+      "command": "gh issue view 154"
     }
   ]
 }
@@ -2811,12 +2867,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">English Learning Harness now keeps learner product surfaces separate from engineering operations. Learner cockpit state lives under docs/product, while goal/issue/evidence operations live under docs/ops.</p>
+        <p class="summary">English Learning Harness now has a learner-root personal cockpit that connects daily mission, Speaking Skill OS, multimodal interaction evidence, and 7-day/30-day journey windows. The larger AI-native OS goal remains active.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-02</strong>
-        Product/Ops surface split complete<br>
-        Learner-facing product cockpit and engineering/ops dashboard are separated with dedicated SSOT files and smoke checks.
+        AI-native Learning OS in progress<br>
+        AIOS-1 personal learner cockpit runtime is implemented and verified for #154.
       </div>
     </header>
 
@@ -2866,7 +2922,7 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>2</span>
+          <span>3</span>
         </header>
         <div class="column-cards">
 
@@ -2890,6 +2946,16 @@
               <div class="card-row"><b>완료</b><p>아직 미구현. 다음 goal은 #137 owner pilot report/transcript bridge와 #139 readiness gate를 묶는 것이 적절하다.</p></div>
               <div class="card-row"><b>검증</b><p>pilot report smoke, pilot readiness gate smoke, dashboard render check.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-NEXT</strong>
+                <span>docs/ops/project-state.json</span>
+              </div>
+              <h3>Next: generated mission/artifact layer를 personal cockpit에 연결</h3>
+              <div class="card-row"><b>왜</b><p>큰 goal은 매일 새로운 학습 장면과 증거를 생성하는 AI-native OS다. 개인 cockpit 다음에는 narrative/multimodal/generated artifacts가 같은 표면에서 자연스럽게 시작되어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>아직 미구현.</p></div>
+              <div class="card-row"><b>검증</b><p>다음 PR에서 generated mission artifact smoke와 product cockpit integration smoke로 검증한다.</p></div>
+            </article>
         </div>
       </section>
       <section class="board-column compact tone-green">
@@ -2899,16 +2965,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>M10-2</strong>
-                <span>docs/narrative-missions/schemas/mission-spec.schema.json, docs/narrative-missions/schemas/world-state.schema.json, docs/narrative-missions/schemas/tool-capabilities.schema.json, docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json, scripts/phase10-world-state-smoke.mjs</span>
-              </div>
-              <h3>#144 mission/world/capability contracts를 구현함</h3>
-              <div class="card-row"><b>왜</b><p>모델 생성 미션이 learner state에 영향을 주기 전에 기계가 읽을 수 있는 계약과 fallback 경로가 필요했다.</p></div>
-              <div class="card-row"><b>완료</b><p>mission-spec, world-state, tool-capabilities JSON Schema와 positive fixture를 추가하고, world/capability validator smoke를 만들었다.</p></div>
-              <div class="card-row"><b>검증</b><p>`node scripts/phase10-world-state-smoke.mjs`가 one-NPC, child-mode false, lore length, text fallback을 검사한다.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>M10-3</strong>
@@ -2958,6 +3014,16 @@
               <div class="card-row"><b>왜</b><p>학습자가 보는 제품 cockpit과 Codex/maintainer가 보는 issue·PR·gate 운영판이 섞이면 진행상황도 제품 경험도 모두 혼란스러워진다.</p></div>
               <div class="card-row"><b>완료</b><p>docs/product 아래 learner cockpit SSOT/HTML을 만들고, docs/ops 아래 engineering dashboard SSOT/HTML을 분리했다. docs/dashboard.html은 legacy redirect로 축소했다.</p></div>
               <div class="card-row"><b>검증</b><p>node scripts/product-surface-smoke.mjs, node scripts/ops-dashboard-smoke.mjs, node scripts/phase10-narrative-mission-gate-smoke.mjs, node scripts/phase1-scaffold-smoke.mjs, git diff --check.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-1</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/personal-learner-cockpit-smoke.mjs, docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md, docs/ISSUE-INDEX.md, README.md</span>
+              </div>
+              <h3>#154 개인 learner cockpit runtime 구현</h3>
+              <div class="card-row"><b>왜</b><p>repo-level preview만으로는 학습자가 매일 들어오는 제품 표면이 아니다. 실제 learner root의 evidence와 next action을 한 화면에 연결해야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>`cockpit` command가 learner-root `cockpit-state.json`과 `cockpit.html`을 생성하고 daily mission, Speaking Skill OS, due review, text/voice/image interaction evidence, 7일/30일 journey window를 연결한다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/personal-learner-cockpit-smoke.mjs`가 fixture learner에서 diagnosis, text/voice/image sessions, weekly mirror, cockpit render, product-surface leak guard를 검증한다.</p></div>
             </article>
         </div>
       </section>
@@ -3265,6 +3331,18 @@
               <strong>docs/product/learner-cockpit.html</strong>
               <span>generated learner-facing product cockpit preview</span>
             </a>
+            <a class="link-card source" href="../phase-11-evidence/">
+              <strong>docs/phase-11-evidence/</strong>
+              <span>AI-native learning OS integration evidence notes</span>
+            </a>
+            <a class="link-card source" href="../phase-11-evidence/AIOS-1-personal-cockpit-runtime.md">
+              <strong>docs/phase-11-evidence/AIOS-1-personal-cockpit-runtime.md</strong>
+              <span>AIOS-1 personal cockpit runtime evidence</span>
+            </a>
+            <a class="link-card source" href="../../scripts/personal-learner-cockpit-smoke.mjs">
+              <strong>scripts/personal-learner-cockpit-smoke.mjs</strong>
+              <span>personal learner cockpit runtime smoke</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -3272,10 +3350,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>M9-3 pilot prompt UX</td>
-              <td><strong>Pass</strong><span>mission-card prompt UX, rejected ambiguous prompt, and neutral first-use scenario smoke pass</span></td>
-            </tr>
             <tr>
               <td>M10-1 narrative mission plan</td>
               <td><strong>Pass</strong><span>PRD/test spec/data contracts define narrative as Verified transfer wrapper; smoke verifies docs, issue links, dashboard state, and claim boundaries</span></td>
@@ -3304,14 +3378,14 @@
               <td>Product/Ops surface split smoke</td>
               <td><strong>Pass</strong><span>product-surface-smoke, ops-dashboard-smoke, M10 closeout gate, phase1 scaffold smoke, and git diff --check passed.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-1 personal learner cockpit</td>
+              <td><strong>Pass</strong><span>personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard.</span></td>
+            </tr>
           </tbody>
         </table>
         <div class="commands">
 
-            <div class="command">
-              <span>Read issue index</span>
-              <code>open docs/ISSUE-INDEX.md</code>
-            </div>
             <div class="command">
               <span>Open dashboard</span>
               <code>open docs/ops/engineering-dashboard.html</code>
@@ -3340,6 +3414,10 @@
               <span>Run ops dashboard smoke</span>
               <code>node scripts/ops-dashboard-smoke.mjs</code>
             </div>
+            <div class="command">
+              <span>View AIOS-1 issue</span>
+              <code>gh issue view 154</code>
+            </div>
         </div>
       </aside>
     </section>
@@ -3348,7 +3426,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 86개 보기</summary>
+        <summary>완료 이력 87개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -4211,10 +4289,20 @@
               <div class="card-row"><b>완료</b><p>PRD, test spec, mission/world/capability data contracts, issue plan, Claude cross-review evidence, planning smoke를 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>phase10-narrative-mission-plan-smoke가 M10 문서, 이슈 색인, 상태판, claim boundary를 검사한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>M10-2</strong>
+                <span>docs/narrative-missions/schemas/mission-spec.schema.json, docs/narrative-missions/schemas/world-state.schema.json, docs/narrative-missions/schemas/tool-capabilities.schema.json, docs/narrative-missions/fixtures/usual-place-clarification.mission-spec.json, scripts/phase10-world-state-smoke.mjs</span>
+              </div>
+              <h3>#144 mission/world/capability contracts를 구현함</h3>
+              <div class="card-row"><b>왜</b><p>모델 생성 미션이 learner state에 영향을 주기 전에 기계가 읽을 수 있는 계약과 fallback 경로가 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>mission-spec, world-state, tool-capabilities JSON Schema와 positive fixture를 추가하고, world/capability validator smoke를 만들었다.</p></div>
+              <div class="card-row"><b>검증</b><p>`node scripts/phase10-world-state-smoke.mjs`가 one-NPC, child-mode false, lore length, text fallback을 검사한다.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 83개 보기</summary>
+        <summary>전체 검증 84개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -4551,12 +4639,16 @@
               <td>Product/Ops surface split smoke</td>
               <td><strong>Pass</strong><span>product-surface-smoke, ops-dashboard-smoke, M10 closeout gate, phase1 scaffold smoke, and git diff --check passed.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-1 personal learner cockpit</td>
+              <td><strong>Pass</strong><span>personal cockpit smoke creates text/voice/image sessions, weekly mirror, learner-root cockpit state/html, 7-day/30-day journey counts, rendered HTML sections, and product-surface leak guard.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 69개 보기</summary>
+        <summary>전체 명령 71개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -4834,6 +4926,14 @@
             <div class="command">
               <span>Run ops dashboard smoke</span>
               <code>node scripts/ops-dashboard-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run personal learner cockpit smoke</span>
+              <code>node scripts/personal-learner-cockpit-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>View AIOS-1 issue</span>
+              <code>gh issue view 154</code>
             </div>
         </div>
       </details>
