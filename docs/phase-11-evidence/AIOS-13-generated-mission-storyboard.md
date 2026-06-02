@@ -16,6 +16,7 @@ The AI-native OS goal calls for generated interactive HTML and Remotion-style ar
 - The storyboard derives from the current generated mission, target Speaking Skill OS skill, required learner action, transfer test, and session evidence requirement.
 - Storyboard HTML includes Previous / Play / Next controls over scene setup, speaking cue, model answer, and evidence checkpoint frames.
 - `asset-deck` now generates and links the storyboard artifact from the `remotion-storyboard` asset card.
+- Learner reports and the personal cockpit now link the latest storyboard artifact from the generated artifact sections.
 - Claims remain bounded: this is a local Remotion-style preparation artifact, not a video export, realtime voice, or learning-outcome proof.
 
 ## Verification
@@ -30,7 +31,7 @@ node scripts/product-surface-smoke.mjs
 node scripts/ops-dashboard-smoke.mjs
 ```
 
-The storyboard smoke verifies command output, JSON/HTML existence, four evidence-guided storyboard frames, interactive controls, required session evidence, asset deck linkage, product-surface leak guards, and unsupported-claim guards.
+The storyboard smoke verifies command output, JSON/HTML existence, four evidence-guided storyboard frames, interactive controls, required session evidence, asset deck linkage, learner report linkage, personal cockpit linkage, product-surface leak guards, and unsupported-claim guards.
 
 ## Claim Boundary
 
