@@ -32,6 +32,7 @@ Codex should install the skill surface, handle setup, run practice, save local p
 - asks one low-pressure question at a time
 - keeps correction gentle during practice
 - lets Codex run the daily practice engine internally after the learner answers, refreshing mission, evidence, report, and cockpit surfaces together
+- starts first practice from a concrete everyday conversation scene instead of repository or command explanations
 - saves local session evidence
 - tracks concrete speaking weaknesses in a personal speaking backlog
 - turns the next session into a targeted drill and transfer test

@@ -21,6 +21,9 @@ Run a short, safe English contact session with the learner.
 - Prefer the Speaking Skill OS loop when available: diagnose or read the local speaking backlog, target one backlog item, run the drill, test transfer, and save the evidence.
 - When the learner has answered at least one practice prompt, prefer the agent-operated `practice` engine path so Codex refreshes the mission, session artifact, weekly mirror, learner report, and cockpit together.
 - Do not paste internal engine commands into the learner-facing answer unless the learner explicitly asks for maintainer/debug details.
+- Never expose rubric labels such as "clarification question I can ask" as the learner prompt.
+- Do not make the first practice prompt about this repository, handoff documents, coding, or project planning unless the learner asks for that topic.
+- First-use prompts should be concrete everyday scenes such as today, food, commute, cafe, office, or asking what someone means.
 
 ## Engine Discovery
 
@@ -63,6 +66,22 @@ Use multiple `--say` values when the learner gave several turns. This command is
    - one natural recast,
    - one tiny next phrase,
    - a short note that today's local report/cockpit were updated when persistence succeeded.
+
+## Learner-Facing Transcript Shape
+
+The learner-facing transcript should look like a short tutoring exchange:
+
+```text
+Codex: 오늘은 한 문장만 해볼게요. 친구가 "usual place"라고 했는데 장소가 애매합니다. 영어로 어디를 말하는지 한 번만 물어보세요.
+Learner: Which place do you mean?
+Codex: 좋아요. 자연스럽게는 "Which place do you mean?" 그대로 쓸 수 있어요. 한 번 더, 조금 천천히 말해볼게요.
+Learner: Which place do you mean?
+Codex: 오늘 전달한 것: 애매한 장소를 확인했어요.
+Codex: 자연스럽게 바꾸면: Which place do you mean?
+Codex: 다음에 써볼 한 문장: Could you tell me which place you mean?
+```
+
+The transcript must not ask the learner to run commands, inspect files, open GitHub issues, or fill internal evaluation fields.
 
 ## Metrics To Record
 

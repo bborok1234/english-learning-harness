@@ -4,10 +4,10 @@
   "project": {
     "name": "English Learning Harness",
     "stage": "AI-native Learning OS in progress",
-    "status": "AIOS-5 generated scene artifacts are implemented for #162 and ready for PR verification.",
+    "status": "AIOS-6 skill-level learner conversation simulation is implemented for #164 and ready for PR verification.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "English Learning Harness now generates mission-derived scene/timeline artifacts with speaking cue, repair, and transfer checkpoint frames, and links them from practice, learner reports, and cockpit.",
-    "nextGoal": "Continue toward skill-level learner conversation simulation and stronger generated artifact variants while preserving text-first evidence and claim boundaries.",
+    "summary": "English Learning Harness now has a learner-facing skill-level transcript fixture that verifies first practice starts from an everyday scene, avoids command/process leakage, ends with a mini mirror, and still runs the real Codex-operated practice artifact loop.",
+    "nextGoal": "Continue toward generated artifact variants and broader learner-conversation simulations while preserving text-first evidence and claim boundaries.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate local scene/timeline artifacts from daily missions and connect them to the practice evidence loop.",
+    "allowedClaim": "The harness can validate a local skill-level learner conversation fixture and connect it to the Codex-operated practice artifact loop.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "Allowed claim is local rich-artifact mechanics and learning-loop linkage only; outcome, realtime voice, child-mode, retention, and Remotion efficacy claims remain blocked."
+    "claimBoundary": "Allowed claim is local skill-contract simulation and persistence mechanics only; real learner outcomes, hosted distribution, realtime voice, and perfect future LLM adherence remain unclaimed."
   },
   "ssot": [
     {
@@ -355,37 +355,49 @@
       "path": "../scripts/generated-scene-artifact-smoke.mjs",
       "role": "generated scene artifact smoke",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-11-evidence/AIOS-6-skill-conversation-simulation.md",
+      "path": "./phase-11-evidence/AIOS-6-skill-conversation-simulation.md",
+      "role": "AIOS-6 skill-level learner conversation simulation evidence",
+      "kind": "source"
+    },
+    {
+      "label": "scripts/skill-conversation-simulation-smoke.mjs",
+      "path": "../scripts/skill-conversation-simulation-smoke.mjs",
+      "role": "skill-level learner conversation simulation smoke",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Ultragoal",
       "value": "Active",
-      "detail": "full AI-native English Learning OS remains open; AIOS-1 through AIOS-5 are implemented slices, not final product completion",
+      "detail": "full AI-native English Learning OS remains open; AIOS-1 through AIOS-6 are implemented slices, not final product completion",
       "tone": "amber"
     },
     {
       "label": "Current stage",
-      "value": "AIOS-5 ready",
-      "detail": "mission-derived scene artifacts render interactive speaking/repair/transfer frames and link through practice/report/cockpit",
+      "value": "AIOS-6 ready",
+      "detail": "skill transcript fixture verifies everyday prompt, mini mirror, no process leakage, and real practice artifact generation",
       "tone": "green"
     },
     {
       "label": "Next goal",
-      "value": "Skill-level conversation simulation",
-      "detail": "verify onboarding/daily/mini-mirror skill flow as a natural learner transcript, not only engine commands",
+      "value": "Generated variants",
+      "detail": "broaden daily scene variants and conversation simulations while preserving evidence linkage",
       "tone": "amber"
     },
     {
       "label": "GitHub plan",
-      "value": "#162 in progress",
-      "detail": "AIOS-5 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
+      "value": "#164 in progress",
+      "detail": "AIOS-6 is the current PR-sized issue; larger ultragoal remains intentionally unclosed",
       "tone": "green"
     },
     {
       "label": "Differentiator",
-      "value": "Evidence-linked scene artifact",
-      "detail": "generated scenes now carry speaking cue, repair, and transfer checkpoint frames instead of decorative roleplay only",
+      "value": "Learner conversation gate",
+      "detail": "the harness now tests the skill-facing transcript, not only engine commands and generated files",
       "tone": "green"
     }
   ],
@@ -515,6 +527,13 @@
       "status": "Pass",
       "evidence": "#162, generated-scene-artifact-smoke, codex-operated-practice-flow-smoke, interactive-artifact-report-smoke",
       "claim": "scene artifacts are generated from daily missions, render interactive frame controls, require session evidence, and link from learner report/cockpit without product-surface leakage"
+    },
+    {
+      "id": "GATE-19",
+      "label": "Skill-level learner conversation simulation",
+      "status": "Pass",
+      "evidence": "#164, skill-conversation-simulation-smoke, codex-operated-practice-flow-smoke",
+      "claim": "a first-use skill transcript can avoid command/process/rubric leakage, use an everyday prompt, end with a mini mirror, and run the real practice artifact loop"
     }
   ],
   "board": [
@@ -1764,6 +1783,18 @@
             "scripts/generated-scene-artifact-smoke.mjs",
             "docs/phase-11-evidence/AIOS-5-generated-scene-artifacts.md"
           ]
+        },
+        {
+          "id": "AIOS-6",
+          "title": "Skill-level learner conversation simulation을 추가함",
+          "why": "엔진이 좋아져도 첫 학습 대화가 명령어/프로젝트 설명처럼 보이면 제품 목표가 깨진다. skill transcript 자체를 검증하는 gate가 필요했다.",
+          "done": "daily-session skill에 transcript guardrail을 추가하고, simulated learner transcript가 everyday prompt, learner answer, mini mirror, practice artifact generation을 통과하는 smoke를 만들었다.",
+          "verification": "`node scripts/skill-conversation-simulation-smoke.mjs`가 통과했고, 실제 `practice` 엔진으로 mission/scene/session/report/cockpit을 생성했다.",
+          "files": [
+            "skills/daily-session/SKILL.md",
+            "scripts/skill-conversation-simulation-smoke.mjs",
+            "docs/phase-11-evidence/AIOS-6-skill-conversation-simulation.md"
+          ]
         }
       ]
     },
@@ -1774,12 +1805,12 @@
       "cards": [
         {
           "id": "NOW-1",
-          "title": "AIOS-5 PR 검증과 병합",
-          "why": "generated scene artifact는 구현됐지만 main 기준으로 남기려면 전체 smoke와 PR-first merge가 필요하다.",
-          "done": "새 scene smoke, practice/artifact/report smoke, scaffold/readme/product/ops smoke, diff check를 실행한다.",
-          "verification": "PR #162 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
+          "title": "AIOS-6 PR 검증과 병합",
+          "why": "skill-level conversation simulation은 구현됐지만 main 기준으로 남기려면 smoke와 PR-first merge가 필요하다.",
+          "done": "skill simulation smoke, practice/scene/product/ops/readme/scaffold smoke, diff check를 실행한다.",
+          "verification": "PR #164 단위로 커밋/푸시/PR/머지를 완료하고 main에서 핵심 smoke를 재실행한다.",
           "files": [
-            "scripts/generated-scene-artifact-smoke.mjs",
+            "scripts/skill-conversation-simulation-smoke.mjs",
             "docs/ops/project-state.json"
           ]
         }
@@ -1791,17 +1822,6 @@
       "tone": "amber",
       "cards": [
         {
-          "id": "AIOS-SKILL-E2E",
-          "title": "Skill-level learner conversation simulation",
-          "why": "engine flow가 있어도 실제 Codex skill 응답이 학습자에게 자연스럽지 않으면 제품성이 부족하다.",
-          "done": "onboarding/daily/mini-mirror skill 계약을 따라 simulated learner transcript가 command leakage 없이 완료되는지 검증한다.",
-          "verification": "skill contract smoke와 learner transcript fixture가 통과해야 한다.",
-          "files": [
-            "skills/",
-            "scripts/"
-          ]
-        },
-        {
           "id": "AIOS-GENAI-VARIANTS",
           "title": "생성형 artifact variants 확장",
           "why": "일일 scene 한 종류만으로는 매일 들어오고 싶어지는 다양성이 부족하다.",
@@ -1810,6 +1830,17 @@
           "files": [
             "scripts/lib/english-learning-store.mjs",
             "docs/phase-11-evidence/"
+          ]
+        },
+        {
+          "id": "AIOS-REAL-PILOT-RECHECK",
+          "title": "실제 owner/self pilot gap 재점검",
+          "why": "fixture가 늘어도 실제 사용 경험 검증은 아직 약하다.",
+          "done": "M9의 남은 #137/#139와 현재 AIOS surface를 비교해 실제 owner/self pilot을 다시 정렬한다.",
+          "verification": "pilot readiness smoke와 current product surface evidence가 일치해야 한다.",
+          "files": [
+            "docs/phase-9-evidence/",
+            "scripts/phase9-owner-pilot-smoke.mjs"
           ]
         }
       ]
@@ -2315,6 +2346,11 @@
       "name": "AIOS-5 generated scene artifacts",
       "status": "Pass",
       "detail": "generated-scene-artifact smoke validates scene JSON/HTML generation, Playwright frame controls, evidence requirement, practice generation, report/cockpit linkage, and claim guards."
+    },
+    {
+      "name": "AIOS-6 skill-level learner conversation simulation",
+      "status": "Pass",
+      "detail": "skill-conversation-simulation smoke validates skill contracts, everyday first prompt, mini mirror transcript, no command/process/rubric/unsupported-claim leakage, and real practice artifact generation."
     }
   ],
   "commands": [
@@ -2633,6 +2669,14 @@
     {
       "label": "View AIOS-5 issue",
       "command": "gh issue view 162"
+    },
+    {
+      "label": "Run skill conversation simulation smoke",
+      "command": "node scripts/skill-conversation-simulation-smoke.mjs"
+    },
+    {
+      "label": "View AIOS-6 issue",
+      "command": "gh issue view 164"
     }
   ]
 }

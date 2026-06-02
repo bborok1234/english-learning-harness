@@ -498,6 +498,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #158 | AIOS-3: Add interactive mission artifacts and learner reports | continue |
 | #160 | AIOS-4: Add Codex-operated daily practice flow | continue |
 | #162 | AIOS-5: Add generated scene artifacts to the daily practice loop | continue |
+| #164 | AIOS-6: Add skill-level learner conversation simulation | continue |
 
 #154 evidence currently shows:
 
@@ -537,3 +538,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - `practice` now generates a scene artifact and learner report/cockpit link the latest scene.
 - `scripts/generated-scene-artifact-smoke.mjs` verifies rendered interaction, report/cockpit linkage, session-evidence requirement, product-surface leak guard, and unsupported-claim guard.
 - This proves local rich-artifact mechanics only. It does not prove Remotion efficacy, generated-world retention, realtime voice, or learning outcomes.
+
+#164 evidence currently shows:
+
+- `skills/daily-session/SKILL.md` rejects exposed rubric labels and project-specific first-use prompts.
+- The daily-session skill defines a learner-facing transcript shape with an everyday prompt, learner answer, gentle recast, and mini mirror.
+- `scripts/skill-conversation-simulation-smoke.mjs` verifies the simulated transcript has no Node/GitHub/PR/issue/smoke/rubric/project-planning/level/native-speaker/guaranteed-outcome/fluency-proof leakage.
+- The same smoke runs the real `practice` engine and verifies mission HTML, scene HTML, session artifact, learner report, cockpit, report scene linkage, and cockpit report linkage.
+- This proves a local skill-contract conversation fixture only. It does not prove real learner outcomes, hosted distribution, realtime voice, or perfect future LLM adherence.
