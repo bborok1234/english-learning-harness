@@ -1,5 +1,9 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import {
+  buildSession,
+  persistSession,
+} from "./english-learning-store.mjs";
 
 const allowedSkills = ["starts", "follow_ups", "clarification", "repair", "soft_disagreement"];
 const allowedLevelBands = ["beginner", "lower-intermediate", "intermediate", "advanced"];
@@ -306,4 +310,103 @@ export function validateNarrativeMissionBundle({
       toolCapabilities,
     }),
   ];
+}
+
+export function buildNarrativeScenario(missionSpec, backlogItem) {
+  return {
+    id: missionSpec.mission_id,
+    title: missionSpec.learner_visible_scene.title,
+    mode: missionSpec.fallback_mode,
+    goal: `${missionSpec.required_learner_action} Transfer test: ${missionSpec.transfer_test}`,
+    role_context: `${missionSpec.learner_visible_scene.setup} ${missionSpec.learner_visible_scene.ask}`,
+    cefr_skill: missionSpec.target_skill,
+    rescue_phrase: missionSpec.learner_visible_scene.example,
+    follow_up_prompt: missionSpec.learner_visible_scene.ask,
+    pattern: missionSpec.learner_visible_scene.example,
+    retry_prompt: missionSpec.required_learner_action,
+    speaking_backlog: {
+      id: backlogItem.id,
+      skill: backlogItem.skill,
+      label: backlogItem.label,
+      status: backlogItem.status,
+      transfer_test: backlogItem.transfer_test,
+      pass_criteria: backlogItem.pass_criteria,
+    },
+    narrative_mission: {
+      mission_id: missionSpec.mission_id,
+      world_ref: missionSpec.world_ref,
+      npc_ref: missionSpec.npc_ref,
+      learner_visible_scene: missionSpec.learner_visible_scene,
+    },
+  };
+}
+
+function storyConsequenceForEvidence(missionSpec, evidence) {
+  const passed = evidence?.result === "pass";
+  return {
+    recorded_after_transfer_evidence: true,
+    transfer_result: evidence?.result || "missing",
+    text: passed ? missionSpec.story_consequence.on_pass : missionSpec.story_consequence.on_needs_review,
+  };
+}
+
+export function persistNarrativeMissionSession({
+  learnerRoot,
+  learnerTurns,
+  missionSpec,
+  speakingBacklog,
+  worldState,
+  toolCapabilities,
+  date = new Date(),
+  sessionId,
+}) {
+  const validationErrors = validateNarrativeMissionBundle({
+    missionSpec,
+    speakingBacklog,
+    worldState,
+    toolCapabilities,
+  });
+  if (validationErrors.length) {
+    throw new Error(validationErrors.join("; "));
+  }
+
+  const backlogItem = speakingBacklog.items.find((item) => item.id === missionSpec.backlog_item_id);
+  const scenario = buildNarrativeScenario(missionSpec, backlogItem);
+  const session = buildSession(learnerTurns, {
+    sessionId: sessionId || `${date.toISOString().slice(0, 10)}-${date.getTime()}-narrative`,
+    opening: "Narrative mission. Speak once, then the story can move only after the transfer check.",
+    scenario,
+    selectionReason: {
+      source: "narrative-mission",
+      mission_id: missionSpec.mission_id,
+      speaking_backlog_item_id: missionSpec.backlog_item_id,
+      speaking_backlog_skill: missionSpec.target_skill,
+      mode: missionSpec.fallback_mode,
+    },
+  });
+  session.narrative_mission = {
+    mission_id: missionSpec.mission_id,
+    world_ref: missionSpec.world_ref,
+    npc_ref: missionSpec.npc_ref,
+    learner_visible_scene: missionSpec.learner_visible_scene,
+    story_consequence: null,
+    claim_boundary: missionSpec.claim_boundary,
+  };
+
+  const persisted = persistSession(learnerRoot, session, date);
+  const storyConsequence = storyConsequenceForEvidence(missionSpec, session.speaking_backlog_evidence);
+  session.narrative_mission.story_consequence = storyConsequence;
+
+  const artifact = JSON.parse(readFileSync(persisted.artifactPath, "utf8"));
+  artifact.narrative_mission = {
+    ...artifact.narrative_mission,
+    story_consequence: storyConsequence,
+  };
+  writeFileSync(persisted.artifactPath, `${JSON.stringify(artifact, null, 2)}\n`);
+
+  return {
+    session,
+    persisted,
+    storyConsequence,
+  };
 }

@@ -465,3 +465,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - generated/media capabilities are optional only; text must be the required path.
 - `scripts/phase10-mission-spec-validator-smoke.mjs` rejects missing backlog links, skill mismatch, win-condition mismatch, missing real-world transfer target, media-required missions, unsupported learning claims, and decorative story-completion missions.
 - This proves decorative-mission rejection; it does not yet persist narrative mission learner evidence.
+
+#146 evidence currently shows:
+
+- `persistNarrativeMissionSession()` wraps a validated narrative mission around the existing `persistSession()` path.
+- `scripts/phase10-narrative-mission-parity-smoke.mjs` compares plain `today` with the `usual-place-clarification` narrative mission.
+- pass and needs-review fixture pairs produce the same backlog item id, skill, transfer result, backlog status, and transfer test.
+- story consequence is persisted only after `speaking_backlog_evidence` exists and records the matching transfer result.
+- This proves one text-first narrative mission parity fixture; it does not yet add richer generation, realtime voice, or multimodal scenes.
