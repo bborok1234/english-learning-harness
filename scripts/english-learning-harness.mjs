@@ -28,6 +28,7 @@ import {
   readVocabulary,
   writeWeeklyMirror,
   writeGeneratedDailyMission,
+  writeLearnerReport,
   writeLearnerModel,
   writeProgress,
   writePersonalLearnerCockpit,
@@ -162,6 +163,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs daily [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs mission [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
@@ -206,6 +208,8 @@ function supportDiagnostics(options, paths) {
         paths.reviewQueue,
         paths.journalDir,
         paths.artifactDir,
+        paths.missionArtifactDir,
+        paths.reportArtifactDir,
       ]
     : [];
 
@@ -218,6 +222,7 @@ function supportDiagnostics(options, paths) {
       commandWithRoot("daily", learnerRoot, ["--json"]),
       commandWithRoot("mission", learnerRoot, ["--json"]),
       commandWithRoot("cockpit", learnerRoot, ["--json"]),
+      commandWithRoot("report", learnerRoot, ["--json"]),
       commandWithRoot("diagnose", learnerRoot, ["--say", JSON.stringify("I get stuck when I speak."), "--json"]),
       commandWithRoot("backlog", learnerRoot, ["--json"]),
       commandWithRoot("pilot-status", learnerRoot, ["--json"]),
@@ -250,6 +255,8 @@ function repairLearnerStore(learnerRoot) {
   mkdirSync(paths.root, { recursive: true });
   mkdirSync(paths.journalDir, { recursive: true });
   mkdirSync(paths.artifactDir, { recursive: true });
+  mkdirSync(paths.missionArtifactDir, { recursive: true });
+  mkdirSync(paths.reportArtifactDir, { recursive: true });
   mkdirSync(paths.speakingOsDir, { recursive: true });
   mkdirSync(paths.weeklyMirrorDir, { recursive: true });
 
@@ -364,6 +371,22 @@ function cockpit(options) {
     speakingSkillOS: result.state.speaking_skill_os,
     journey: result.state.journey,
     claimBoundary: result.state.claim_boundary,
+  };
+}
+
+function report(options) {
+  const result = writeLearnerReport(options.learnerRoot, options.date || new Date());
+  return {
+    status: "pass",
+    path: "explicit-command-wrapper",
+    learnerRoot: result.report.learner_root,
+    reportPath: result.reportPath,
+    reportHtmlPath: result.reportHtmlPath,
+    reportUrl: result.reportUrl,
+    windows: result.report.windows,
+    speakingSkillOS: result.report.speaking_skill_os,
+    nextFocus: result.report.next_focus,
+    claimBoundary: result.report.claim_boundary,
   };
 }
 
@@ -1365,6 +1388,10 @@ function run() {
   }
   if (command === "cockpit") {
     output(cockpit(options), options.json);
+    return;
+  }
+  if (command === "report") {
+    output(report(options), options.json);
     return;
   }
   if (command === "home") {

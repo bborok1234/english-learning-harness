@@ -87,6 +87,8 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - 주간 mirror로 학습 흐름을 보여줍니다.
 - 매일 열어볼 수 있는 개인 cockpit을 로컬에 생성합니다.
 - 오늘의 약점에 맞는 generated mission artifact를 만듭니다.
+- generated mission artifact 안에서 text, voice transcript, image information-gap 연습 모드를 바로 전환할 수 있게 합니다.
+- 7일/30일 learner report로 내가 남긴 세션, 표현, 약점 카드, 다음 focus를 보여줍니다.
 
 이 repo의 스크립트는 그 경험 아래에서 움직이는 엔진입니다. Codex, maintainer, setup, verification을 위한 것이지 학습자가 직접 조작해야 하는 제품 표면이 아닙니다.
 
@@ -145,6 +147,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 ├── journal/
 └── artifacts/
     ├── missions/
+    ├── reports/
     ├── sessions/
     └── weekly/
 ```
@@ -160,6 +163,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - weekly mirror
 - personal cockpit state/html
 - generated daily mission state/html
+- learner report state/html
 - local validation export
 
 ## 첫 세션 후 기대하는 느낌
@@ -173,6 +177,8 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - 다음 연습 제안
 - 매일 다시 열어볼 수 있는 `cockpit.html`
 - 선택적으로 열어볼 수 있는 `home.html` journey view
+- 오늘 장면을 눌러가며 시작할 수 있는 generated mission HTML
+- 7일/30일 학습 증거를 보는 learner report HTML
 
 경험은 단순해야 합니다. 조금 말하고, 유용한 mirror를 받고, 표현 하나를 남기고, 내일 다시 돌아옵니다.
 
@@ -243,6 +249,7 @@ node scripts/english-learning-harness.mjs backlog --json
 node scripts/english-learning-harness.mjs daily --json
 node scripts/english-learning-harness.mjs mission --json
 node scripts/english-learning-harness.mjs cockpit --json
+node scripts/english-learning-harness.mjs report --json
 node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
 node scripts/english-learning-harness.mjs weekly --json
 node scripts/english-learning-harness.mjs home --json
@@ -377,6 +384,7 @@ node scripts/phase7-open-source-history-audit-smoke.mjs
 node scripts/phase7-publication-preflight.mjs
 node scripts/phase1-scaffold-smoke.mjs
 node scripts/generated-daily-mission-smoke.mjs
+node scripts/interactive-artifact-report-smoke.mjs
 node scripts/personal-learner-cockpit-smoke.mjs
 node scripts/generate-dashboard.mjs
 node scripts/generate-learner-cockpit.mjs

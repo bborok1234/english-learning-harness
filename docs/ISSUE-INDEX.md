@@ -495,6 +495,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 |---|---|---|
 | #154 | AIOS-1: Generate personal learner cockpit from runtime state | continue |
 | #156 | AIOS-2: Generate daily mission artifacts linked to learner cockpit | continue |
+| #158 | AIOS-3: Add interactive mission artifacts and learner reports | continue |
 
 #154 evidence currently shows:
 
@@ -509,3 +510,12 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - The generated mission links to the current Speaking Skill OS item or daily scenario and includes required learner action, transfer test, text-first start command, optional voice/image commands, and prompt material.
 - `scripts/generated-daily-mission-smoke.mjs` verifies mission generation, rendered HTML, product-surface leak guard, post-mission `today` evidence, and personal cockpit linkage.
 - This proves generated mission artifact mechanics only. It does not prove learning outcomes, generated-world retention, or realtime voice.
+
+#158 evidence currently shows:
+
+- Generated mission HTML now includes selectable text, voice-transcript, and image information-gap practice modes.
+- `node scripts/english-learning-harness.mjs report` writes `artifacts/reports/learner-report-YYYY-MM-DD.json` and `.html` under the learner root.
+- Learner reports summarize 7-day/30-day session and interaction-event windows, modalities, saved phrases, Speaking Skill OS status, next focus, and latest generated mission linkage.
+- Personal cockpit links the latest learner report from the journey section.
+- `scripts/interactive-artifact-report-smoke.mjs` verifies Playwright tab interaction, report generation, cockpit linkage, text/voice/image evidence counts, product-surface leak guard, and unsupported-claim guard.
+- This proves local interactive artifact/report mechanics only. It does not prove learning outcomes, generated-world retention, realtime voice, or real-world transfer.
