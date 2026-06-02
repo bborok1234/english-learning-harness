@@ -645,6 +645,11 @@ The cockpit refresh is a product-surface convenience contract. It is not evidenc
     },
     "learnerRule": "방금 답변은 저장됐습니다. 다음에도 영어 한 문장만 답하면 됩니다."
   },
+  "quickReply": {
+    "selected": "1|quick-1",
+    "id": "quick-1",
+    "text": "Which place do you mean?"
+  },
   "replyCardArtifact": {
     "action": "pilot-reply-card",
     "jsonPath": "learner-root/artifacts/pilot/pilot-reply-card.json",
@@ -655,7 +660,7 @@ The cockpit refresh is a product-surface convenience contract. It is not evidenc
 }
 ```
 
-The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale, then write `pilot-reply-card.json/html` as the latest saved-reply surface. For daily replies, `learnerFacing` and the reply card must expose only learner-safe coaching and next-card content; they must not expose command names, issue labels, transcript internals, or audit internals. The generated reply card is a product surface, so a browser render smoke must verify saved status, coaching cells, next-card content, and no internal language leakage. It is not a learner-facing command and must not appear in generated learner HTML.
+The router must delegate to `pilot-capture` rather than write pilot state directly, so cockpit refresh and commit behavior stay in one path. `pilot-reply` may receive either an explicit `--say` answer or a `--quick-reply` selection. Quick-reply selection must resolve against the current `pilot-next` quick replies and then save the resolved English sentence through the same capture path; invalid selections must fail before saving. After saving, it must regenerate `pilot-next-card.json/html` so the next learner-facing card is not stale, then write `pilot-reply-card.json/html` as the latest saved-reply surface. For daily replies, `learnerFacing` and the reply card must expose only learner-safe coaching and next-card content; they must not expose command names, issue labels, transcript internals, or audit internals. The generated reply card is a product surface, so a browser render smoke must verify saved status, coaching cells, next-card content, and no internal language leakage. It is not a learner-facing command and must not appear in generated learner HTML.
 
 `pilot-next --json` writes the current learner-facing pilot card:
 
