@@ -117,6 +117,8 @@ function main() {
     const artifacts = day.day.aios_artifacts;
     assert(day.practice?.path === "codex-operated-practice-flow", `day ${index + 1} should use practice flow`);
     assert(day.day.pilot_mission?.target_skill, `day ${index + 1} should preserve pilot mission target skill`);
+    assert(day.day.learner_coaching?.next_phrase, `day ${index + 1} should preserve learner coaching next phrase`);
+    assert(day.day.learner_coaching?.next_focus, `day ${index + 1} should preserve learner coaching next focus`);
     assertLearnerFile(artifacts.mission, `day ${index + 1} mission`);
     assertLearnerFile(artifacts.scene, `day ${index + 1} scene`);
     assertLearnerFile(artifacts.asset_deck, `day ${index + 1} asset deck`);
@@ -156,12 +158,14 @@ function main() {
     report.product_journey_audit.distinct_pilot_mission_skills.length >= 5,
     "pilot audit should preserve distinct speaking action skills",
   );
+  assert(report.product_journey_audit.days_with_learner_coaching === 5, "all days should keep learner coaching");
   assert(report.product_journey_audit.friction_note_count === 5, "all days should keep friction notes");
   assert(report.aios_artifacts.days.length === 5, "report should keep five AIOS day bridges");
 
   for (const day of report.aios_artifacts.days) {
     assertLearnerFile(day.mission, `report day ${day.day} mission`);
     assert(day.pilot_mission?.target_skill, `report day ${day.day} pilot mission target skill`);
+    assert(day.learner_coaching?.next_phrase, `report day ${day.day} learner coaching next phrase`);
     assertLearnerFile(day.scene, `report day ${day.day} scene`);
     assertLearnerFile(day.asset_deck, `report day ${day.day} asset deck`);
     assert(day.next_asset_action?.asset_id, `report day ${day.day} next asset action`);
@@ -172,6 +176,8 @@ function main() {
   assert(markdown.includes("## Product Journey Audit"), "Markdown report should include product journey audit");
   assert(markdown.includes("pilot_action=clarification"), "Markdown should list pilot action metadata");
   assert(markdown.includes("pilot_action=repair"), "Markdown should list varied pilot action metadata");
+  assert(markdown.includes("coaching_next="), "Markdown should list learner coaching next phrase");
+  assert(markdown.includes("Days with learner coaching: 5/5"), "Markdown should list learner coaching audit count");
   assert(markdown.includes("asset_deck=artifacts/assets/"), "Markdown should list asset deck paths");
   assert(markdown.includes("next_asset="), "Markdown should list next asset ids");
   assertNoEngineeringLeak(markdown, "pilot Markdown");

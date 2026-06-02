@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-12 pilot mission audit metadata implemented; real owner pilot Day 1 answer still required",
-    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission metadata, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
+    "stage": "AIOS-12 learner coaching report metadata implemented; real owner pilot Day 1 answer still required",
+    "status": "AIOS-12 (#179) now has pilot audit mechanics, Codex owner-pilot skill, learner-facing next-card generation, varied five-day pilot missions with reportable pilot_mission and learner_coaching metadata, card-level capture, active pilot visibility, automatic cockpit refresh, and redacted local pilot dashboard sync. #179 remains open until real owner/self transcript evidence is collected.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner pilot lane can now survive interrupted Codex conversations and produce auditable speaking-action evidence: the first five pilot days test clarification, repair, image/scene description, soft disagreement, and follow-up, and pilot-day/pilot-finish preserve that metadata into reports without exposing private transcripts publicly.",
+    "summary": "The learner pilot lane can now survive interrupted Codex conversations and produce auditable speaking-action plus coaching evidence: each pilot day keeps the sampled speaking action, the learner-facing recast/next phrase/focus, generated artifacts, and product-surface links without exposing private transcripts publicly.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission audit metadata, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
+    "allowedClaim": "The harness has a Codex-facing owner pilot skill, learner-facing pilot next-card generation, varied five-day pilot missions, per-day pilot mission and learner coaching audit metadata, card-level pilot capture, automatic pilot cockpit refresh, active pilot cockpit visibility, redacted local pilot dashboard sync, and local audit mechanics for running and judging a real owner/self pilot later.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -547,7 +547,7 @@
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -820,6 +820,13 @@
       "status": "Pass",
       "evidence": "phase15-owner-pilot-journey-audit-smoke, phase15-owner-pilot-varied-day-missions-smoke",
       "claim": "pilot reports preserve per-day pilot_mission metadata, count days_with_pilot_mission_metadata, and list distinct sampled speaking skills; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-36",
+      "label": "Learner coaching report metadata",
+      "status": "Pass",
+      "evidence": "phase15-owner-pilot-journey-audit-smoke, phase15-owner-pilot-capture-smoke",
+      "claim": "pilot reports preserve each day's learner-facing coaching summary and count days_with_learner_coaching; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -871,6 +878,18 @@
           "why": "5일 pilot이 다양한 행동을 요구해도 report/audit에 어떤 행동을 샘플링했는지 남지 않으면 제품 판단 근거가 약해진다.",
           "done": "pilot-day가 pilot_mission metadata를 저장하고, pilot-finish가 report.aios_artifacts.days와 product_journey_audit에 metadata count와 distinct skill list를 남긴다.",
           "verification": "phase15 owner pilot journey audit smoke validates days_with_pilot_mission_metadata, distinct pilot mission skills, and Markdown pilot_action output.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-12-owner-pilot-journey-audit-mechanics.md"
+          ]
+        },
+        {
+          "id": "AIOS-12-LEARNER-COACHING-REPORT-METADATA",
+          "title": "AIOS-12 learner coaching report metadata 통과",
+          "why": "실제 pilot day가 저장만 되고 학습자용 recast/next phrase/focus가 report에 남지 않으면 회화 향상 루프를 감사하기 어렵다.",
+          "done": "pilot-day가 practice learnerFacing을 learner_coaching으로 저장하고, pilot-finish가 report.aios_artifacts.days와 product_journey_audit에 coaching count를 남긴다.",
+          "verification": "phase15 owner pilot journey audit smoke validates day learner_coaching, report learner_coaching, Markdown coaching_next output, and days_with_learner_coaching.",
           "files": [
             "scripts/english-learning-harness.mjs",
             "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
@@ -2930,6 +2949,11 @@
       "name": "AIOS-12 pilot mission audit metadata",
       "status": "Pass",
       "detail": "phase15-owner-pilot-journey-audit smoke validates final reports include per-day pilot action metadata, days_with_pilot_mission_metadata, and distinct_pilot_mission_skills."
+    },
+    {
+      "name": "AIOS-12 learner coaching report metadata",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-journey-audit smoke validates final reports include per-day learner_coaching, Markdown coaching_next output, and days_with_learner_coaching."
     }
   ],
   "commands": [

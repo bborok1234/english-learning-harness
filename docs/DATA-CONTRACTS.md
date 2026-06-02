@@ -454,6 +454,13 @@ Required JSON fields:
         "target_skill": "clarification|repair|image_description|soft_disagreement|follow_up",
         "transfer_evidence": "learner-facing behavior being sampled"
       },
+      "learner_coaching": {
+        "communicated": "learner-facing summary of what was communicated",
+        "recast": "short improved sentence",
+        "next_phrase": "phrase to reuse next",
+        "next_focus": "next learner-facing focus",
+        "artifact_hint": "which local product surfaces were refreshed"
+      },
       "speaking_backlog_evidence": {},
       "aios_artifacts": {
         "mission": "artifacts/missions/daily-mission-YYYY-MM-DD.html",
@@ -514,6 +521,7 @@ Required JSON fields:
         "days_with_core_artifacts": 5,
         "days_with_asset_actions": 5,
         "days_with_pilot_mission_metadata": 5,
+        "days_with_learner_coaching": 5,
         "distinct_pilot_mission_skills": [
           "clarification",
           "repair",
@@ -621,7 +629,7 @@ The first five `pilot-next` daily cards must cover distinct speaking actions:
 
 These varied missions are local pilot prompts, not evidence of outcome improvement.
 
-`pilot-finish` must copy each day `pilot_mission` into `report.aios_artifacts.days[].pilot_mission` and must count `days_with_pilot_mission_metadata` in `product_journey_audit`. The audit is invalid if completed days lack this metadata.
+`pilot-finish` must copy each day `pilot_mission` into `report.aios_artifacts.days[].pilot_mission`, copy each day `learner_coaching` into `report.aios_artifacts.days[].learner_coaching`, and count both `days_with_pilot_mission_metadata` and `days_with_learner_coaching` in `product_journey_audit`. The audit is invalid if completed days lack this metadata.
 
 ## Local Pilot Dashboard Overlay
 

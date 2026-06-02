@@ -12,16 +12,16 @@ The real owner/self pilot should not close from fixture data. This work adds the
 ## What Changed
 
 - `practice` now exposes the generated mission asset deck top action in command JSON.
-- `pilot-day` now records the day's pilot mission metadata, mission, scene, asset deck, next asset action, learner report, cockpit, session artifact, and friction note.
+- `pilot-day` now records the day's pilot mission metadata, learner coaching summary, mission, scene, asset deck, next asset action, learner report, cockpit, session artifact, and friction note.
 - `pilot-finish` now writes `product_journey_audit` into the pilot report.
-- Pilot Markdown reports now show pilot action metadata, asset deck paths, next asset ids, evidence completeness, friction-note count, and the product decision.
+- Pilot Markdown reports now show pilot action metadata, learner coaching next phrase, asset deck paths, next asset ids, evidence completeness, friction-note count, and the product decision.
 
 ## Verified Behavior
 
 `scripts/phase15-owner-pilot-journey-audit-smoke.mjs` runs a five-day fixture pilot and verifies:
 
 - all five days use the Codex-operated `practice` flow;
-- each day preserves pilot action metadata, mission, scene, asset deck, top asset action, learner report, and cockpit links;
+- each day preserves pilot action metadata, learner coaching next phrase, mission, scene, asset deck, top asset action, learner report, and cockpit links;
 - the final pilot report records a governance decision from the allowed decision set;
 - the final cockpit still exposes the latest next asset action;
 - product report text avoids engineering leaks and unsupported outcome claims.
