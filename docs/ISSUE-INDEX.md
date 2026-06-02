@@ -510,6 +510,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #164 | AIOS-6: Add skill-level learner conversation simulation | continue |
 | #166 | AIOS-7: Add adaptive generated scene variants | continue |
 | #169 | AIOS-8: Add first-use conversation variant gate | continue |
+| #171 | AIOS-9: Define multimodal mission asset contract | continue |
 
 #154 evidence currently shows:
 
@@ -573,3 +574,11 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - Each variant avoids Node/GitHub/PR/issue/smoke/rubric/project-planning/level/native-speaker/guaranteed-outcome leakage.
 - Each variant runs the real `practice` flow and verifies generated mission, generated scene, session artifact, learner report, cockpit, and required scene evidence.
 - This proves local first-use conversation variety and persistence mechanics only. It does not prove real learner outcomes, engagement, retention, or realtime voice.
+
+#171 planned evidence should show:
+
+- multimodal mission assets are represented by a machine-readable contract, not ad hoc decorative prompts.
+- text-first fallback remains the canonical completion path.
+- optional generated HTML/Remotion-style scene, image prompt, voice transcript prompt, and future video/realtime hooks map to the same Speaking Skill OS target and expected evidence.
+- negative fixtures reject assets that do not require learner output or cannot write evidence.
+- realtime voice and generated-media learning gains remain blocked claims unless separately proven.

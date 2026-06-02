@@ -315,6 +315,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-6: Add skill-level learner conversation simulation (#164). The daily-session skill now has learner-facing transcript guardrails, and `skill-conversation-simulation-smoke` verifies a concrete everyday prompt, mini mirror, no command/process leakage, and real `practice` artifact generation.
 - [x] AIOS-7: Add adaptive scene variants (#166). Generated scenes now include skill/date-based variant metadata and cue styles, with smoke coverage proving clarification, repair, and soft-disagreement variants preserve Speaking Skill OS evidence links.
 - [x] AIOS-8: Add first-use conversation variant gate (#169). The daily-session skill now defines first-use variant coverage, and `skill-conversation-variants-smoke` verifies office clarification, cafe repair, object description, and soft-disagreement transcripts through the real `practice` artifact loop.
+- [ ] AIOS-9: Define multimodal mission asset contract (#171). Next slice: make generated HTML/Remotion-style, image, voice transcript, and future video assets serve the Speaking Skill OS evidence loop rather than acting as decoration.
 
 ## SSOT Structure
 
