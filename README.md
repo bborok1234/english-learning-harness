@@ -78,6 +78,7 @@ Pilot prompt 원칙과 Day 0 미션 카드는 [docs/PILOT-PROMPTS.md](docs/PILOT
 - 학습자 프로필을 만들거나 갱신합니다.
 - 한 번에 한 가지 쉬운 질문만 던집니다.
 - 말하는 중에는 과하게 문법 설명을 하지 않고 부드럽게 recast합니다.
+- 학습자가 답하면 Codex가 내부적으로 daily practice flow를 실행해 mission, session evidence, report, cockpit을 함께 갱신합니다.
 - 세션 증거를 로컬에 저장합니다.
 - 유용한 표현과 반복되는 막힘을 기억합니다.
 - speaking backlog를 만들어 “내가 실제로 못 하는 회화 행동”을 추적합니다.
@@ -250,6 +251,7 @@ node scripts/english-learning-harness.mjs daily --json
 node scripts/english-learning-harness.mjs mission --json
 node scripts/english-learning-harness.mjs cockpit --json
 node scripts/english-learning-harness.mjs report --json
+node scripts/english-learning-harness.mjs practice --say "I want to practice today." --json
 node scripts/english-learning-harness.mjs today --say "I want to practice today." --json
 node scripts/english-learning-harness.mjs weekly --json
 node scripts/english-learning-harness.mjs home --json
@@ -383,6 +385,7 @@ node scripts/phase7-open-source-readiness-smoke.mjs
 node scripts/phase7-open-source-history-audit-smoke.mjs
 node scripts/phase7-publication-preflight.mjs
 node scripts/phase1-scaffold-smoke.mjs
+node scripts/codex-operated-practice-flow-smoke.mjs
 node scripts/generated-daily-mission-smoke.mjs
 node scripts/interactive-artifact-report-smoke.mjs
 node scripts/personal-learner-cockpit-smoke.mjs

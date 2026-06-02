@@ -164,6 +164,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs mission [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs practice [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
@@ -221,6 +222,7 @@ function supportDiagnostics(options, paths) {
     nextCommands: [
       commandWithRoot("daily", learnerRoot, ["--json"]),
       commandWithRoot("mission", learnerRoot, ["--json"]),
+      commandWithRoot("practice", learnerRoot, ["--say", JSON.stringify("I want to practice today."), "--json"]),
       commandWithRoot("cockpit", learnerRoot, ["--json"]),
       commandWithRoot("report", learnerRoot, ["--json"]),
       commandWithRoot("diagnose", learnerRoot, ["--say", JSON.stringify("I get stuck when I speak."), "--json"]),
@@ -387,6 +389,82 @@ function report(options) {
     speakingSkillOS: result.report.speaking_skill_os,
     nextFocus: result.report.next_focus,
     claimBoundary: result.report.claim_boundary,
+  };
+}
+
+function practice(options) {
+  const date = options.date || new Date();
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const turns = transcriptInputs(options);
+  const hasExplicitInput = (options.input?.length ?? 0) > 0 || Boolean(options.transcript);
+  const diagnosis = !nextSpeakingBacklogItem(paths.root) && hasExplicitInput
+    ? diagnoseSpeakingSample(paths.root, turns, date)
+    : null;
+  const missionResult = writeGeneratedDailyMission(paths.root, date);
+  const sessionOptions = {
+    ...options,
+    learnerRoot: paths.root,
+    date,
+    input: turns,
+    transcript: undefined,
+  };
+  const sessionResult = options.imageFile || options.hiddenDetail
+    ? image(sessionOptions)
+    : options.audioFile
+      ? voice(sessionOptions)
+      : today(sessionOptions);
+  const weeklyResult = weekly({ ...options, learnerRoot: paths.root, date });
+  const reportResult = report({ ...options, learnerRoot: paths.root, date });
+  const cockpitResult = cockpit({ ...options, learnerRoot: paths.root, date });
+  const nextFocus = reportResult.nextFocus?.prompt || cockpitResult.journey.latest_weekly_mirror?.next_focus?.prompt || "";
+  return {
+    status: "pass",
+    path: "codex-operated-practice-flow",
+    learnerRoot: paths.root,
+    learnerFacing: {
+      today: sessionResult.mirror.communicated,
+      recast: sessionResult.mirror.recast,
+      nextPhrase: sessionResult.mirror.nextPhrase,
+      nextFocus,
+      artifactHint:
+        "오늘의 mission, learner report, cockpit이 로컬에 갱신되었습니다. 학습자는 Codex 대화 안에 머무르면 됩니다.",
+    },
+    diagnosis: diagnosis
+      ? {
+          skill: diagnosis.diagnosis.skill,
+          backlogItemId: diagnosis.backlogItem.id,
+          backlogItemLabel: diagnosis.backlogItem.label,
+        }
+      : null,
+    mission: {
+      id: missionResult.state.mission_id,
+      title: missionResult.state.learner_visible_scene.title,
+      htmlPath: missionResult.missionHtmlPath,
+      url: missionResult.missionUrl,
+    },
+    session: {
+      id: sessionResult.sessionId,
+      mode: sessionResult.mode,
+      artifactPath: sessionResult.artifactPath,
+      speakingBacklogEvidence: sessionResult.speakingBacklogEvidence,
+    },
+    report: {
+      path: reportResult.reportPath,
+      htmlPath: reportResult.reportHtmlPath,
+      url: reportResult.reportUrl,
+      windows: reportResult.windows,
+    },
+    cockpit: {
+      statePath: cockpitResult.cockpitStatePath,
+      htmlPath: cockpitResult.cockpitPath,
+      url: cockpitResult.cockpitUrl,
+    },
+    weekly: {
+      mirrorPath: weeklyResult.mirrorPath,
+      nextFocus: weeklyResult.mirror.next_focus,
+    },
+    claimBoundary:
+      "This is a Codex-operated local practice flow. It creates local learning artifacts and evidence, but does not prove fluency, realtime voice, or real-world transfer.",
   };
 }
 
@@ -1392,6 +1470,10 @@ function run() {
   }
   if (command === "report") {
     output(report(options), options.json);
+    return;
+  }
+  if (command === "practice") {
+    output(practice(options), options.json);
     return;
   }
   if (command === "home") {

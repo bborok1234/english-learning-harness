@@ -496,6 +496,7 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 | #154 | AIOS-1: Generate personal learner cockpit from runtime state | continue |
 | #156 | AIOS-2: Generate daily mission artifacts linked to learner cockpit | continue |
 | #158 | AIOS-3: Add interactive mission artifacts and learner reports | continue |
+| #160 | AIOS-4: Add Codex-operated daily practice flow | continue |
 
 #154 evidence currently shows:
 
@@ -519,3 +520,10 @@ M10 turns "immersive world" from cosmetic roleplay into a verified transfer wrap
 - Personal cockpit links the latest learner report from the journey section.
 - `scripts/interactive-artifact-report-smoke.mjs` verifies Playwright tab interaction, report generation, cockpit linkage, text/voice/image evidence counts, product-surface leak guard, and unsupported-claim guard.
 - This proves local interactive artifact/report mechanics only. It does not prove learning outcomes, generated-world retention, realtime voice, or real-world transfer.
+
+#160 evidence currently shows:
+
+- `node scripts/english-learning-harness.mjs practice` composes mission generation, session persistence, weekly mirror, learner report, and cockpit refresh into one Codex-operated daily flow.
+- `skills/daily-session/SKILL.md` tells Codex to use the agent-operated `practice` path after collecting learner answers and not paste internal engine commands into learner-facing output.
+- `scripts/codex-operated-practice-flow-smoke.mjs` verifies one practice run creates mission HTML, session artifact, weekly mirror, learner report JSON/HTML, cockpit state/HTML, Speaking Skill OS evidence, and no learner-facing command leakage.
+- This proves local Codex-operated flow mechanics only. It does not prove learning outcomes, realtime voice, or real-world transfer.
