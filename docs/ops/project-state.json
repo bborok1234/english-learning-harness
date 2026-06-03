@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02T00:00:00+09:00",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-14 learner cockpit no longer exposes internal commands; real owner pilot Day 1 answer still required",
-    "status": "AIOS-14 turns the personal cockpit into a cleaner learner product surface by replacing internal node command snippets with Korean Codex-facing start prompts. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
+    "stage": "AIOS-15 active pilot cockpit shows current card and quick replies; real owner pilot Day 1 answer still required",
+    "status": "AIOS-15 makes the active pilot easier to continue from the learner cockpit by linking the current pilot card, showing the learner-safe assistant prompt, and rendering quick reply choices with copy buttons. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner cockpit now presents today mission, generated artifact links, and next actions as Codex conversation prompts instead of shell commands. The engineering dashboard remains the place for commands, verification, issue status, and claim boundaries.",
+    "summary": "The learner cockpit now supports the active owner/self pilot as a product surface: progress, current card, assistant prompt, quick reply choices, saved-reply card, and local evidence links are visible without exposing internal commands. Real pilot completion still requires actual learner answers over at least five practice days.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, and owner-pilot cards as local product surfaces. The personal cockpit now keeps ordinary learner actions in Korean Codex-prompt language rather than internal node commands. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, and owner-pilot cards as local product surfaces. The personal cockpit now keeps ordinary learner actions in Korean Codex-prompt language and exposes active pilot current-card/quick-reply affordances. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-14 improves product-surface boundary mechanics only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
+    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-14/AIOS-15 improve product-surface boundary and pilot-continuation mechanics only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
   },
   "ssot": [
     {
@@ -565,6 +565,12 @@
       "path": "./ops/local-pilot-status.example.json",
       "role": "tracked example for ignored local pilot overlay",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md",
+      "path": "./phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md",
+      "role": "AIOS-15 active pilot cockpit current-card and quick-reply evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -928,6 +934,13 @@
       "status": "Pass",
       "evidence": "#214, personal-learner-cockpit-smoke, adaptive-mission-asset-priority-smoke, product-surface-smoke",
       "claim": "personal cockpit state/html render today mission and next actions as Korean Codex-facing prompts, strip internal start commands from latest mission and asset-deck summaries, and smokes fail if node script commands or learner-root flags leak into the product surface; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-48",
+      "label": "Active pilot cockpit current card and quick replies",
+      "status": "Pass",
+      "evidence": "#216, personal-learner-cockpit-active-pilot-smoke",
+      "claim": "active pilot cockpit state/html link the current pilot next-card artifact, expose the learner-safe assistant prompt, and render quick reply choices with copy buttons without internal command leakage; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -2547,6 +2560,18 @@
             "docs/phase-11-evidence/AIOS-14-learner-cockpit-command-free-surface.md",
             "scripts/adaptive-mission-asset-priority-smoke.mjs"
           ]
+        },
+        {
+          "id": "AIOS-15-ACTIVE-PILOT-CURRENT-CARD-REPLIES",
+          "title": "AIOS-15 active pilot current-card replies 통과",
+          "why": "실제 pilot을 매일 이어가려면 cockpit에서 현재 카드와 답변 후보를 바로 보고 Codex 대화로 가져갈 수 있어야 한다.",
+          "done": "active pilot cockpit state/html links current pilot-next-card artifacts, shows assistant prompt details, renders quick replies, and provides local copy buttons.",
+          "verification": "personal-learner-cockpit-active-pilot smoke validates current next-card link, assistant prompt, quick replies, copy button markup, saved reply link, and leak guards; Playwright fixture render confirms the active pilot section, current card link, 3 quick reply buttons, and no internal command text.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md"
+          ]
         }
       ]
     },
@@ -3186,6 +3211,11 @@
       "detail": "personal-learner-cockpit-active-pilot smoke validates one pilot-reply Day 0 card appears as active pilot progress in learner cockpit, points to the next learner-facing card, and links the latest saved-reply card without command or engineering leakage."
     },
     {
+      "name": "AIOS-15 active pilot current-card quick replies",
+      "status": "Pass",
+      "detail": "personal-learner-cockpit-active-pilot smoke validates current pilot card artifact linkage, assistant prompt details, quick replies, copy buttons, saved reply link, and no internal command leakage; Playwright fixture render confirms the visible cockpit controls."
+    },
+    {
       "name": "AIOS-12 redacted local pilot dashboard sync",
       "status": "Pass",
       "detail": "local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage."
@@ -3242,6 +3272,10 @@
     }
   ],
   "commands": [
+    {
+      "label": "Run AIOS-15 active pilot cockpit smoke",
+      "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
+    },
     {
       "label": "Run AIOS-14 cockpit command-free smoke",
       "command": "node scripts/personal-learner-cockpit-smoke.mjs"

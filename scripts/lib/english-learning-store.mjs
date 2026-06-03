@@ -3803,6 +3803,17 @@ function readActivePilotState(paths) {
   if (!existsSync(pilotStatePath)) return null;
   const state = JSON.parse(readFileSync(pilotStatePath, "utf8"));
   if (state.status === "complete") return null;
+  const nextCardJsonPath = resolve(paths.root, "artifacts/pilot/pilot-next-card.json");
+  const nextCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-next-card.html");
+  const nextCardArtifact =
+    existsSync(nextCardJsonPath) && existsSync(nextCardHtmlPath)
+      ? {
+          json: relative(paths.root, nextCardJsonPath),
+          html: relative(paths.root, nextCardHtmlPath),
+          url: `file://${nextCardHtmlPath}`,
+        }
+      : null;
+  const nextCardState = nextCardArtifact ? JSON.parse(readFileSync(nextCardJsonPath, "utf8")) : null;
   const replyCardJsonPath = resolve(paths.root, "artifacts/pilot/pilot-reply-card.json");
   const replyCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-reply-card.html");
   const latestReplyCard =
@@ -3864,6 +3875,13 @@ function readActivePilotState(paths) {
       nextPhase === "baseline" && baselineAnswers === 0
         ? '친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.'
         : nextCard?.ask ?? "",
+    current_card_artifact: nextCardArtifact,
+    assistant_prompt: nextCardState?.assistant_prompt?.text ?? "",
+    quick_replies: (nextCardState?.quick_replies ?? []).map((reply) => ({
+      id: reply.id,
+      text: reply.text,
+      note: reply.note,
+    })),
     latest_reply_card: latestReplyCard,
     state_file: relative(paths.root, pilotStatePath),
     claim_boundary:
@@ -4153,6 +4171,35 @@ function personalLearnerCockpitHtml(state) {
       color: var(--muted);
       font-size: 13px;
     }
+    .reply-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .reply-choice {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      padding: 12px;
+    }
+    .reply-choice p { font-weight: 700; }
+    .copy-reply {
+      border: 1px solid #b7cbbb;
+      border-radius: 8px;
+      background: #eef7f0;
+      color: #225f3d;
+      padding: 8px 10px;
+      font: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .copy-reply[data-copied="true"] {
+      background: #dff1e5;
+    }
     ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 8px; }
     li strong { color: var(--green); }
     details {
@@ -4204,7 +4251,37 @@ function personalLearnerCockpitHtml(state) {
             <h3>${escapeHtml(state.active_pilot.next_card.title)}</h3>
             <p class="ask">${escapeHtml(state.active_pilot.learner_prompt)}</p>
             <p class="subtle">예시: ${escapeHtml(state.active_pilot.next_card.example)}</p>
+            ${
+              state.active_pilot.current_card_artifact
+                ? `<p class="subtle">현재 카드: <a href="${escapeHtml(state.active_pilot.current_card_artifact.url)}">현재 pilot 카드 열기</a></p>`
+                : ""
+            }
           </div>
+          ${
+            state.active_pilot.assistant_prompt
+              ? `<details>
+            <summary>Codex가 말할 진행 안내</summary>
+            <p>${escapeHtml(state.active_pilot.assistant_prompt)}</p>
+          </details>`
+              : ""
+          }
+          ${
+            state.active_pilot.quick_replies?.length
+              ? `<div class="reply-grid" aria-label="pilot quick replies">
+            ${state.active_pilot.quick_replies
+              .map(
+                (reply, index) => `<div class="reply-choice">
+              <div>
+                <p>${escapeHtml(index + 1)}. ${escapeHtml(reply.text)}</p>
+                <span class="subtle">${escapeHtml(reply.note)}</span>
+              </div>
+              <button class="copy-reply" type="button" data-copy-reply="${escapeHtml(reply.text)}">복사</button>
+            </div>`,
+              )
+              .join("")}
+          </div>`
+              : ""
+          }
           ${
             state.active_pilot.latest_reply_card
               ? `<p class="subtle">방금 저장된 답변 카드: <a href="${escapeHtml(state.active_pilot.latest_reply_card.url)}">${escapeHtml(state.active_pilot.latest_reply_card.html)}</a></p>`
@@ -4359,6 +4436,20 @@ function personalLearnerCockpitHtml(state) {
       </aside>
     </div>
   </main>
+  <script>
+  document.querySelectorAll("[data-copy-reply]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const text = button.getAttribute("data-copy-reply") || "";
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = "복사됨";
+        button.dataset.copied = "true";
+      } catch {
+        button.textContent = "직접 복사";
+      }
+    });
+  });
+</script>
 </body>
 </html>
 `;

@@ -55,6 +55,21 @@ function main() {
   assert(state.active_pilot.partial.baseline_answers === 1, "cockpit should show captured baseline count");
   assert(state.active_pilot.next_card.card_id === "meaning_check", "cockpit should point to the next Day 0 card");
   assert(state.active_pilot.learner_prompt.includes("어디에서 만나자는 뜻인지"), "cockpit should show learner-facing next prompt");
+  assert(
+    state.active_pilot.current_card_artifact?.html === "artifacts/pilot/pilot-next-card.html",
+    "cockpit should link current pilot next-card HTML",
+  );
+  assert(
+    state.active_pilot.current_card_artifact?.json === "artifacts/pilot/pilot-next-card.json",
+    "cockpit should link current pilot next-card JSON",
+  );
+  assert(existsSync(resolve(learnerRoot, state.active_pilot.current_card_artifact.html)), "current next-card HTML missing");
+  assert(state.active_pilot.assistant_prompt.includes("답은 영어 한 문장만"), "cockpit should expose assistant prompt");
+  assert(state.active_pilot.quick_replies.length >= 2, "cockpit should expose quick replies");
+  assert(
+    state.active_pilot.quick_replies.some((reply) => reply.text === "Which place do you mean?"),
+    "cockpit quick replies should include the shortest clarification answer",
+  );
   assert(state.active_pilot.latest_reply_card?.html === "artifacts/pilot/pilot-reply-card.html", "cockpit should link latest reply card HTML");
   assert(state.active_pilot.latest_reply_card?.json === "artifacts/pilot/pilot-reply-card.json", "cockpit should link latest reply card JSON");
   assert(existsSync(resolve(learnerRoot, state.active_pilot.latest_reply_card.html)), "latest reply card HTML missing");
@@ -63,6 +78,10 @@ function main() {
   const html = readFileSync(cockpit.cockpitPath, "utf8");
   assert(html.includes("진행 중인 owner pilot"), "cockpit HTML missing active pilot section");
   assert(html.includes("어디에서 만나자는 뜻인지"), "cockpit HTML missing next pilot prompt");
+  assert(html.includes("현재 pilot 카드 열기"), "cockpit HTML should link current pilot card");
+  assert(html.includes("Codex가 말할 진행 안내"), "cockpit HTML should expose assistant prompt details");
+  assert(html.includes("Which place do you mean?"), "cockpit HTML should render quick reply text");
+  assert(html.includes("data-copy-reply=\"Which place do you mean?\""), "cockpit HTML should render quick reply copy button");
   assert(html.includes("방금 저장된 답변 카드"), "cockpit HTML should expose saved reply card link");
   assert(html.includes("pilot-reply-card.html"), "cockpit HTML should link reply card");
   for (const forbidden of ["pilot-capture", "pilot-reply ", "pilot-start", "product_journey_audit", "PR #", "issue #"]) {
