@@ -640,6 +640,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #206 | AIOS-12: Make pilot quick replies visually selectable | continue |
 | #208 | AIOS-12: Add copy buttons to pilot quick replies | continue |
 | #214 | AIOS-14: Remove internal commands from learner cockpit product surface | continue |
+| #216 | AIOS-15: Expose current pilot card and quick replies in learner cockpit | continue |
 
 #179 planned evidence should show:
 
@@ -680,5 +681,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - Personal cockpit now links the latest saved-reply card when `pilot-reply-card.html` exists.
 - `scripts/personal-learner-cockpit-active-pilot-smoke.mjs` verifies one captured Day 0 card appears as active pilot progress in cockpit, next card remains learner-facing, and the saved-reply card link is present without command leakage.
 - `docs/phase-15-evidence/AIOS-12-active-pilot-cockpit.md` records the active pilot cockpit evidence.
+- Personal cockpit now links the current `pilot-next-card.html/json`, renders the learner-safe assistant prompt, and shows quick reply choices with copy buttons.
+- `scripts/personal-learner-cockpit-active-pilot-smoke.mjs` verifies the current pilot card link, assistant prompt, quick replies, and copy buttons appear in cockpit without internal command leakage.
+- `docs/phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md` records the active pilot cockpit current-card/quick-reply evidence.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
