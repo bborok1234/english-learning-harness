@@ -3831,6 +3831,8 @@ function readActivePilotState(paths) {
   const nextCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-next-card.html");
   const launchCardJsonPath = resolve(paths.root, "artifacts/pilot/pilot-launch-card.json");
   const launchCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-launch-card.html");
+  const turnPacketJsonPath = resolve(paths.root, "artifacts/pilot/pilot-turn-packet.json");
+  const turnPacketHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-turn-packet.html");
   const launchCardArtifact =
     existsSync(launchCardJsonPath) && existsSync(launchCardHtmlPath)
       ? {
@@ -3845,6 +3847,14 @@ function readActivePilotState(paths) {
           json: relative(paths.root, nextCardJsonPath),
           html: relative(paths.root, nextCardHtmlPath),
           url: `file://${nextCardHtmlPath}`,
+      }
+      : null;
+  const turnPacketArtifact =
+    existsSync(turnPacketJsonPath) && existsSync(turnPacketHtmlPath)
+      ? {
+          json: relative(paths.root, turnPacketJsonPath),
+          html: relative(paths.root, turnPacketHtmlPath),
+          url: `file://${turnPacketHtmlPath}`,
         }
       : null;
   const nextCardState = nextCardArtifact ? JSON.parse(readFileSync(nextCardJsonPath, "utf8")) : null;
@@ -3911,6 +3921,7 @@ function readActivePilotState(paths) {
         ? nextCardState?.next_card?.ask ?? "아래 장면 중 하나를 고르거나, 바로 영어 한 문장만 말해보세요."
         : nextCard?.ask ?? "",
     launch_card_artifact: launchCardArtifact,
+    turn_packet_artifact: turnPacketArtifact,
     current_card_artifact: nextCardArtifact,
     assistant_prompt: nextCardState?.assistant_prompt?.text ?? "",
     quick_replies: (nextCardState?.quick_replies ?? []).map((reply) => ({
@@ -4307,6 +4318,11 @@ function personalLearnerCockpitHtml(state) {
             ${
               state.active_pilot.launch_card_artifact
                 ? `<p class="subtle">시작/재개 카드: <a href="${escapeHtml(state.active_pilot.launch_card_artifact.url)}">Pilot 시작/재개 카드 열기</a></p>`
+                : ""
+            }
+            ${
+              state.active_pilot.turn_packet_artifact
+                ? `<p class="subtle">다음 대화 턴: <a href="${escapeHtml(state.active_pilot.turn_packet_artifact.url)}">Codex 진행 카드 열기</a></p>`
                 : ""
             }
             ${
