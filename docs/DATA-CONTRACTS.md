@@ -617,7 +617,17 @@ The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifac
   },
   "learnerFacing": {
     "message": "저장 전 learner-safe confirmation text",
-    "saved": false
+    "saved": false,
+    "resumePrompt": "current learner-facing pilot prompt",
+    "quickReplies": [
+      {
+        "number": 1,
+        "id": "quick-1",
+        "text": "Which place do you mean?",
+        "note": "가장 짧고 안전한 답변"
+      }
+    ],
+    "responseRule": "영어 한 문장이나 번호 하나만 보내면 됩니다."
   },
   "integrity": {
     "stateExistedBefore": true,
@@ -634,9 +644,11 @@ The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifac
 }
 ```
 
-`pilot-intake` is for Codex conversation safety, where learner answers, Korean status requests, stop requests, operator instructions, and internal continuation payloads can appear in the same thread. It may refresh local next-card/cockpit artifacts through `pilot-next`, but it must not create `pilot-state.json` from a fresh preview, change any answer counts, mark consent, save transcript text, or attach friction notes. Returned preview JSON/HTML must not include the raw incoming message, transcript text, friction note text, issue/PR language, rubric internals, or unsupported speaking-improvement claims. If `saveEligible` is false, Codex must not call `pilot-reply` for that message.
+`pilot-intake` is for Codex conversation safety, where learner answers, Korean status requests, stop requests, operator instructions, and internal continuation payloads can appear in the same thread. It may refresh local next-card/cockpit artifacts through `pilot-next`, but it must not create `pilot-state.json` from a fresh preview, change any answer counts, mark consent, save transcript text, or attach friction notes. Returned preview JSON/HTML must not include the raw incoming message, transcript text, friction note text, issue/PR language, rubric internals, or unsupported speaking-improvement claims. If `saveEligible` is false, Codex must not call `pilot-reply` for that message; it should answer the non-learning request or resume the current card from `learnerFacing.resumePrompt` and `learnerFacing.quickReplies`.
 
 Internal context markers such as `codex_internal_context`, `<objective>`, `Continuation behavior`, `Completion audit`, `Blocked audit`, `Tokens used`, or `Do not call update_goal` must classify as `internal_context_block` with `saveEligible=false` even when the payload contains English prose.
+
+`pilot-intake-preview.json/html` may expose a `resume` object with the current learner-facing prompt, quick replies, and response rule. This is allowed learner-facing content because it comes from the current `pilot-next` card, not from the rejected raw input.
 
 `pilot-capture --json` returns the refreshed learner cockpit location after each captured card:
 

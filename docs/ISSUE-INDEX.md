@@ -663,6 +663,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #256 | AIOS-35: Attach pilot friction note after saved daily answer | continue |
 | #258 | AIOS-36: Add protected pilot answer intake preview | continue |
 | #260 | AIOS-37: Guard pilot intake against internal context blocks | continue |
+| #262 | AIOS-38: Return pending learner prompt after no-save pilot intake | continue |
 
 #179 planned evidence should show:
 
@@ -779,5 +780,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-intake` now treats Codex/internal context payloads such as `codex_internal_context`, `<objective>`, `Continuation behavior`, `Completion audit`, and `Blocked audit` as `internal_context_block` no-save input before direct-answer classification.
 - `scripts/phase15-owner-pilot-intake-preview-smoke.mjs` verifies an English-heavy goal continuation fixture remains no-save without creating `pilot-state.json` or leaking raw context into preview surfaces.
 - `docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md` records the internal-context intake guard boundary.
+- `pilot-intake` now returns `learnerFacing.resumePrompt`, `learnerFacing.quickReplies`, and preview `resume` content sourced from the current `pilot-next` card so Codex can resume after no-save turns.
+- `scripts/phase15-owner-pilot-intake-preview-smoke.mjs` verifies quick/meta/internal/direct previews include resume content, render it in HTML, and keep no-save invariants.
+- `docs/phase-15-evidence/AIOS-38-intake-resume-prompt.md` records the no-save resume prompt evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
