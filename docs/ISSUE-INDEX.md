@@ -657,6 +657,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #244 | AIOS-29: Generate local real-pilot run sheet before saving answers | continue |
 | #246 | AIOS-30: Generate redacted real-pilot continuity handoff | continue |
 | #248 | AIOS-31: Generate conversation-native pilot turn packet | continue |
+| #250 | AIOS-32: Link pilot turn packet from active learner cockpit | continue |
 
 #179 planned evidence should show:
 
@@ -755,5 +756,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-turn` now writes a Codex operator turn packet with learner-only prompt copy, quick replies, operator-only save policy, and local launch/next/handoff/cockpit links for the next real-pilot conversation turn.
 - `scripts/phase15-owner-pilot-turn-packet-smoke.mjs` verifies fresh/partial packets save no answer, expose Korean-first one-turn learner copy, render four local links, and exclude fixture transcript/friction text plus internal command, issue/PR, rubric, audit, and unsupported fluency language.
 - `docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md` records the conversation-native turn packet evidence boundary.
+- Active learner cockpit state/html now links `artifacts/pilot/pilot-turn-packet.json/html` as a learner-safe Codex continuation surface when the local packet exists.
+- `scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs` verifies turn-packet linkage, browser-rendered cockpit visibility, no extra answer save, preserved launch/next/reply links, and no command/issue/PR/rubric/audit leakage.
+- `docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md` records the active cockpit turn-link evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

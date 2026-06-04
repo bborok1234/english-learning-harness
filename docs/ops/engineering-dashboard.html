@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-31 generates a conversation-native real-pilot turn packet; active AIOS goal remains not complete",
-    "status": "AIOS-31 adds a no-answer-save Codex operator turn packet with learner-only prompt copy, quick replies, operator-only save policy, and launch/next/handoff/cockpit links. #179 real owner/self evidence and learning outcome claims remain unresolved.",
+    "stage": "AIOS-32 links the pilot turn packet from the active learner cockpit; active AIOS goal remains not complete",
+    "status": "AIOS-32 exposes the local Codex pilot turn packet from active cockpit state/html so the next real-pilot conversation turn can be resumed from the product surface. #179 real owner/self evidence and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, and Codex can prepare the exact next learner-facing pilot turn without exposing operator policy.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, and the active cockpit now links that turn packet as a continuation surface.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-31 is Codex operator turn-packet mechanics only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-32 is active cockpit navigation evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -1080,6 +1080,12 @@
       "label": "docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md",
       "path": "./phase-15-evidence/AIOS-31-pilot-turn-packet.md",
       "role": "AIOS-31 conversation-native Codex pilot turn packet evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md",
+      "path": "./phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md",
+      "role": "AIOS-32 active learner cockpit pilot turn packet link evidence",
       "kind": "source"
     }
   ],
@@ -3341,6 +3347,20 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md"
           ]
+        },
+        {
+          "id": "AIOS-32-COCKPIT-PILOT-TURN-LINK",
+          "title": "AIOS-32 cockpit pilot turn link 통과",
+          "why": "실제 제품 표면은 cockpit이다. 다음 pilot turn packet이 있어도 cockpit에서 찾을 수 없으면 사용자는 다시 파일/명령어 사고로 돌아가게 된다.",
+          "done": "active cockpit state/html이 pilot-turn-packet JSON/HTML을 learner-safe Codex continuation link로 노출하고 launch, next-card, quick replies, latest reply-card links를 유지한다.",
+          "verification": "personal learner cockpit pilot turn link smoke validates state link, rendered cockpit link, unchanged baseline answer count, preserved related links, and no command/issue/rubric/audit leakage.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs",
+            "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md"
+          ]
         }
       ]
     },
@@ -4129,6 +4149,11 @@
       "name": "AIOS-31 conversation-native pilot turn packet",
       "status": "pass",
       "detail": "node scripts/phase15-owner-pilot-turn-packet-smoke.mjs verifies learner/operator separation, no answer save, render links, redaction, and claim boundary."
+    },
+    {
+      "name": "AIOS-32 active cockpit pilot turn packet link",
+      "status": "pass",
+      "detail": "node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs verifies active cockpit state/html links the pilot turn packet without saving another answer or leaking internal language."
     }
   ],
   "commands": [
@@ -4655,6 +4680,10 @@
     {
       "label": "Run AIOS-31 pilot turn packet smoke",
       "command": "node scripts/phase15-owner-pilot-turn-packet-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-32 cockpit pilot turn link smoke",
+      "command": "node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs"
     }
   ]
 }
@@ -4663,12 +4692,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, and Codex can prepare the exact next learner-facing pilot turn without exposing operator policy.</p>
+        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, and the active cockpit now links that turn packet as a continuation surface.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-31 generates a conversation-native real-pilot turn packet; active AIOS goal remains not complete<br>
-        AIOS-31 adds a no-answer-save Codex operator turn packet with learner-only prompt copy, quick replies, operator-only save policy, and launch/next/handoff/cockpit links. #179 real owner/self evidence and learning outcome claims remain unresolved.
+        AIOS-32 links the pilot turn packet from the active learner cockpit; active AIOS goal remains not complete<br>
+        AIOS-32 exposes the local Codex pilot turn packet from active cockpit state/html so the next real-pilot conversation turn can be resumed from the product surface. #179 real owner/self evidence and learning outcome claims remain unresolved.
       </div>
     </header>
 
@@ -4781,16 +4810,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-26-COCKPIT-PILOT-LAUNCH-LINK</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md</span>
-              </div>
-              <h3>AIOS-26 cockpit pilot launch link 통과</h3>
-              <div class="card-row"><b>왜</b><p>실제 pilot launch card가 있어도 cockpit에서 발견할 수 없으면 daily product surface로 재개하기 어렵다.</p></div>
-              <div class="card-row"><b>완료</b><p>active pilot state/html이 pilot-launch-card artifact를 링크하고, 기존 next-card/reply-card 링크는 유지한다.</p></div>
-              <div class="card-row"><b>검증</b><p>personal-learner-cockpit-active-pilot-smoke validates launch card state/HTML linkage, file existence, no internal leakage, and existing active pilot checks.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-27-PRODUCT-CLAIM-GUARD</strong>
                 <span>scripts/product-claim-guard-smoke.mjs, README.md, README.en.md, docs/product/learner-cockpit-state.json, docs/product/learner-cockpit.html, docs/RESEARCH-BASIS.md, docs/phase-15-evidence/AIOS-27-product-claim-guard.md</span>
               </div>
@@ -4838,6 +4857,16 @@
               <div class="card-row"><b>왜</b><p>실제 제품 표면은 Codex 대화다. Codex가 다음 턴에서 무엇을 말해야 하는지와 답변 후 저장 정책을 분리해 알아야 학습자에게 명령어를 넘기지 않는다.</p></div>
               <div class="card-row"><b>완료</b><p>pilot-turn이 artifacts/pilot/pilot-turn-packet.json/html을 만들고 learnerTurn.say, quick replies, operator-only save policy, launch/next/handoff/cockpit links를 제공한다. 답변 저장과 consent mark는 하지 않는다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot turn packet smoke validates fresh/partial packets, browser render, no answer save, four local links, and no transcript/friction/internal-language leakage.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-32-COCKPIT-PILOT-TURN-LINK</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md</span>
+              </div>
+              <h3>AIOS-32 cockpit pilot turn link 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 제품 표면은 cockpit이다. 다음 pilot turn packet이 있어도 cockpit에서 찾을 수 없으면 사용자는 다시 파일/명령어 사고로 돌아가게 된다.</p></div>
+              <div class="card-row"><b>완료</b><p>active cockpit state/html이 pilot-turn-packet JSON/HTML을 learner-safe Codex continuation link로 노출하고 launch, next-card, quick replies, latest reply-card links를 유지한다.</p></div>
+              <div class="card-row"><b>검증</b><p>personal learner cockpit pilot turn link smoke validates state link, rendered cockpit link, unchanged baseline answer count, preserved related links, and no command/issue/rubric/audit leakage.</p></div>
             </article>
         </div>
       </section>
@@ -5600,6 +5629,10 @@
               <strong>docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md</strong>
               <span>AIOS-31 conversation-native Codex pilot turn packet evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md">
+              <strong>docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md</strong>
+              <span>AIOS-32 active learner cockpit pilot turn packet link evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5607,10 +5640,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-24 protected issue tracker guard</td>
-              <td><strong>Pass</strong><span>pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection.</span></td>
-            </tr>
             <tr>
               <td>AIOS-25 real pilot launch card</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage.</span></td>
@@ -5638,6 +5667,10 @@
             <tr>
               <td>AIOS-31 conversation-native pilot turn packet</td>
               <td><strong>pass</strong><span>node scripts/phase15-owner-pilot-turn-packet-smoke.mjs verifies learner/operator separation, no answer save, render links, redaction, and claim boundary.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-32 active cockpit pilot turn packet link</td>
+              <td><strong>pass</strong><span>node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs verifies active cockpit state/html links the pilot turn packet without saving another answer or leaking internal language.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5683,7 +5716,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 138개 보기</summary>
+        <summary>완료 이력 139개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -7066,10 +7099,20 @@
               <div class="card-row"><b>완료</b><p>pilot-launch가 새 답변을 저장하지 않고 진행률, 다음 질문, quick replies, 저장 경계, privacy, cockpit link를 담은 learner-facing JSON/HTML launch card를 쓴다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15-owner-pilot-launch-card-smoke validates fresh/resume launch cards, Playwright render, no answer persistence, cockpit link, quick replies, privacy, and no internal language leakage.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-26-COCKPIT-PILOT-LAUNCH-LINK</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md</span>
+              </div>
+              <h3>AIOS-26 cockpit pilot launch link 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot launch card가 있어도 cockpit에서 발견할 수 없으면 daily product surface로 재개하기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>active pilot state/html이 pilot-launch-card artifact를 링크하고, 기존 next-card/reply-card 링크는 유지한다.</p></div>
+              <div class="card-row"><b>검증</b><p>personal-learner-cockpit-active-pilot-smoke validates launch card state/HTML linkage, file existence, no internal leakage, and existing active pilot checks.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 132개 보기</summary>
+        <summary>전체 검증 133개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -7602,12 +7645,16 @@
               <td>AIOS-31 conversation-native pilot turn packet</td>
               <td><strong>pass</strong><span>node scripts/phase15-owner-pilot-turn-packet-smoke.mjs verifies learner/operator separation, no answer save, render links, redaction, and claim boundary.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-32 active cockpit pilot turn packet link</td>
+              <td><strong>pass</strong><span>node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs verifies active cockpit state/html links the pilot turn packet without saving another answer or leaking internal language.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 131개 보기</summary>
+        <summary>전체 명령 132개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -8133,6 +8180,10 @@
             <div class="command">
               <span>Run AIOS-31 pilot turn packet smoke</span>
               <code>node scripts/phase15-owner-pilot-turn-packet-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-32 cockpit pilot turn link smoke</span>
+              <code>node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs</code>
             </div>
         </div>
       </details>
