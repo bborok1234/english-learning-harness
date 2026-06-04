@@ -107,6 +107,7 @@ async function main() {
   const freshAfter = status(freshRoot);
   assert(fresh.action === "pilot-launch", "pilot-launch action mismatch");
   assert(fresh.savedAnswer === false, "pilot-launch should not save an answer");
+  assert(!existsSync(resolve(freshRoot, "pilot-state.json")), "fresh launch should not create pilot-state consent or answers");
   assert(fresh.nextCard.phase === "baseline", "fresh launch should start at baseline");
   assert(fresh.nextCard.title === "첫 장면 고르기", "fresh launch should show the immersive first card");
   assert(fresh.quickReplies.length >= 3, "fresh launch should include quick replies");

@@ -75,6 +75,11 @@ function main() {
     assert(capture.committed === (index === baselineCards.length - 1), `baseline capture ${index + 1} commit mismatch`);
     assert(capture.cockpit?.htmlPath && existsSync(capture.cockpit.htmlPath), `baseline capture ${index + 1} cockpit missing`);
     assert(capture.cockpit.activePilot, `baseline capture ${index + 1} should expose active pilot cockpit snapshot`);
+    if (index === 0) {
+      const firstState = readState();
+      assert(firstState.consent.scope === "local-only", "first saved pilot answer should record local-only consent scope");
+      assert(firstState.consent.accepted_at === isoDay(0), "first saved pilot answer should timestamp consent");
+    }
   }
 
   const afterBaseline = readState();

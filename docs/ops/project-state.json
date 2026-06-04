@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-27 guards learner-facing product claims; active AIOS goal remains not complete",
-    "status": "AIOS-27 adds a repo-level learner-facing product claim guard across README, English README, learner cockpit state/html, and research basis. #179 real owner/self evidence and learning outcome claims remain unresolved.",
+    "stage": "AIOS-28 records local-only consent on first pilot save; active AIOS goal remains not complete",
+    "status": "AIOS-28 keeps pilot launch as a no-save/no-consent preview while first actual pilot answer persistence records local-only consent metadata. #179 real owner/self evidence and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, and learner-facing public/product surfaces now have a shared claim guard that keeps unsupported outcome claims blocked.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, and pilot answer persistence now records local-only consent at first save.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, and a learner-facing product claim guard across public/product surfaces. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-27 is product claim-governance evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-28 is privacy and consent mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -654,6 +654,12 @@
       "label": "docs/phase-15-evidence/AIOS-27-product-claim-guard.md",
       "path": "./phase-15-evidence/AIOS-27-product-claim-guard.md",
       "role": "AIOS-27 learner-facing product claim guard evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-28-pilot-consent-save.md",
+      "path": "./phase-15-evidence/AIOS-28-pilot-consent-save.md",
+      "role": "AIOS-28 first-save local-only pilot consent evidence",
       "kind": "source"
     }
   ],
@@ -2857,6 +2863,22 @@
             "docs/RESEARCH-BASIS.md",
             "docs/phase-15-evidence/AIOS-27-product-claim-guard.md"
           ]
+        },
+        {
+          "id": "AIOS-28-PILOT-CONSENT-SAVE",
+          "title": "AIOS-28 pilot first-save consent 통과",
+          "why": "실제 pilot evidence를 모으기 전, preview 표면은 저장하지 않고 첫 저장 시 local-only consent가 상태에 남아야 한다.",
+          "done": "pilot-launch는 pilot-state를 만들지 않는 preview로 유지하고, pilot-capture/pilot-reply 저장 경로는 첫 답변 저장 시 consent.scope와 accepted_at을 기록한다.",
+          "verification": "owner pilot launch-card smoke validates no pilot-state on fresh launch; owner pilot capture smoke validates first saved answer records local-only consent scope and timestamp; reply routing smoke still routes through capture.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-launch-card-smoke.mjs",
+            "scripts/phase15-owner-pilot-capture-smoke.mjs",
+            "scripts/phase15-owner-pilot-reply-routing-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-28-pilot-consent-save.md"
+          ]
         }
       ]
     },
@@ -3625,6 +3647,11 @@
       "name": "AIOS-27 product claim guard",
       "status": "Pass",
       "detail": "product-claim-guard smoke validates README.md, README.en.md, learner cockpit state/html, and RESEARCH-BASIS keep allowed learning-design claims separate from blocked outcome claims."
+    },
+    {
+      "name": "AIOS-28 pilot first-save consent",
+      "status": "Pass",
+      "detail": "launch-card smoke validates fresh launch saves no pilot-state, capture smoke validates first saved answer records local-only consent scope/timestamp, and reply-routing smoke still routes through capture."
     }
   ],
   "commands": [
@@ -4135,6 +4162,10 @@
     {
       "label": "Run AIOS-27 product claim guard smoke",
       "command": "node scripts/product-claim-guard-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-28 pilot consent save smokes",
+      "command": "node scripts/phase15-owner-pilot-launch-card-smoke.mjs && node scripts/phase15-owner-pilot-capture-smoke.mjs"
     }
   ]
 }

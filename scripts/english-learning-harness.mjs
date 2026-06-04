@@ -1181,6 +1181,20 @@ function writePilotState(paths, state, date = new Date()) {
   return normalized;
 }
 
+function ensurePilotConsent(state, date, scope = "local-only") {
+  return {
+    ...state,
+    consent: {
+      ...state.consent,
+      scope,
+      accepted_at: state.consent?.accepted_at || date.toISOString(),
+      note:
+        state.consent?.note ||
+        "Pilot data stays local by default. Do not post transcripts, private notes, local paths, audio, or image files publicly without explicit review.",
+    },
+  };
+}
+
 function relativeToRoot(paths, filePath) {
   return filePath ? relative(paths.root, filePath) : "";
 }
@@ -1470,6 +1484,7 @@ function pilotCapture(options) {
   if (!["baseline", "day", "final"].includes(phase)) {
     throw new Error("--phase must be baseline, day, or final");
   }
+  state = ensurePilotConsent(state, date, options.consent || state.consent?.scope || "local-only");
 
   if (phase === "day") {
     const dayNumber = options.day ?? completedDays + 1;

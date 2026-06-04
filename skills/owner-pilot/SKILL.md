@@ -14,6 +14,7 @@ Run the owner/self pilot as a learner-facing Codex conversation, not as a comman
 - Use Korean-first guidance and ask for one short English answer at a time.
 - Keep the participant identity generic unless the learner explicitly asks to store a name.
 - Keep pilot data local by default. Do not post transcripts or friction notes publicly without explicit review.
+- The launch/next-card preview must not save a learner answer or mark consent. The first actual saved pilot answer records local-only consent metadata in `pilot-state.json`.
 - A real pilot is not complete until actual learner transcript evidence exists for Day 0, at least five daily sessions, and the final sample.
 - Fixture smokes prove mechanics only. Never close or claim the real pilot from fixture data.
 - Do not promise fluency, retention, realtime voice efficacy, generated-media gains, or real-world speaking ability.
@@ -35,7 +36,7 @@ Before asking the learner to answer the real pilot, generate the launch card int
 node scripts/english-learning-harness.mjs pilot-launch --json
 ```
 
-Use this as the safest start/resume surface. It shows current progress, the next learner prompt, quick replies, privacy, and what will be saved after the learner answers. It must not save a new answer by itself.
+Use this as the safest start/resume surface. It shows current progress, the next learner prompt, quick replies, privacy, and what will be saved after the learner answers. It must not save a new answer or mark consent by itself.
 
 Before asking the next learner-facing card directly, generate the local next-card artifact internally:
 
@@ -60,7 +61,7 @@ If the learner picks a quick reply, use:
 node scripts/english-learning-harness.mjs pilot-reply --quick-reply "1" --json
 ```
 
-If the answer belongs to a daily pilot card and the learner mentioned a friction point, add `--friction-note "<short note>"`. The router reads current pilot state and saves the answer to the next baseline, daily, or final card. Do not ask the learner to choose a phase, card id, or day number.
+If the answer belongs to a daily pilot card and the learner mentioned a friction point, add `--friction-note "<short note>"`. The router reads current pilot state and saves the answer to the next baseline, daily, or final card. The first saved answer records local-only consent metadata. Do not ask the learner to choose a phase, card id, or day number.
 
 After saving, the router refreshes cockpit, the next local `pilot-next-card.html`, and a latest `pilot-reply-card.html` saved-reply surface. Use the returned `learnerFacing` object to summarize what was saved, show the learner-safe recast/next phrase after daily cards, and ask the next card from `learnerFacing.nextCard` when continuing immediately.
 

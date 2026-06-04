@@ -574,6 +574,8 @@ When a pilot is active, `cockpit-state.json` may include:
 
 The learner-facing cockpit may link `latest_reply_card` when a saved-reply card exists. It must not expose `pilot-reply` command text, `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, transcript internals, or `product_journey_audit` internals.
 
+`pilot-launch` and `pilot-next` may generate learner-facing preview artifacts, but they must not create a real pilot answer or mark consent. The first answer saved through `pilot-capture` or `pilot-reply` records local-only consent metadata in `pilot-state.json`.
+
 `pilot-capture --json` returns the refreshed learner cockpit location after each captured card:
 
 ```json

@@ -653,6 +653,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #236 | AIOS-25: Add learner-facing real pilot launch card | continue |
 | #238 | AIOS-26: Surface real pilot launch card in learner cockpit | continue |
 | #240 | AIOS-27: Guard learner-facing learning claims across product surfaces | continue |
+| #242 | AIOS-28: Record local-only consent on first real pilot save | continue |
 
 #179 planned evidence should show:
 
@@ -739,5 +740,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md` records the cockpit launch-card discovery evidence.
 - `scripts/product-claim-guard-smoke.mjs` verifies README.md, README.en.md, learner cockpit state/html, and RESEARCH-BASIS keep allowed learning-design claims separate from blocked outcome claims.
 - `docs/phase-15-evidence/AIOS-27-product-claim-guard.md` records the product claim-governance evidence boundary.
+- `pilot-capture` now records local-only consent metadata before the first saved pilot answer, while `pilot-launch` remains a no-save/no-consent preview surface.
+- `scripts/phase15-owner-pilot-launch-card-smoke.mjs` verifies fresh launch does not create `pilot-state.json`; `scripts/phase15-owner-pilot-capture-smoke.mjs` verifies first saved answer records consent scope/timestamp.
+- `docs/phase-15-evidence/AIOS-28-pilot-consent-save.md` records the first-save consent mechanics boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
