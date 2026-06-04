@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-37 guards internal context intake; active AIOS goal remains not complete",
-    "status": "AIOS-37 prevents Codex goal/continuation payloads from being mistaken for learner English answers. Real owner/self daily sessions, final sample, report, and learning outcome claims remain unresolved.",
+    "stage": "AIOS-38 restores learner prompt after no-save intake; active AIOS goal remains not complete",
+    "status": "AIOS-38 lets Codex resume the current learner-facing pilot card after no-save intake turns. Real owner/self daily sessions, final sample, report, and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet, resume from redacted handoff, prepare the next learner-facing turn, inspect a redacted evidence gap, attach post-answer friction notes, preview incoming pilot messages before saving, and now rejects internal goal/continuation context blocks before direct-answer classification.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet, resume from redacted handoff, prepare the next learner-facing turn, inspect a redacted evidence gap, attach post-answer friction notes, preview incoming pilot messages before saving, reject internal goal/continuation context blocks, and now recover to the current learner prompt plus quick replies after no-save intake.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, protected pilot answer intake previews, internal-context intake no-save guards, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, protected pilot answer intake previews, internal-context intake no-save guards, no-save intake resume prompts, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-37 is internal-context intake guard mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-38 is no-save intake recovery mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -715,13 +715,19 @@
       "path": "./phase-15-evidence/AIOS-37-internal-context-intake-guard.md",
       "role": "AIOS-37 internal continuation/context intake guard evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-38-intake-resume-prompt.md",
+      "path": "./phase-15-evidence/AIOS-38-intake-resume-prompt.md",
+      "role": "AIOS-38 no-save intake resume prompt evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, protected intake preview, and internal-context no-save guard implemented; #179 stays open",
+      "detail": "automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, protected intake preview, internal-context no-save guard, and intake resume prompt implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -1141,6 +1147,13 @@
       "status": "Pass",
       "evidence": "#260, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke",
       "claim": "pilot-intake recognizes Codex/internal goal continuation payloads before direct-answer classification and keeps them no-save without mutating pilot answer counts; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-57",
+      "label": "No-save intake resume prompt",
+      "status": "Pass",
+      "evidence": "#262, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke",
+      "claim": "pilot-intake returns the current learner-facing resume prompt and quick replies after no-save or save-eligible previews without mutating pilot answer counts; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -3076,6 +3089,21 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md"
           ]
+        },
+        {
+          "id": "AIOS-38-INTAKE-RESUME-PROMPT",
+          "title": "AIOS-38 no-save intake resume prompt 통과",
+          "why": "No-save turns should not strand the learner. After status/internal/meta input, Codex needs the current learner-facing card and quick replies in the same result to resume smoothly.",
+          "done": "pilot-intake now returns learnerFacing.resumePrompt, learnerFacing.quickReplies, responseRule, and preview resume JSON/HTML sourced from the current pilot-next card.",
+          "verification": "phase15 owner pilot intake preview smoke validates quick/meta/internal/direct previews include resume prompt and quick replies, render the resume section, and keep no-save invariants.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-intake-preview-smoke.mjs",
+            "scripts/phase15-owner-pilot-skill-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-38-intake-resume-prompt.md"
+          ]
         }
       ]
     },
@@ -3894,6 +3922,11 @@
       "name": "AIOS-37 internal context intake no-save guard",
       "status": "pass",
       "detail": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies English-heavy Codex internal context is classified as no-save before any pilot-reply route."
+    },
+    {
+      "name": "AIOS-38 no-save intake resume prompt",
+      "status": "pass",
+      "detail": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies intake previews include learner-facing resume prompt/quick replies and render them without saving answers."
     }
   ],
   "commands": [
@@ -4443,6 +4476,10 @@
     },
     {
       "label": "Run AIOS-37 internal context intake guard smoke",
+      "command": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-38 intake resume prompt smoke",
       "command": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs"
     }
   ]

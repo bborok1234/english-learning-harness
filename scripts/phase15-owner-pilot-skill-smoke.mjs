@@ -35,6 +35,8 @@ function main() {
     "Use it as a no-save guard.",
     "If `saveEligible` is true, save with `pilot-reply`.",
     "If `route` is `no-save`, do not store that message as pilot evidence",
+    "learnerFacing.resumePrompt",
+    "learnerFacing.quickReplies",
     "codex_internal_context",
     "Continuation behavior",
     "Completion audit",

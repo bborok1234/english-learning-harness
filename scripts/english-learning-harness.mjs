@@ -1937,6 +1937,13 @@ function classifyPilotIntake({ text, quickReply, nextCardArtifact }) {
 }
 
 function pilotIntakeArtifact({ paths, date, preview, nextCardArtifact }) {
+  const resumePrompt = nextCardArtifact.assistantPrompt?.text || nextCardArtifact.nextCard?.ask || "";
+  const resumeQuickReplies = (nextCardArtifact.quickReplies ?? []).map((reply, index) => ({
+    number: index + 1,
+    id: reply.id,
+    text: reply.text,
+    note: reply.note,
+  }));
   const artifact = {
     schema_version: 1,
     generated_at: date.toISOString(),
@@ -1955,9 +1962,14 @@ function pilotIntakeArtifact({ paths, date, preview, nextCardArtifact }) {
         }
       : null,
     learner_message: preview.learnerMessage,
+    resume: {
+      prompt: resumePrompt,
+      quick_replies: resumeQuickReplies,
+      response_rule: nextCardArtifact.assistantPrompt?.answer_rule ?? "영어 한 문장이나 번호 하나만 보내면 됩니다.",
+    },
     next_operator_step: preview.saveEligible
       ? "If the learner meant this as the current pilot answer, Codex may now save it through the protected reply route."
-      : "Do not save this message as pilot evidence. Answer the learner request or ask for one short English sentence.",
+      : "Do not save this message as pilot evidence. Answer the learner request or reuse the resume prompt.",
     privacy: "Preview artifacts do not include the learner's raw message. Real transcripts remain local unless explicitly reviewed.",
     claim_boundary:
       "This preview classifies one incoming pilot message before saving. It saves no learner answer, proves no learning outcome, and does not complete the real pilot.",
@@ -1985,6 +1997,10 @@ function pilotIntakeArtifact({ paths, date, preview, nextCardArtifact }) {
     p { margin: 0; }
     .subtle, footer { color: var(--muted); }
     .status { margin-top: 18px; padding: 16px; border-radius: 8px; background: ${artifact.save_eligible ? "var(--safe)" : "var(--hold)"}; font-size: 20px; font-weight: 760; }
+    .resume { margin-top: 18px; padding: 16px; border-radius: 8px; background: #eef5f0; }
+    .resume-prompt { margin-top: 8px; white-space: pre-wrap; font-size: 18px; font-weight: 720; overflow-wrap: anywhere; }
+    .replies { margin: 12px 0 0; padding-left: 20px; }
+    .replies li { margin: 6px 0; overflow-wrap: anywhere; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
     .cell { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: #fbfcfa; overflow-wrap: anywhere; }
     footer { margin-top: 16px; font-size: 13px; }
@@ -2004,6 +2020,21 @@ function pilotIntakeArtifact({ paths, date, preview, nextCardArtifact }) {
         <div class="cell"><strong>다음 단계</strong><p>${artifact.save_eligible ? "학습 답변으로 저장 가능" : "저장하지 않고 응답/재질문"}</p></div>
         <div class="cell"><strong>현재 카드</strong><p>${escapeHtml(artifact.next_card?.title ?? "없음")}</p></div>
       </div>
+      ${
+        artifact.resume.prompt
+          ? `<section class="resume" aria-label="resume prompt">
+        <h2>현재 카드로 돌아가기</h2>
+        <p class="resume-prompt">${escapeHtml(artifact.resume.prompt)}</p>
+        ${
+          artifact.resume.quick_replies.length
+            ? `<ol class="replies">${artifact.resume.quick_replies
+                .map((reply) => `<li>${escapeHtml(reply.text)} <span class="subtle">(${escapeHtml(reply.note)})</span></li>`)
+                .join("")}</ol>`
+            : ""
+        }
+      </section>`
+          : ""
+      }
       <h2>프라이버시</h2>
       <p class="subtle">${escapeHtml(artifact.privacy)}</p>
     </section>
@@ -2057,6 +2088,9 @@ function pilotIntake(options) {
     learnerFacing: {
       message: preview.learnerMessage,
       saved: false,
+      resumePrompt: previewArtifact.artifact.resume.prompt,
+      quickReplies: previewArtifact.artifact.resume.quick_replies,
+      responseRule: previewArtifact.artifact.resume.response_rule,
     },
     integrity: {
       stateExistedBefore: beforeStateExists,

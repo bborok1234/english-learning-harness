@@ -114,6 +114,8 @@ async function main() {
   assert(quick.saveEligible === true, "quick reply should be save eligible");
   assert(quick.route === "pilot-reply-quick", "quick reply route mismatch");
   assert(quick.quickReply.id === "quick-1", "quick reply id mismatch");
+  assert(quick.learnerFacing.resumePrompt.includes("첫 장면"), "quick preview should include a resume prompt");
+  assert(quick.learnerFacing.quickReplies.length === 3, "quick preview should include current quick replies");
   assertNoSaveInvariant(quick, { baselineAnswers: 0, completedDailySessions: 0 });
 
   const meta = runJson([
@@ -130,6 +132,8 @@ async function main() {
   assert(meta.classification === "korean_meta_or_control", "Korean dashboard request should classify as meta/control");
   assert(meta.saveEligible === false, "meta request must not be save eligible");
   assert(meta.route === "no-save", "meta request route mismatch");
+  assert(meta.learnerFacing.resumePrompt.includes("첫 장면"), "meta preview should include a resume prompt");
+  assert(meta.learnerFacing.quickReplies.length === 3, "meta preview should include current quick replies");
   assertNoSaveInvariant(meta, { baselineAnswers: 0, completedDailySessions: 0 });
 
   const internal = runJson([
@@ -146,6 +150,8 @@ async function main() {
   assert(internal.classification === "internal_context_block", "internal context should classify as no-save");
   assert(internal.saveEligible === false, "internal context must not be save eligible");
   assert(internal.route === "no-save", "internal context route mismatch");
+  assert(internal.learnerFacing.resumePrompt.includes("첫 장면"), "internal context should include a resume prompt");
+  assert(internal.learnerFacing.quickReplies.length === 3, "internal context should include current quick replies");
   assertNoSaveInvariant(internal, { baselineAnswers: 0, completedDailySessions: 0 });
   assert(!existsSync(resolve(freshRoot, "pilot-state.json")), "fresh intake preview should not create pilot state");
 
@@ -177,6 +183,8 @@ async function main() {
   assert(direct.classification === "direct_english_answer", "English answer should classify as direct answer");
   assert(direct.saveEligible === true, "English answer should be save eligible");
   assert(direct.route === "pilot-reply-direct", "English answer route mismatch");
+  assert(direct.learnerFacing.resumePrompt.includes("어디에서 만나자는 뜻인지"), "direct preview should include current resume prompt");
+  assert(direct.learnerFacing.quickReplies.length === 3, "direct preview should include current quick replies");
   assertNoSaveInvariant(direct, { baselineAnswers: 1, completedDailySessions: 0 });
 
   const afterPartialState = readJson(resolve(partialRoot, "pilot-state.json"));
@@ -189,7 +197,11 @@ async function main() {
   const previewJson = readFileSync(direct.previewArtifact.jsonPath, "utf8");
   const previewHtml = readFileSync(direct.previewArtifact.htmlPath, "utf8");
   assert(previewJson.includes('"saved_answer": false'), "preview JSON should mark no save");
+  assert(previewJson.includes('"resume"'), "preview JSON should include resume data");
+  assert(previewJson.includes("Which place do you mean?"), "preview JSON should include learner-safe quick replies");
   assert(previewHtml.includes("저장 전 확인"), "preview HTML should render learner-safe heading");
+  assert(previewHtml.includes("현재 카드로 돌아가기"), "preview HTML should render resume section");
+  assert(previewHtml.includes("Which place do you mean?"), "preview HTML should render learner-safe quick replies");
   assertNoRawOrInternalLeak(JSON.stringify(quick), "quick output");
   assertNoRawOrInternalLeak(JSON.stringify(meta), "meta output");
   assertNoRawOrInternalLeak(JSON.stringify(internal), "internal context output");
@@ -201,6 +213,8 @@ async function main() {
   assert(rendered.title === "Pilot Intake Preview", "rendered preview title mismatch");
   assert(rendered.h1 === "저장 전 확인", "rendered preview heading mismatch");
   assert(rendered.text.includes("아직 저장하지 않았어요"), "rendered preview should show no-save copy");
+  assert(rendered.text.includes("현재 카드로 돌아가기"), "rendered preview should show resume section");
+  assert(rendered.text.includes("Which place do you mean?"), "rendered preview should show current quick replies");
   assert(rendered.cellCount === 4, "rendered preview should show four status cells");
   assertNoRawOrInternalLeak(rendered.text, "rendered preview");
 
@@ -208,7 +222,7 @@ async function main() {
     JSON.stringify(
       {
         status: "pass",
-        issues: ["AIOS-36", "AIOS-37"],
+        issues: ["AIOS-36", "AIOS-37", "AIOS-38"],
         freshRoot,
         partialRoot,
         previewHtml: direct.previewArtifact.htmlPath,
@@ -224,6 +238,6 @@ async function main() {
 try {
   await main();
 } catch (error) {
-  console.error(JSON.stringify({ status: "fail", issues: ["AIOS-36", "AIOS-37"], error: error.message }, null, 2));
+  console.error(JSON.stringify({ status: "fail", issues: ["AIOS-36", "AIOS-37", "AIOS-38"], error: error.message }, null, 2));
   process.exitCode = 1;
 }
