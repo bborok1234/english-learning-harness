@@ -45,7 +45,21 @@ Before asking the first learner-facing daily prompt, prefer generating the local
 node scripts/english-learning-harness.mjs practice-next --json
 ```
 
-Use the returned `assistantPrompt.text` as the default learner-facing prompt. It should expose a concrete daily scene, one-sentence answer rule, quick replies, and the current cockpit link without showing engine commands. If the learner chooses a quick reply by number, treat that selected English sentence as the learner answer and persist it through the `practice` engine path yourself.
+Use the returned `assistantPrompt.text` as the default learner-facing prompt. It should expose a concrete daily scene, one-sentence answer rule, quick replies, and the current cockpit link without showing engine commands.
+
+If the learner chooses a quick reply by number, save it internally through the reply router:
+
+```bash
+node scripts/english-learning-harness.mjs practice-reply --quick-reply "1" --json
+```
+
+If the learner types their own English sentence, use:
+
+```bash
+node scripts/english-learning-harness.mjs practice-reply --say "<learner answer>" --json
+```
+
+The router resolves the start-card quick reply, runs the `practice` persistence flow, refreshes mission/report/cockpit, and writes a learner-facing saved-reply card. Do not ask the learner to retype a selected quick reply.
 
 After collecting the learner's answer(s), call the local engine internally:
 

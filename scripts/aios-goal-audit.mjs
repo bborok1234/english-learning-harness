@@ -109,6 +109,7 @@ function buildAudit() {
         "docs/product/learner-cockpit-state.json",
         "docs/product/learner-cockpit.html",
         "scripts/daily-practice-start-card-smoke.mjs",
+        "scripts/daily-practice-reply-routing-smoke.mjs",
         "scripts/product-surface-smoke.mjs",
         "scripts/personal-learner-cockpit-smoke.mjs",
       ],
@@ -122,6 +123,13 @@ function buildAudit() {
           pass: fileIncludes("scripts/daily-practice-start-card-smoke.mjs", [
             "learner-ready daily practice start card",
             "quickReplies",
+          ]),
+        },
+        {
+          label: "Daily practice quick replies route into persistence",
+          pass: fileIncludes("scripts/daily-practice-reply-routing-smoke.mjs", [
+            "practice-reply",
+            "quickReplySaved",
           ]),
         },
       ],

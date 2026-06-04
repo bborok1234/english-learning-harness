@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T01:33:02.982Z",
+  "generated_at": "2026-06-04T01:42:31.994Z",
   "surface": "engineering-governance",
   "objective": "Build the AI-Native English Learning Operating System on Codex for Korean learners with Speaking Skill OS, narrative missions, multimodal/generated artifacts, learner cockpit, journeys, reports, and adaptive governance.",
   "overall_status": "not_complete",
@@ -88,6 +88,10 @@
             "exists": true
           },
           {
+            "path": "scripts/daily-practice-reply-routing-smoke.mjs",
+            "exists": true
+          },
+          {
             "path": "scripts/product-surface-smoke.mjs",
             "exists": true
           },
@@ -103,6 +107,10 @@
           },
           {
             "label": "Daily practice has a learner-ready start card",
+            "pass": true
+          },
+          {
+            "label": "Daily practice quick replies route into persistence",
             "pass": true
           }
         ]

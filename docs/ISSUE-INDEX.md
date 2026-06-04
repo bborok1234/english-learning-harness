@@ -646,6 +646,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #222 | AIOS-18: Align owner-pilot skill contract with immersive first-card start | continue |
 | #224 | AIOS-19: Add goal completion audit for AI-native OS objective | continue |
 | #226 | AIOS-20: Add learner-ready daily practice start card | continue |
+| #228 | AIOS-21: Route daily practice quick replies into persistence | continue |
 
 #179 planned evidence should show:
 
@@ -708,5 +709,9 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `skills/daily-session/SKILL.md` now tells Codex to generate the `practice-next` card before asking the first daily prompt.
 - `scripts/daily-practice-start-card-smoke.mjs` verifies the card JSON/HTML, scene-matched quick replies, copy buttons, cockpit link, and no internal command/issue/audit leakage.
 - `docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md` records the daily start-card evidence boundary.
+- `practice-reply --quick-reply` now resolves selected start-card quick replies, runs the existing practice persistence flow, and writes a learner-facing saved-reply card.
+- `practice-reply --say` saves direct learner sentences through the same reply route.
+- `scripts/daily-practice-reply-routing-smoke.mjs` verifies quick-reply routing, freeform routing, invalid quick-reply rejection, saved-reply card rendering, cockpit/report links, and no internal command/issue/audit leakage.
+- `docs/phase-15-evidence/AIOS-21-daily-practice-reply-routing.md` records the daily reply routing evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
