@@ -193,6 +193,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-launch [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-run-sheet [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-handoff [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -2581,6 +2582,188 @@ function pilotRunSheet(options) {
   };
 }
 
+function pilotHandoff(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const stateExists = existsSync(paths.pilotState);
+  const state = readPilotState(paths, date);
+  const summary = pilotStatusSummary(state);
+  const next = pilotNext({ ...options, learnerRoot: paths.root, date });
+  const launchCardJsonPath = resolve(paths.pilotDir, "pilot-launch-card.json");
+  const runSheetJsonPath = resolve(paths.pilotDir, "pilot-run-sheet.json");
+  const replyCardJsonPath = resolve(paths.pilotDir, "pilot-reply-card.json");
+  const handoff = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "local Codex real-pilot continuity handoff",
+    saved_answer: false,
+    redaction: {
+      transcript_text_included: false,
+      friction_notes_included: false,
+      local_paths_public_safe: false,
+      rule: "Share counts and local links only. Do not post transcripts, friction notes, private notes, local paths, audio, or images publicly without explicit review.",
+    },
+    pilot: {
+      state_exists: stateExists,
+      status: summary.status,
+      baseline_ready: summary.baselineReady,
+      completed_daily_sessions: summary.completedDailySessions,
+      minimum_valid_daily_sessions: summary.minimumValidDailySessions,
+      target_days: summary.targetDays,
+      final_ready: summary.finalReady,
+      report_ready: summary.reportReady,
+      partial_baseline_answers: summary.partial.baselineAnswers,
+      partial_final_answers: summary.partial.finalAnswers,
+      partial_day_captures: summary.partial.dayCaptures,
+    },
+    consent: {
+      marked: Boolean(stateExists && state.consent?.accepted_at),
+      scope: stateExists && state.consent?.accepted_at ? state.consent.scope : "not-marked-until-first-save",
+      accepted_at: stateExists && state.consent?.accepted_at ? state.consent.accepted_at : "",
+    },
+    next_action: {
+      action: summary.nextAction.command === "pilot-complete" ? "review-local-report" : "ask-next-learner-card",
+      phase: next.nextCard.phase,
+      day: next.nextCard.day ?? null,
+      title: next.nextCard.title,
+      ask: next.nextCard.ask,
+      assistant_prompt: next.assistantPrompt.text,
+      quick_replies: next.quickReplies.map((reply, index) => ({
+        number: index + 1,
+        id: reply.id,
+        text: reply.text,
+        note: reply.note,
+      })),
+    },
+    local_surfaces: {
+      next_card: {
+        html: relativeToRoot(paths, next.htmlPath),
+        url: next.url,
+      },
+      cockpit: {
+        html: next.cockpit?.htmlPath ? relativeToRoot(paths, next.cockpit.htmlPath) : "cockpit.html",
+        url: next.cockpit?.url ?? "",
+      },
+      launch_card_ready: existsSync(launchCardJsonPath),
+      run_sheet_ready: existsSync(runSheetJsonPath),
+      latest_reply_card_ready: existsSync(replyCardJsonPath),
+    },
+    next_operator_step:
+      summary.nextAction.command === "pilot-complete"
+        ? "Review the local pilot report before sharing anything publicly."
+        : "Ask exactly one learner-facing prompt, then save the answer through the internal owner-pilot reply route.",
+    claim_boundary:
+      "This handoff summarizes local pilot continuity. It does not include transcript text, save a new answer, prove learning outcomes, or complete the pilot.",
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-handoff.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-handoff.html");
+  writeFileSync(jsonPath, `${JSON.stringify(handoff, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Pilot Handoff</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; --soft: #eef5f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(1040px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(30px, 5vw, 48px); line-height: 1.1; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 17px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 20px; overflow-wrap: anywhere; }
+    .block { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .ask { background: var(--warm); font-size: 21px; font-weight: 760; line-height: 1.34; overflow-wrap: anywhere; }
+    .safe { background: var(--soft); }
+    pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; font: inherit; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; overflow-wrap: anywhere; }
+    .links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .links a { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; font-weight: 720; }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 760px) { .grid, .links { grid-template-columns: 1fr; } .ask { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Redacted Local Handoff</p>
+      <h1>실제 말하기 여정 이어받기</h1>
+      <p class="subtle">원문 답변 없이 진행 상태와 다음 행동만 보여주는 로컬 handoff입니다.</p>
+      <div class="grid" aria-label="pilot progress">
+        <div class="metric"><span>Baseline</span><strong>${escapeHtml(handoff.pilot.baseline_ready ? "완료" : `${handoff.pilot.partial_baseline_answers}/5`)}</strong></div>
+        <div class="metric"><span>Daily</span><strong>${escapeHtml(`${handoff.pilot.completed_daily_sessions}/${handoff.pilot.minimum_valid_daily_sessions}`)}</strong></div>
+        <div class="metric"><span>Final</span><strong>${escapeHtml(handoff.pilot.final_ready ? "완료" : `${handoff.pilot.partial_final_answers}/5`)}</strong></div>
+        <div class="metric"><span>Consent</span><strong>${escapeHtml(handoff.consent.marked ? "local-only" : "첫 저장 전")}</strong></div>
+      </div>
+      <section class="block ask" aria-label="next prompt">${escapeHtml(handoff.next_action.ask)}</section>
+      <section class="block" aria-label="codex prompt">
+        <h2>Codex가 이어서 말할 프롬프트</h2>
+        <pre>${escapeHtml(handoff.next_action.assistant_prompt)}</pre>
+      </section>
+      <section class="block safe" aria-label="redaction boundary">
+        <h2>공개/공유 경계</h2>
+        <p>${escapeHtml(handoff.redaction.rule)}</p>
+        <p class="subtle" style="margin-top: 8px;">Transcript text included: ${escapeHtml(handoff.redaction.transcript_text_included)} · Friction notes included: ${escapeHtml(handoff.redaction.friction_notes_included)}</p>
+      </section>
+      ${
+        handoff.next_action.quick_replies.length
+          ? `<section class="block" aria-label="quick replies">
+        <h2>다음 답변 후보</h2>
+        <ul>
+          ${handoff.next_action.quick_replies
+            .map((reply) => `<li>${escapeHtml(reply.number)}. ${escapeHtml(reply.text)} <span class="subtle">(${escapeHtml(reply.note)})</span></li>`)
+            .join("")}
+        </ul>
+      </section>`
+          : ""
+      }
+      <section class="block" aria-label="operator step">
+        <h2>다음 운영 행동</h2>
+        <p>${escapeHtml(handoff.next_operator_step)}</p>
+      </section>
+      <section class="block" aria-label="local links">
+        <h2>로컬 표면</h2>
+        <div class="links">
+          <a href="${escapeHtml(relative(dirname(htmlPath), next.htmlPath))}">다음 카드 열기</a>
+          <a href="${escapeHtml(next.cockpit?.htmlPath ? relative(dirname(htmlPath), next.cockpit.htmlPath) : "../../cockpit.html")}">Cockpit 열기</a>
+        </div>
+      </section>
+    </section>
+    <footer>${escapeHtml(handoff.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-handoff",
+    learnerRoot: paths.root,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    savedAnswer: false,
+    redaction: handoff.redaction,
+    pilot: handoff.pilot,
+    consent: handoff.consent,
+    nextAction: handoff.next_action,
+    localSurfaces: handoff.local_surfaces,
+    nextOperatorStep: handoff.next_operator_step,
+    claimBoundary: handoff.claim_boundary,
+  };
+}
+
 function pilotDay(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -3407,6 +3590,10 @@ function run() {
   }
   if (command === "pilot-run-sheet") {
     output(pilotRunSheet(options), options.json);
+    return;
+  }
+  if (command === "pilot-handoff") {
+    output(pilotHandoff(options), options.json);
     return;
   }
   if (command === "pilot-next") {

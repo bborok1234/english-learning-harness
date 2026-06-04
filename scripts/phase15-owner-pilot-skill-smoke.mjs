@@ -21,6 +21,8 @@ function main() {
     "Use that engine yourself. Do not hand the command to the learner.",
     "pilot-run-sheet",
     "Use it to confirm the next prompt, save boundary, consent status, privacy rules, launch card, and cockpit links.",
+    "pilot-handoff",
+    "Use it to see saved progress counts, the next learner-facing prompt, consent status, and local links without exposing transcript text or friction notes.",
     "pilot-launch",
     "Use this as the safest start/resume surface.",
     "pilot-next",
