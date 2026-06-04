@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-24 protected blocker tracker guard added; active AIOS goal remains not complete",
-    "status": "AIOS-24 reopened the real-pilot tracker and adds PR-body plus goal-audit guards so protected blocker issues cannot silently disappear from GitHub while repo-local SSOT still claims they are open. #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-25 real pilot launch card added; active AIOS goal remains not complete",
+    "status": "AIOS-25 adds a learner-facing launch/resume card for the real owner/self pilot before any new answer is saved. #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop now has mission integrity and deferred diagnosis. The engineering governance loop now also checks protected GitHub issue state, so a tracker mismatch blocks completion instead of hiding the real pilot blocker.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot now also has a launch card that explains current progress, the next prompt, quick replies, privacy, and save boundary before Codex asks for the next real answer.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-24 is governance and tracker-integrity evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-25 is real pilot launch/resume mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -1038,6 +1038,12 @@
       "label": "docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md",
       "path": "./phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md",
       "role": "AIOS-24 PR body protected-issue auto-close guard evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
+      "path": "./phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
+      "role": "AIOS-25 real pilot launch-card evidence",
       "kind": "source"
     }
   ],
@@ -3200,6 +3206,19 @@
             "scripts/aios-goal-audit-smoke.mjs",
             "docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md"
           ]
+        },
+        {
+          "id": "AIOS-25-REAL-PILOT-LAUNCH-CARD",
+          "title": "AIOS-25 real pilot launch card 통과",
+          "why": "실제 pilot을 시작하거나 재개할 때 learner가 내부 상태나 명령을 이해하지 않아도 다음 한 문장만 말할 수 있어야 한다.",
+          "done": "pilot-launch가 새 답변을 저장하지 않고 진행률, 다음 질문, quick replies, 저장 경계, privacy, cockpit link를 담은 learner-facing JSON/HTML launch card를 쓴다.",
+          "verification": "phase15-owner-pilot-launch-card-smoke validates fresh/resume launch cards, Playwright render, no answer persistence, cockpit link, quick replies, privacy, and no internal language leakage.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-launch-card-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md"
+          ]
         }
       ]
     },
@@ -3953,6 +3972,11 @@
       "name": "AIOS-24 protected issue tracker guard",
       "status": "Pass",
       "detail": "pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection."
+    },
+    {
+      "name": "AIOS-25 real pilot launch card",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage."
     }
   ],
   "commands": [
@@ -4451,6 +4475,10 @@
     {
       "label": "Run AIOS-24 PR template auto-close guard",
       "command": "node scripts/pr-body-autoclose-guard.mjs --json"
+    },
+    {
+      "label": "Run AIOS-25 real pilot launch card smoke",
+      "command": "node scripts/phase15-owner-pilot-launch-card-smoke.mjs"
     }
   ]
 }
@@ -4459,12 +4487,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing daily loop now has mission integrity and deferred diagnosis. The engineering governance loop now also checks protected GitHub issue state, so a tracker mismatch blocks completion instead of hiding the real pilot blocker.</p>
+        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot now also has a launch card that explains current progress, the next prompt, quick replies, privacy, and save boundary before Codex asks for the next real answer.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-24 protected blocker tracker guard added; active AIOS goal remains not complete<br>
-        AIOS-24 reopened the real-pilot tracker and adds PR-body plus goal-audit guards so protected blocker issues cannot silently disappear from GitHub while repo-local SSOT still claims they are open. #179 real owner/self evidence and blocked learning claims remain unresolved.
+        AIOS-25 real pilot launch card added; active AIOS goal remains not complete<br>
+        AIOS-25 adds a learner-facing launch/resume card for the real owner/self pilot before any new answer is saved. #179 real owner/self evidence and blocked learning claims remain unresolved.
       </div>
     </header>
 
@@ -4577,16 +4605,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-19-GOAL-COMPLETION-AUDIT</strong>
-                <span>scripts/aios-goal-audit.mjs, scripts/aios-goal-audit-smoke.mjs, docs/ops/goal-audit.json, docs/ops/goal-audit.html, docs/phase-15-evidence/AIOS-19-goal-completion-audit.md</span>
-              </div>
-              <h3>AIOS-19 goal completion audit 통과</h3>
-              <div class="card-row"><b>왜</b><p>큰 AI-native OS 목표는 작은 smoke 통과만으로 완료라고 말하면 안 된다. stop condition별 증거와 blocker를 한눈에 보는 감사 표면이 필요했다.</p></div>
-              <div class="card-row"><b>완료</b><p>docs/ops/goal-audit.json/html이 8개 stop condition, local mechanics status, real pilot blocker, blocked learning claims를 보여준다.</p></div>
-              <div class="card-row"><b>검증</b><p>aios-goal-audit-smoke validates requirement count=8, overall_status=not_complete, real pilot blocker, and no premature completion claim.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-20-DAILY-PRACTICE-START-CARD</strong>
                 <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/daily-practice-start-card-smoke.mjs, docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md</span>
               </div>
@@ -4634,6 +4652,16 @@
               <div class="card-row"><b>왜</b><p>실제 pilot tracker가 GitHub에서 닫히면 대시보드가 남은 일을 한눈에 보여주지 못한다.</p></div>
               <div class="card-row"><b>완료</b><p>#179를 다시 열고, PR body protected-issue guard와 GitHub issue-state-aware goal audit을 추가했다.</p></div>
               <div class="card-row"><b>검증</b><p>pr-body-autoclose-guard-smoke validates unsafe protected wording fails; aios-goal-audit-smoke validates externally closed protected tracker becomes closed_external_mismatch and still blocks completion.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-25-REAL-PILOT-LAUNCH-CARD</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-launch-card-smoke.mjs, skills/owner-pilot/SKILL.md, docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md</span>
+              </div>
+              <h3>AIOS-25 real pilot launch card 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot을 시작하거나 재개할 때 learner가 내부 상태나 명령을 이해하지 않아도 다음 한 문장만 말할 수 있어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-launch가 새 답변을 저장하지 않고 진행률, 다음 질문, quick replies, 저장 경계, privacy, cockpit link를 담은 learner-facing JSON/HTML launch card를 쓴다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15-owner-pilot-launch-card-smoke validates fresh/resume launch cards, Playwright render, no answer persistence, cockpit link, quick replies, privacy, and no internal language leakage.</p></div>
             </article>
         </div>
       </section>
@@ -5368,6 +5396,10 @@
               <strong>docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md</strong>
               <span>AIOS-24 PR body protected-issue auto-close guard evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-25-real-pilot-launch-card.md">
+              <strong>docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md</strong>
+              <span>AIOS-25 real pilot launch-card evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5375,10 +5407,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-17 immersive first pilot card</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates the fresh baseline card starts with three opening scene choices, low-pressure quick replies, Playwright-rendered chooser UI, and no project/work premise or internal command leakage.</span></td>
-            </tr>
             <tr>
               <td>AIOS-18 owner-pilot skill contract alignment</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards.</span></td>
@@ -5406,6 +5434,10 @@
             <tr>
               <td>AIOS-24 protected issue tracker guard</td>
               <td><strong>Pass</strong><span>pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-25 real pilot launch card</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5451,7 +5483,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 131개 보기</summary>
+        <summary>완료 이력 132개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6764,10 +6796,20 @@
               <div class="card-row"><b>완료</b><p>owner-pilot skill과 PILOT-PROMPTS가 `첫 장면 고르기`, 세 opening scene, 1/2/3 또는 quick reply 선택 저장 흐름을 설명한다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot skill smoke validates the scene-chooser contract and rejects stale fixed-start guidance; next-card smoke still verifies rendered scene choices.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-19-GOAL-COMPLETION-AUDIT</strong>
+                <span>scripts/aios-goal-audit.mjs, scripts/aios-goal-audit-smoke.mjs, docs/ops/goal-audit.json, docs/ops/goal-audit.html, docs/phase-15-evidence/AIOS-19-goal-completion-audit.md</span>
+              </div>
+              <h3>AIOS-19 goal completion audit 통과</h3>
+              <div class="card-row"><b>왜</b><p>큰 AI-native OS 목표는 작은 smoke 통과만으로 완료라고 말하면 안 된다. stop condition별 증거와 blocker를 한눈에 보는 감사 표면이 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>docs/ops/goal-audit.json/html이 8개 stop condition, local mechanics status, real pilot blocker, blocked learning claims를 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>aios-goal-audit-smoke validates requirement count=8, overall_status=not_complete, real pilot blocker, and no premature completion claim.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 125개 보기</summary>
+        <summary>전체 검증 126개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -7272,12 +7314,16 @@
               <td>AIOS-24 protected issue tracker guard</td>
               <td><strong>Pass</strong><span>pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-25 real pilot launch card</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 124개 보기</summary>
+        <summary>전체 명령 125개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -7775,6 +7821,10 @@
             <div class="command">
               <span>Run AIOS-24 PR template auto-close guard</span>
               <code>node scripts/pr-body-autoclose-guard.mjs --json</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-25 real pilot launch card smoke</span>
+              <code>node scripts/phase15-owner-pilot-launch-card-smoke.mjs</code>
             </div>
         </div>
       </details>
