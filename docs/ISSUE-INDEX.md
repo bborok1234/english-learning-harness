@@ -661,6 +661,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #252 | AIOS-33: Generate redacted real-pilot evidence gap | continue |
 | #254 | AIOS-34: Link pilot evidence gap from active learner cockpit | continue |
 | #256 | AIOS-35: Attach pilot friction note after saved daily answer | continue |
+| #258 | AIOS-36: Add protected pilot answer intake preview | continue |
 
 #179 planned evidence should show:
 
@@ -771,5 +772,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-friction` now attaches a short local friction note to an existing completed daily pilot record without creating a new answer, duplicating a session, or exposing the note in learner-facing confirmation surfaces.
 - `scripts/phase15-owner-pilot-friction-attach-smoke.mjs` verifies post-answer friction attach, unchanged session count/id, evidence-gap count refresh, cockpit friction-card linkage, browser-rendered confirmation, and no friction/internal-language leakage.
 - `docs/phase-15-evidence/AIOS-35-pilot-friction-attach.md` records the post-answer friction attach evidence boundary.
+- `pilot-intake` now classifies an incoming Codex-thread message before save, distinguishing direct English answers, quick-reply selections, Korean/meta/control requests, and ambiguous non-answers.
+- `scripts/phase15-owner-pilot-intake-preview-smoke.mjs` verifies no-save fresh/partial previews, unchanged answer counts, no fresh `pilot-state.json` creation, browser-rendered preview, and no raw input/internal-language leakage.
+- `docs/phase-15-evidence/AIOS-36-pilot-intake-preview.md` records the protected intake preview evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

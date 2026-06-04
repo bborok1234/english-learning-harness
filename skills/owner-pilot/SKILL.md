@@ -81,6 +81,14 @@ Use the returned `assistantPrompt.text` as the default learner-facing prompt. It
 
 If the learner chooses one of `quickReplies`, save it internally with `pilot-reply --quick-reply "<id-or-number>" --json` rather than asking them to retype the full sentence.
 
+Before saving a learner message when the thread may contain Korean status questions, stop requests, meta instructions, or uncertainty, run the protected intake preview internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-intake --say "<incoming message>" --json
+```
+
+Use it as a no-save guard. If `saveEligible` is true, save with `pilot-reply`. If `route` is `no-save`, do not store that message as pilot evidence; answer the user's request or ask for one short English sentence again. The preview must not save an answer, mark consent, expose raw input in learner-facing artifacts, or close the real pilot.
+
 After the learner answers the current card, prefer the automatic reply router internally:
 
 ```bash

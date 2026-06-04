@@ -601,6 +601,41 @@ The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifac
 
 `pilot-launch` and `pilot-next` may generate learner-facing preview artifacts, but they must not create a real pilot answer or mark consent. The first answer saved through `pilot-capture` or `pilot-reply` records local-only consent metadata in `pilot-state.json`.
 
+`pilot-intake --json` writes `artifacts/pilot/pilot-intake-preview.json/html` as a protected no-save preview before `pilot-reply` is used:
+
+```json
+{
+  "status": "pass",
+  "action": "pilot-intake",
+  "savedAnswer": false,
+  "classification": "direct_english_answer|quick_reply_selection|korean_meta_or_control|meta_or_control|korean_non_answer|ambiguous_empty|ambiguous_non_text",
+  "saveEligible": true,
+  "route": "pilot-reply-direct|pilot-reply-quick|no-save",
+  "quickReply": {
+    "id": "quick-1",
+    "number": 1
+  },
+  "learnerFacing": {
+    "message": "저장 전 learner-safe confirmation text",
+    "saved": false
+  },
+  "integrity": {
+    "stateExistedBefore": true,
+    "stateExistsAfter": true,
+    "answerCountsUnchanged": true
+  },
+  "previewArtifact": {
+    "action": "pilot-intake-preview",
+    "jsonPath": "learner-root/artifacts/pilot/pilot-intake-preview.json",
+    "htmlPath": "learner-root/artifacts/pilot/pilot-intake-preview.html",
+    "url": "file:///absolute/path/to/pilot-intake-preview.html"
+  },
+  "claimBoundary": "This preview classifies one incoming pilot message before saving. It saves no learner answer, proves no learning outcome, and does not complete the real pilot."
+}
+```
+
+`pilot-intake` is for Codex conversation safety, where learner answers, Korean status requests, stop requests, and operator instructions can appear in the same thread. It may refresh local next-card/cockpit artifacts through `pilot-next`, but it must not create `pilot-state.json` from a fresh preview, change any answer counts, mark consent, save transcript text, or attach friction notes. Returned preview JSON/HTML must not include the raw incoming message, transcript text, friction note text, issue/PR language, rubric internals, or unsupported speaking-improvement claims. If `saveEligible` is false, Codex must not call `pilot-reply` for that message.
+
 `pilot-capture --json` returns the refreshed learner cockpit location after each captured card:
 
 ```json

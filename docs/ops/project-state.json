@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-35 attaches post-answer pilot friction notes; active AIOS goal remains not complete",
-    "status": "AIOS-35 lets Codex attach a short friction note after a daily pilot answer has already been saved, without duplicating sessions or exposing the note in learner-facing confirmation surfaces. Real owner/self completion and learning outcome claims remain unresolved.",
+    "stage": "AIOS-36 protects pilot answer intake; active AIOS goal remains not complete",
+    "status": "AIOS-36 lets Codex classify incoming Codex-thread messages before saving, so English answers and quick-reply choices are separated from Korean status/control/meta requests. Real owner/self completion and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, the active cockpit links that turn packet as a continuation surface, Codex can inspect a redacted evidence gap before making any completion claim, the active cockpit links that gap as a journey-check surface, and Codex can attach post-answer friction notes without creating another learner answer.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, resume from a redacted local handoff, prepare the exact next learner-facing pilot turn, inspect a redacted evidence gap, attach post-answer friction notes, and preview incoming pilot messages before saving so thread meta requests do not contaminate speaking evidence.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, protected pilot answer intake previews, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-35 is post-answer friction evidence mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-36 is protected no-save intake mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -703,13 +703,19 @@
       "path": "./phase-15-evidence/AIOS-35-pilot-friction-attach.md",
       "role": "AIOS-35 post-answer pilot friction attach evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-36-pilot-intake-preview.md",
+      "path": "./phase-15-evidence/AIOS-36-pilot-intake-preview.md",
+      "role": "AIOS-36 protected pilot answer intake preview evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, and audit mechanics implemented; #179 stays open",
+      "detail": "automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, and protected intake preview implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -1115,6 +1121,13 @@
       "status": "Pass",
       "evidence": "#228, daily-practice-reply-routing-smoke, skill-conversation-simulation-smoke",
       "claim": "practice-reply resolves start-card quick replies or direct sentences, runs the practice persistence flow, writes a learner-facing saved-reply card, and rejects invalid selections before saving; real learner session evidence remains unclaimed"
+    },
+    {
+      "id": "GATE-55",
+      "label": "Protected pilot answer intake preview",
+      "status": "Pass",
+      "evidence": "#258, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke",
+      "claim": "pilot-intake classifies direct English answers, quick-reply selections, Korean/meta/control requests, and ambiguous input before any pilot-reply save while preserving no-save answer-count invariants; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -3020,6 +3033,21 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-35-pilot-friction-attach.md"
           ]
+        },
+        {
+          "id": "AIOS-36-PILOT-INTAKE-PREVIEW",
+          "title": "AIOS-36 protected pilot answer intake preview 통과",
+          "why": "Codex 대화 안에서는 영어 답변, 한국어 상태 질문, 중단 요청, 운영 지시가 섞인다. 저장 전 preview가 없으면 실제 pilot transcript가 오염될 수 있다.",
+          "done": "pilot-intake가 incoming message를 저장 전 분류하고, saveEligible/route/learnerFacing/integrity를 반환하며, raw input 없는 JSON/HTML preview를 쓴다.",
+          "verification": "phase15 owner pilot intake preview smoke validates fresh/partial no-save previews, unchanged answer counts, no fresh pilot-state creation, browser render, and no raw input/internal-language leakage; owner pilot skill smoke validates the no-save guard contract.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-intake-preview-smoke.mjs",
+            "scripts/phase15-owner-pilot-skill-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-36-pilot-intake-preview.md"
+          ]
         }
       ]
     },
@@ -3828,6 +3856,11 @@
       "name": "AIOS-35 post-answer pilot friction attach",
       "status": "pass",
       "detail": "node scripts/phase15-owner-pilot-friction-attach-smoke.mjs verifies post-answer friction attach without new answer/session duplication and without friction text leakage in learner-facing surfaces."
+    },
+    {
+      "name": "AIOS-36 protected pilot answer intake preview",
+      "status": "pass",
+      "detail": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies direct/quick/meta classification before save, no answer-count mutation, rendered preview, and redaction boundary."
     }
   ],
   "commands": [
@@ -4370,6 +4403,10 @@
     {
       "label": "Run AIOS-35 post-answer pilot friction attach smoke",
       "command": "node scripts/phase15-owner-pilot-friction-attach-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-36 pilot intake preview smoke",
+      "command": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs"
     }
   ]
 }

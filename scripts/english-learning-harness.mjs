@@ -197,6 +197,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-turn [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-evidence-gap [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-intake [--say TEXT|--quick-reply INDEX_OR_ID] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-friction [--day N] [--friction-note TEXT|--say TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -1810,6 +1811,254 @@ function resolvePilotReplyAnswer(options, nextCardArtifact) {
       id: selected.id,
       text: selected.text,
     },
+  };
+}
+
+function explicitPilotIntakeText(options) {
+  const inputs = [...(options.input ?? [])].filter(Boolean);
+  if (options.transcript) {
+    inputs.push(
+      ...readFileSync(options.transcript, "utf8")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean),
+    );
+  }
+  return (inputs[0] || "").trim();
+}
+
+function findPilotQuickReply(selection, nextCardArtifact) {
+  const trimmed = String(selection ?? "").trim();
+  if (!trimmed) return null;
+  const quickReplies = nextCardArtifact.quickReplies ?? [];
+  return (
+    quickReplies.find((reply) => reply.id === trimmed) ??
+    (Number.isInteger(Number(trimmed)) ? quickReplies[Number(trimmed) - 1] : null) ??
+    quickReplies.find((reply) => reply.text === trimmed) ??
+    null
+  );
+}
+
+function classifyPilotIntake({ text, quickReply, nextCardArtifact }) {
+  const normalized = text.trim();
+  const selectedQuickReply = findPilotQuickReply(quickReply || normalized, nextCardArtifact);
+  if (selectedQuickReply && (quickReply || /^[0-9]+$/.test(normalized) || /^quick-[0-9]+$/i.test(normalized))) {
+    return {
+      classification: "quick_reply_selection",
+      saveEligible: true,
+      route: "pilot-reply-quick",
+      reason: "The learner selected one of the current reply choices.",
+      quickReply: {
+        id: selectedQuickReply.id,
+        number: (nextCardArtifact.quickReplies ?? []).findIndex((reply) => reply.id === selectedQuickReply.id) + 1,
+      },
+      learnerMessage: "번호 선택으로 저장할 수 있는 답변입니다. 아직 저장하지 않았어요.",
+    };
+  }
+
+  if (!normalized) {
+    return {
+      classification: "ambiguous_empty",
+      saveEligible: false,
+      route: "no-save",
+      reason: "No learner answer was provided.",
+      quickReply: null,
+      learnerMessage: "아직 저장할 답변이 없어요. 영어 한 문장이나 번호 하나만 보내면 됩니다.",
+    };
+  }
+
+  const hasKorean = /[가-힣]/.test(normalized);
+  const hasLatin = /[a-z]/i.test(normalized);
+  const metaPatterns = [
+    /상태|대시보드|진행|어디까지|뭐\s*해야|다음\s*작업|그만|중단|멈춰|저장하지|취소|설명|명령|커맨드|이슈|PR|goal|골/i,
+    /\b(status|dashboard|progress|what next|where are we|what are you doing|stop|pause|cancel|do not save|don't save|command|issue|pull request|goal)\b/i,
+    /\b(what should i do|i do not know what to do|i don't know what to do|what am i supposed to do)\b/i,
+  ];
+  if (metaPatterns.some((pattern) => pattern.test(normalized))) {
+    return {
+      classification: hasKorean ? "korean_meta_or_control" : "meta_or_control",
+      saveEligible: false,
+      route: "no-save",
+      reason: "The message looks like a status/control/meta request, not pilot speech evidence.",
+      quickReply: null,
+      learnerMessage: "이건 학습 답변이 아니라 진행/상태 요청으로 보입니다. 저장하지 않았어요.",
+    };
+  }
+  if (hasKorean && !hasLatin) {
+    return {
+      classification: "korean_non_answer",
+      saveEligible: false,
+      route: "no-save",
+      reason: "The message is Korean-only and should not be stored as English speaking evidence without confirmation.",
+      quickReply: null,
+      learnerMessage: "한국어 메모로 보여서 영어 답변으로 저장하지 않았어요. 영어 한 문장만 다시 보내면 됩니다.",
+    };
+  }
+  if (hasLatin) {
+    return {
+      classification: "direct_english_answer",
+      saveEligible: true,
+      route: "pilot-reply-direct",
+      reason: "The message looks like a direct English learner answer.",
+      quickReply: null,
+      learnerMessage: "영어 답변으로 저장할 수 있는 후보입니다. 아직 저장하지 않았어요.",
+    };
+  }
+  return {
+    classification: "ambiguous_non_text",
+    saveEligible: false,
+    route: "no-save",
+    reason: "The message is not a recognized English answer or quick reply.",
+    quickReply: null,
+    learnerMessage: "저장할 답변인지 확실하지 않아서 저장하지 않았어요. 번호 하나나 영어 한 문장으로 답하면 됩니다.",
+  };
+}
+
+function pilotIntakeArtifact({ paths, date, preview, nextCardArtifact }) {
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "protected pilot answer intake preview",
+    saved_answer: false,
+    classification: preview.classification,
+    save_eligible: preview.saveEligible,
+    route: preview.route,
+    reason: preview.reason,
+    quick_reply: preview.quickReply,
+    next_card: nextCardArtifact.nextCard
+      ? {
+          title: nextCardArtifact.nextCard.title,
+          phase: nextCardArtifact.nextCard.phase,
+          day: nextCardArtifact.nextCard.day,
+        }
+      : null,
+    learner_message: preview.learnerMessage,
+    next_operator_step: preview.saveEligible
+      ? "If the learner meant this as the current pilot answer, Codex may now save it through the protected reply route."
+      : "Do not save this message as pilot evidence. Answer the learner request or ask for one short English sentence.",
+    privacy: "Preview artifacts do not include the learner's raw message. Real transcripts remain local unless explicitly reviewed.",
+    claim_boundary:
+      "This preview classifies one incoming pilot message before saving. It saves no learner answer, proves no learning outcome, and does not complete the real pilot.",
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-intake-preview.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-intake-preview.html");
+  writeFileSync(jsonPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pilot Intake Preview</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --safe: #e8f3ed; --hold: #fff3da; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(820px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(28px, 5vw, 42px); line-height: 1.12; letter-spacing: 0; }
+    h2 { margin: 20px 0 8px; font-size: 18px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle, footer { color: var(--muted); }
+    .status { margin-top: 18px; padding: 16px; border-radius: 8px; background: ${artifact.save_eligible ? "var(--safe)" : "var(--hold)"}; font-size: 20px; font-weight: 760; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .cell { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: #fbfcfa; overflow-wrap: anywhere; }
+    footer { margin-top: 16px; font-size: 13px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .status { font-size: 18px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Intake Preview</p>
+      <h1>저장 전 확인</h1>
+      <p class="subtle">이 카드는 들어온 메시지를 실제 파일럿 답변으로 저장해도 되는지 먼저 분류합니다.</p>
+      <p class="status">${escapeHtml(artifact.learner_message)}</p>
+      <div class="grid">
+        <div class="cell"><strong>분류</strong><p>${escapeHtml(artifact.classification)}</p></div>
+        <div class="cell"><strong>저장 후보</strong><p>${artifact.save_eligible ? "가능" : "보류"}</p></div>
+        <div class="cell"><strong>다음 단계</strong><p>${artifact.save_eligible ? "학습 답변으로 저장 가능" : "저장하지 않고 응답/재질문"}</p></div>
+        <div class="cell"><strong>현재 카드</strong><p>${escapeHtml(artifact.next_card?.title ?? "없음")}</p></div>
+      </div>
+      <h2>프라이버시</h2>
+      <p class="subtle">${escapeHtml(artifact.privacy)}</p>
+    </section>
+    <footer>${escapeHtml(artifact.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-intake-preview",
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    artifact,
+  };
+}
+
+function pilotIntake(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const beforeStateExists = existsSync(paths.pilotState);
+  const beforeState = readPilotState(paths, date);
+  const beforeSummary = pilotStatusSummary(beforeState);
+  const nextCardArtifact = pilotNext({ learnerRoot: paths.root, date });
+  const text = explicitPilotIntakeText(options);
+  const preview = classifyPilotIntake({ text, quickReply: options.quickReply, nextCardArtifact });
+  const previewArtifact = pilotIntakeArtifact({ paths, date, preview, nextCardArtifact });
+  const afterStateExists = existsSync(paths.pilotState);
+  const afterState = readPilotState(paths, date);
+  const afterSummary = pilotStatusSummary(afterState);
+  const answerCountsUnchanged =
+    beforeSummary.partial.baselineAnswers === afterSummary.partial.baselineAnswers &&
+    beforeSummary.partial.dayCaptures === afterSummary.partial.dayCaptures &&
+    beforeSummary.partial.finalAnswers === afterSummary.partial.finalAnswers &&
+    beforeSummary.completedDailySessions === afterSummary.completedDailySessions &&
+    beforeSummary.baselineReady === afterSummary.baselineReady &&
+    beforeSummary.finalReady === afterSummary.finalReady &&
+    beforeStateExists === afterStateExists;
+  return {
+    status: "pass",
+    action: "pilot-intake",
+    learnerRoot: paths.root,
+    savedAnswer: false,
+    classification: preview.classification,
+    saveEligible: preview.saveEligible,
+    route: preview.route,
+    quickReply: preview.quickReply,
+    learnerFacing: {
+      message: preview.learnerMessage,
+      saved: false,
+    },
+    integrity: {
+      stateExistedBefore: beforeStateExists,
+      stateExistsAfter: afterStateExists,
+      answerCountsUnchanged,
+      before: {
+        baselineAnswers: beforeSummary.partial.baselineAnswers,
+        dayCaptures: beforeSummary.partial.dayCaptures,
+        finalAnswers: beforeSummary.partial.finalAnswers,
+        completedDailySessions: beforeSummary.completedDailySessions,
+      },
+      after: {
+        baselineAnswers: afterSummary.partial.baselineAnswers,
+        dayCaptures: afterSummary.partial.dayCaptures,
+        finalAnswers: afterSummary.partial.finalAnswers,
+        completedDailySessions: afterSummary.completedDailySessions,
+      },
+    },
+    nextCardArtifact: {
+      htmlPath: nextCardArtifact.htmlPath,
+      url: nextCardArtifact.url,
+    },
+    previewArtifact,
+    claimBoundary: previewArtifact.artifact.claim_boundary,
   };
 }
 
@@ -4124,6 +4373,10 @@ function run() {
   }
   if (command === "pilot-next") {
     output(pilotNext(options), options.json);
+    return;
+  }
+  if (command === "pilot-intake") {
+    output(pilotIntake(options), options.json);
     return;
   }
   if (command === "pilot-friction") {
