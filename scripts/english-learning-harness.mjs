@@ -183,6 +183,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs asset-deck [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs cockpit [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs report [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs practice-next [--scene-preset ID] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs practice [--say TEXT ...] [--transcript FILE] [--scene-preset ID] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs home [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs diagnose [--say TEXT ...] [--transcript FILE] [--learner-root DIR] [--date ISO] [--json]",
@@ -508,6 +509,223 @@ function report(options) {
     speakingSkillOS: result.report.speaking_skill_os,
     nextFocus: result.report.next_focus,
     claimBoundary: result.report.claim_boundary,
+  };
+}
+
+function dailyQuickReplies(missionState) {
+  const scene = missionState.learner_visible_scene ?? {};
+  const bySkill = {
+    clarification: [
+      "Which one do you mean?",
+      "Could you tell me which one you mean?",
+      "Do you mean the usual place or a different one?",
+    ],
+    repair: [
+      "I do not know the exact word, but I can explain it.",
+      "I forgot the word, but I mean something small and useful.",
+      "Let me say it in an easier way.",
+    ],
+    follow_ups: [
+      "That sounds nice. What did you do there?",
+      "How was it?",
+      "Did you go there with friends?",
+    ],
+    soft_disagreement: [
+      "I see your point, but I prefer another option.",
+      "I understand, but that is difficult for me today.",
+      "Maybe we can choose something lighter.",
+    ],
+    starts: [
+      "I had a quiet day and did a few small tasks.",
+      "I feel okay today, but I am a little tired.",
+      "I want to practice one simple sentence today.",
+    ],
+  };
+  const fallbackReplies = bySkill[missionState.target_skill] ?? [];
+  const replies = [...new Set([scene.example, ...fallbackReplies].filter(Boolean))].slice(0, 3);
+  return replies.map((text, index) => ({
+    id: `quick-${index + 1}`,
+    text,
+    note: index === 0 ? "가장 짧고 안전한 시작" : "조금 더 구체적인 변형",
+  }));
+}
+
+function dailyAssistantPrompt(missionState, quickReplies) {
+  const scene = missionState.learner_visible_scene ?? {};
+  const quickLine = quickReplies.length
+    ? `막히면 번호로 골라도 됩니다: ${quickReplies.map((reply, index) => `${index + 1}. ${reply.text}`).join(" / ")}`
+    : "";
+  return [
+    "오늘은 영어 한 문장만 먼저 시작합니다.",
+    scene.title ? `장면: ${scene.title}` : "",
+    scene.setup ? `상황: ${scene.setup}` : "",
+    scene.situation ? `대화 맥락: ${scene.situation}` : "",
+    scene.ask ? `질문: ${scene.ask}` : "",
+    scene.example ? `예시: ${scene.example}` : "",
+    quickLine,
+    "답은 영어 한 문장이면 충분합니다. Codex가 저장과 cockpit 갱신은 내부적으로 처리합니다.",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function writePracticeStartCard({ paths, date, missionResult, cockpitResult }) {
+  const missionState = missionResult.state;
+  const scene = missionState.learner_visible_scene ?? {};
+  const quickReplies = dailyQuickReplies(missionState);
+  const assistantPrompt = {
+    language: "ko",
+    text: dailyAssistantPrompt(missionState, quickReplies),
+    answer_rule: "영어 한 문장만 답하면 됩니다. 번호를 골라도 되고 직접 바꿔 말해도 됩니다.",
+    after_answer: "Codex가 내부적으로 practice flow를 실행해 mission, report, cockpit을 갱신합니다.",
+  };
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "learner-facing daily practice start card",
+    mission: {
+      id: missionState.mission_id,
+      title: scene.title ?? "",
+      target_skill: missionState.target_skill,
+      transfer_test: missionState.transfer_test,
+      mission_html: relative(paths.root, missionResult.missionHtmlPath),
+    },
+    prompt: {
+      setup: scene.setup ?? "",
+      situation: scene.situation ?? "",
+      ask: scene.ask ?? "",
+      example: scene.example ?? "",
+    },
+    assistant_prompt: assistantPrompt,
+    quick_replies: quickReplies,
+    cockpit: {
+      html: relative(paths.root, cockpitResult.cockpitPath),
+      url: cockpitResult.cockpitUrl,
+    },
+    privacy: "답변 원문은 기본적으로 내 컴퓨터의 학습 기록에만 저장됩니다.",
+    claim_boundary:
+      "This card helps start a local daily practice session. It does not save an answer or prove learning outcomes.",
+  };
+  const jsonPath = resolve(paths.missionArtifactDir, "practice-start-card.json");
+  const htmlPath = resolve(paths.missionArtifactDir, "practice-start-card.html");
+  writeFileSync(jsonPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(scene.title ?? "Daily Practice Start")}</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #657067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(800px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; text-transform: uppercase; }
+    h1 { margin: 8px 0 10px; font-size: clamp(28px, 5vw, 44px); line-height: 1.12; letter-spacing: 0; }
+    p { margin: 0; }
+    .setup { color: var(--muted); font-size: 16px; }
+    .ask { margin-top: 20px; padding: 18px; border-radius: 8px; background: var(--warm); font-size: 22px; font-weight: 760; line-height: 1.32; }
+    .prompt { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .prompt h2, .quick h2 { margin: 0 0 8px; font-size: 16px; letter-spacing: 0; }
+    .prompt pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; color: var(--ink); font: inherit; }
+    .quick { margin-top: 18px; }
+    .quick ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .quick li { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .quick .choice { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 780; }
+    .quick strong { display: block; font-size: 16px; overflow-wrap: anywhere; }
+    .quick span { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .copy-reply { appearance: none; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; color: var(--ink); padding: 7px 10px; font: inherit; font-size: 13px; font-weight: 720; cursor: pointer; white-space: nowrap; }
+    .meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 17px; overflow-wrap: anywhere; }
+    .rule, .privacy { margin-top: 14px; color: var(--muted); }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 640px) { .meta { grid-template-columns: 1fr; } .quick li { grid-template-columns: auto 1fr; } .copy-reply { grid-column: 2; justify-self: start; } .ask { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card">
+      <p class="eyebrow">English Learning Harness · Daily Practice</p>
+      <h1>${escapeHtml(scene.title ?? "오늘의 한 문장")}</h1>
+      <p class="setup">${escapeHtml(scene.setup ?? "")}</p>
+      <div class="meta" aria-label="daily practice metadata">
+        <div class="metric"><span>Target skill</span><strong>${escapeHtml(missionState.target_skill)}</strong></div>
+        <div class="metric"><span>Evidence</span><strong>session artifact</strong></div>
+        <div class="metric"><span>Mode</span><strong>text-first</strong></div>
+      </div>
+      ${scene.situation ? `<p class="setup">${escapeHtml(scene.situation)}</p>` : ""}
+      <p class="ask">${escapeHtml(scene.ask ?? "")}</p>
+      ${scene.example ? `<p class="rule">예시: ${escapeHtml(scene.example)}</p>` : ""}
+      <section class="prompt" aria-label="learner-ready prompt">
+        <h2>Codex가 바로 말할 다음 문장</h2>
+        <pre>${escapeHtml(assistantPrompt.text)}</pre>
+      </section>
+      <section class="quick" aria-label="daily quick replies">
+        <h2>번호로 고를 수 있는 답변 후보</h2>
+        <ul>
+          ${quickReplies
+            .map(
+              (reply, index) => `<li><b class="choice" aria-label="${index + 1}번 선택지">${index + 1}</b><div><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></div><button class="copy-reply" type="button" data-reply="${escapeHtml(reply.text)}">복사</button></li>`,
+            )
+            .join("")}
+        </ul>
+      </section>
+      <p class="rule">${escapeHtml(assistantPrompt.answer_rule)}</p>
+      <p class="privacy">${escapeHtml(artifact.privacy)}</p>
+    </section>
+    <footer>${escapeHtml(artifact.claim_boundary)}</footer>
+  </main>
+  <script>
+    for (const button of document.querySelectorAll(".copy-reply")) {
+      button.addEventListener("click", async () => {
+        const text = button.dataset.reply || "";
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = "복사됨";
+        } catch {
+          button.textContent = "선택해서 복사";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    artifact,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+  };
+}
+
+function practiceNext(options) {
+  const date = options.date || new Date();
+  const paths = ensureLearnerStore(options.learnerRoot);
+  const missionResult = writeGeneratedDailyMission(paths.root, date, {
+    scenePreset: options.scenePreset,
+  });
+  const cockpitResult = cockpit({ ...options, learnerRoot: paths.root, date });
+  const card = writePracticeStartCard({ paths, date, missionResult, cockpitResult });
+  return {
+    status: "pass",
+    path: "codex-operated-practice-start-card",
+    learnerRoot: paths.root,
+    cardPath: card.jsonPath,
+    htmlPath: card.htmlPath,
+    url: card.url,
+    mission: card.artifact.mission,
+    assistantPrompt: card.artifact.assistant_prompt,
+    quickReplies: card.artifact.quick_replies,
+    cockpit: card.artifact.cockpit,
+    claimBoundary: card.artifact.claim_boundary,
   };
 }
 
@@ -2624,6 +2842,10 @@ function run() {
   }
   if (command === "report") {
     output(report(options), options.json);
+    return;
+  }
+  if (command === "practice-next") {
+    output(practiceNext(options), options.json);
     return;
   }
   if (command === "practice") {

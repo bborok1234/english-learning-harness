@@ -108,6 +108,7 @@ function buildAudit() {
       files: [
         "docs/product/learner-cockpit-state.json",
         "docs/product/learner-cockpit.html",
+        "scripts/daily-practice-start-card-smoke.mjs",
         "scripts/product-surface-smoke.mjs",
         "scripts/personal-learner-cockpit-smoke.mjs",
       ],
@@ -115,6 +116,13 @@ function buildAudit() {
         {
           label: "Learner cockpit is separated from ops board",
           pass: fileIncludes("scripts/product-surface-smoke.mjs", ["Learner cockpit is a product surface"]),
+        },
+        {
+          label: "Daily practice has a learner-ready start card",
+          pass: fileIncludes("scripts/daily-practice-start-card-smoke.mjs", [
+            "learner-ready daily practice start card",
+            "quickReplies",
+          ]),
         },
       ],
       boundary: "Fixture/product smoke verifies surface mechanics, not daily real-world use.",

@@ -645,6 +645,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #220 | AIOS-17: Make the first pilot card an immersive scene chooser | continue |
 | #222 | AIOS-18: Align owner-pilot skill contract with immersive first-card start | continue |
 | #224 | AIOS-19: Add goal completion audit for AI-native OS objective | continue |
+| #226 | AIOS-20: Add learner-ready daily practice start card | continue |
 
 #179 planned evidence should show:
 
@@ -703,5 +704,9 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `scripts/aios-goal-audit.mjs` writes `docs/ops/goal-audit.json/html`, mapping the active AI-native OS stop conditions to current evidence and blockers.
 - `scripts/aios-goal-audit-smoke.mjs` verifies the audit covers all eight stop conditions and keeps `overall_status=not_complete` while real owner/self pilot evidence is missing.
 - `docs/phase-15-evidence/AIOS-19-goal-completion-audit.md` records the goal audit evidence boundary.
+- `practice-next` now writes `artifacts/missions/practice-start-card.json/html` before answer persistence so ordinary daily practice has a learner-ready scene card with quick replies.
+- `skills/daily-session/SKILL.md` now tells Codex to generate the `practice-next` card before asking the first daily prompt.
+- `scripts/daily-practice-start-card-smoke.mjs` verifies the card JSON/HTML, scene-matched quick replies, copy buttons, cockpit link, and no internal command/issue/audit leakage.
+- `docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md` records the daily start-card evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
