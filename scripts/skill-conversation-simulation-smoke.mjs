@@ -64,6 +64,8 @@ function assertSkillContracts() {
   assert(daily.includes("Never expose rubric labels"), "daily skill must reject exposed rubric labels");
   assert(daily.includes("Do not make the first practice prompt about this repository"), "daily skill must avoid project-specific first prompt");
   assert(daily.includes("practice-next --json"), "daily skill must prefer the learner-ready start card before first prompt");
+  assert(daily.includes("practice-reply --quick-reply"), "daily skill must route selected quick replies internally");
+  assert(daily.includes("practice-reply --say"), "daily skill must route freeform learner answers internally");
   assert(daily.includes("quick replies"), "daily skill must expose quick replies through the start card contract");
   assert(daily.includes("agent-operated `practice` engine path"), "daily skill must prefer practice engine path");
   assert(mirror.includes("오늘 전달한 것:"), "mini mirror must keep short Korean output shape");

@@ -110,6 +110,7 @@ What is complete:
 - AIOS-18 owner-pilot skill contract alignment is implemented for #222. The Codex-facing owner-pilot skill and canonical pilot prompt contract now describe the same `첫 장면 고르기` start path as the engine.
 - AIOS-19 goal completion audit is implemented for #224. `docs/ops/goal-audit.json/html` maps the active AI-native OS goal stop conditions to current evidence and keeps the overall goal `not_complete` while real owner/self pilot evidence is missing.
 - AIOS-20 daily practice start card is implemented for #226. Ordinary daily practice now has a learner-ready `practice-next` JSON/HTML card with a concrete scene, quick replies, and no answer persistence before the learner responds.
+- AIOS-21 daily practice reply routing is implemented for #228. `practice-reply` resolves start-card quick replies or direct learner sentences, runs the practice persistence flow, and writes a learner-facing saved-reply card.
 
 What is not started:
 - Real user validation.
