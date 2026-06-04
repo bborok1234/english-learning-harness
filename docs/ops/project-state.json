@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-30 generates a redacted local real-pilot continuity handoff; active AIOS goal remains not complete",
-    "status": "AIOS-30 adds a no-answer-save redacted local handoff with progress counts, next prompt, consent state, redaction flags, next-card link, and cockpit link for cross-turn/day real-pilot continuity. #179 real owner/self evidence and learning outcome claims remain unresolved.",
+    "stage": "AIOS-31 generates a conversation-native real-pilot turn packet; active AIOS goal remains not complete",
+    "status": "AIOS-31 adds a no-answer-save Codex operator turn packet with learner-only prompt copy, quick replies, operator-only save policy, and launch/next/handoff/cockpit links. #179 real owner/self evidence and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, and Codex can resume from a redacted local handoff without transcript leakage.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, and Codex can prepare the exact next learner-facing pilot turn without exposing operator policy.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-30 is redacted local real-pilot continuity evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-31 is Codex operator turn-packet mechanics only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -672,6 +672,12 @@
       "label": "docs/phase-15-evidence/AIOS-30-pilot-handoff.md",
       "path": "./phase-15-evidence/AIOS-30-pilot-handoff.md",
       "role": "AIOS-30 redacted local real-pilot continuity handoff evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md",
+      "path": "./phase-15-evidence/AIOS-31-pilot-turn-packet.md",
+      "role": "AIOS-31 conversation-native Codex pilot turn packet evidence",
       "kind": "source"
     }
   ],
@@ -2919,6 +2925,20 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-30-pilot-handoff.md"
           ]
+        },
+        {
+          "id": "AIOS-31-PILOT-TURN-PACKET",
+          "title": "AIOS-31 pilot turn packet 통과",
+          "why": "실제 제품 표면은 Codex 대화다. Codex가 다음 턴에서 무엇을 말해야 하는지와 답변 후 저장 정책을 분리해 알아야 학습자에게 명령어를 넘기지 않는다.",
+          "done": "pilot-turn이 artifacts/pilot/pilot-turn-packet.json/html을 만들고 learnerTurn.say, quick replies, operator-only save policy, launch/next/handoff/cockpit links를 제공한다. 답변 저장과 consent mark는 하지 않는다.",
+          "verification": "phase15 owner pilot turn packet smoke validates fresh/partial packets, browser render, no answer save, four local links, and no transcript/friction/internal-language leakage.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-turn-packet-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md"
+          ]
         }
       ]
     },
@@ -3702,6 +3722,11 @@
       "name": "AIOS-30 redacted real-pilot handoff",
       "status": "Pass",
       "detail": "handoff smoke validates fresh/partial handoff JSON, HTML, and rendered text exclude transcript and friction text while preserving progress counts, consent status, and next-card/cockpit links."
+    },
+    {
+      "name": "AIOS-31 conversation-native pilot turn packet",
+      "status": "pass",
+      "detail": "node scripts/phase15-owner-pilot-turn-packet-smoke.mjs verifies learner/operator separation, no answer save, render links, redaction, and claim boundary."
     }
   ],
   "commands": [
@@ -4224,6 +4249,10 @@
     {
       "label": "Run AIOS-30 redacted real-pilot handoff smoke",
       "command": "node scripts/phase15-owner-pilot-handoff-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-31 pilot turn packet smoke",
+      "command": "node scripts/phase15-owner-pilot-turn-packet-smoke.mjs"
     }
   ]
 }

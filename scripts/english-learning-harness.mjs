@@ -194,6 +194,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-launch [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-run-sheet [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-handoff [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-turn [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -2764,6 +2765,153 @@ function pilotHandoff(options) {
   };
 }
 
+function pilotTurn(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const launch = pilotLaunch({ ...options, learnerRoot: paths.root, date });
+  const handoff = pilotHandoff({ ...options, learnerRoot: paths.root, date });
+  const turn = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "Codex operator pilot turn packet",
+    saved_answer: false,
+    learner_turn: {
+      language: "ko-first",
+      say: handoff.nextAction.assistant_prompt,
+      ask: handoff.nextAction.ask,
+      quick_replies: handoff.nextAction.quick_replies,
+      response_rule: "학습자는 번호 하나를 고르거나 영어 한 문장을 직접 답하면 됩니다.",
+      visible_privacy: "답변 원문은 로컬 학습 기록에만 저장하고 공개 협업 기록에는 올리지 않습니다.",
+    },
+    operator_only: {
+      next_action: handoff.nextAction.action,
+      phase: handoff.nextAction.phase,
+      day: handoff.nextAction.day,
+      save_policy: {
+        before_learner_answer: "Generating this packet, launch card, next card, and handoff saves no learner answer.",
+        after_learner_answer:
+          "If the learner chooses a numbered option, save the selected quick reply internally. If they type a sentence, save exactly that sentence internally.",
+        first_save_consent:
+          "The first saved pilot answer records local-only consent metadata. Do not mark consent from this packet alone.",
+      },
+      public_sharing_boundary:
+        "Do not share transcripts, friction notes, private notes, local paths, audio, or images publicly without explicit review.",
+      forbidden_learner_copy: [
+        "internal operation details",
+        "collaboration metadata",
+        "assessment internals",
+        "governance labels",
+        "unsupported outcome claims",
+      ],
+    },
+    local_surfaces: {
+      launch_card: {
+        html: relativeToRoot(paths, launch.htmlPath),
+        url: launch.url,
+      },
+      next_card: handoff.localSurfaces.next_card,
+      handoff: {
+        html: relativeToRoot(paths, handoff.htmlPath),
+        url: handoff.url,
+      },
+      cockpit: handoff.localSurfaces.cockpit,
+    },
+    redaction: handoff.redaction,
+    claim_boundary:
+      "This turn packet prepares one Codex-operated pilot conversation turn. It does not save a new answer, prove learning outcomes, or complete the real pilot.",
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-turn-packet.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-turn-packet.html");
+  writeFileSync(jsonPath, `${JSON.stringify(turn, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pilot Turn Packet</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; --soft: #eef5f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(960px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.12; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 17px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .say { margin-top: 18px; padding: 18px; border-radius: 8px; background: var(--warm); font-size: 21px; font-weight: 760; line-height: 1.34; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 14px; margin-top: 18px; align-items: start; }
+    .block { padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .safe { background: var(--soft); }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; overflow-wrap: anywhere; }
+    .links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+    .links a { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; font-weight: 720; }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) { .grid, .links { grid-template-columns: 1fr; } .say { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Codex Operator Turn</p>
+      <h1>다음 한 턴 준비</h1>
+      <p class="subtle">학습자에게는 아래 문장만 말하고, 저장/공유 경계는 Codex가 내부적으로 지킵니다.</p>
+      <section class="say" aria-label="say to learner">${escapeHtml(turn.learner_turn.say)}</section>
+      <div class="grid">
+        <section class="block" aria-label="quick replies">
+          <h2>번호로 고를 수 있는 답변 후보</h2>
+          ${
+            turn.learner_turn.quick_replies.length
+              ? `<ul>${turn.learner_turn.quick_replies
+                  .map((reply) => `<li>${escapeHtml(reply.number)}. ${escapeHtml(reply.text)} <span class="subtle">(${escapeHtml(reply.note)})</span></li>`)
+                  .join("")}</ul>`
+              : `<p class="subtle">직접 영어 한 문장으로 답하면 됩니다.</p>`
+          }
+        </section>
+        <section class="block safe" aria-label="operator boundary">
+          <h2>운영 경계</h2>
+          <p>${escapeHtml(turn.operator_only.save_policy.before_learner_answer)}</p>
+          <p class="subtle" style="margin-top: 8px;">${escapeHtml(turn.operator_only.save_policy.first_save_consent)}</p>
+        </section>
+      </div>
+      <section class="block" style="margin-top: 14px;" aria-label="privacy">
+        <h2>학습자에게 보이는 프라이버시</h2>
+        <p>${escapeHtml(turn.learner_turn.visible_privacy)}</p>
+      </section>
+      <section class="links" aria-label="local surfaces">
+        <a href="${escapeHtml(relative(dirname(htmlPath), launch.htmlPath))}">시작 카드</a>
+        <a href="${escapeHtml(relative(dirname(htmlPath), handoff.htmlPath))}">이어받기 handoff</a>
+        <a href="${escapeHtml(handoff.localSurfaces.next_card.html ? relative(dirname(htmlPath), resolve(paths.root, handoff.localSurfaces.next_card.html)) : "pilot-next-card.html")}">다음 카드</a>
+        <a href="${escapeHtml(handoff.localSurfaces.cockpit.html ? relative(dirname(htmlPath), resolve(paths.root, handoff.localSurfaces.cockpit.html)) : "../../cockpit.html")}">Cockpit</a>
+      </section>
+    </section>
+    <footer>${escapeHtml(turn.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-turn",
+    learnerRoot: paths.root,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    savedAnswer: false,
+    learnerTurn: turn.learner_turn,
+    operatorOnly: turn.operator_only,
+    localSurfaces: turn.local_surfaces,
+    redaction: turn.redaction,
+    claimBoundary: turn.claim_boundary,
+  };
+}
+
 function pilotDay(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -3594,6 +3742,10 @@ function run() {
   }
   if (command === "pilot-handoff") {
     output(pilotHandoff(options), options.json);
+    return;
+  }
+  if (command === "pilot-turn") {
+    output(pilotTurn(options), options.json);
     return;
   }
   if (command === "pilot-next") {
