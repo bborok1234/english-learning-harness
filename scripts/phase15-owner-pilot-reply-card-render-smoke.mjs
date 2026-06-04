@@ -85,6 +85,7 @@ async function renderReplyCard(url) {
     sectionCount: document.querySelectorAll("section").length,
     gridItemCount: document.querySelectorAll(".line").length,
     nextCardLabel: document.querySelector('[aria-label="next card"]')?.textContent ?? "",
+    frictionLabel: document.querySelector('[aria-label="friction follow up"]')?.textContent ?? "",
   }));
   await browser.close();
   return result;
@@ -118,8 +119,6 @@ async function main() {
     isoDay(1),
     "--say",
     "Which place do you mean before I choose the subway exit?",
-    "--friction-note",
-    "Fixture checks that the saved-reply card renders without exposing command details.",
     "--json",
   ]);
 
@@ -138,6 +137,11 @@ async function main() {
   assert(card.saved === true, "reply card should be saved");
   assert(card.coaching.next_phrase === reply.learnerFacing.nextPhrase, "reply card next phrase mismatch");
   assert(card.next_card.title === reply.learnerFacing.nextCard.title, "reply card next card mismatch");
+  assert(card.friction.captured === false, "reply card should not invent friction capture");
+  assert(card.friction.follow_up_prompt.includes("한 단어"), "reply card should include friction follow-up prompt");
+  assert(reply.learnerFacing.frictionNoteCaptured === false, "learner-facing summary should say friction was not captured");
+  assert(reply.learnerFacing.frictionPrompt.includes("막힌 지점"), "learner-facing summary should include friction prompt");
+  assert(!JSON.stringify(reply.result.result.day).includes("No explicit friction note captured."), "day record should not store fake friction note");
   assertNoInternalLeak(
     [
       card.coaching.communicated,
@@ -148,6 +152,7 @@ async function main() {
       card.next_card.ask,
       card.next_card.example,
       card.learner_rule,
+      card.friction.follow_up_prompt,
       card.privacy,
       card.claim_boundary,
     ].join("\n"),
@@ -160,6 +165,8 @@ async function main() {
   assert(rendered.text.includes("자연스럽게 바꾸면"), "rendered page missing recast label");
   assert(rendered.text.includes("다음에 쓸 표현"), "rendered page missing next phrase label");
   assert(rendered.text.includes(reply.learnerFacing.nextPhrase), "rendered page missing next phrase value");
+  assert(rendered.text.includes("짧은 마찰 메모"), "rendered page missing friction follow-up section");
+  assert(rendered.frictionLabel.includes("한 단어"), "rendered friction follow-up prompt mismatch");
   assert(rendered.text.includes("다음 카드"), "rendered page missing next card section");
   assert(rendered.nextCardLabel.includes(reply.learnerFacing.nextCard.title), "rendered next card title mismatch");
   assert(rendered.nextCardLabel.includes(reply.learnerFacing.nextCard.ask), "rendered next card prompt mismatch");

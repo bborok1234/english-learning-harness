@@ -1164,6 +1164,11 @@ function pilotReplyLearnerFacing({ routedTo, captureResult, nextCardArtifact }) 
     : null;
   const dayRecord = captureResult.result?.day ?? null;
   const coaching = dayRecord?.learner_coaching ?? null;
+  const frictionNote = dayRecord?.friction_note ?? "";
+  const frictionPrompt =
+    routedTo.phase === "day" && !frictionNote
+      ? "방금 답하면서 막힌 지점이 있었다면 한 단어로만 남겨도 됩니다. 예: usual place, 너무 길다, 바로 안 떠오름"
+      : "";
   if (coaching) {
     return {
       saved: true,
@@ -1174,6 +1179,8 @@ function pilotReplyLearnerFacing({ routedTo, captureResult, nextCardArtifact }) 
       nextPhrase: coaching.next_phrase,
       nextFocus: coaching.next_focus,
       artifactHint: coaching.artifact_hint,
+      frictionNoteCaptured: Boolean(frictionNote),
+      frictionPrompt,
       nextCard: next,
       learnerRule: "방금 답변은 저장됐습니다. 다음에도 영어 한 문장만 답하면 됩니다.",
     };
@@ -1185,6 +1192,8 @@ function pilotReplyLearnerFacing({ routedTo, captureResult, nextCardArtifact }) 
     day: routedTo.day,
     capturedCount: captureResult.capturedCount ?? null,
     committed: Boolean(captureResult.committed),
+    frictionNoteCaptured: Boolean(frictionNote),
+    frictionPrompt,
     nextCard: next,
     learnerRule: "방금 답변은 저장됐습니다. 다음 카드도 영어 한 문장이면 충분합니다.",
   };
@@ -1203,6 +1212,10 @@ function pilotReplyCardArtifact({ paths, date, routedTo, learnerFacing, nextCard
       next_phrase: learnerFacing.nextPhrase ?? "",
       next_focus: learnerFacing.nextFocus ?? "",
       artifact_hint: learnerFacing.artifactHint ?? "",
+    },
+    friction: {
+      captured: Boolean(learnerFacing.frictionNoteCaptured),
+      follow_up_prompt: learnerFacing.frictionPrompt ?? "",
     },
     next_card: learnerFacing.nextCard ?? null,
     learner_rule: learnerFacing.learnerRule,
@@ -1244,6 +1257,7 @@ function pilotReplyCardArtifact({ paths, date, routedTo, learnerFacing, nextCard
     .line { padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
     .line + .line { margin-top: 10px; }
     .next { margin-top: 18px; padding: 18px; border-radius: 8px; background: var(--warm); }
+    .friction { margin-top: 18px; padding: 18px; border-radius: 8px; background: var(--cool); }
     .ask { margin-top: 8px; font-size: 21px; font-weight: 760; line-height: 1.32; }
     .example, .rule, footer { margin-top: 14px; color: var(--muted); }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
@@ -1266,6 +1280,14 @@ function pilotReplyCardArtifact({ paths, date, routedTo, learnerFacing, nextCard
         <div class="line"><strong>다음에 쓸 표현</strong><p>${escapeHtml(artifact.coaching.next_phrase)}</p></div>
         <div class="line"><strong>다음 작은 초점</strong><p>${escapeHtml(artifact.coaching.next_focus)}</p></div>
       </div>`
+          : ""
+      }
+      ${
+        artifact.friction.follow_up_prompt
+          ? `<section class="friction" aria-label="friction follow up">
+        <h2>짧은 마찰 메모</h2>
+        <p>${escapeHtml(artifact.friction.follow_up_prompt)}</p>
+      </section>`
           : ""
       }
       ${
@@ -1350,7 +1372,7 @@ function pilotReply(options) {
   } else if (nextAction.command === "pilot-day") {
     captureOptions.phase = "day";
     captureOptions.day = nextAction.day;
-    captureOptions.frictionNote = options.frictionNote || "No explicit friction note captured.";
+    captureOptions.frictionNote = options.frictionNote || "";
   } else {
     throw new Error(`pilot-reply cannot route next action: ${nextAction.command}`);
   }
