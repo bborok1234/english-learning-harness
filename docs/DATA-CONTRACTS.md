@@ -719,6 +719,16 @@ The first five `pilot-next` daily cards must cover distinct speaking actions:
 
 These varied missions are local pilot prompts, not evidence of outcome improvement.
 
+`pilot-run-sheet --json` writes `artifacts/pilot/pilot-run-sheet.json/html` as a local Codex operator handoff before a real answer is saved. It may generate or link the launch card and cockpit, but it must not save a learner answer or mark consent by itself. It should expose:
+
+- next learner prompt and quick replies,
+- whether local-only consent has already been marked,
+- what will be saved only after the learner answers,
+- local launch-card and cockpit links,
+- public sharing boundary.
+
+The HTML is local-only run readiness evidence. It is not a learner outcome report and does not complete the real pilot.
+
 `pilot-finish` must copy each day `pilot_mission` into `report.aios_artifacts.days[].pilot_mission`, copy each day `learner_coaching` into `report.aios_artifacts.days[].learner_coaching`, and count both `days_with_pilot_mission_metadata` and `days_with_learner_coaching` in `product_journey_audit`. The audit is invalid if completed days lack this metadata.
 
 ## Local Pilot Dashboard Overlay

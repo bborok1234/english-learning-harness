@@ -30,6 +30,14 @@ When persistence is needed, find the local engine in this order:
 
 Use that engine yourself. Do not hand the command to the learner.
 
+If you need a local operator handoff before asking for the real pilot answer, generate the run sheet internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-run-sheet --json
+```
+
+Use it to confirm the next prompt, save boundary, consent status, privacy rules, launch card, and cockpit links. It must not save a learner answer or mark consent by itself.
+
 Before asking the learner to answer the real pilot, generate the launch card internally:
 
 ```bash
