@@ -133,6 +133,15 @@ async function main() {
   assert(routed.path === "codex-operated-practice-reply", "practice-reply path mismatch");
   assert(routed.savedFrom === "quick_reply", "practice-reply should record quick_reply source");
   assert(routed.savedAnswer === quickReplyText, "practice-reply should save the selected quick reply text");
+  assert(routed.diagnosis === null, "practice-reply should not diagnose before preserving the current mission");
+  assert(
+    routed.futureDiagnosis?.timing === "after_current_session",
+    "practice-reply should defer diagnosis until after current session persistence",
+  );
+  assert(
+    routed.futureDiagnosis?.purpose === "future_practice_planning",
+    "practice-reply future diagnosis should be marked as future planning",
+  );
   assert(existsSync(routed.replyCardPath), "practice reply-card JSON missing");
   assert(existsSync(routed.replyCardHtmlPath), "practice reply-card HTML missing");
   assert(existsSync(routed.report.htmlPath), "practice reply should write learner report HTML");
@@ -192,13 +201,18 @@ async function main() {
     "--learner-root",
     freeformRoot,
     "--say",
-    "I forgot the word, but I want cold coffee with milk.",
+    "I don't know how to say it, but I want cold coffee with milk.",
     "--date",
     "2026-06-04T09:00:00.000Z",
     "--json",
   ]);
   assert(freeform.savedFrom === "freeform", "freeform practice reply should record freeform source");
   assert(freeform.savedAnswer.includes("cold coffee"), "freeform practice reply should save learner answer");
+  assert(freeform.diagnosis === null, "freeform practice reply should not diagnose before current mission");
+  assert(
+    freeform.futureDiagnosis?.skill === "repair",
+    "freeform practice reply should create future repair diagnosis after preserving current mission",
+  );
   assert(freeform.mission.id === freeformStart.mission.id, "freeform practice reply should preserve start-card mission id");
   assert(
     freeform.mission.targetSkill === freeformStart.mission.target_skill,
@@ -237,13 +251,13 @@ async function main() {
     JSON.stringify(
       {
         status: "pass",
-        issue: "AIOS-22",
+        issue: "AIOS-23",
         learnerRoot,
         replyCardHtmlPath: routed.replyCardHtmlPath,
         quickReplySaved: routed.savedAnswer,
         renderedCoachingCount: rendered.coachingCount,
         claimBoundary:
-          "This validates daily practice reply routing with fixture data only. It does not save a real learner answer.",
+          "This validates daily practice reply routing and deferred future diagnosis with fixture data only. It does not save a real learner answer.",
       },
       null,
       2,
@@ -258,7 +272,7 @@ try {
     JSON.stringify(
       {
         status: "fail",
-        issue: "AIOS-22",
+        issue: "AIOS-23",
         error: error.message,
       },
       null,
