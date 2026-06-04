@@ -587,12 +587,17 @@ When a pilot is active, `cockpit-state.json` may include:
       "html": "artifacts/pilot/pilot-reply-card.html",
       "url": "file:///absolute/path/to/pilot-reply-card.html"
     },
+    "latest_friction_card": {
+      "json": "artifacts/pilot/pilot-friction-card.json",
+      "html": "artifacts/pilot/pilot-friction-card.html",
+      "url": "file:///absolute/path/to/pilot-friction-card.html"
+    },
     "state_file": "pilot-state.json"
   }
 }
 ```
 
-The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifact`, `evidence_gap_artifact`, `current_card_artifact`, and `latest_reply_card` when the local artifacts exist. It must present them as learner-safe continuation or journey-check surfaces, not engine commands. It must not expose `pilot-reply` command text, `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, transcript internals, or `product_journey_audit` internals.
+The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifact`, `evidence_gap_artifact`, `current_card_artifact`, `latest_reply_card`, and `latest_friction_card` when the local artifacts exist. It must present them as learner-safe continuation, journey-check, or confirmation surfaces, not engine commands. It must not expose `pilot-reply` command text, `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, transcript internals, friction note text, or `product_journey_audit` internals.
 
 `pilot-launch` and `pilot-next` may generate learner-facing preview artifacts, but they must not create a real pilot answer or mark consent. The first answer saved through `pilot-capture` or `pilot-reply` records local-only consent metadata in `pilot-state.json`.
 
@@ -754,6 +759,8 @@ The HTML is local-only run readiness evidence. It is not a learner outcome repor
 `pilot-turn --json` writes `artifacts/pilot/pilot-turn-packet.json/html` as a Codex operator packet for exactly one real-pilot conversation turn. It may refresh launch, next-card, handoff, and cockpit surfaces, but it must not save a learner answer or mark consent by itself. It should separate `learner_turn` copy from `operator_only` save policy, include local links to launch card, next card, handoff, and cockpit, and keep transcript text, friction note text, engine command tokens, issue/PR language, rubric internals, or unsupported outcome claims out of the packet and rendered HTML.
 
 `pilot-evidence-gap --json` writes `artifacts/pilot/pilot-evidence-gap.json/html` as a redacted evidence-gap surface for the real pilot. It may refresh turn, launch, next-card, handoff, and cockpit surfaces, but it must not save a learner answer or mark consent by itself. It should include required/collected/remaining counts for Day 0 baseline cards, daily sessions, final sample cards, daily friction notes, local report, and direction decision. It must not include transcript text, friction note text, issue/PR language, rubric internals, or unsupported speaking-improvement claims.
+
+`pilot-friction --json` attaches a local friction note to an existing completed daily pilot record after the learner answer was already saved. It must not create a new answer, duplicate a daily session, change transcript text, or mark new consent. It should update the matching `days[].friction_note` and `partial.days[].friction_note`, refresh the cockpit and evidence gap, and write `artifacts/pilot/pilot-friction-card.json/html` as a learner-safe confirmation surface. Returned public-safe JSON/HTML must not include the friction note text, transcript text, issue/PR language, rubric internals, or unsupported speaking-improvement claims.
 
 `pilot-finish` must copy each day `pilot_mission` into `report.aios_artifacts.days[].pilot_mission`, copy each day `learner_coaching` into `report.aios_artifacts.days[].learner_coaching`, and count both `days_with_pilot_mission_metadata` and `days_with_learner_coaching` in `product_journey_audit`. The audit is invalid if completed days lack this metadata.
 

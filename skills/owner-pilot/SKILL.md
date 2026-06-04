@@ -97,6 +97,14 @@ If the answer belongs to a daily pilot card and the learner mentioned a friction
 
 After saving, the router refreshes cockpit, the next local `pilot-next-card.html`, and a latest `pilot-reply-card.html` saved-reply surface. Use the returned `learnerFacing` object to summarize what was saved, show the learner-safe recast/next phrase after daily cards, and ask the next card from `learnerFacing.nextCard` when continuing immediately.
 
+If a daily pilot answer was already saved without a friction note and the learner then replies with the short friction follow-up, attach only that note internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-friction --friction-note "<short note>" --json
+```
+
+Use this only for a completed daily pilot record. It must not create another learner answer, duplicate a daily session, or expose the friction note text in learner-facing confirmation surfaces.
+
 ## Pilot Phases
 
 ### Day 0 Baseline
