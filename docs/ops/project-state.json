@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-25 real pilot launch card added; active AIOS goal remains not complete",
-    "status": "AIOS-25 adds a learner-facing launch/resume card for the real owner/self pilot before any new answer is saved. #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-26 cockpit links real pilot launch card; active AIOS goal remains not complete",
+    "status": "AIOS-26 exposes the real pilot launch/resume card from the learner cockpit so the next real answer can start from the daily product surface. #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot now also has a launch card that explains current progress, the next prompt, quick replies, privacy, and save boundary before Codex asks for the next real answer.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is now discoverable from the active learner cockpit, so the cockpit can act as the daily start/resume surface before Codex asks for the next real answer.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-25 is real pilot launch/resume mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-26 is cockpit discovery mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -642,6 +642,12 @@
       "label": "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
       "path": "./phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
       "role": "AIOS-25 real pilot launch-card evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md",
+      "path": "./phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md",
+      "role": "AIOS-26 cockpit pilot launch-card link evidence",
       "kind": "source"
     }
   ],
@@ -2817,6 +2823,18 @@
             "skills/owner-pilot/SKILL.md",
             "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md"
           ]
+        },
+        {
+          "id": "AIOS-26-COCKPIT-PILOT-LAUNCH-LINK",
+          "title": "AIOS-26 cockpit pilot launch link 통과",
+          "why": "실제 pilot launch card가 있어도 cockpit에서 발견할 수 없으면 daily product surface로 재개하기 어렵다.",
+          "done": "active pilot state/html이 pilot-launch-card artifact를 링크하고, 기존 next-card/reply-card 링크는 유지한다.",
+          "verification": "personal-learner-cockpit-active-pilot-smoke validates launch card state/HTML linkage, file existence, no internal leakage, and existing active pilot checks.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md"
+          ]
         }
       ]
     },
@@ -3575,6 +3593,11 @@
       "name": "AIOS-25 real pilot launch card",
       "status": "Pass",
       "detail": "phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage."
+    },
+    {
+      "name": "AIOS-26 cockpit pilot launch link",
+      "status": "Pass",
+      "detail": "personal-learner-cockpit-active-pilot smoke validates the active cockpit links pilot-launch-card.html/json while preserving next-card, quick-reply, copy-button, and reply-card checks."
     }
   ],
   "commands": [
@@ -4077,6 +4100,10 @@
     {
       "label": "Run AIOS-25 real pilot launch card smoke",
       "command": "node scripts/phase15-owner-pilot-launch-card-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-26 cockpit pilot launch link smoke",
+      "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
     }
   ]
 }
