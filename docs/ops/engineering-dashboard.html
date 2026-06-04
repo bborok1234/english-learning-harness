@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-36 protects pilot answer intake; active AIOS goal remains not complete",
-    "status": "AIOS-36 lets Codex classify incoming Codex-thread messages before saving, so English answers and quick-reply choices are separated from Korean status/control/meta requests. Real owner/self completion and learning outcome claims remain unresolved.",
+    "stage": "AIOS-37 guards internal context intake; active AIOS goal remains not complete",
+    "status": "AIOS-37 prevents Codex goal/continuation payloads from being mistaken for learner English answers. Real owner/self daily sessions, final sample, report, and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, resume from a redacted local handoff, prepare the exact next learner-facing pilot turn, inspect a redacted evidence gap, attach post-answer friction notes, and preview incoming pilot messages before saving so thread meta requests do not contaminate speaking evidence.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet, resume from redacted handoff, prepare the next learner-facing turn, inspect a redacted evidence gap, attach post-answer friction notes, preview incoming pilot messages before saving, and now rejects internal goal/continuation context blocks before direct-answer classification.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, protected pilot answer intake previews, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, protected pilot answer intake previews, internal-context intake no-save guards, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-36 is protected no-save intake mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-37 is internal-context intake guard mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -1111,13 +1111,19 @@
       "path": "./phase-15-evidence/AIOS-36-pilot-intake-preview.md",
       "role": "AIOS-36 protected pilot answer intake preview evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md",
+      "path": "./phase-15-evidence/AIOS-37-internal-context-intake-guard.md",
+      "role": "AIOS-37 internal continuation/context intake guard evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
     {
       "label": "Current slice",
       "value": "AIOS-12",
-      "detail": "automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, and protected intake preview implemented; #179 stays open",
+      "detail": "automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, protected intake preview, and internal-context no-save guard implemented; #179 stays open",
       "tone": "amber"
     },
     {
@@ -1530,6 +1536,13 @@
       "status": "Pass",
       "evidence": "#258, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke",
       "claim": "pilot-intake classifies direct English answers, quick-reply selections, Korean/meta/control requests, and ambiguous input before any pilot-reply save while preserving no-save answer-count invariants; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-56",
+      "label": "Internal context intake no-save guard",
+      "status": "Pass",
+      "evidence": "#260, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke",
+      "claim": "pilot-intake recognizes Codex/internal goal continuation payloads before direct-answer classification and keeps them no-save without mutating pilot answer counts; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -3450,6 +3463,21 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-36-pilot-intake-preview.md"
           ]
+        },
+        {
+          "id": "AIOS-37-INTERNAL-CONTEXT-INTAKE-GUARD",
+          "title": "AIOS-37 internal context intake guard 통과",
+          "why": "Goal continuation payloads can contain long English instructions beside learner-facing pilot prompts. If classified as direct English answers, real pilot transcript evidence can be corrupted.",
+          "done": "pilot-intake now detects internal context markers before quick-reply/direct-answer classification and returns internal_context_block with saveEligible=false and route=no-save.",
+          "verification": "phase15 owner pilot intake preview smoke validates an English-heavy internal goal continuation fixture remains no-save, does not create pilot-state, keeps answer counts unchanged, and does not leak raw internal context into preview JSON/HTML.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-intake-preview-smoke.mjs",
+            "scripts/phase15-owner-pilot-skill-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md"
+          ]
         }
       ]
     },
@@ -4263,6 +4291,11 @@
       "name": "AIOS-36 protected pilot answer intake preview",
       "status": "pass",
       "detail": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies direct/quick/meta classification before save, no answer-count mutation, rendered preview, and redaction boundary."
+    },
+    {
+      "name": "AIOS-37 internal context intake no-save guard",
+      "status": "pass",
+      "detail": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies English-heavy Codex internal context is classified as no-save before any pilot-reply route."
     }
   ],
   "commands": [
@@ -4809,6 +4842,10 @@
     {
       "label": "Run AIOS-36 pilot intake preview smoke",
       "command": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-37 internal context intake guard smoke",
+      "command": "node scripts/phase15-owner-pilot-intake-preview-smoke.mjs"
     }
   ]
 }
@@ -4817,12 +4854,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, resume from a redacted local handoff, prepare the exact next learner-facing pilot turn, inspect a redacted evidence gap, attach post-answer friction notes, and preview incoming pilot messages before saving so thread meta requests do not contaminate speaking evidence.</p>
+        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet, resume from redacted handoff, prepare the next learner-facing turn, inspect a redacted evidence gap, attach post-answer friction notes, preview incoming pilot messages before saving, and now rejects internal goal/continuation context blocks before direct-answer classification.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-36 protects pilot answer intake; active AIOS goal remains not complete<br>
-        AIOS-36 lets Codex classify incoming Codex-thread messages before saving, so English answers and quick-reply choices are separated from Korean status/control/meta requests. Real owner/self completion and learning outcome claims remain unresolved.
+        AIOS-37 guards internal context intake; active AIOS goal remains not complete<br>
+        AIOS-37 prevents Codex goal/continuation payloads from being mistaken for learner English answers. Real owner/self daily sessions, final sample, report, and learning outcome claims remain unresolved.
       </div>
     </header>
 
@@ -4831,7 +4868,7 @@
         <article class="metric-card tone-amber">
           <div class="eyebrow"><span class="dot"></span>Current slice</div>
           <div class="metric-value">AIOS-12</div>
-          <p>automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, and protected intake preview implemented; #179 stays open</p>
+          <p>automatic pilot reply routing with saved-reply card, learner coaching report metadata, pilot mission audit metadata, varied daily missions, next card, capture, cockpit refresh, local dashboard sync, skill, cockpit visibility, audit mechanics, protected intake preview, and internal-context no-save guard implemented; #179 stays open</p>
         </article>
         <article class="metric-card tone-green">
           <div class="eyebrow"><span class="dot"></span>Pilot surface</div>
@@ -4935,16 +4972,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-31-PILOT-TURN-PACKET</strong>
-                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-turn-packet-smoke.mjs, skills/owner-pilot/SKILL.md, docs/DATA-CONTRACTS.md, docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md</span>
-              </div>
-              <h3>AIOS-31 pilot turn packet 통과</h3>
-              <div class="card-row"><b>왜</b><p>실제 제품 표면은 Codex 대화다. Codex가 다음 턴에서 무엇을 말해야 하는지와 답변 후 저장 정책을 분리해 알아야 학습자에게 명령어를 넘기지 않는다.</p></div>
-              <div class="card-row"><b>완료</b><p>pilot-turn이 artifacts/pilot/pilot-turn-packet.json/html을 만들고 learnerTurn.say, quick replies, operator-only save policy, launch/next/handoff/cockpit links를 제공한다. 답변 저장과 consent mark는 하지 않는다.</p></div>
-              <div class="card-row"><b>검증</b><p>phase15 owner pilot turn packet smoke validates fresh/partial packets, browser render, no answer save, four local links, and no transcript/friction/internal-language leakage.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-32-COCKPIT-PILOT-TURN-LINK</strong>
                 <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/DATA-CONTRACTS.md, docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md</span>
               </div>
@@ -4992,6 +5019,16 @@
               <div class="card-row"><b>왜</b><p>Codex 대화 안에서는 영어 답변, 한국어 상태 질문, 중단 요청, 운영 지시가 섞인다. 저장 전 preview가 없으면 실제 pilot transcript가 오염될 수 있다.</p></div>
               <div class="card-row"><b>완료</b><p>pilot-intake가 incoming message를 저장 전 분류하고, saveEligible/route/learnerFacing/integrity를 반환하며, raw input 없는 JSON/HTML preview를 쓴다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot intake preview smoke validates fresh/partial no-save previews, unchanged answer counts, no fresh pilot-state creation, browser render, and no raw input/internal-language leakage; owner pilot skill smoke validates the no-save guard contract.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-37-INTERNAL-CONTEXT-INTAKE-GUARD</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-intake-preview-smoke.mjs, scripts/phase15-owner-pilot-skill-smoke.mjs, skills/owner-pilot/SKILL.md, docs/DATA-CONTRACTS.md, docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md</span>
+              </div>
+              <h3>AIOS-37 internal context intake guard 통과</h3>
+              <div class="card-row"><b>왜</b><p>Goal continuation payloads can contain long English instructions beside learner-facing pilot prompts. If classified as direct English answers, real pilot transcript evidence can be corrupted.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-intake now detects internal context markers before quick-reply/direct-answer classification and returns internal_context_block with saveEligible=false and route=no-save.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot intake preview smoke validates an English-heavy internal goal continuation fixture remains no-save, does not create pilot-state, keeps answer counts unchanged, and does not leak raw internal context into preview JSON/HTML.</p></div>
             </article>
         </div>
       </section>
@@ -5313,6 +5350,11 @@
               <td><strong>GATE-55</strong><span>Protected pilot answer intake preview</span></td>
               <td><strong>Pass</strong><span>#258, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke</span></td>
               <td>pilot-intake classifies direct English answers, quick-reply selections, Korean/meta/control requests, and ambiguous input before any pilot-reply save while preserving no-save answer-count invariants; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-56</strong><span>Internal context intake no-save guard</span></td>
+              <td><strong>Pass</strong><span>#260, phase15-owner-pilot-intake-preview-smoke, phase15-owner-pilot-skill-smoke</span></td>
+              <td>pilot-intake recognizes Codex/internal goal continuation payloads before direct-answer classification and keeps them no-save without mutating pilot answer counts; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -5779,6 +5821,10 @@
               <strong>docs/phase-15-evidence/AIOS-36-pilot-intake-preview.md</strong>
               <span>AIOS-36 protected pilot answer intake preview evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-37-internal-context-intake-guard.md">
+              <strong>docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md</strong>
+              <span>AIOS-37 internal continuation/context intake guard evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5786,10 +5832,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-29 local real-pilot run sheet</td>
-              <td><strong>Pass</strong><span>run-sheet smoke validates fresh run sheets save no answer and mark no consent, render first-save boundary plus local links, and resume sheets show existing local-only consent.</span></td>
-            </tr>
             <tr>
               <td>AIOS-30 redacted real-pilot handoff</td>
               <td><strong>Pass</strong><span>handoff smoke validates fresh/partial handoff JSON, HTML, and rendered text exclude transcript and friction text while preserving progress counts, consent status, and next-card/cockpit links.</span></td>
@@ -5817,6 +5859,10 @@
             <tr>
               <td>AIOS-36 protected pilot answer intake preview</td>
               <td><strong>pass</strong><span>node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies direct/quick/meta classification before save, no answer-count mutation, rendered preview, and redaction boundary.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-37 internal context intake no-save guard</td>
+              <td><strong>pass</strong><span>node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies English-heavy Codex internal context is classified as no-save before any pilot-reply route.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5862,7 +5908,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 143개 보기</summary>
+        <summary>완료 이력 144개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -7295,10 +7341,20 @@
               <div class="card-row"><b>완료</b><p>pilot-handoff가 artifacts/pilot/pilot-handoff.json/html을 만들고, progress count, consent status, next prompt, quick replies, next-card/cockpit links, redaction flags를 제공한다.</p></div>
               <div class="card-row"><b>검증</b><p>owner pilot handoff smoke validates no answer save, redacted JSON/HTML/browser text, partial baseline count, local-only consent, next-card/cockpit links, and no issue/PR/smoke/rubric/audit leakage.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-31-PILOT-TURN-PACKET</strong>
+                <span>scripts/english-learning-harness.mjs, scripts/phase15-owner-pilot-turn-packet-smoke.mjs, skills/owner-pilot/SKILL.md, docs/DATA-CONTRACTS.md, docs/phase-15-evidence/AIOS-31-pilot-turn-packet.md</span>
+              </div>
+              <h3>AIOS-31 pilot turn packet 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 제품 표면은 Codex 대화다. Codex가 다음 턴에서 무엇을 말해야 하는지와 답변 후 저장 정책을 분리해 알아야 학습자에게 명령어를 넘기지 않는다.</p></div>
+              <div class="card-row"><b>완료</b><p>pilot-turn이 artifacts/pilot/pilot-turn-packet.json/html을 만들고 learnerTurn.say, quick replies, operator-only save policy, launch/next/handoff/cockpit links를 제공한다. 답변 저장과 consent mark는 하지 않는다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot turn packet smoke validates fresh/partial packets, browser render, no answer save, four local links, and no transcript/friction/internal-language leakage.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 137개 보기</summary>
+        <summary>전체 검증 138개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -7851,12 +7907,16 @@
               <td>AIOS-36 protected pilot answer intake preview</td>
               <td><strong>pass</strong><span>node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies direct/quick/meta classification before save, no answer-count mutation, rendered preview, and redaction boundary.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-37 internal context intake no-save guard</td>
+              <td><strong>pass</strong><span>node scripts/phase15-owner-pilot-intake-preview-smoke.mjs verifies English-heavy Codex internal context is classified as no-save before any pilot-reply route.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 136개 보기</summary>
+        <summary>전체 명령 137개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -8401,6 +8461,10 @@
             </div>
             <div class="command">
               <span>Run AIOS-36 pilot intake preview smoke</span>
+              <code>node scripts/phase15-owner-pilot-intake-preview-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-37 internal context intake guard smoke</span>
               <code>node scripts/phase15-owner-pilot-intake-preview-smoke.mjs</code>
             </div>
         </div>

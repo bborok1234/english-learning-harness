@@ -10,6 +10,18 @@ const smokeRoot = resolve(repoRoot, "tmp/phase-15-owner-pilot-intake-preview");
 const require = createRequire(import.meta.url);
 const privateEnglishAnswer = "Which place do you mean before I choose the subway exit?";
 const privateMetaRequest = "대시보드 보여줘";
+const privateInternalContext = `<codex_internal_context source="goal">
+<objective>
+Goal: Build the AI-Native English Learning Operating System on Codex
+</objective>
+Continuation behavior:
+- Keep the full objective intact.
+Completion audit:
+- Treat completion as unproven.
+Blocked audit:
+- Do not call update_goal unless strict conditions are met.
+Tokens used: 10017079
+</codex_internal_context>`;
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -28,6 +40,9 @@ function assertNoRawOrInternalLeak(text, label) {
   for (const forbidden of [
     privateEnglishAnswer.toLowerCase(),
     privateMetaRequest.toLowerCase(),
+    "codex_internal_context",
+    "<objective>",
+    "completion audit",
     "pilot-reply ",
     "pilot-capture",
     "pilot-start",
@@ -116,6 +131,22 @@ async function main() {
   assert(meta.saveEligible === false, "meta request must not be save eligible");
   assert(meta.route === "no-save", "meta request route mismatch");
   assertNoSaveInvariant(meta, { baselineAnswers: 0, completedDailySessions: 0 });
+
+  const internal = runJson([
+    "scripts/english-learning-harness.mjs",
+    "pilot-intake",
+    "--learner-root",
+    freshRoot,
+    "--date",
+    "2026-06-04T12:02:30.000Z",
+    "--say",
+    privateInternalContext,
+    "--json",
+  ]);
+  assert(internal.classification === "internal_context_block", "internal context should classify as no-save");
+  assert(internal.saveEligible === false, "internal context must not be save eligible");
+  assert(internal.route === "no-save", "internal context route mismatch");
+  assertNoSaveInvariant(internal, { baselineAnswers: 0, completedDailySessions: 0 });
   assert(!existsSync(resolve(freshRoot, "pilot-state.json")), "fresh intake preview should not create pilot state");
 
   runJson([
@@ -161,6 +192,7 @@ async function main() {
   assert(previewHtml.includes("저장 전 확인"), "preview HTML should render learner-safe heading");
   assertNoRawOrInternalLeak(JSON.stringify(quick), "quick output");
   assertNoRawOrInternalLeak(JSON.stringify(meta), "meta output");
+  assertNoRawOrInternalLeak(JSON.stringify(internal), "internal context output");
   assertNoRawOrInternalLeak(JSON.stringify(direct), "direct output");
   assertNoRawOrInternalLeak(previewJson, "preview JSON");
   assertNoRawOrInternalLeak(previewHtml, "preview HTML");
@@ -176,7 +208,7 @@ async function main() {
     JSON.stringify(
       {
         status: "pass",
-        issue: "AIOS-36",
+        issues: ["AIOS-36", "AIOS-37"],
         freshRoot,
         partialRoot,
         previewHtml: direct.previewArtifact.htmlPath,
@@ -192,6 +224,6 @@ async function main() {
 try {
   await main();
 } catch (error) {
-  console.error(JSON.stringify({ status: "fail", issue: "AIOS-36", error: error.message }, null, 2));
+  console.error(JSON.stringify({ status: "fail", issues: ["AIOS-36", "AIOS-37"], error: error.message }, null, 2));
   process.exitCode = 1;
 }
