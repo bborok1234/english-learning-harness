@@ -3718,13 +3718,37 @@ function latestPilotReport(paths) {
   };
 }
 
+function pilotOpeningSceneChoices() {
+  return [
+    {
+      id: "daily-life",
+      label: "일상 장면",
+      setup: "친구가 오늘 하루를 물어봅니다.",
+      starter: "I had a quiet day and did a few small tasks.",
+    },
+    {
+      id: "small-adventure",
+      label: "작은 모험",
+      setup: "처음 가보는 장소에 막 도착했습니다.",
+      starter: "I just arrived, and this place feels new to me.",
+    },
+    {
+      id: "comfort-zone",
+      label: "편한 공간",
+      setup: "지금 내가 있는 공간을 누군가에게 소개합니다.",
+      starter: "I am in a comfortable place with a few things around me.",
+    },
+  ];
+}
+
 function pilotCards() {
   return [
     {
       id: "today_snapshot",
-      title: "오늘의 한 컷",
-      ask: "오늘 실제로 한 일을 영어로 한 문장만 말해보세요.",
-      example: "I had lunch and took a short walk today.",
+      title: "첫 장면 고르기",
+      ask: "아래 장면 중 하나를 고르거나, 바로 영어 한 문장만 말해보세요.",
+      example: "I had a quiet day and did a few small tasks.",
+      scene_choices: pilotOpeningSceneChoices(),
     },
     {
       id: "meaning_check",
@@ -3870,10 +3894,11 @@ function readActivePilotState(paths) {
       title: nextCard?.title ?? "",
       ask: nextCard?.ask ?? "",
       example: nextCard?.example ?? "",
+      scene_choices: nextCardState?.next_card?.scene_choices ?? nextCard?.scene_choices ?? [],
     },
     learner_prompt:
       nextPhase === "baseline" && baselineAnswers === 0
-        ? '친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.'
+        ? nextCardState?.next_card?.ask ?? "아래 장면 중 하나를 고르거나, 바로 영어 한 문장만 말해보세요."
         : nextCard?.ask ?? "",
     current_card_artifact: nextCardArtifact,
     assistant_prompt: nextCardState?.assistant_prompt?.text ?? "",
@@ -4251,6 +4276,23 @@ function personalLearnerCockpitHtml(state) {
             <h3>${escapeHtml(state.active_pilot.next_card.title)}</h3>
             <p class="ask">${escapeHtml(state.active_pilot.learner_prompt)}</p>
             <p class="subtle">예시: ${escapeHtml(state.active_pilot.next_card.example)}</p>
+            ${
+              state.active_pilot.next_card.scene_choices?.length
+                ? `<div class="reply-grid" aria-label="pilot opening scene choices">
+              ${state.active_pilot.next_card.scene_choices
+                .map(
+                  (choice, index) => `<div class="reply-choice">
+                <div>
+                  <p>${escapeHtml(index + 1)}. ${escapeHtml(choice.label)}</p>
+                  <span class="subtle">${escapeHtml(choice.setup)}</span>
+                  <span class="subtle">${escapeHtml(choice.starter)}</span>
+                </div>
+              </div>`,
+                )
+                .join("")}
+            </div>`
+                : ""
+            }
             ${
               state.active_pilot.current_card_artifact
                 ? `<p class="subtle">현재 카드: <a href="${escapeHtml(state.active_pilot.current_card_artifact.url)}">현재 pilot 카드 열기</a></p>`
