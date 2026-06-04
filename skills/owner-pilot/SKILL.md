@@ -46,6 +46,14 @@ node scripts/english-learning-harness.mjs pilot-handoff --json
 
 Use it to see saved progress counts, the next learner-facing prompt, consent status, and local links without exposing transcript text or friction notes.
 
+For the actual next Codex conversation turn, prefer the redacted operator turn packet internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-turn --json
+```
+
+Use `learnerTurn.say` as the only learner-facing prompt. Use `operatorOnly` only to decide how to save a numbered choice or direct English sentence after the learner answers. The packet must not save an answer, mark consent, expose transcript text, or expose friction notes.
+
 Before asking the learner to answer the real pilot, generate the launch card internally:
 
 ```bash
