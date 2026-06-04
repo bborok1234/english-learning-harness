@@ -649,6 +649,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #228 | AIOS-21: Route daily practice quick replies into persistence | continue |
 | #230 | AIOS-22: Preserve daily start-card mission when saving practice replies | continue |
 | #232 | AIOS-23: Defer daily reply diagnosis until after current mission persistence | continue |
+| #234 | AIOS-24: Guard PR bodies from accidentally closing real-pilot blocker issues | continue |
 
 #179 planned evidence should show:
 
@@ -721,5 +722,10 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `practice-reply` now defers diagnosis until after current mission/session persistence when saving a start-card reply, so current evidence remains attached to the answered card while future Speaking Skill OS planning still updates.
 - `scripts/daily-practice-reply-routing-smoke.mjs` now verifies `futureDiagnosis.timing=after_current_session` and a repair freeform answer creates a future `repair` backlog item without changing the saved mission.
 - `docs/phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md` records the deferred diagnosis mechanics and claim boundary.
+- `#179` was reopened after an accidental PR-body auto-close event; real owner/self pilot evidence is still missing.
+- `scripts/pr-body-autoclose-guard.mjs` rejects GitHub issue-completion wording for protected blocker issue references.
+- `scripts/pr-body-autoclose-guard-smoke.mjs` verifies unsafe protected wording fails and safe protected wording passes.
+- `scripts/aios-goal-audit.mjs` now checks GitHub issue state for the real-pilot blocker and reports `closed_external_mismatch` if the protected tracker is not open.
+- `docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md` records the tracker-integrity repair and guardrail evidence.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

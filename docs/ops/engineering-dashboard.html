@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-23 deferred daily reply diagnosis added; active AIOS goal remains not complete",
-    "status": "AIOS-23 keeps daily practice reply persistence attached to the same start-card mission the learner answered, then creates future Speaking Skill OS diagnosis after current session persistence when useful. #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-24 protected blocker tracker guard added; active AIOS goal remains not complete",
+    "status": "AIOS-24 reopened the real-pilot tracker and adds PR-body plus goal-audit guards so protected blocker issues cannot silently disappear from GitHub while repo-local SSOT still claims they are open. #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop now has both sides of the interaction plus an integrity/adaptation guard: practice-next creates a concrete start card before the answer, practice-reply saves the selected quick reply or direct sentence without retargeting the current mission, and futureDiagnosis can update the next practice target after persistence.",
+    "summary": "The learner-facing daily loop now has mission integrity and deferred diagnosis. The engineering governance loop now also checks protected GitHub issue state, so a tracker mismatch blocks completion instead of hiding the real pilot blocker.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, and an engineering goal audit as local artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-23 is daily reply routing and deferred diagnosis mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-24 is governance and tracker-integrity evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -1032,6 +1032,12 @@
       "label": "docs/phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md",
       "path": "./phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md",
       "role": "AIOS-23 daily practice reply deferred-diagnosis evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md",
+      "path": "./phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md",
+      "role": "AIOS-24 PR body protected-issue auto-close guard evidence",
       "kind": "source"
     }
   ],
@@ -3179,6 +3185,21 @@
             "scripts/daily-practice-reply-routing-smoke.mjs",
             "docs/phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md"
           ]
+        },
+        {
+          "id": "AIOS-24-PR-BODY-AUTOCLOSE-GUARD",
+          "title": "AIOS-24 protected issue tracker guard 통과",
+          "why": "실제 pilot tracker가 GitHub에서 닫히면 대시보드가 남은 일을 한눈에 보여주지 못한다.",
+          "done": "#179를 다시 열고, PR body protected-issue guard와 GitHub issue-state-aware goal audit을 추가했다.",
+          "verification": "pr-body-autoclose-guard-smoke validates unsafe protected wording fails; aios-goal-audit-smoke validates externally closed protected tracker becomes closed_external_mismatch and still blocks completion.",
+          "files": [
+            ".github/PULL_REQUEST_TEMPLATE.md",
+            "scripts/pr-body-autoclose-guard.mjs",
+            "scripts/pr-body-autoclose-guard-smoke.mjs",
+            "scripts/aios-goal-audit.mjs",
+            "scripts/aios-goal-audit-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md"
+          ]
         }
       ]
     },
@@ -3927,6 +3948,11 @@
       "name": "AIOS-23 deferred daily reply diagnosis",
       "status": "Pass",
       "detail": "daily-practice-reply-routing smoke validates current mission preservation plus futureDiagnosis after session persistence, including future repair backlog creation from a repair freeform answer."
+    },
+    {
+      "name": "AIOS-24 protected issue tracker guard",
+      "status": "Pass",
+      "detail": "pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection."
     }
   ],
   "commands": [
@@ -4417,6 +4443,14 @@
     {
       "label": "Run AIOS-23 deferred daily reply diagnosis smoke",
       "command": "node scripts/daily-practice-reply-routing-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-24 PR body auto-close guard smoke",
+      "command": "node scripts/pr-body-autoclose-guard-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-24 PR template auto-close guard",
+      "command": "node scripts/pr-body-autoclose-guard.mjs --json"
     }
   ]
 }
@@ -4425,12 +4459,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing daily loop now has both sides of the interaction plus an integrity/adaptation guard: practice-next creates a concrete start card before the answer, practice-reply saves the selected quick reply or direct sentence without retargeting the current mission, and futureDiagnosis can update the next practice target after persistence.</p>
+        <p class="summary">The learner-facing daily loop now has mission integrity and deferred diagnosis. The engineering governance loop now also checks protected GitHub issue state, so a tracker mismatch blocks completion instead of hiding the real pilot blocker.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-23 deferred daily reply diagnosis added; active AIOS goal remains not complete<br>
-        AIOS-23 keeps daily practice reply persistence attached to the same start-card mission the learner answered, then creates future Speaking Skill OS diagnosis after current session persistence when useful. #179 real owner/self evidence and blocked learning claims remain unresolved.
+        AIOS-24 protected blocker tracker guard added; active AIOS goal remains not complete<br>
+        AIOS-24 reopened the real-pilot tracker and adds PR-body plus goal-audit guards so protected blocker issues cannot silently disappear from GitHub while repo-local SSOT still claims they are open. #179 real owner/self evidence and blocked learning claims remain unresolved.
       </div>
     </header>
 
@@ -4543,16 +4577,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-18-OWNER-PILOT-SKILL-CONTRACT</strong>
-                <span>skills/owner-pilot/SKILL.md, docs/PILOT-PROMPTS.md, scripts/phase15-owner-pilot-skill-smoke.mjs, docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md</span>
-              </div>
-              <h3>AIOS-18 owner-pilot skill contract 정렬 통과</h3>
-              <div class="card-row"><b>왜</b><p>엔진은 첫 장면 선택으로 바뀌었지만 skill 문서가 예전 고정 첫 질문을 유지하면 Codex가 실제 pilot에서 낡은 흐름을 따를 수 있다.</p></div>
-              <div class="card-row"><b>완료</b><p>owner-pilot skill과 PILOT-PROMPTS가 `첫 장면 고르기`, 세 opening scene, 1/2/3 또는 quick reply 선택 저장 흐름을 설명한다.</p></div>
-              <div class="card-row"><b>검증</b><p>phase15 owner pilot skill smoke validates the scene-chooser contract and rejects stale fixed-start guidance; next-card smoke still verifies rendered scene choices.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-19-GOAL-COMPLETION-AUDIT</strong>
                 <span>scripts/aios-goal-audit.mjs, scripts/aios-goal-audit-smoke.mjs, docs/ops/goal-audit.json, docs/ops/goal-audit.html, docs/phase-15-evidence/AIOS-19-goal-completion-audit.md</span>
               </div>
@@ -4600,6 +4624,16 @@
               <div class="card-row"><b>왜</b><p>current mission drift를 막으면서도 learner answer에서 나온 다음 Speaking Skill OS target을 잃지 않아야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>practice-reply는 current mission/session persistence 후 `futureDiagnosis`로 다음 practice planning backlog를 만든다.</p></div>
               <div class="card-row"><b>검증</b><p>daily-practice-reply-routing-smoke validates no pre-mission diagnosis, preserved current mission, futureDiagnosis timing/purpose, and a future repair backlog from a repair freeform answer.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-24-PR-BODY-AUTOCLOSE-GUARD</strong>
+                <span>.github/PULL_REQUEST_TEMPLATE.md, scripts/pr-body-autoclose-guard.mjs, scripts/pr-body-autoclose-guard-smoke.mjs, scripts/aios-goal-audit.mjs, scripts/aios-goal-audit-smoke.mjs, docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md</span>
+              </div>
+              <h3>AIOS-24 protected issue tracker guard 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot tracker가 GitHub에서 닫히면 대시보드가 남은 일을 한눈에 보여주지 못한다.</p></div>
+              <div class="card-row"><b>완료</b><p>#179를 다시 열고, PR body protected-issue guard와 GitHub issue-state-aware goal audit을 추가했다.</p></div>
+              <div class="card-row"><b>검증</b><p>pr-body-autoclose-guard-smoke validates unsafe protected wording fails; aios-goal-audit-smoke validates externally closed protected tracker becomes closed_external_mismatch and still blocks completion.</p></div>
             </article>
         </div>
       </section>
@@ -5330,6 +5364,10 @@
               <strong>docs/phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md</strong>
               <span>AIOS-23 daily practice reply deferred-diagnosis evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md">
+              <strong>docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md</strong>
+              <span>AIOS-24 PR body protected-issue auto-close guard evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5337,10 +5375,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-12 saved-reply card browser render</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-reply-card-render smoke validates a fixture Day 1 saved-reply card renders in a browser with saved status, four coaching cells, next phrase, next-card prompt, and no internal command, issue, or audit leakage.</span></td>
-            </tr>
             <tr>
               <td>AIOS-17 immersive first pilot card</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates the fresh baseline card starts with three opening scene choices, low-pressure quick replies, Playwright-rendered chooser UI, and no project/work premise or internal command leakage.</span></td>
@@ -5368,6 +5402,10 @@
             <tr>
               <td>AIOS-23 deferred daily reply diagnosis</td>
               <td><strong>Pass</strong><span>daily-practice-reply-routing smoke validates current mission preservation plus futureDiagnosis after session persistence, including future repair backlog creation from a repair freeform answer.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-24 protected issue tracker guard</td>
+              <td><strong>Pass</strong><span>pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5413,7 +5451,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 130개 보기</summary>
+        <summary>완료 이력 131개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6716,10 +6754,20 @@
               <div class="card-row"><b>완료</b><p>fresh Day 0 pilot card가 첫 장면 고르기, 세 가지 opening scene, 낮은 압박의 quick reply를 보여준다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke renders the card in Playwright and verifies three scene choices, quick replies, copy buttons, no project/work assumption, and no internal command leakage.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-18-OWNER-PILOT-SKILL-CONTRACT</strong>
+                <span>skills/owner-pilot/SKILL.md, docs/PILOT-PROMPTS.md, scripts/phase15-owner-pilot-skill-smoke.mjs, docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md</span>
+              </div>
+              <h3>AIOS-18 owner-pilot skill contract 정렬 통과</h3>
+              <div class="card-row"><b>왜</b><p>엔진은 첫 장면 선택으로 바뀌었지만 skill 문서가 예전 고정 첫 질문을 유지하면 Codex가 실제 pilot에서 낡은 흐름을 따를 수 있다.</p></div>
+              <div class="card-row"><b>완료</b><p>owner-pilot skill과 PILOT-PROMPTS가 `첫 장면 고르기`, 세 opening scene, 1/2/3 또는 quick reply 선택 저장 흐름을 설명한다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot skill smoke validates the scene-chooser contract and rejects stale fixed-start guidance; next-card smoke still verifies rendered scene choices.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 124개 보기</summary>
+        <summary>전체 검증 125개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -7220,12 +7268,16 @@
               <td>AIOS-23 deferred daily reply diagnosis</td>
               <td><strong>Pass</strong><span>daily-practice-reply-routing smoke validates current mission preservation plus futureDiagnosis after session persistence, including future repair backlog creation from a repair freeform answer.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-24 protected issue tracker guard</td>
+              <td><strong>Pass</strong><span>pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 122개 보기</summary>
+        <summary>전체 명령 124개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -7715,6 +7767,14 @@
             <div class="command">
               <span>Run AIOS-23 deferred daily reply diagnosis smoke</span>
               <code>node scripts/daily-practice-reply-routing-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-24 PR body auto-close guard smoke</span>
+              <code>node scripts/pr-body-autoclose-guard-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-24 PR template auto-close guard</span>
+              <code>node scripts/pr-body-autoclose-guard.mjs --json</code>
             </div>
         </div>
       </details>

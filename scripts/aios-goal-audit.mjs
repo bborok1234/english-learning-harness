@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -13,6 +14,7 @@ function argValue(flag, fallback) {
 
 const jsonOutput = resolve(repoRoot, argValue("--json-output", "docs/ops/goal-audit.json"));
 const htmlOutput = resolve(repoRoot, argValue("--html-output", "docs/ops/goal-audit.html"));
+const realPilotIssueStateOverride = argValue("--real-pilot-issue-state", "");
 const jsonMode = args.includes("--json");
 
 function read(path) {
@@ -41,6 +43,37 @@ function evidence(paths, checks = []) {
     })),
     checks,
   };
+}
+
+function githubIssueState(issueNumber) {
+  if (realPilotIssueStateOverride) {
+    return {
+      number: issueNumber,
+      state: realPilotIssueStateOverride.toUpperCase(),
+      source: "override",
+    };
+  }
+  try {
+    const issue = JSON.parse(
+      execFileSync("gh", ["issue", "view", String(issueNumber), "--json", "number,state,url"], {
+        cwd: repoRoot,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }),
+    );
+    return {
+      number: issue.number,
+      state: issue.state,
+      url: issue.url,
+      source: "github",
+    };
+  } catch {
+    return {
+      number: issueNumber,
+      state: "UNKNOWN",
+      source: "unavailable",
+    };
+  }
 }
 
 function requirement({
@@ -75,6 +108,14 @@ function buildAudit() {
     issueIndexText.includes("#179") &&
     (opsStateText.includes("real owner/self") || issueIndexText.includes("real owner/self")) &&
     !opsStateText.includes("real owner/self pilot complete");
+  const realPilotIssue = githubIssueState(179);
+  const realPilotBlockerStatus = !openRealPilot
+    ? "missing_local_tracker"
+    : realPilotIssue.state === "OPEN"
+      ? "open"
+      : realPilotIssue.state === "CLOSED"
+        ? "closed_external_mismatch"
+        : "unknown";
   const generatedAt = new Date().toISOString();
 
   const requirements = [
@@ -268,8 +309,15 @@ function buildAudit() {
     {
       id: "BLOCK-REAL-PILOT-179",
       title: "실제 owner/self pilot transcript evidence is still missing",
-      status: openRealPilot ? "open" : "unknown",
-      evidence: "#179 remains open in ops state until real owner/self transcript evidence exists.",
+      status: realPilotBlockerStatus,
+      evidence: {
+        local_tracker_present: openRealPilot,
+        github_issue: realPilotIssue,
+        summary:
+          realPilotBlockerStatus === "open"
+            ? "#179 is open and remains required until real owner/self transcript evidence exists."
+            : "#179 tracker state is not open; reopen or restore the tracker before claiming governance is healthy.",
+      },
       required_to_complete_goal:
         "At least one real Day 0 baseline, five daily sessions, final sample, friction notes, cockpit/report review, and a governance decision.",
     },
@@ -284,7 +332,7 @@ function buildAudit() {
   ];
 
   const allLocalMechanicsVerified = requirements.every((item) => item.status === "verified_local_mechanics");
-  const hasOpenBlockers = blockers.some((item) => item.status === "open");
+  const hasOpenBlockers = blockers.some((item) => item.status !== "resolved");
 
   return {
     schema_version: 1,
@@ -407,6 +455,7 @@ const result = {
   overallStatus: audit.overall_status,
   localMechanicsStatus: audit.local_mechanics_status,
   blockers: audit.completion_blockers.map((item) => item.id),
+  blockerStatuses: Object.fromEntries(audit.completion_blockers.map((item) => [item.id, item.status])),
   jsonPath: jsonOutput,
   htmlPath: htmlOutput,
   url: pathToFileURL(htmlOutput).href,

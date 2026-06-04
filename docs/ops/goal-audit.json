@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T02:02:26.661Z",
+  "generated_at": "2026-06-04T02:12:14.253Z",
   "surface": "engineering-governance",
   "objective": "Build the AI-Native English Learning Operating System on Codex for Korean learners with Speaking Skill OS, narrative missions, multimodal/generated artifacts, learner cockpit, journeys, reports, and adaptive governance.",
   "overall_status": "not_complete",
@@ -10,7 +10,16 @@
       "id": "BLOCK-REAL-PILOT-179",
       "title": "실제 owner/self pilot transcript evidence is still missing",
       "status": "open",
-      "evidence": "#179 remains open in ops state until real owner/self transcript evidence exists.",
+      "evidence": {
+        "local_tracker_present": true,
+        "github_issue": {
+          "number": 179,
+          "state": "OPEN",
+          "url": "https://github.com/bborok1234/english-learning-harness/issues/179",
+          "source": "github"
+        },
+        "summary": "#179 is open and remains required until real owner/self transcript evidence exists."
+      },
       "required_to_complete_goal": "At least one real Day 0 baseline, five daily sessions, final sample, friction notes, cockpit/report review, and a governance decision."
     },
     {
