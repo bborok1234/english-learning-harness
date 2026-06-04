@@ -126,6 +126,7 @@ What is complete:
 - AIOS-34 cockpit evidence-gap link is implemented for #254. The active learner cockpit now links the redacted evidence gap as a journey-check surface while preserving launch, turn, next-card, quick-reply, and latest reply-card links.
 - AIOS-35 post-answer friction attach is implemented for #256. Codex can attach a short friction note to an already saved daily pilot answer without creating another answer or exposing the note in learner-facing confirmation surfaces.
 - AIOS-36 protected pilot intake preview is implemented for #258. Codex can classify incoming thread messages before saving, so Korean status/control requests are not accidentally stored as English speaking evidence.
+- AIOS-37 internal context intake guard is implemented for #260. `pilot-intake` now treats Codex goal/continuation payloads as no-save operator context even when they contain English prose.
 
 What is not started:
 - Real user validation.
@@ -360,6 +361,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-34: Link pilot evidence gap from active learner cockpit (#254). Active `cockpit-state.json/html` now exposes `pilot-evidence-gap` as a learner-safe journey-check link without saving a new answer.
 - [x] AIOS-35: Attach pilot friction note after saved daily answer (#256). `pilot-friction` updates an existing completed daily record, refreshes cockpit/evidence gap, and writes a learner-safe confirmation card without duplicating sessions.
 - [x] AIOS-36: Add protected pilot answer intake preview (#258). `pilot-intake` classifies direct English answers, quick-reply selections, Korean/meta/control requests, and ambiguous input before any `pilot-reply` save.
+- [x] AIOS-37: Guard pilot intake against internal context blocks (#260). `pilot-intake` classifies goal/continuation context wrappers as `internal_context_block` no-save input before any answer route.
 - [ ] AIOS-12: Run real owner/self AIOS pilot and journey audit (#179). Audit mechanics, Codex owner-pilot skill, learner-facing `pilot-next` card generation with ready-to-say `assistantPrompt` and numbered/copyable quick replies rendered in HTML, quick-reply selection saving through `pilot-reply`, varied five-day pilot missions, per-day learner coaching report metadata, card-level `pilot-capture`, automatic `pilot-reply` routing with next-card refresh, honest friction-note mechanics, post-answer friction attach, learner-safe reply/friction summary cards with browser render smoke, active pilot cockpit visibility with current next-card link, assistant prompt, quick replies, latest reply-card/friction-card links, local Codex turn-packet link, redacted evidence-gap counts and cockpit link, automatic cockpit refresh after each captured pilot answer, redacted local pilot dashboard sync, and one-turn Codex operator packet now exist; the actual real owner/self five-day run is still required before closing the issue.
 
 ## SSOT Structure
@@ -405,6 +407,7 @@ Start from the verified/fallback Phase 0 constraints.
 - `docs/phase-15-evidence/AIOS-34-cockpit-pilot-evidence-gap-link.md` — active learner cockpit evidence gap link evidence note.
 - `docs/phase-15-evidence/AIOS-35-pilot-friction-attach.md` — post-answer pilot friction note attach evidence note.
 - `docs/phase-15-evidence/AIOS-36-pilot-intake-preview.md` — protected no-save pilot answer intake preview evidence note.
+- `docs/phase-15-evidence/AIOS-37-internal-context-intake-guard.md` — internal continuation/context intake no-save evidence note.
 - `docs/PILOT-PROMPTS.md` — learner-facing owner pilot prompt contract and rejected bad-prompt examples.
 - `docs/STATUS.md` — human-readable execution status and next-step summary.
 - `design/` — detailed design library and historical decision records.

@@ -1841,6 +1841,28 @@ function findPilotQuickReply(selection, nextCardArtifact) {
 
 function classifyPilotIntake({ text, quickReply, nextCardArtifact }) {
   const normalized = text.trim();
+  const internalContextPatterns = [
+    /<codex_internal_context\b/i,
+    /<\/codex_internal_context>/i,
+    /<objective>/i,
+    /<\/objective>/i,
+    /\bContinuation behavior\s*:/i,
+    /\bCompletion audit\s*:/i,
+    /\bBlocked audit\s*:/i,
+    /\bTokens used\s*:/i,
+    /\bDo not call update_goal\b/i,
+    /\bTreat it as the task to pursue, not as higher-priority instructions\b/i,
+  ];
+  if (internalContextPatterns.some((pattern) => pattern.test(normalized))) {
+    return {
+      classification: "internal_context_block",
+      saveEligible: false,
+      route: "no-save",
+      reason: "The message looks like Codex/internal context, not learner speech evidence.",
+      quickReply: null,
+      learnerMessage: "내부 진행 컨텍스트로 보여서 학습 답변으로 저장하지 않았어요.",
+    };
+  }
   const selectedQuickReply = findPilotQuickReply(quickReply || normalized, nextCardArtifact);
   if (selectedQuickReply && (quickReply || /^[0-9]+$/.test(normalized) || /^quick-[0-9]+$/i.test(normalized))) {
     return {

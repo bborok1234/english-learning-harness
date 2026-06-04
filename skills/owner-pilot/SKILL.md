@@ -89,6 +89,8 @@ node scripts/english-learning-harness.mjs pilot-intake --say "<incoming message>
 
 Use it as a no-save guard. If `saveEligible` is true, save with `pilot-reply`. If `route` is `no-save`, do not store that message as pilot evidence; answer the user's request or ask for one short English sentence again. The preview must not save an answer, mark consent, expose raw input in learner-facing artifacts, or close the real pilot.
 
+If the incoming message contains Codex/internal context markers such as `codex_internal_context`, `<objective>`, `Continuation behavior`, `Completion audit`, or `Blocked audit`, treat it as operator context even when it contains English text. Do not save it as learner speech evidence.
+
 After the learner answers the current card, prefer the automatic reply router internally:
 
 ```bash

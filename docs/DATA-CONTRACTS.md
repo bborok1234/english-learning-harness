@@ -608,7 +608,7 @@ The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifac
   "status": "pass",
   "action": "pilot-intake",
   "savedAnswer": false,
-  "classification": "direct_english_answer|quick_reply_selection|korean_meta_or_control|meta_or_control|korean_non_answer|ambiguous_empty|ambiguous_non_text",
+  "classification": "direct_english_answer|quick_reply_selection|internal_context_block|korean_meta_or_control|meta_or_control|korean_non_answer|ambiguous_empty|ambiguous_non_text",
   "saveEligible": true,
   "route": "pilot-reply-direct|pilot-reply-quick|no-save",
   "quickReply": {
@@ -634,7 +634,9 @@ The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifac
 }
 ```
 
-`pilot-intake` is for Codex conversation safety, where learner answers, Korean status requests, stop requests, and operator instructions can appear in the same thread. It may refresh local next-card/cockpit artifacts through `pilot-next`, but it must not create `pilot-state.json` from a fresh preview, change any answer counts, mark consent, save transcript text, or attach friction notes. Returned preview JSON/HTML must not include the raw incoming message, transcript text, friction note text, issue/PR language, rubric internals, or unsupported speaking-improvement claims. If `saveEligible` is false, Codex must not call `pilot-reply` for that message.
+`pilot-intake` is for Codex conversation safety, where learner answers, Korean status requests, stop requests, operator instructions, and internal continuation payloads can appear in the same thread. It may refresh local next-card/cockpit artifacts through `pilot-next`, but it must not create `pilot-state.json` from a fresh preview, change any answer counts, mark consent, save transcript text, or attach friction notes. Returned preview JSON/HTML must not include the raw incoming message, transcript text, friction note text, issue/PR language, rubric internals, or unsupported speaking-improvement claims. If `saveEligible` is false, Codex must not call `pilot-reply` for that message.
+
+Internal context markers such as `codex_internal_context`, `<objective>`, `Continuation behavior`, `Completion audit`, `Blocked audit`, `Tokens used`, or `Do not call update_goal` must classify as `internal_context_block` with `saveEligible=false` even when the payload contains English prose.
 
 `pilot-capture --json` returns the refreshed learner cockpit location after each captured card:
 
