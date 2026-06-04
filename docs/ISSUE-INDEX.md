@@ -650,6 +650,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #230 | AIOS-22: Preserve daily start-card mission when saving practice replies | continue |
 | #232 | AIOS-23: Defer daily reply diagnosis until after current mission persistence | continue |
 | #234 | AIOS-24: Guard PR bodies from accidentally closing real-pilot blocker issues | continue |
+| #236 | AIOS-25: Add learner-facing real pilot launch card | continue |
 
 #179 planned evidence should show:
 
@@ -727,5 +728,9 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `scripts/pr-body-autoclose-guard-smoke.mjs` verifies unsafe protected wording fails and safe protected wording passes.
 - `scripts/aios-goal-audit.mjs` now checks GitHub issue state for the real-pilot blocker and reports `closed_external_mismatch` if the protected tracker is not open.
 - `docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md` records the tracker-integrity repair and guardrail evidence.
+- `pilot-launch` now writes learner-facing JSON/HTML launch cards before saving any new real pilot answer.
+- `scripts/phase15-owner-pilot-launch-card-smoke.mjs` verifies fresh/resume launch cards, browser render, no answer persistence, cockpit link, quick replies, privacy, and no internal language leakage.
+- `skills/owner-pilot/SKILL.md` now tells Codex to generate the launch card before asking the learner for a real pilot answer.
+- `docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md` records the launch-card mechanics and claim boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

@@ -29,13 +29,21 @@ When persistence is needed, find the local engine in this order:
 
 Use that engine yourself. Do not hand the command to the learner.
 
-Before asking the next learner-facing card, generate the local next-card artifact internally:
+Before asking the learner to answer the real pilot, generate the launch card internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-launch --json
+```
+
+Use this as the safest start/resume surface. It shows current progress, the next learner prompt, quick replies, privacy, and what will be saved after the learner answers. It must not save a new answer by itself.
+
+Before asking the next learner-facing card directly, generate the local next-card artifact internally:
 
 ```bash
 node scripts/english-learning-harness.mjs pilot-next --json
 ```
 
-This refreshes the learner cockpit and writes a local `artifacts/pilot/pilot-next-card.html` card. Use it as a product-surface aid, but do not ask the learner to run the command.
+This refreshes the learner cockpit and writes a local next-card artifact. Use it as a product-surface aid, but do not ask the learner to run the command.
 Use the returned `assistantPrompt.text` as the default learner-facing prompt. It is Korean-first, asks for one English sentence, and avoids command/issue/audit language. If the fresh Day 0 card includes `scene_choices`, show the learner the choices in plain Korean and let them answer with a number or one English sentence.
 
 If the learner chooses one of `quickReplies`, save it internally with `pilot-reply --quick-reply "<id-or-number>" --json` rather than asking them to retype the full sentence.

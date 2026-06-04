@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-24 protected blocker tracker guard added; active AIOS goal remains not complete",
-    "status": "AIOS-24 reopened the real-pilot tracker and adds PR-body plus goal-audit guards so protected blocker issues cannot silently disappear from GitHub while repo-local SSOT still claims they are open. #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-25 real pilot launch card added; active AIOS goal remains not complete",
+    "status": "AIOS-25 adds a learner-facing launch/resume card for the real owner/self pilot before any new answer is saved. #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop now has mission integrity and deferred diagnosis. The engineering governance loop now also checks protected GitHub issue state, so a tracker mismatch blocks completion instead of hiding the real pilot blocker.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot now also has a launch card that explains current progress, the next prompt, quick replies, privacy, and save boundary before Codex asks for the next real answer.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-24 is governance and tracker-integrity evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-25 is real pilot launch/resume mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -636,6 +636,12 @@
       "label": "docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md",
       "path": "./phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md",
       "role": "AIOS-24 PR body protected-issue auto-close guard evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
+      "path": "./phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
+      "role": "AIOS-25 real pilot launch-card evidence",
       "kind": "source"
     }
   ],
@@ -2798,6 +2804,19 @@
             "scripts/aios-goal-audit-smoke.mjs",
             "docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md"
           ]
+        },
+        {
+          "id": "AIOS-25-REAL-PILOT-LAUNCH-CARD",
+          "title": "AIOS-25 real pilot launch card 통과",
+          "why": "실제 pilot을 시작하거나 재개할 때 learner가 내부 상태나 명령을 이해하지 않아도 다음 한 문장만 말할 수 있어야 한다.",
+          "done": "pilot-launch가 새 답변을 저장하지 않고 진행률, 다음 질문, quick replies, 저장 경계, privacy, cockpit link를 담은 learner-facing JSON/HTML launch card를 쓴다.",
+          "verification": "phase15-owner-pilot-launch-card-smoke validates fresh/resume launch cards, Playwright render, no answer persistence, cockpit link, quick replies, privacy, and no internal language leakage.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-launch-card-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md"
+          ]
         }
       ]
     },
@@ -3551,6 +3570,11 @@
       "name": "AIOS-24 protected issue tracker guard",
       "status": "Pass",
       "detail": "pr-body-autoclose-guard smoke and aios-goal-audit smoke validate protected issue wording and externally closed real-pilot tracker detection."
+    },
+    {
+      "name": "AIOS-25 real pilot launch card",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage."
     }
   ],
   "commands": [
@@ -4049,6 +4073,10 @@
     {
       "label": "Run AIOS-24 PR template auto-close guard",
       "command": "node scripts/pr-body-autoclose-guard.mjs --json"
+    },
+    {
+      "label": "Run AIOS-25 real pilot launch card smoke",
+      "command": "node scripts/phase15-owner-pilot-launch-card-smoke.mjs"
     }
   ]
 }

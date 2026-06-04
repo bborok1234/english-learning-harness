@@ -191,6 +191,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs backlog [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-launch [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -2260,6 +2261,159 @@ function pilotNext(options) {
   };
 }
 
+function pilotLaunch(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const next = pilotNext({ ...options, learnerRoot: paths.root, date });
+  const status = pilotStatus({ ...options, learnerRoot: paths.root, date });
+  const quickReplySummary = next.quickReplies.map((reply, index) => ({
+    number: index + 1,
+    id: reply.id,
+    text: reply.text,
+    note: reply.note,
+  }));
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "learner-facing real pilot launch card",
+    saved_answer: false,
+    pilot: {
+      status: status.summary.status,
+      baseline_ready: status.summary.baselineReady,
+      completed_daily_sessions: status.summary.completedDailySessions,
+      minimum_valid_daily_sessions: status.summary.minimumValidDailySessions,
+      target_days: status.summary.targetDays,
+      final_ready: status.summary.finalReady,
+      report_ready: status.summary.reportReady,
+    },
+    next_card: next.nextCard,
+    prompt: next.assistantPrompt,
+    quick_replies: quickReplySummary,
+    learner_message: [
+      status.summary.baselineReady
+        ? `현재 실제 말하기 여정은 ${status.summary.completedDailySessions}/${status.summary.minimumValidDailySessions}일차 증거가 저장된 상태입니다.`
+        : "아직 첫 스냅샷이 완료되지 않았습니다.",
+      "아래 질문에 영어 한 문장만 답하면 됩니다.",
+      "번호 후보를 골라도 되고, 직접 바꿔 말해도 됩니다.",
+      "이 launch card 자체는 새 답변을 저장하지 않습니다.",
+    ].join(" "),
+    after_answer:
+      "답변을 보내면 Codex가 내부적으로 저장하고 다음 카드, cockpit, report를 갱신합니다.",
+    privacy:
+      "답변 원문은 기본적으로 내 컴퓨터의 학습 기록에만 저장됩니다. 공개 협업 기록에는 올리지 않습니다.",
+    links: {
+      cockpit_html: next.cockpit.htmlPath ? relativeToRoot(paths, next.cockpit.htmlPath) : "cockpit.html",
+      cockpit_url: next.cockpit.url,
+    },
+    claim_boundary:
+      "This launch card prepares the local owner/self pilot. It does not save a new answer, prove learning outcomes, or complete the pilot.",
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-launch-card.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-launch-card.html");
+  writeFileSync(jsonPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5일 말하기 여정 시작</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; --soft: #eef5f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(860px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(30px, 5vw, 46px); line-height: 1.12; letter-spacing: 0; }
+    h2 { margin: 0 0 8px; font-size: 17px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .progress { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 22px; overflow-wrap: anywhere; }
+    .ask { margin-top: 18px; padding: 18px; border-radius: 8px; background: var(--warm); font-size: 22px; font-weight: 760; line-height: 1.32; overflow-wrap: anywhere; }
+    .prompt, .quick, .note, .links { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .prompt pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; font: inherit; }
+    .quick ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .quick li { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+    .quick b { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: var(--accent); color: #fff; }
+    .quick strong { display: block; overflow-wrap: anywhere; }
+    .quick span { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .note { background: var(--soft); }
+    .links { display: grid; gap: 8px; }
+    .links a { display: block; padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; font-weight: 720; }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 640px) { .progress { grid-template-columns: 1fr; } .ask { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · 5일 말하기 여정</p>
+      <h1>${escapeHtml(next.nextCard.phase === "baseline" ? "첫 스냅샷 시작" : "오늘의 말하기 카드")}</h1>
+      <p class="subtle">${escapeHtml(artifact.learner_message)}</p>
+      <div class="progress" aria-label="pilot progress">
+        <div class="metric"><span>저장된 연습일</span><strong>${escapeHtml(artifact.pilot.completed_daily_sessions)} / ${escapeHtml(artifact.pilot.minimum_valid_daily_sessions)}</strong></div>
+        <div class="metric"><span>현재 단계</span><strong>${escapeHtml(next.nextCard.phase)}</strong></div>
+        <div class="metric"><span>답변 저장</span><strong>아직 안 됨</strong></div>
+      </div>
+      <p class="subtle">${escapeHtml(next.nextCard.setup)}</p>
+      <p class="ask">${escapeHtml(next.nextCard.ask)}</p>
+      ${next.nextCard.example ? `<p class="subtle" style="margin-top: 12px;">예시: ${escapeHtml(next.nextCard.example)}</p>` : ""}
+      <section class="prompt" aria-label="ready prompt">
+        <h2>Codex가 바로 이어서 물어볼 말</h2>
+        <pre>${escapeHtml(next.assistantPrompt.text)}</pre>
+      </section>
+      ${
+        quickReplySummary.length
+          ? `<section class="quick" aria-label="quick replies">
+        <h2>번호로 고를 수 있는 답변 후보</h2>
+        <ul>
+          ${quickReplySummary
+            .map(
+              (reply) => `<li><b>${reply.number}</b><div><strong>${escapeHtml(reply.text)}</strong><span>${escapeHtml(reply.note)}</span></div></li>`,
+            )
+            .join("")}
+        </ul>
+      </section>`
+          : ""
+      }
+      <section class="note" aria-label="save boundary">
+        <h2>답변하면 저장되는 것</h2>
+        <p>${escapeHtml(artifact.after_answer)}</p>
+        <p class="subtle" style="margin-top: 8px;">${escapeHtml(artifact.privacy)}</p>
+      </section>
+      <section class="links" aria-label="related local surfaces">
+        <h2>로컬 표면</h2>
+        <a href="${escapeHtml(relative(dirname(htmlPath), next.cockpit.htmlPath))}">Cockpit 열기</a>
+      </section>
+    </section>
+    <footer>${escapeHtml(artifact.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-launch",
+    learnerRoot: paths.root,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    savedAnswer: false,
+    nextCard: next.nextCard,
+    assistantPrompt: next.assistantPrompt,
+    quickReplies: quickReplySummary,
+    cockpit: next.cockpit,
+    claimBoundary: artifact.claim_boundary,
+  };
+}
+
 function pilotDay(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -3078,6 +3232,10 @@ function run() {
   }
   if (command === "pilot-status") {
     output(pilotStatus(options), options.json);
+    return;
+  }
+  if (command === "pilot-launch") {
+    output(pilotLaunch(options), options.json);
     return;
   }
   if (command === "pilot-next") {
