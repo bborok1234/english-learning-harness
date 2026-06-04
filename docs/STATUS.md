@@ -117,6 +117,7 @@ What is complete:
 - AIOS-25 real pilot launch card is implemented for #236. `pilot-launch` gives Codex a learner-facing start/resume surface before any new real answer is saved.
 - AIOS-26 cockpit launch-card discovery is implemented for #238. The active learner cockpit now links the real pilot launch card as the primary start/resume surface.
 - AIOS-27 product claim guard is implemented for #240. Learner-facing public/product surfaces now have a single smoke that keeps allowed learning-design claims separate from blocked outcome claims.
+- AIOS-28 pilot consent save mechanics are implemented for #242. Preview launch cards still save nothing, while the first persisted pilot answer records local-only consent metadata.
 
 What is not started:
 - Real user validation.
@@ -342,6 +343,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-25: Add learner-facing real pilot launch card (#236). `pilot-launch` writes JSON/HTML launch cards and smoke verifies fresh/resume states without saving a real answer.
 - [x] AIOS-26: Surface real pilot launch card in learner cockpit (#238). Active cockpit state/HTML now expose the launch card while keeping next-card and reply-card links.
 - [x] AIOS-27: Guard learner-facing learning claims across product surfaces (#240). `product-claim-guard-smoke` checks README, English README, learner cockpit state/html, and RESEARCH-BASIS claim boundaries.
+- [x] AIOS-28: Record local-only consent on first real pilot save (#242). `pilot-capture` records local-only consent on first saved answer while `pilot-launch` remains no-save/no-consent preview.
 - [ ] AIOS-12: Run real owner/self AIOS pilot and journey audit (#179). Audit mechanics, Codex owner-pilot skill, learner-facing `pilot-next` card generation with ready-to-say `assistantPrompt` and numbered/copyable quick replies rendered in HTML, quick-reply selection saving through `pilot-reply`, varied five-day pilot missions, per-day learner coaching report metadata, card-level `pilot-capture`, automatic `pilot-reply` routing with next-card refresh, honest friction-note mechanics, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with current next-card link, assistant prompt, quick replies, latest reply-card link, automatic cockpit refresh after each captured pilot answer, and redacted local pilot dashboard sync now exist; the actual real owner/self five-day run is still required before closing the issue.
 
 ## SSOT Structure
@@ -378,6 +380,7 @@ Start from the verified/fallback Phase 0 constraints.
 - `docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md` — real pilot launch/resume card evidence note.
 - `docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md` — cockpit launch-card discovery evidence note.
 - `docs/phase-15-evidence/AIOS-27-product-claim-guard.md` — learner-facing product claim guard evidence note.
+- `docs/phase-15-evidence/AIOS-28-pilot-consent-save.md` — first-save local-only pilot consent evidence note.
 - `docs/PILOT-PROMPTS.md` — learner-facing owner pilot prompt contract and rejected bad-prompt examples.
 - `docs/STATUS.md` — human-readable execution status and next-step summary.
 - `design/` — detailed design library and historical decision records.
