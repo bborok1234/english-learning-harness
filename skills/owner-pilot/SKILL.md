@@ -54,6 +54,14 @@ node scripts/english-learning-harness.mjs pilot-turn --json
 
 Use `learnerTurn.say` as the only learner-facing prompt. Use `operatorOnly` only to decide how to save a numbered choice or direct English sentence after the learner answers. The packet must not save an answer, mark consent, expose transcript text, or expose friction notes.
 
+When checking whether the real pilot is ready for review, generate the redacted evidence gap internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-evidence-gap --json
+```
+
+Use it to inspect required vs collected Day 0, daily, final, friction, local report, and direction-decision evidence counts. It must not save an answer, mark consent, expose transcript text, or expose friction note text.
+
 Before asking the learner to answer the real pilot, generate the launch card internally:
 
 ```bash
