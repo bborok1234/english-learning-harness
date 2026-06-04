@@ -642,6 +642,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #214 | AIOS-14: Remove internal commands from learner cockpit product surface | continue |
 | #216 | AIOS-15: Expose current pilot card and quick replies in learner cockpit | continue |
 | #218 | AIOS-16: Do not store fake friction notes for pilot replies | continue |
+| #220 | AIOS-17: Make the first pilot card an immersive scene chooser | continue |
 
 #179 planned evidence should show:
 
@@ -689,5 +690,9 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - Saved-reply cards now show a short learner-facing friction follow-up prompt when a daily reply did not include a friction note.
 - `scripts/phase15-owner-pilot-reply-card-render-smoke.mjs` verifies no fake friction note is stored and the follow-up prompt renders; `scripts/phase15-owner-pilot-reply-routing-smoke.mjs` verifies explicit friction notes still count.
 - `docs/phase-15-evidence/AIOS-16-honest-pilot-friction.md` records the honest friction evidence boundary.
+- The fresh Day 0 pilot card now starts with `첫 장면 고르기`, three opening scene choices, and low-pressure quick replies that do not assume a project/work premise.
+- `pilot-next-card.html/json` and the personal cockpit active pilot state can expose opening scene choices while keeping actual answer persistence separate.
+- `scripts/phase15-owner-pilot-next-card-smoke.mjs` now renders the first pilot card in Playwright and verifies three scene choices, quick replies, copy buttons, and no internal command leakage.
+- `docs/phase-15-evidence/AIOS-17-immersive-pilot-start.md` records the immersive pilot start evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

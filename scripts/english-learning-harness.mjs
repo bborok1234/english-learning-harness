@@ -762,14 +762,38 @@ function relativeToRoot(paths, filePath) {
   return filePath ? relative(paths.root, filePath) : "";
 }
 
+function pilotOpeningSceneChoices() {
+  return [
+    {
+      id: "daily-life",
+      label: "일상 장면",
+      setup: "친구가 오늘 하루를 물어봅니다.",
+      starter: "I had a quiet day and did a few small tasks.",
+    },
+    {
+      id: "small-adventure",
+      label: "작은 모험",
+      setup: "처음 가보는 장소에 막 도착했습니다.",
+      starter: "I just arrived, and this place feels new to me.",
+    },
+    {
+      id: "comfort-zone",
+      label: "편한 공간",
+      setup: "지금 내가 있는 공간을 누군가에게 소개합니다.",
+      starter: "I am in a comfortable place with a few things around me.",
+    },
+  ];
+}
+
 function day0MissionCards() {
   return [
     {
       id: "today_snapshot",
-      title: "오늘의 한 컷",
-      setup: "방금 친구가 '오늘 뭐 했어?'라고 물었다고 상상합니다.",
-      ask: "오늘 실제로 한 일을 영어로 한 문장만 말해보세요.",
-      example: "I had lunch and took a short walk today.",
+      title: "첫 장면 고르기",
+      setup: "영어 시험처럼 시작하지 않습니다. 지금 말하고 싶은 작은 장면 하나를 고릅니다.",
+      ask: "아래 장면 중 하나를 고르거나, 바로 영어 한 문장만 말해보세요.",
+      example: "I had a quiet day and did a few small tasks.",
+      sceneChoices: pilotOpeningSceneChoices(),
     },
     {
       id: "meaning_check",
@@ -807,13 +831,14 @@ function day0ConversationGuide() {
   return {
     title: "3분 영어 스냅샷",
     opening:
-      "시험이 아니라 현재 말하기 상태를 찍어두는 첫 장면입니다. 틀려도 그대로가 좋은 데이터입니다.",
+      "시험이 아니라 현재 말하기 상태를 찍어두는 첫 장면입니다. 먼저 말하고 싶은 작은 세계를 고릅니다.",
     howToRun:
       "Codex should ask one mission at a time, wait for the learner's answer, then move to the next card. Do not expose rubric labels or ask the learner to fill evaluation fields.",
     learnerRule: "한 번에 한 문장만 말해도 됩니다. 막히면 쉬운 단어로 돌아가면 됩니다.",
     privacy:
       "이 답변은 기본적으로 로컬에만 저장됩니다. 공개 이슈나 PR에는 원문을 올리지 않습니다.",
     firstQuestion: day0MissionCards()[0],
+    sceneChoices: pilotOpeningSceneChoices(),
     cards: day0MissionCards(),
   };
 }
@@ -1501,6 +1526,7 @@ function learnerFacingNextCard(nextAction) {
       ask: card.ask ?? nextAction.prompt,
       example: card.example ?? "",
       learner_rule: guide.learnerRule ?? "한 문장이면 충분합니다.",
+      scene_choices: card.sceneChoices ?? guide.sceneChoices ?? [],
     };
   }
   if (nextAction.command === "pilot-day") {
@@ -1513,6 +1539,7 @@ function learnerFacingNextCard(nextAction) {
       ask: card.ask ?? nextAction.prompt,
       example: card.example ?? "",
       learner_rule: guide.learnerRule ?? "한 문장이면 충분합니다.",
+      scene_choices: card.sceneChoices ?? [],
     };
   }
   if (nextAction.command === "pilot-capture" && nextAction.phase === "final") {
@@ -1526,6 +1553,7 @@ function learnerFacingNextCard(nextAction) {
       ask: card.ask ?? nextAction.prompt,
       example: card.example ?? "",
       learner_rule: guide.learnerRule ?? "한 문장이면 충분합니다.",
+      scene_choices: card.sceneChoices ?? [],
     };
   }
   return {
@@ -1536,6 +1564,7 @@ function learnerFacingNextCard(nextAction) {
     ask: nextAction.prompt,
     example: "",
     learner_rule: "로컬 리포트를 먼저 확인합니다.",
+    scene_choices: [],
   };
 }
 
@@ -1552,6 +1581,11 @@ function buildPilotAssistantPrompt(nextCard, summary) {
     progress,
     nextCard.title ? `장면: ${nextCard.title}` : "",
     nextCard.setup ? `상황: ${nextCard.setup}` : "",
+    nextCard.scene_choices?.length
+      ? `선택 가능한 시작 장면:\n${nextCard.scene_choices
+          .map((choice, index) => `${index + 1}. ${choice.label} - ${choice.setup}`)
+          .join("\n")}`
+      : "",
     nextCard.ask ? `질문: ${nextCard.ask}` : "",
     nextCard.example ? `막히면 이렇게 시작해도 됩니다: ${nextCard.example}` : "",
     nextCard.phase === "complete"
@@ -1578,10 +1612,10 @@ function buildPilotAssistantPrompt(nextCard, summary) {
 function buildPilotQuickReplies(nextCard) {
   if (nextCard.phase === "complete") return [];
   const byTitle = {
-    "오늘의 한 컷": [
-      "I worked on my project today.",
-      "I had a normal workday today.",
-      "I wrote some notes and cleaned up my tasks today.",
+    "첫 장면 고르기": [
+      "I had a quiet day and did a few small tasks.",
+      "I just arrived, and this place feels new to me.",
+      "I am in a comfortable place with a few things around me.",
     ],
     "잠깐, 무슨 뜻이야?": [
       "Which place do you mean?",
@@ -1696,6 +1730,13 @@ function pilotNext(options) {
     .prompt { margin-top: 18px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
     .prompt h2 { margin: 0 0 8px; font-size: 16px; letter-spacing: 0; }
     .prompt pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; color: var(--ink); font: inherit; }
+    .scenes { margin-top: 18px; }
+    .scenes h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
+    .scene-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .scene { border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 13px; }
+    .scene b { display: block; font-size: 15px; }
+    .scene span { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; }
+    .scene em { display: block; margin-top: 8px; color: var(--ink); font-size: 14px; font-style: normal; overflow-wrap: anywhere; }
     .quick { margin-top: 18px; }
     .quick h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
     .quick ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
@@ -1711,7 +1752,7 @@ function pilotNext(options) {
     .metric span { display: block; color: var(--muted); font-size: 13px; }
     .metric strong { display: block; margin-top: 2px; font-size: 22px; }
     footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
-    @media (max-width: 640px) { .progress { grid-template-columns: 1fr; } .quick li { grid-template-columns: auto 1fr; } .copy-reply { grid-column: 2; justify-self: start; } .ask { font-size: 19px; } }
+    @media (max-width: 640px) { .progress, .scene-grid { grid-template-columns: 1fr; } .quick li { grid-template-columns: auto 1fr; } .copy-reply { grid-column: 2; justify-self: start; } .ask { font-size: 19px; } }
   </style>
 </head>
 <body>
@@ -1727,6 +1768,20 @@ function pilotNext(options) {
       </div>
       <p class="ask">${escapeHtml(nextCard.ask)}</p>
       ${nextCard.example ? `<p class="example">예시: ${escapeHtml(nextCard.example)}</p>` : ""}
+      ${
+        nextCard.scene_choices?.length
+          ? `<section class="scenes" aria-label="opening scene choices">
+        <h2>고를 수 있는 시작 장면</h2>
+        <div class="scene-grid">
+          ${nextCard.scene_choices
+            .map(
+              (choice, index) => `<article class="scene"><b>${index + 1}. ${escapeHtml(choice.label)}</b><span>${escapeHtml(choice.setup)}</span><em>${escapeHtml(choice.starter)}</em></article>`,
+            )
+            .join("")}
+        </div>
+      </section>`
+          : ""
+      }
       <section class="prompt" aria-label="learner-ready prompt">
         <h2>Codex가 바로 말할 다음 문장</h2>
         <pre>${escapeHtml(assistantPrompt.text)}</pre>

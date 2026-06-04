@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { homedir } from "node:os";
 import { resolve } from "node:path";
+import { createRequire } from "node:module";
 
 const repoRoot = resolve(import.meta.dirname, "..");
 const smokeRoot = resolve(repoRoot, "tmp/phase-15-owner-pilot-next-card");
 const learnerRoot = resolve(smokeRoot, "learner");
+const require = createRequire(import.meta.url);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -60,7 +63,39 @@ function assertCleanQuickReplies(replies) {
   }
 }
 
-function main() {
+async function loadChromium() {
+  try {
+    return (await import("playwright")).chromium;
+  } catch {
+    const bundledPlaywright = resolve(
+      homedir(),
+      ".cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+    );
+    if (existsSync(bundledPlaywright)) {
+      return require(bundledPlaywright).chromium;
+    }
+    throw new Error("Playwright is required for pilot next-card render smoke");
+  }
+}
+
+async function renderNextCard(url) {
+  const chromium = await loadChromium();
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage({ viewport: { width: 1180, height: 900 } });
+  await page.goto(url);
+  const result = await page.evaluate(() => ({
+    title: document.title,
+    h1: document.querySelector("h1")?.textContent ?? "",
+    text: document.body.innerText,
+    sceneCount: document.querySelectorAll(".scene").length,
+    quickReplyCount: document.querySelectorAll(".quick li").length,
+    copyButtonCount: document.querySelectorAll(".copy-reply").length,
+  }));
+  await browser.close();
+  return result;
+}
+
+async function main() {
   rmSync(smokeRoot, { recursive: true, force: true });
   mkdirSync(smokeRoot, { recursive: true });
 
@@ -72,12 +107,31 @@ function main() {
     "--json",
   ]);
   assert(baseline.nextCard.phase === "baseline", "fresh pilot should ask baseline card");
+  assert(baseline.nextCard.title === "첫 장면 고르기", "fresh pilot should start with an immersive scene chooser");
+  assert(baseline.nextCard.scene_choices?.length === 3, "fresh pilot should expose three opening scene choices");
+  assert(
+    baseline.nextCard.scene_choices.some((choice) => choice.label === "작은 모험"),
+    "opening scene choices should include a non-office/non-project option",
+  );
   assertCleanAssistantPrompt(baseline.assistantPrompt);
   assertCleanQuickReplies(baseline.quickReplies);
-  assert(baseline.assistantPrompt.text.includes("오늘 뭐 했어?"), "baseline assistant prompt should include concrete first scene");
-  assert(baseline.quickReplies.some((reply) => reply.text.includes("project")), "baseline quick replies should include a copyable daily answer");
+  assert(baseline.assistantPrompt.text.includes("선택 가능한 시작 장면"), "baseline assistant prompt should include scene choices");
+  assert(baseline.assistantPrompt.text.includes("작은 모험"), "baseline assistant prompt should include the small adventure scene");
+  assert(!baseline.assistantPrompt.text.includes("project"), "baseline assistant prompt should not assume a project/work start");
+  assert(baseline.quickReplies.some((reply) => reply.text.includes("quiet day")), "baseline quick replies should include a low-pressure daily answer");
+  assert(baseline.quickReplies.some((reply) => reply.text.includes("new to me")), "baseline quick replies should include a more imaginative scene answer");
   assert(existsSync(baseline.htmlPath), "baseline next-card html missing");
-  assertCleanLearnerHtml(read(baseline.htmlPath));
+  const baselineHtml = read(baseline.htmlPath);
+  assert(baselineHtml.includes("고를 수 있는 시작 장면"), "baseline card should render opening scene choices");
+  assert(baselineHtml.includes("처음 가보는 장소"), "baseline card should render the small adventure scene");
+  assert(baselineHtml.includes("I just arrived, and this place feels new to me."), "baseline card should render scene starter sentence");
+  assert(!baselineHtml.includes("project"), "baseline card should not assume project/work content");
+  assertCleanLearnerHtml(baselineHtml);
+  const baselineRender = await renderNextCard(baseline.url);
+  assert(baselineRender.h1 === "첫 장면 고르기", "rendered baseline card should show the scene chooser title");
+  assert(baselineRender.sceneCount === 3, "rendered baseline card should show three scene choices");
+  assert(baselineRender.quickReplyCount >= 3, "rendered baseline card should show quick replies");
+  assert(baselineRender.copyButtonCount >= 3, "rendered baseline card should show quick reply copy buttons");
 
   runJson([
     "scripts/english-learning-harness.mjs",
@@ -172,6 +226,7 @@ function main() {
         htmlPath: nextDay.htmlPath,
         nextPhase: nextDay.nextCard.phase,
         nextDay: nextDay.nextCard.day,
+        renderedSceneCount: baselineRender.sceneCount,
         claimBoundary: "This validates learner-facing pilot next-card generation only. It does not run the real owner/self pilot.",
       },
       null,
@@ -181,7 +236,7 @@ function main() {
 }
 
 try {
-  main();
+  await main();
 } catch (error) {
   console.error(
     JSON.stringify(
