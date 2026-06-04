@@ -115,6 +115,7 @@ What is complete:
 - AIOS-23 deferred daily reply diagnosis is implemented for #232. Current start-card replies keep their mission evidence, while future Speaking Skill OS diagnosis can be created after session persistence.
 - AIOS-24 PR body auto-close guard is implemented for #234. `#179` is reopened, PR-body wording is guarded, and goal audit now checks GitHub issue state for the real-pilot blocker.
 - AIOS-25 real pilot launch card is implemented for #236. `pilot-launch` gives Codex a learner-facing start/resume surface before any new real answer is saved.
+- AIOS-26 cockpit launch-card discovery is implemented for #238. The active learner cockpit now links the real pilot launch card as the primary start/resume surface.
 
 What is not started:
 - Real user validation.
@@ -338,6 +339,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-23: Defer daily reply diagnosis until after current mission persistence (#232). `practice-reply` can create future diagnosis/backlog evidence without retargeting the current saved answer.
 - [x] AIOS-24: Guard protected real-pilot blocker issues from accidental PR-body auto-close (#234). `pr-body-autoclose-guard-smoke` and `aios-goal-audit-smoke` now cover the tracker-integrity failure mode.
 - [x] AIOS-25: Add learner-facing real pilot launch card (#236). `pilot-launch` writes JSON/HTML launch cards and smoke verifies fresh/resume states without saving a real answer.
+- [x] AIOS-26: Surface real pilot launch card in learner cockpit (#238). Active cockpit state/HTML now expose the launch card while keeping next-card and reply-card links.
 - [ ] AIOS-12: Run real owner/self AIOS pilot and journey audit (#179). Audit mechanics, Codex owner-pilot skill, learner-facing `pilot-next` card generation with ready-to-say `assistantPrompt` and numbered/copyable quick replies rendered in HTML, quick-reply selection saving through `pilot-reply`, varied five-day pilot missions, per-day learner coaching report metadata, card-level `pilot-capture`, automatic `pilot-reply` routing with next-card refresh, honest friction-note mechanics, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with current next-card link, assistant prompt, quick replies, latest reply-card link, automatic cockpit refresh after each captured pilot answer, and redacted local pilot dashboard sync now exist; the actual real owner/self five-day run is still required before closing the issue.
 
 ## SSOT Structure
@@ -372,6 +374,7 @@ Start from the verified/fallback Phase 0 constraints.
 - `docs/phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md` — daily practice reply future-diagnosis evidence note.
 - `docs/phase-15-evidence/AIOS-24-pr-body-autoclose-guard.md` — PR body protected-issue auto-close guard evidence note.
 - `docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md` — real pilot launch/resume card evidence note.
+- `docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md` — cockpit launch-card discovery evidence note.
 - `docs/PILOT-PROMPTS.md` — learner-facing owner pilot prompt contract and rejected bad-prompt examples.
 - `docs/STATUS.md` — human-readable execution status and next-step summary.
 - `design/` — detailed design library and historical decision records.

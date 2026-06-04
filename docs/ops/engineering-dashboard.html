@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-25 real pilot launch card added; active AIOS goal remains not complete",
-    "status": "AIOS-25 adds a learner-facing launch/resume card for the real owner/self pilot before any new answer is saved. #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-26 cockpit links real pilot launch card; active AIOS goal remains not complete",
+    "status": "AIOS-26 exposes the real pilot launch/resume card from the learner cockpit so the next real answer can start from the daily product surface. #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot now also has a launch card that explains current progress, the next prompt, quick replies, privacy, and save boundary before Codex asks for the next real answer.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is now discoverable from the active learner cockpit, so the cockpit can act as the daily start/resume surface before Codex asks for the next real answer.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-25 is real pilot launch/resume mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-26 is cockpit discovery mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -1044,6 +1044,12 @@
       "label": "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
       "path": "./phase-15-evidence/AIOS-25-real-pilot-launch-card.md",
       "role": "AIOS-25 real pilot launch-card evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md",
+      "path": "./phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md",
+      "role": "AIOS-26 cockpit pilot launch-card link evidence",
       "kind": "source"
     }
   ],
@@ -3219,6 +3225,18 @@
             "skills/owner-pilot/SKILL.md",
             "docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md"
           ]
+        },
+        {
+          "id": "AIOS-26-COCKPIT-PILOT-LAUNCH-LINK",
+          "title": "AIOS-26 cockpit pilot launch link 통과",
+          "why": "실제 pilot launch card가 있어도 cockpit에서 발견할 수 없으면 daily product surface로 재개하기 어렵다.",
+          "done": "active pilot state/html이 pilot-launch-card artifact를 링크하고, 기존 next-card/reply-card 링크는 유지한다.",
+          "verification": "personal-learner-cockpit-active-pilot-smoke validates launch card state/HTML linkage, file existence, no internal leakage, and existing active pilot checks.",
+          "files": [
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md"
+          ]
         }
       ]
     },
@@ -3977,6 +3995,11 @@
       "name": "AIOS-25 real pilot launch card",
       "status": "Pass",
       "detail": "phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage."
+    },
+    {
+      "name": "AIOS-26 cockpit pilot launch link",
+      "status": "Pass",
+      "detail": "personal-learner-cockpit-active-pilot smoke validates the active cockpit links pilot-launch-card.html/json while preserving next-card, quick-reply, copy-button, and reply-card checks."
     }
   ],
   "commands": [
@@ -4479,6 +4502,10 @@
     {
       "label": "Run AIOS-25 real pilot launch card smoke",
       "command": "node scripts/phase15-owner-pilot-launch-card-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-26 cockpit pilot launch link smoke",
+      "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
     }
   ]
 }
@@ -4487,12 +4514,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot now also has a launch card that explains current progress, the next prompt, quick replies, privacy, and save boundary before Codex asks for the next real answer.</p>
+        <p class="summary">The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is now discoverable from the active learner cockpit, so the cockpit can act as the daily start/resume surface before Codex asks for the next real answer.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-25 real pilot launch card added; active AIOS goal remains not complete<br>
-        AIOS-25 adds a learner-facing launch/resume card for the real owner/self pilot before any new answer is saved. #179 real owner/self evidence and blocked learning claims remain unresolved.
+        AIOS-26 cockpit links real pilot launch card; active AIOS goal remains not complete<br>
+        AIOS-26 exposes the real pilot launch/resume card from the learner cockpit so the next real answer can start from the daily product surface. #179 real owner/self evidence and blocked learning claims remain unresolved.
       </div>
     </header>
 
@@ -4605,16 +4632,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-20-DAILY-PRACTICE-START-CARD</strong>
-                <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/daily-practice-start-card-smoke.mjs, docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md</span>
-              </div>
-              <h3>AIOS-20 daily practice start card 통과</h3>
-              <div class="card-row"><b>왜</b><p>ordinary daily practice도 첫 질문 전에 사용자가 볼 수 있는 concrete scene/quick reply 표면이 필요했다.</p></div>
-              <div class="card-row"><b>완료</b><p>practice-next가 practice-start-card.json/html을 만들고, daily-session skill이 이 카드를 먼저 생성하도록 정렬됐다.</p></div>
-              <div class="card-row"><b>검증</b><p>daily-practice-start-card-smoke validates JSON/HTML render, scene-matched quick replies, copy buttons, cockpit link, and no internal command leakage.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-21-DAILY-PRACTICE-REPLY-ROUTING</strong>
                 <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/daily-practice-reply-routing-smoke.mjs, docs/phase-15-evidence/AIOS-21-daily-practice-reply-routing.md</span>
               </div>
@@ -4662,6 +4679,16 @@
               <div class="card-row"><b>왜</b><p>실제 pilot을 시작하거나 재개할 때 learner가 내부 상태나 명령을 이해하지 않아도 다음 한 문장만 말할 수 있어야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>pilot-launch가 새 답변을 저장하지 않고 진행률, 다음 질문, quick replies, 저장 경계, privacy, cockpit link를 담은 learner-facing JSON/HTML launch card를 쓴다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15-owner-pilot-launch-card-smoke validates fresh/resume launch cards, Playwright render, no answer persistence, cockpit link, quick replies, privacy, and no internal language leakage.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-26-COCKPIT-PILOT-LAUNCH-LINK</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md</span>
+              </div>
+              <h3>AIOS-26 cockpit pilot launch link 통과</h3>
+              <div class="card-row"><b>왜</b><p>실제 pilot launch card가 있어도 cockpit에서 발견할 수 없으면 daily product surface로 재개하기 어렵다.</p></div>
+              <div class="card-row"><b>완료</b><p>active pilot state/html이 pilot-launch-card artifact를 링크하고, 기존 next-card/reply-card 링크는 유지한다.</p></div>
+              <div class="card-row"><b>검증</b><p>personal-learner-cockpit-active-pilot-smoke validates launch card state/HTML linkage, file existence, no internal leakage, and existing active pilot checks.</p></div>
             </article>
         </div>
       </section>
@@ -5400,6 +5427,10 @@
               <strong>docs/phase-15-evidence/AIOS-25-real-pilot-launch-card.md</strong>
               <span>AIOS-25 real pilot launch-card evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md">
+              <strong>docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md</strong>
+              <span>AIOS-26 cockpit pilot launch-card link evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5407,10 +5438,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-18 owner-pilot skill contract alignment</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards.</span></td>
-            </tr>
             <tr>
               <td>AIOS-19 active goal completion audit</td>
               <td><strong>Pass</strong><span>aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing.</span></td>
@@ -5438,6 +5465,10 @@
             <tr>
               <td>AIOS-25 real pilot launch card</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-26 cockpit pilot launch link</td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates the active cockpit links pilot-launch-card.html/json while preserving next-card, quick-reply, copy-button, and reply-card checks.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5483,7 +5514,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 132개 보기</summary>
+        <summary>완료 이력 133개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6806,10 +6837,20 @@
               <div class="card-row"><b>완료</b><p>docs/ops/goal-audit.json/html이 8개 stop condition, local mechanics status, real pilot blocker, blocked learning claims를 보여준다.</p></div>
               <div class="card-row"><b>검증</b><p>aios-goal-audit-smoke validates requirement count=8, overall_status=not_complete, real pilot blocker, and no premature completion claim.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-20-DAILY-PRACTICE-START-CARD</strong>
+                <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/daily-practice-start-card-smoke.mjs, docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md</span>
+              </div>
+              <h3>AIOS-20 daily practice start card 통과</h3>
+              <div class="card-row"><b>왜</b><p>ordinary daily practice도 첫 질문 전에 사용자가 볼 수 있는 concrete scene/quick reply 표면이 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>practice-next가 practice-start-card.json/html을 만들고, daily-session skill이 이 카드를 먼저 생성하도록 정렬됐다.</p></div>
+              <div class="card-row"><b>검증</b><p>daily-practice-start-card-smoke validates JSON/HTML render, scene-matched quick replies, copy buttons, cockpit link, and no internal command leakage.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 126개 보기</summary>
+        <summary>전체 검증 127개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -7318,12 +7359,16 @@
               <td>AIOS-25 real pilot launch card</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-launch-card smoke validates fresh/resume launch cards, Playwright render, no answer persistence, quick replies, cockpit link, privacy boundary, and no learner-facing command or tracker leakage.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-26 cockpit pilot launch link</td>
+              <td><strong>Pass</strong><span>personal-learner-cockpit-active-pilot smoke validates the active cockpit links pilot-launch-card.html/json while preserving next-card, quick-reply, copy-button, and reply-card checks.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 125개 보기</summary>
+        <summary>전체 명령 126개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -7825,6 +7870,10 @@
             <div class="command">
               <span>Run AIOS-25 real pilot launch card smoke</span>
               <code>node scripts/phase15-owner-pilot-launch-card-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-26 cockpit pilot launch link smoke</span>
+              <code>node scripts/personal-learner-cockpit-active-pilot-smoke.mjs</code>
             </div>
         </div>
       </details>

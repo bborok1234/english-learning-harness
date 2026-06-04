@@ -40,6 +40,11 @@ function main() {
     "I worked on a small plan and had coffee today.",
     "--json",
   ]);
+  runJson([
+    "scripts/english-learning-harness.mjs",
+    "pilot-launch",
+    "--json",
+  ]);
 
   const cockpit = runJson([
     "scripts/english-learning-harness.mjs",
@@ -55,6 +60,15 @@ function main() {
   assert(state.active_pilot.partial.baseline_answers === 1, "cockpit should show captured baseline count");
   assert(state.active_pilot.next_card.card_id === "meaning_check", "cockpit should point to the next Day 0 card");
   assert(state.active_pilot.learner_prompt.includes("어디에서 만나자는 뜻인지"), "cockpit should show learner-facing next prompt");
+  assert(
+    state.active_pilot.launch_card_artifact?.html === "artifacts/pilot/pilot-launch-card.html",
+    "cockpit should link pilot launch-card HTML",
+  );
+  assert(
+    state.active_pilot.launch_card_artifact?.json === "artifacts/pilot/pilot-launch-card.json",
+    "cockpit should link pilot launch-card JSON",
+  );
+  assert(existsSync(resolve(learnerRoot, state.active_pilot.launch_card_artifact.html)), "pilot launch-card HTML missing");
   assert(
     state.active_pilot.current_card_artifact?.html === "artifacts/pilot/pilot-next-card.html",
     "cockpit should link current pilot next-card HTML",
@@ -78,6 +92,8 @@ function main() {
   const html = readFileSync(cockpit.cockpitPath, "utf8");
   assert(html.includes("진행 중인 owner pilot"), "cockpit HTML missing active pilot section");
   assert(html.includes("어디에서 만나자는 뜻인지"), "cockpit HTML missing next pilot prompt");
+  assert(html.includes("Pilot 시작/재개 카드 열기"), "cockpit HTML should link pilot launch card");
+  assert(html.includes("pilot-launch-card.html"), "cockpit HTML should link launch card file");
   assert(html.includes("현재 pilot 카드 열기"), "cockpit HTML should link current pilot card");
   assert(html.includes("Codex가 말할 진행 안내"), "cockpit HTML should expose assistant prompt details");
   assert(html.includes("Which place do you mean?"), "cockpit HTML should render quick reply text");
