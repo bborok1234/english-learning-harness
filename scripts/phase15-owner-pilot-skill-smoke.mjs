@@ -19,6 +19,8 @@ function main() {
     "Codex conversation as the product surface",
     "Do not ask the learner to run `node`",
     "Use that engine yourself. Do not hand the command to the learner.",
+    "pilot-run-sheet",
+    "Use it to confirm the next prompt, save boundary, consent status, privacy rules, launch card, and cockpit links.",
     "pilot-launch",
     "Use this as the safest start/resume surface.",
     "pilot-next",

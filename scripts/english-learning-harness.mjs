@@ -192,6 +192,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-start [--say TEXT ...] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-status [--learner-root DIR] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-launch [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-run-sheet [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -2429,6 +2430,157 @@ function pilotLaunch(options) {
   };
 }
 
+function pilotRunSheet(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const launch = pilotLaunch({ ...options, learnerRoot: paths.root, date });
+  const stateExists = existsSync(paths.pilotState);
+  const state = readPilotState(paths, date);
+  const summary = pilotStatusSummary(state);
+  const consentMarked = Boolean(stateExists && state.consent?.accepted_at);
+  const runSheet = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "local Codex real-pilot run sheet",
+    saved_answer: false,
+    pilot_state_exists: stateExists,
+    consent: {
+      marked: consentMarked,
+      scope: consentMarked ? state.consent.scope : "not-marked-until-first-save",
+      accepted_at: consentMarked ? state.consent.accepted_at : "",
+      first_save_rule: "The first actual saved pilot answer records local-only consent metadata.",
+    },
+    next_action: {
+      phase: launch.nextCard.phase,
+      day: launch.nextCard.day ?? null,
+      title: launch.nextCard.title,
+      ask: launch.nextCard.ask,
+      assistant_prompt: launch.assistantPrompt.text,
+      quick_replies: launch.quickReplies,
+    },
+    save_boundary: {
+      before_answer: "This run sheet and launch card do not save a learner answer.",
+      after_answer:
+        "After the learner answers, Codex saves exactly that answer internally, records local-only consent on first save, refreshes the next card, cockpit, and local report surfaces.",
+      public_boundary:
+        "Do not post transcripts, private notes, local paths, audio, or images publicly without explicit review.",
+    },
+    local_surfaces: {
+      launch_card: {
+        html: relativeToRoot(paths, launch.htmlPath),
+        url: launch.url,
+      },
+      cockpit: {
+        html: launch.cockpit?.htmlPath ? relativeToRoot(paths, launch.cockpit.htmlPath) : "cockpit.html",
+        url: launch.cockpit?.url ?? "",
+      },
+    },
+    claim_boundary:
+      "This run sheet prepares the local owner/self pilot. It does not save a new answer, prove learning outcomes, or complete the pilot.",
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-run-sheet.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-run-sheet.html");
+  writeFileSync(jsonPath, `${JSON.stringify(runSheet, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Pilot Run Sheet</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; --soft: #eef5f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(980px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(30px, 5vw, 48px); line-height: 1.1; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 17px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: #fbfcfa; }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 20px; overflow-wrap: anywhere; }
+    .block { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .ask { background: var(--warm); font-size: 21px; font-weight: 760; line-height: 1.34; overflow-wrap: anywhere; }
+    pre { margin: 0; white-space: pre-wrap; word-break: keep-all; overflow-wrap: anywhere; font: inherit; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; overflow-wrap: anywhere; }
+    .links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .links a { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; font-weight: 720; }
+    .save { background: var(--soft); }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) { .grid, .links { grid-template-columns: 1fr; } .ask { font-size: 19px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Local Only</p>
+      <h1>실제 말하기 여정 진행표</h1>
+      <p class="subtle">Codex가 다음 질문을 하기 전에 저장 경계와 프라이버시 상태를 확인하는 로컬 표면입니다.</p>
+      <div class="grid" aria-label="run state">
+        <div class="metric"><span>답변 저장</span><strong>아직 안 됨</strong></div>
+        <div class="metric"><span>동의 기록</span><strong>${escapeHtml(consentMarked ? "이미 기록됨" : "첫 저장 전")}</strong></div>
+        <div class="metric"><span>다음 단계</span><strong>${escapeHtml(runSheet.next_action.phase)}</strong></div>
+      </div>
+      <section class="block ask" aria-label="next learner question">${escapeHtml(runSheet.next_action.ask)}</section>
+      <section class="block" aria-label="codex prompt">
+        <h2>Codex가 바로 말할 프롬프트</h2>
+        <pre>${escapeHtml(runSheet.next_action.assistant_prompt)}</pre>
+      </section>
+      ${
+        runSheet.next_action.quick_replies.length
+          ? `<section class="block" aria-label="quick replies">
+        <h2>막히면 고를 수 있는 답변 후보</h2>
+        <ul>
+          ${runSheet.next_action.quick_replies
+            .map((reply) => `<li>${escapeHtml(reply.number)}. ${escapeHtml(reply.text)} <span class="subtle">(${escapeHtml(reply.note)})</span></li>`)
+            .join("")}
+        </ul>
+      </section>`
+          : ""
+      }
+      <section class="block save" aria-label="save boundary">
+        <h2>저장 경계</h2>
+        <p>${escapeHtml(runSheet.save_boundary.before_answer)}</p>
+        <p style="margin-top: 8px;">${escapeHtml(runSheet.save_boundary.after_answer)}</p>
+        <p class="subtle" style="margin-top: 8px;">${escapeHtml(runSheet.save_boundary.public_boundary)}</p>
+      </section>
+      <section class="block" aria-label="local links">
+        <h2>같이 열어볼 로컬 표면</h2>
+        <div class="links">
+          <a href="${escapeHtml(relative(dirname(htmlPath), launch.htmlPath))}">시작 카드 열기</a>
+          <a href="${escapeHtml(launch.cockpit?.htmlPath ? relative(dirname(htmlPath), launch.cockpit.htmlPath) : "../../cockpit.html")}">Cockpit 열기</a>
+        </div>
+      </section>
+    </section>
+    <footer>${escapeHtml(runSheet.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-run-sheet",
+    learnerRoot: paths.root,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    savedAnswer: false,
+    pilotStateExists: stateExists,
+    consent: runSheet.consent,
+    nextAction: runSheet.next_action,
+    localSurfaces: runSheet.local_surfaces,
+    claimBoundary: runSheet.claim_boundary,
+  };
+}
+
 function pilotDay(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -3251,6 +3403,10 @@ function run() {
   }
   if (command === "pilot-launch") {
     output(pilotLaunch(options), options.json);
+    return;
+  }
+  if (command === "pilot-run-sheet") {
+    output(pilotRunSheet(options), options.json);
     return;
   }
   if (command === "pilot-next") {

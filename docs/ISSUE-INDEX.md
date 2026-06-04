@@ -654,6 +654,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #238 | AIOS-26: Surface real pilot launch card in learner cockpit | continue |
 | #240 | AIOS-27: Guard learner-facing learning claims across product surfaces | continue |
 | #242 | AIOS-28: Record local-only consent on first real pilot save | continue |
+| #244 | AIOS-29: Generate local real-pilot run sheet before saving answers | continue |
 
 #179 planned evidence should show:
 
@@ -743,5 +744,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-capture` now records local-only consent metadata before the first saved pilot answer, while `pilot-launch` remains a no-save/no-consent preview surface.
 - `scripts/phase15-owner-pilot-launch-card-smoke.mjs` verifies fresh launch does not create `pilot-state.json`; `scripts/phase15-owner-pilot-capture-smoke.mjs` verifies first saved answer records consent scope/timestamp.
 - `docs/phase-15-evidence/AIOS-28-pilot-consent-save.md` records the first-save consent mechanics boundary.
+- `pilot-run-sheet` now writes local JSON/HTML with the next learner prompt, quick replies, consent state, save boundary, launch-card link, and cockpit link before any real answer is saved.
+- `scripts/phase15-owner-pilot-run-sheet-smoke.mjs` verifies fresh run sheets do not create `pilot-state.json`, rendered HTML shows `첫 저장 전`, and resume run sheets show existing local-only consent.
+- `docs/phase-15-evidence/AIOS-29-pilot-run-sheet.md` records the local real-pilot run sheet evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
