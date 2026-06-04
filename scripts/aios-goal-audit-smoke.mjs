@@ -28,6 +28,8 @@ function main() {
     jsonPath,
     "--html-output",
     htmlPath,
+    "--real-pilot-issue-state",
+    "OPEN",
     "--json",
   ]);
 
@@ -66,6 +68,29 @@ function main() {
   assert(html.includes("Completion Blockers"), "goal audit HTML should show blockers");
   assert(html.includes("Stop Condition Evidence"), "goal audit HTML should show requirement evidence");
   assert(html.includes("BLOCK-REAL-PILOT-179"), "goal audit HTML should render real pilot blocker");
+
+  const closedJsonPath = resolve(smokeRoot, "goal-audit-closed-mismatch.json");
+  const closedHtmlPath = resolve(smokeRoot, "goal-audit-closed-mismatch.html");
+  runJson([
+    "scripts/aios-goal-audit.mjs",
+    "--json-output",
+    closedJsonPath,
+    "--html-output",
+    closedHtmlPath,
+    "--real-pilot-issue-state",
+    "CLOSED",
+    "--json",
+  ]);
+  const closedAudit = readJson(closedJsonPath);
+  const closedRealPilotBlocker = closedAudit.completion_blockers.find((item) => item.id === "BLOCK-REAL-PILOT-179");
+  assert(
+    closedRealPilotBlocker?.status === "closed_external_mismatch",
+    "goal audit should detect externally closed real pilot tracker",
+  );
+  assert(
+    closedAudit.overall_status === "not_complete",
+    "closed real pilot tracker mismatch must still block completion",
+  );
 
   console.log(
     JSON.stringify(
