@@ -3833,6 +3833,8 @@ function readActivePilotState(paths) {
   const launchCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-launch-card.html");
   const turnPacketJsonPath = resolve(paths.root, "artifacts/pilot/pilot-turn-packet.json");
   const turnPacketHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-turn-packet.html");
+  const evidenceGapJsonPath = resolve(paths.root, "artifacts/pilot/pilot-evidence-gap.json");
+  const evidenceGapHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-evidence-gap.html");
   const launchCardArtifact =
     existsSync(launchCardJsonPath) && existsSync(launchCardHtmlPath)
       ? {
@@ -3855,6 +3857,14 @@ function readActivePilotState(paths) {
           json: relative(paths.root, turnPacketJsonPath),
           html: relative(paths.root, turnPacketHtmlPath),
           url: `file://${turnPacketHtmlPath}`,
+        }
+      : null;
+  const evidenceGapArtifact =
+    existsSync(evidenceGapJsonPath) && existsSync(evidenceGapHtmlPath)
+      ? {
+          json: relative(paths.root, evidenceGapJsonPath),
+          html: relative(paths.root, evidenceGapHtmlPath),
+          url: `file://${evidenceGapHtmlPath}`,
         }
       : null;
   const nextCardState = nextCardArtifact ? JSON.parse(readFileSync(nextCardJsonPath, "utf8")) : null;
@@ -3922,6 +3932,7 @@ function readActivePilotState(paths) {
         : nextCard?.ask ?? "",
     launch_card_artifact: launchCardArtifact,
     turn_packet_artifact: turnPacketArtifact,
+    evidence_gap_artifact: evidenceGapArtifact,
     current_card_artifact: nextCardArtifact,
     assistant_prompt: nextCardState?.assistant_prompt?.text ?? "",
     quick_replies: (nextCardState?.quick_replies ?? []).map((reply) => ({
@@ -4323,6 +4334,11 @@ function personalLearnerCockpitHtml(state) {
             ${
               state.active_pilot.turn_packet_artifact
                 ? `<p class="subtle">다음 대화 턴: <a href="${escapeHtml(state.active_pilot.turn_packet_artifact.url)}">Codex 진행 카드 열기</a></p>`
+                : ""
+            }
+            ${
+              state.active_pilot.evidence_gap_artifact
+                ? `<p class="subtle">여정 체크: <a href="${escapeHtml(state.active_pilot.evidence_gap_artifact.url)}">남은 연습 증거 보기</a></p>`
                 : ""
             }
             ${

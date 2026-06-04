@@ -572,6 +572,11 @@ When a pilot is active, `cockpit-state.json` may include:
       "html": "artifacts/pilot/pilot-turn-packet.html",
       "url": "file:///absolute/path/to/pilot-turn-packet.html"
     },
+    "evidence_gap_artifact": {
+      "json": "artifacts/pilot/pilot-evidence-gap.json",
+      "html": "artifacts/pilot/pilot-evidence-gap.html",
+      "url": "file:///absolute/path/to/pilot-evidence-gap.html"
+    },
     "current_card_artifact": {
       "json": "artifacts/pilot/pilot-next-card.json",
       "html": "artifacts/pilot/pilot-next-card.html",
@@ -587,7 +592,7 @@ When a pilot is active, `cockpit-state.json` may include:
 }
 ```
 
-The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifact`, `current_card_artifact`, and `latest_reply_card` when the local artifacts exist. It must present them as learner-safe continuation surfaces, not engine commands. It must not expose `pilot-reply` command text, `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, transcript internals, or `product_journey_audit` internals.
+The learner-facing cockpit may link `launch_card_artifact`, `turn_packet_artifact`, `evidence_gap_artifact`, `current_card_artifact`, and `latest_reply_card` when the local artifacts exist. It must present them as learner-safe continuation or journey-check surfaces, not engine commands. It must not expose `pilot-reply` command text, `pilot-capture`, `pilot-start`, `pilot-finish`, PR/issue labels, transcript internals, or `product_journey_audit` internals.
 
 `pilot-launch` and `pilot-next` may generate learner-facing preview artifacts, but they must not create a real pilot answer or mark consent. The first answer saved through `pilot-capture` or `pilot-reply` records local-only consent metadata in `pilot-state.json`.
 
