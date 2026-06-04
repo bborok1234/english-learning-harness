@@ -1,6 +1,6 @@
 # Owner Pilot Conversation Prompts
 
-Last updated: 2026-06-01
+Last updated: 2026-06-04
 Status: learner-facing prompt contract
 
 ## Purpose
@@ -16,30 +16,40 @@ Korean-first opening:
 ```text
 오늘은 시험이 아니라 3분 영어 스냅샷을 찍는 날이에요.
 틀린 문장도 그대로 중요한 기준점입니다.
-제가 한 장면씩 드릴 테니 영어로 한 문장만 답해주세요.
+먼저 말하고 싶은 작은 장면을 하나 고르거나, 바로 영어로 한 문장만 답해주세요.
 막히면 쉬운 단어로 돌아가도 됩니다.
 ```
 
 ## Day 0 Mission Cards
 
-### 1. 오늘의 한 컷
+### 1. 첫 장면 고르기
 
 상황:
 
 ```text
-방금 친구가 "오늘 뭐 했어?"라고 물었다고 상상해요.
+영어 시험처럼 시작하지 않습니다. 지금 말하고 싶은 작은 장면 하나를 고릅니다.
 ```
 
 질문:
 
 ```text
-오늘 실제로 한 일을 영어로 한 문장만 말해보세요.
+아래 장면 중 하나를 고르거나, 바로 영어 한 문장만 말해보세요.
+```
+
+선택지:
+
+```text
+1. 일상 장면 - 친구가 오늘 하루를 물어봅니다.
+2. 작은 모험 - 처음 가보는 장소에 막 도착했습니다.
+3. 편한 공간 - 지금 내가 있는 공간을 누군가에게 소개합니다.
 ```
 
 예시:
 
 ```text
-I had lunch and took a short walk today.
+I had a quiet day and did a few small tasks.
+I just arrived, and this place feels new to me.
+I am in a comfortable place with a few things around me.
 ```
 
 ### 2. 잠깐, 무슨 뜻이야?

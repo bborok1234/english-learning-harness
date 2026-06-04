@@ -405,10 +405,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-17 immersive pilot start mechanics; real owner pilot Day 1 answer still required",
-    "status": "AIOS-17 changes the fresh Day 0 pilot card into a learner-facing scene chooser with three opening scenes and low-pressure quick replies. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
+    "stage": "AIOS-18 owner-pilot skill contract aligned; real owner pilot Day 1 answer still required",
+    "status": "AIOS-18 aligns the Codex-facing owner-pilot skill and canonical pilot prompt contract with the AIOS-17 immersive first-card scene chooser. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The owner/self pilot start now invites the learner to choose a small scene or send one English sentence directly, instead of assuming project/work context. The mechanics are fixture/browser verified; real pilot completion still requires actual learner answers over at least five practice days.",
+    "summary": "The learner-facing engine, README, skill instructions, and prompt contract now agree that a fresh Day 0 pilot starts with `첫 장면 고르기`, three opening scenes, and quick replies. This keeps the product surface aligned and reduces the chance that Codex reverts to a stale fixed project/work prompt during the real pilot.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot once the learner provides real answers: Day 0 baseline, at least five daily sessions, final sample, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, and an immersive first pilot scene chooser as local product artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, and matching Codex-facing owner-pilot skill instructions as local product artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-17 improves first-card immersion and answerability only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
+    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-18 aligns the Codex-facing pilot contract only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
   },
   "ssot": [
     {
@@ -985,6 +985,12 @@
       "path": "./phase-15-evidence/AIOS-17-immersive-pilot-start.md",
       "role": "AIOS-17 immersive pilot start evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md",
+      "path": "./phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md",
+      "role": "AIOS-18 owner-pilot skill contract evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -1369,6 +1375,13 @@
       "status": "Pass",
       "evidence": "#220, phase15-owner-pilot-next-card-smoke, personal-learner-cockpit-active-pilot-smoke",
       "claim": "fresh Day 0 pilot-next card exposes three opening scene choices, low-pressure quick replies, and Playwright-rendered chooser UI without assuming project/work content or leaking internal commands; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-51",
+      "label": "Owner-pilot skill contract matches immersive start",
+      "status": "Pass",
+      "evidence": "#222, phase15-owner-pilot-skill-smoke, phase15-owner-pilot-next-card-smoke",
+      "claim": "owner-pilot skill and canonical prompt contract describe the generated first-card scene chooser, allow number/quick-reply/direct-sentence answers, and reject stale fixed-first-card guidance; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -3026,6 +3039,19 @@
             "scripts/phase15-owner-pilot-next-card-smoke.mjs",
             "docs/phase-15-evidence/AIOS-17-immersive-pilot-start.md"
           ]
+        },
+        {
+          "id": "AIOS-18-OWNER-PILOT-SKILL-CONTRACT",
+          "title": "AIOS-18 owner-pilot skill contract 정렬 통과",
+          "why": "엔진은 첫 장면 선택으로 바뀌었지만 skill 문서가 예전 고정 첫 질문을 유지하면 Codex가 실제 pilot에서 낡은 흐름을 따를 수 있다.",
+          "done": "owner-pilot skill과 PILOT-PROMPTS가 `첫 장면 고르기`, 세 opening scene, 1/2/3 또는 quick reply 선택 저장 흐름을 설명한다.",
+          "verification": "phase15 owner pilot skill smoke validates the scene-chooser contract and rejects stale fixed-start guidance; next-card smoke still verifies rendered scene choices.",
+          "files": [
+            "skills/owner-pilot/SKILL.md",
+            "docs/PILOT-PROMPTS.md",
+            "scripts/phase15-owner-pilot-skill-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md"
+          ]
         }
       ]
     },
@@ -3733,6 +3759,11 @@
       "name": "AIOS-17 immersive first pilot card",
       "status": "Pass",
       "detail": "phase15-owner-pilot-next-card smoke validates the fresh baseline card starts with three opening scene choices, low-pressure quick replies, Playwright-rendered chooser UI, and no project/work premise or internal command leakage."
+    },
+    {
+      "name": "AIOS-18 owner-pilot skill contract alignment",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards."
     }
   ],
   "commands": [
@@ -4195,6 +4226,10 @@
     {
       "label": "Run AIOS-17 immersive pilot start smoke",
       "command": "node scripts/phase15-owner-pilot-next-card-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-18 owner-pilot skill contract smoke",
+      "command": "node scripts/phase15-owner-pilot-skill-smoke.mjs"
     }
   ]
 }
@@ -4203,12 +4238,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The owner/self pilot start now invites the learner to choose a small scene or send one English sentence directly, instead of assuming project/work context. The mechanics are fixture/browser verified; real pilot completion still requires actual learner answers over at least five practice days.</p>
+        <p class="summary">The learner-facing engine, README, skill instructions, and prompt contract now agree that a fresh Day 0 pilot starts with `첫 장면 고르기`, three opening scenes, and quick replies. This keeps the product surface aligned and reduces the chance that Codex reverts to a stale fixed project/work prompt during the real pilot.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-17 immersive pilot start mechanics; real owner pilot Day 1 answer still required<br>
-        AIOS-17 changes the fresh Day 0 pilot card into a learner-facing scene chooser with three opening scenes and low-pressure quick replies. AIOS-12 (#179) remains open for real owner/self transcript evidence.
+        AIOS-18 owner-pilot skill contract aligned; real owner pilot Day 1 answer still required<br>
+        AIOS-18 aligns the Codex-facing owner-pilot skill and canonical pilot prompt contract with the AIOS-17 immersive first-card scene chooser. AIOS-12 (#179) remains open for real owner/self transcript evidence.
       </div>
     </header>
 
@@ -4311,16 +4346,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-13-GENERATED-MISSION-STORYBOARD</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/generated-mission-storyboard-smoke.mjs, docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md</span>
-              </div>
-              <h3>AIOS-13 generated mission storyboard 통과</h3>
-              <div class="card-row"><b>왜</b><p>Remotion-style storyboard가 asset deck 텍스트 카드에만 있으면 AI-native generated artifact 주장이 약하다. 독립 HTML artifact로 열리고 조작되어야 한다.</p></div>
-              <div class="card-row"><b>완료</b><p>storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck, learner report, personal cockpit이 최신 storyboard artifact를 링크한다.</p></div>
-              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, learner report linkage, personal cockpit linkage, product leak guards, and unsupported-claim guards.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-13-STORYBOARD-REPORT-COCKPIT-LINKAGE</strong>
                 <span>scripts/lib/english-learning-store.mjs, scripts/generated-mission-storyboard-smoke.mjs, docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md</span>
               </div>
@@ -4368,6 +4393,16 @@
               <div class="card-row"><b>왜</b><p>실제 pilot의 첫 질문이 평가처럼 느껴지거나 프로젝트/업무 전제에 고정되면 사용자가 답하고 싶어지지 않는다.</p></div>
               <div class="card-row"><b>완료</b><p>fresh Day 0 pilot card가 첫 장면 고르기, 세 가지 opening scene, 낮은 압박의 quick reply를 보여준다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot next-card smoke renders the card in Playwright and verifies three scene choices, quick replies, copy buttons, no project/work assumption, and no internal command leakage.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-18-OWNER-PILOT-SKILL-CONTRACT</strong>
+                <span>skills/owner-pilot/SKILL.md, docs/PILOT-PROMPTS.md, scripts/phase15-owner-pilot-skill-smoke.mjs, docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md</span>
+              </div>
+              <h3>AIOS-18 owner-pilot skill contract 정렬 통과</h3>
+              <div class="card-row"><b>왜</b><p>엔진은 첫 장면 선택으로 바뀌었지만 skill 문서가 예전 고정 첫 질문을 유지하면 Codex가 실제 pilot에서 낡은 흐름을 따를 수 있다.</p></div>
+              <div class="card-row"><b>완료</b><p>owner-pilot skill과 PILOT-PROMPTS가 `첫 장면 고르기`, 세 opening scene, 1/2/3 또는 quick reply 선택 저장 흐름을 설명한다.</p></div>
+              <div class="card-row"><b>검증</b><p>phase15 owner pilot skill smoke validates the scene-chooser contract and rejects stale fixed-start guidance; next-card smoke still verifies rendered scene choices.</p></div>
             </article>
         </div>
       </section>
@@ -4664,6 +4699,11 @@
               <td><strong>GATE-50</strong><span>Immersive first pilot start</span></td>
               <td><strong>Pass</strong><span>#220, phase15-owner-pilot-next-card-smoke, personal-learner-cockpit-active-pilot-smoke</span></td>
               <td>fresh Day 0 pilot-next card exposes three opening scene choices, low-pressure quick replies, and Playwright-rendered chooser UI without assuming project/work content or leaking internal commands; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-51</strong><span>Owner-pilot skill contract matches immersive start</span></td>
+              <td><strong>Pass</strong><span>#222, phase15-owner-pilot-skill-smoke, phase15-owner-pilot-next-card-smoke</span></td>
+              <td>owner-pilot skill and canonical prompt contract describe the generated first-card scene chooser, allow number/quick-reply/direct-sentence answers, and reject stale fixed-first-card guidance; real pilot completion remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -5046,6 +5086,10 @@
               <strong>docs/phase-15-evidence/AIOS-17-immersive-pilot-start.md</strong>
               <span>AIOS-17 immersive pilot start evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md">
+              <strong>docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md</strong>
+              <span>AIOS-18 owner-pilot skill contract evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5053,10 +5097,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-12 next-card quick replies</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates pilot-next returns and renders copyable baseline/day quick replies, including the Day 1 clarification option, without internal command, issue, PR, or audit leakage.</span></td>
-            </tr>
             <tr>
               <td>AIOS-12 quick-reply selection saving</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-reply-routing smoke validates pilot-reply resolves quick-1 and numeric quick-reply selections, persists the selected English answer, rejects invalid selections before saving, refreshes next-card artifacts, and writes the saved-reply card.</span></td>
@@ -5084,6 +5124,10 @@
             <tr>
               <td>AIOS-17 immersive first pilot card</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates the fresh baseline card starts with three opening scene choices, low-pressure quick replies, Playwright-rendered chooser UI, and no project/work premise or internal command leakage.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-18 owner-pilot skill contract alignment</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5129,7 +5173,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 124개 보기</summary>
+        <summary>완료 이력 125개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6372,10 +6416,20 @@
               <div class="card-row"><b>완료</b><p>asset-deck command와 practice deck refresh를 추가하고, learner report/cockpit에서 최신 deck을 연결했다.</p></div>
               <div class="card-row"><b>검증</b><p>`node scripts/generated-mission-asset-deck-smoke.mjs`가 deck render, asset cards, completion policy, report/cockpit linkage, leak guards를 검증한다.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-13-GENERATED-MISSION-STORYBOARD</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/english-learning-harness.mjs, scripts/generated-mission-storyboard-smoke.mjs, docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md</span>
+              </div>
+              <h3>AIOS-13 generated mission storyboard 통과</h3>
+              <div class="card-row"><b>왜</b><p>Remotion-style storyboard가 asset deck 텍스트 카드에만 있으면 AI-native generated artifact 주장이 약하다. 독립 HTML artifact로 열리고 조작되어야 한다.</p></div>
+              <div class="card-row"><b>완료</b><p>storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck, learner report, personal cockpit이 최신 storyboard artifact를 링크한다.</p></div>
+              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, learner report linkage, personal cockpit linkage, product leak guards, and unsupported-claim guards.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 118개 보기</summary>
+        <summary>전체 검증 119개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -6852,12 +6906,16 @@
               <td>AIOS-17 immersive first pilot card</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-next-card smoke validates the fresh baseline card starts with three opening scene choices, low-pressure quick replies, Playwright-rendered chooser UI, and no project/work premise or internal command leakage.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-18 owner-pilot skill contract alignment</td>
+              <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 115개 보기</summary>
+        <summary>전체 명령 116개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -7319,6 +7377,10 @@
             <div class="command">
               <span>Run AIOS-17 immersive pilot start smoke</span>
               <code>node scripts/phase15-owner-pilot-next-card-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-18 owner-pilot skill contract smoke</span>
+              <code>node scripts/phase15-owner-pilot-skill-smoke.mjs</code>
             </div>
         </div>
       </details>

@@ -29,14 +29,16 @@ When persistence is needed, find the local engine in this order:
 
 Use that engine yourself. Do not hand the command to the learner.
 
-Before asking the next learner-facing card, you may generate the local next-card artifact internally:
+Before asking the next learner-facing card, generate the local next-card artifact internally:
 
 ```bash
 node scripts/english-learning-harness.mjs pilot-next --json
 ```
 
 This refreshes the learner cockpit and writes a local `artifacts/pilot/pilot-next-card.html` card. Use it as a product-surface aid, but do not ask the learner to run the command.
-Prefer the returned `assistantPrompt.text` as the exact learner-facing prompt. It is Korean-first, asks for one English sentence, and avoids command/issue/audit language. If the learner chooses one of `quickReplies`, save it internally with `pilot-reply --quick-reply "<id-or-number>" --json` rather than asking them to retype the full sentence.
+Use the returned `assistantPrompt.text` as the default learner-facing prompt. It is Korean-first, asks for one English sentence, and avoids command/issue/audit language. If the fresh Day 0 card includes `scene_choices`, show the learner the choices in plain Korean and let them answer with a number or one English sentence.
+
+If the learner chooses one of `quickReplies`, save it internally with `pilot-reply --quick-reply "<id-or-number>" --json` rather than asking them to retype the full sentence.
 
 After the learner answers the current card, prefer the automatic reply router internally:
 
@@ -58,15 +60,21 @@ After saving, the router refreshes cockpit, the next local `pilot-next-card.html
 
 ### Day 0 Baseline
 
-Use `pilot-status --json` internally. If the pilot has no baseline, ask the five Day 0 mission cards one at a time.
+Use `pilot-next --json` internally. If the pilot has no baseline, start with the generated `첫 장면 고르기` card instead of hard-coding a project, repository, or workday question.
 
 Learner-facing opening:
 
 ```text
 오늘은 테스트가 아니라 현재 말하기 상태를 찍는 3분 스냅샷이에요.
-한 문장씩만 답하면 됩니다. 틀려도 그대로 좋은 데이터예요.
-첫 질문: 친구가 "오늘 뭐 했어?"라고 물었다고 생각하고, 오늘 실제로 한 일을 영어로 한 문장만 말해보세요.
+먼저 말하고 싶은 작은 장면을 하나 고르거나, 바로 영어 한 문장만 보내면 됩니다.
+틀린 문장도 그대로 좋은 기준점이에요.
+
+1. 일상 장면
+2. 작은 모험
+3. 편한 공간
 ```
+
+If the learner answers `1`, `2`, `3`, or a quick-reply id, persist that selected sentence through `pilot-reply --quick-reply`. If they type their own English sentence, persist it through `pilot-reply --say`.
 
 After each Day 0 answer, persist internally through the automatic router:
 
@@ -74,7 +82,7 @@ After each Day 0 answer, persist internally through the automatic router:
 node scripts/english-learning-harness.mjs pilot-reply --say "<answer>" --json
 ```
 
-The fifth captured card automatically commits the Day 0 baseline through the pilot engine. If the learner gives a comfort rating, include `--comfort-rating "<0-5>"` on the latest capture.
+After the first scene chooser answer, continue with the next generated Day 0 card from `pilot-next`/`learnerFacing.nextCard`. The fifth captured card automatically commits the Day 0 baseline through the pilot engine. If the learner gives a comfort rating, include `--comfort-rating "<0-5>"` on the latest capture.
 
 ### Daily Pilot Day
 
@@ -109,6 +117,7 @@ Then summarize:
 
 - Ask only one card at a time.
 - If a learner-facing next-card artifact exists, use it to keep the prompt short and concrete.
+- For a fresh Day 0 start, present the generated scene chooser and quick replies before asking for a free-form answer.
 - Avoid meta labels like "baseline", "rubric", "artifact bridge", or "product_journey_audit" in the learner prompt.
 - Do not expose `pilot-next`, `pilot-reply`, `pilot-capture`, `pilot-start`, `pilot-day`, or `pilot-finish` unless the user explicitly asks for maintainer/debug details.
 - If tool execution fails, continue the conversation and say durable saving was not confirmed.
