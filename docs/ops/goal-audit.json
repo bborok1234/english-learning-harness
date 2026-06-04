@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T02:37:34.373Z",
+  "generated_at": "2026-06-04T02:47:31.699Z",
   "surface": "engineering-governance",
   "objective": "Build the AI-Native English Learning Operating System on Codex for Korean learners with Speaking Skill OS, narrative missions, multimodal/generated artifacts, learner cockpit, journeys, reports, and adaptive governance.",
   "overall_status": "not_complete",
@@ -26,13 +26,24 @@
       "id": "BLOCK-UNSUPPORTED-LEARNING-CLAIMS",
       "title": "Learning outcome claims remain intentionally blocked",
       "status": "open",
-      "evidence": [
-        "narrative immersion improves fluency",
-        "engagement proves learning",
-        "generated worlds increase retention",
-        "child mode is ready",
-        "realtime voice adventure is supported"
-      ],
+      "evidence": {
+        "blocked_claims": [
+          "narrative immersion improves fluency",
+          "engagement proves learning",
+          "generated worlds increase retention",
+          "child mode is ready",
+          "realtime voice adventure is supported"
+        ],
+        "product_claim_guard_present": true,
+        "product_claim_guard_evidence": true,
+        "product_surfaces_checked": [
+          "README.md",
+          "README.en.md",
+          "docs/product/learner-cockpit-state.json",
+          "docs/product/learner-cockpit.html",
+          "docs/RESEARCH-BASIS.md"
+        ]
+      },
       "required_to_complete_goal": "Do not claim fluency, retention, realtime voice efficacy, or generated-media learning gains until real evidence supports the claim."
     }
   ],
