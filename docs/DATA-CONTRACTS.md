@@ -729,6 +729,8 @@ These varied missions are local pilot prompts, not evidence of outcome improveme
 
 The HTML is local-only run readiness evidence. It is not a learner outcome report and does not complete the real pilot.
 
+`pilot-handoff --json` writes `artifacts/pilot/pilot-handoff.json/html` as a redacted local continuity handoff when a pilot is resumed across turns or days. It must not save a new answer. It should include progress counts, consent status, next learner-facing prompt, quick replies, local next-card/cockpit links, and explicit redaction flags. It must not include transcript text, friction note text, issue/PR language, rubric internals, or `product_journey_audit` internals.
+
 `pilot-finish` must copy each day `pilot_mission` into `report.aios_artifacts.days[].pilot_mission`, copy each day `learner_coaching` into `report.aios_artifacts.days[].learner_coaching`, and count both `days_with_pilot_mission_metadata` and `days_with_learner_coaching` in `product_journey_audit`. The audit is invalid if completed days lack this metadata.
 
 ## Local Pilot Dashboard Overlay

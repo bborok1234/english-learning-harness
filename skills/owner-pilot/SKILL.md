@@ -38,6 +38,14 @@ node scripts/english-learning-harness.mjs pilot-run-sheet --json
 
 Use it to confirm the next prompt, save boundary, consent status, privacy rules, launch card, and cockpit links. It must not save a learner answer or mark consent by itself.
 
+If resuming a pilot across turns or days, generate the redacted local handoff internally:
+
+```bash
+node scripts/english-learning-harness.mjs pilot-handoff --json
+```
+
+Use it to see saved progress counts, the next learner-facing prompt, consent status, and local links without exposing transcript text or friction notes.
+
 Before asking the learner to answer the real pilot, generate the launch card internally:
 
 ```bash
