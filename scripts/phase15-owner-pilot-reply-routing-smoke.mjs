@@ -187,6 +187,8 @@ function main() {
   assert(dayOne.learnerFacing.nextPhrase, "daily learner-facing summary should expose next phrase");
   assert(dayOne.learnerFacing.nextFocus, "daily learner-facing summary should expose next focus");
   assert(dayOne.learnerFacing.nextCard.day === 2, "daily learner-facing summary should expose next card");
+  assert(dayOne.learnerFacing.frictionNoteCaptured === true, "explicit daily friction note should be marked captured");
+  assert(!dayOne.learnerFacing.frictionPrompt, "explicit daily friction note should not request a follow-up prompt");
   assert(!JSON.stringify(dayOne.learnerFacing).includes("pilot-capture"), "learner-facing summary leaked command text");
   assertReplyCard(dayOne, "자연스럽게 바꾸면");
   assert(read(dayOne.replyCardArtifact.htmlPath).includes(dayOne.learnerFacing.nextPhrase), "daily reply card should include next phrase");

@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-02T00:00:00+09:00",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-15 active pilot cockpit shows current card and quick replies; real owner pilot Day 1 answer still required",
-    "status": "AIOS-15 makes the active pilot easier to continue from the learner cockpit by linking the current pilot card, showing the learner-safe assistant prompt, and rendering quick reply choices with copy buttons. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
+    "stage": "AIOS-16 honest pilot friction mechanics; real owner pilot Day 1 answer still required",
+    "status": "AIOS-16 prevents pilot-reply from storing placeholder friction notes as real evidence and shows a learner-facing friction follow-up prompt when no note was captured. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner cockpit now supports the active owner/self pilot as a product surface: progress, current card, assistant prompt, quick reply choices, saved-reply card, and local evidence links are visible without exposing internal commands. Real pilot completion still requires actual learner answers over at least five practice days.",
+    "summary": "The owner/self pilot mechanics now preserve friction evidence honestly: explicit notes are counted, missing notes stay empty, and the saved-reply card prompts the learner for a short friction note instead of inventing one. Real pilot completion still requires actual learner answers over at least five practice days.",
     "nextGoal": "Run the actual AIOS-12 owner/self pilot: at least five real practice days with transcripts, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, and owner-pilot cards as local product surfaces. The personal cockpit now keeps ordinary learner actions in Korean Codex-prompt language and exposes active pilot current-card/quick-reply affordances. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, and honest saved-reply/friction follow-up surfaces as local product artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-14/AIOS-15 improve product-surface boundary and pilot-continuation mechanics only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
+    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-16 improves honest friction-note mechanics only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
   },
   "ssot": [
     {
@@ -571,6 +571,12 @@
       "path": "./phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md",
       "role": "AIOS-15 active pilot cockpit current-card and quick-reply evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-16-honest-pilot-friction.md",
+      "path": "./phase-15-evidence/AIOS-16-honest-pilot-friction.md",
+      "role": "AIOS-16 honest pilot friction evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -941,6 +947,13 @@
       "status": "Pass",
       "evidence": "#216, personal-learner-cockpit-active-pilot-smoke",
       "claim": "active pilot cockpit state/html link the current pilot next-card artifact, expose the learner-safe assistant prompt, and render quick reply choices with copy buttons without internal command leakage; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-49",
+      "label": "Honest pilot friction evidence",
+      "status": "Pass",
+      "evidence": "#218, phase15-owner-pilot-reply-card-render-smoke, phase15-owner-pilot-reply-routing-smoke",
+      "claim": "pilot-reply does not store placeholder friction notes; saved-reply cards show a learner-facing friction follow-up when no note was captured, while explicit friction notes still count; real pilot completion remains unclaimed"
     }
   ],
   "board": [
@@ -2572,6 +2585,19 @@
             "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
             "docs/phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md"
           ]
+        },
+        {
+          "id": "AIOS-16-HONEST-PILOT-FRICTION",
+          "title": "AIOS-16 honest pilot friction 통과",
+          "why": "real owner/self pilot audit에서 placeholder 문장이 실제 friction evidence처럼 카운트되면 방향 판단이 왜곡된다.",
+          "done": "pilot-reply no longer writes fake friction notes; reply-card state/html shows a short learner-facing follow-up prompt when no friction note was captured, and explicit notes still count.",
+          "verification": "phase15-owner-pilot-reply-card-render smoke verifies no fake note is stored and the follow-up prompt renders; phase15-owner-pilot-reply-routing smoke verifies explicit friction notes remain captured.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-reply-card-render-smoke.mjs",
+            "scripts/phase15-owner-pilot-reply-routing-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-16-honest-pilot-friction.md"
+          ]
         }
       ]
     },
@@ -3216,6 +3242,11 @@
       "detail": "personal-learner-cockpit-active-pilot smoke validates current pilot card artifact linkage, assistant prompt details, quick replies, copy buttons, saved reply link, and no internal command leakage; Playwright fixture render confirms the visible cockpit controls."
     },
     {
+      "name": "AIOS-16 honest pilot friction evidence",
+      "status": "Pass",
+      "detail": "phase15-owner-pilot-reply-card-render smoke verifies missing friction notes are not stored as placeholders and render a learner-facing follow-up prompt; reply-routing smoke verifies explicit friction notes still count."
+    },
+    {
       "name": "AIOS-12 redacted local pilot dashboard sync",
       "status": "Pass",
       "detail": "local-pilot-dashboard-sync smoke validates sync-local-pilot-dashboard writes redacted local pilot status and a local engineering dashboard without transcript or learner path leakage."
@@ -3272,6 +3303,10 @@
     }
   ],
   "commands": [
+    {
+      "label": "Run AIOS-16 honest friction smoke",
+      "command": "node scripts/phase15-owner-pilot-reply-card-render-smoke.mjs"
+    },
     {
       "label": "Run AIOS-15 active pilot cockpit smoke",
       "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
