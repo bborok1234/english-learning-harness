@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-26 cockpit links real pilot launch card; active AIOS goal remains not complete",
-    "status": "AIOS-26 exposes the real pilot launch/resume card from the learner cockpit so the next real answer can start from the daily product surface. #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-27 guards learner-facing product claims; active AIOS goal remains not complete",
+    "status": "AIOS-27 adds a repo-level learner-facing product claim guard across README, English README, learner cockpit state/html, and research basis. #179 real owner/self evidence and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is now discoverable from the active learner cockpit, so the cockpit can act as the daily start/resume surface before Codex asks for the next real answer.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, and learner-facing public/product surfaces now have a shared claim guard that keeps unsupported outcome claims blocked.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, and an engineering goal audit that checks GitHub issue tracker state. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, and a learner-facing product claim guard across public/product surfaces. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-26 is cockpit discovery mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-27 is product claim-governance evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -648,6 +648,12 @@
       "label": "docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md",
       "path": "./phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md",
       "role": "AIOS-26 cockpit pilot launch-card link evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-27-product-claim-guard.md",
+      "path": "./phase-15-evidence/AIOS-27-product-claim-guard.md",
+      "role": "AIOS-27 learner-facing product claim guard evidence",
       "kind": "source"
     }
   ],
@@ -2835,6 +2841,22 @@
             "scripts/personal-learner-cockpit-active-pilot-smoke.mjs",
             "docs/phase-15-evidence/AIOS-26-cockpit-pilot-launch-link.md"
           ]
+        },
+        {
+          "id": "AIOS-27-PRODUCT-CLAIM-GUARD",
+          "title": "AIOS-27 product claim guard 통과",
+          "why": "공개 README와 learner cockpit은 제품 표면이다. 실제 pilot evidence 전에는 fluency, retention, realtime voice, generated-media efficacy 같은 성과 주장이 섞이면 안 된다.",
+          "done": "README.md, README.en.md, learner cockpit state/html, RESEARCH-BASIS의 allowed design claim과 blocked outcome claim을 하나의 smoke가 검사한다.",
+          "verification": "product-claim-guard smoke validates required research-basis language, claim boundaries, and forbidden unsupported outcome claims across learner-facing product/public surfaces.",
+          "files": [
+            "scripts/product-claim-guard-smoke.mjs",
+            "README.md",
+            "README.en.md",
+            "docs/product/learner-cockpit-state.json",
+            "docs/product/learner-cockpit.html",
+            "docs/RESEARCH-BASIS.md",
+            "docs/phase-15-evidence/AIOS-27-product-claim-guard.md"
+          ]
         }
       ]
     },
@@ -3598,6 +3620,11 @@
       "name": "AIOS-26 cockpit pilot launch link",
       "status": "Pass",
       "detail": "personal-learner-cockpit-active-pilot smoke validates the active cockpit links pilot-launch-card.html/json while preserving next-card, quick-reply, copy-button, and reply-card checks."
+    },
+    {
+      "name": "AIOS-27 product claim guard",
+      "status": "Pass",
+      "detail": "product-claim-guard smoke validates README.md, README.en.md, learner cockpit state/html, and RESEARCH-BASIS keep allowed learning-design claims separate from blocked outcome claims."
     }
   ],
   "commands": [
@@ -4104,6 +4131,10 @@
     {
       "label": "Run AIOS-26 cockpit pilot launch link smoke",
       "command": "node scripts/personal-learner-cockpit-active-pilot-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-27 product claim guard smoke",
+      "command": "node scripts/product-claim-guard-smoke.mjs"
     }
   ]
 }

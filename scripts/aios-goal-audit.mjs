@@ -325,7 +325,18 @@ function buildAudit() {
       id: "BLOCK-UNSUPPORTED-LEARNING-CLAIMS",
       title: "Learning outcome claims remain intentionally blocked",
       status: "open",
-      evidence: opsState.project.blockedClaims ?? [],
+      evidence: {
+        blocked_claims: opsState.project.blockedClaims ?? [],
+        product_claim_guard_present: fileExists("scripts/product-claim-guard-smoke.mjs"),
+        product_claim_guard_evidence: fileExists("docs/phase-15-evidence/AIOS-27-product-claim-guard.md"),
+        product_surfaces_checked: [
+          "README.md",
+          "README.en.md",
+          "docs/product/learner-cockpit-state.json",
+          "docs/product/learner-cockpit.html",
+          "docs/RESEARCH-BASIS.md",
+        ],
+      },
       required_to_complete_goal:
         "Do not claim fluency, retention, realtime voice efficacy, or generated-media learning gains until real evidence supports the claim.",
     },
