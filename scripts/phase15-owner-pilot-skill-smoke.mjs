@@ -26,6 +26,8 @@ function main() {
     "pilot-turn",
     "Use `learnerTurn.say` as the only learner-facing prompt.",
     "Use `operatorOnly` only to decide how to save a numbered choice or direct English sentence after the learner answers.",
+    "pilot-evidence-gap",
+    "Use it to inspect required vs collected Day 0, daily, final, friction, local report, and direction-decision evidence counts.",
     "pilot-launch",
     "Use this as the safest start/resume surface.",
     "pilot-next",

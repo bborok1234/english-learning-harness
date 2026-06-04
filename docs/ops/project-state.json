@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-32 links the pilot turn packet from the active learner cockpit; active AIOS goal remains not complete",
-    "status": "AIOS-32 exposes the local Codex pilot turn packet from active cockpit state/html so the next real-pilot conversation turn can be resumed from the product surface. #179 real owner/self evidence and learning outcome claims remain unresolved.",
+    "stage": "AIOS-33 generates a redacted real-pilot evidence gap; active AIOS goal remains not complete",
+    "status": "AIOS-33 exposes required vs collected real-pilot evidence counts without transcript or friction text, so #179 can be resumed from concrete missing evidence. Real owner/self completion and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, and the active cockpit now links that turn packet as a continuation surface.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, the active cockpit links that turn packet as a continuation surface, and Codex can inspect a redacted evidence gap before making any completion claim.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-32 is active cockpit navigation evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-33 is redacted evidence-gap navigation only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -684,6 +684,12 @@
       "label": "docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md",
       "path": "./phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md",
       "role": "AIOS-32 active learner cockpit pilot turn packet link evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-33-pilot-evidence-gap.md",
+      "path": "./phase-15-evidence/AIOS-33-pilot-evidence-gap.md",
+      "role": "AIOS-33 redacted real-pilot evidence gap evidence",
       "kind": "source"
     }
   ],
@@ -2959,6 +2965,20 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-32-cockpit-pilot-turn-link.md"
           ]
+        },
+        {
+          "id": "AIOS-33-PILOT-EVIDENCE-GAP",
+          "title": "AIOS-33 redacted pilot evidence gap 통과",
+          "why": "실제 pilot blocker가 막연히 open으로만 보이면 다음 행동이 흐려진다. 원문 없이 남은 증거 수를 봐야 실제 실행을 이어갈 수 있다.",
+          "done": "pilot-evidence-gap이 Day 0, daily, final, friction, report, direction decision의 required/collected/remaining counts와 next safe prompt를 JSON/HTML로 만든다. 답변 저장은 하지 않는다.",
+          "verification": "phase15 owner pilot evidence gap smoke validates fresh/partial fixture counts, browser render, local links, no answer save, and no transcript/friction/internal-language leakage.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/phase15-owner-pilot-evidence-gap-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-33-pilot-evidence-gap.md"
+          ]
         }
       ]
     },
@@ -3752,6 +3772,11 @@
       "name": "AIOS-32 active cockpit pilot turn packet link",
       "status": "pass",
       "detail": "node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs verifies active cockpit state/html links the pilot turn packet without saving another answer or leaking internal language."
+    },
+    {
+      "name": "AIOS-33 redacted real-pilot evidence gap",
+      "status": "pass",
+      "detail": "node scripts/phase15-owner-pilot-evidence-gap-smoke.mjs verifies required/collected/remaining counts, no answer save, render, local links, and redaction boundary."
     }
   ],
   "commands": [
@@ -4282,6 +4307,10 @@
     {
       "label": "Run AIOS-32 cockpit pilot turn link smoke",
       "command": "node scripts/personal-learner-cockpit-pilot-turn-link-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-33 real-pilot evidence gap smoke",
+      "command": "node scripts/phase15-owner-pilot-evidence-gap-smoke.mjs"
     }
   ]
 }

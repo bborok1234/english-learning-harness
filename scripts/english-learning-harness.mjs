@@ -195,6 +195,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-run-sheet [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-handoff [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-turn [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-evidence-gap [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -2912,6 +2913,217 @@ function pilotTurn(options) {
   };
 }
 
+function pilotEvidenceGap(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  const stateExists = existsSync(paths.pilotState);
+  const state = readPilotState(paths, date);
+  const summary = pilotStatusSummary(state);
+  const turn = pilotTurn({ ...options, learnerRoot: paths.root, date });
+  const frictionNoteCount = state.days.filter((day) => day.friction_note).length;
+  const report = state.report ?? null;
+  const decision = report?.product_journey_audit?.decision ?? "";
+  const baselineCollected = summary.baselineReady ? 5 : summary.partial.baselineAnswers;
+  const finalCollected = summary.finalReady ? 5 : summary.partial.finalAnswers;
+  const evidence = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "redacted real-pilot evidence gap",
+    saved_answer: false,
+    redaction: {
+      transcript_text_included: false,
+      friction_note_text_included: false,
+      local_paths_public_safe: false,
+      rule: "Use counts and local links only. Do not share transcripts, friction note text, private notes, local paths, audio, or images publicly without explicit review.",
+    },
+    pilot: {
+      state_exists: stateExists,
+      status: summary.status,
+      baseline_ready: summary.baselineReady,
+      final_ready: summary.finalReady,
+      report_ready: summary.reportReady,
+    },
+    required_evidence: [
+      {
+        id: "day0_baseline",
+        label: "Day 0 baseline cards",
+        required: 5,
+        collected: Math.min(baselineCollected, 5),
+        remaining: Math.max(0, 5 - baselineCollected),
+        complete: baselineCollected >= 5,
+      },
+      {
+        id: "daily_sessions",
+        label: "Daily pilot sessions",
+        required: summary.minimumValidDailySessions,
+        collected: Math.min(summary.completedDailySessions, summary.minimumValidDailySessions),
+        remaining: Math.max(0, summary.minimumValidDailySessions - summary.completedDailySessions),
+        complete: summary.completedDailySessions >= summary.minimumValidDailySessions,
+      },
+      {
+        id: "final_sample",
+        label: "Final sample cards",
+        required: 5,
+        collected: Math.min(finalCollected, 5),
+        remaining: Math.max(0, 5 - finalCollected),
+        complete: finalCollected >= 5,
+      },
+      {
+        id: "friction_notes",
+        label: "Daily friction notes",
+        required: summary.minimumValidDailySessions,
+        collected: Math.min(frictionNoteCount, summary.minimumValidDailySessions),
+        remaining: Math.max(0, summary.minimumValidDailySessions - frictionNoteCount),
+        complete: frictionNoteCount >= summary.minimumValidDailySessions,
+      },
+      {
+        id: "local_report",
+        label: "Local learner report",
+        required: 1,
+        collected: summary.reportReady ? 1 : 0,
+        remaining: summary.reportReady ? 0 : 1,
+        complete: summary.reportReady,
+      },
+      {
+        id: "direction_decision",
+        label: "Direction decision",
+        required: 1,
+        collected: decision ? 1 : 0,
+        remaining: decision ? 0 : 1,
+        complete: Boolean(decision),
+      },
+    ],
+    next_safe_step: {
+      phase: turn.operatorOnly.phase,
+      day: turn.operatorOnly.day,
+      learner_prompt: turn.learnerTurn.say,
+      quick_replies: turn.learnerTurn.quick_replies,
+      save_boundary: turn.operatorOnly.save_policy.after_learner_answer,
+    },
+    local_surfaces: {
+      turn_packet: {
+        html: relativeToRoot(paths, turn.htmlPath),
+        url: turn.url,
+      },
+      next_card: turn.localSurfaces.next_card,
+      handoff: turn.localSurfaces.handoff,
+      cockpit: turn.localSurfaces.cockpit,
+    },
+    completion_policy:
+      "All required evidence must be collected from the real owner/self pilot before making a completion or learning-outcome claim.",
+    claim_boundary:
+      "This evidence gap summarizes local pilot counts only. It does not include transcripts, save a new answer, prove learning outcomes, or complete the real pilot.",
+  };
+  evidence.overall = {
+    complete: evidence.required_evidence.every((item) => item.complete),
+    remaining_items: evidence.required_evidence.filter((item) => !item.complete).map((item) => item.id),
+  };
+
+  const jsonPath = resolve(paths.pilotDir, "pilot-evidence-gap.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-evidence-gap.html");
+  writeFileSync(jsonPath, `${JSON.stringify(evidence, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Pilot Evidence Gap</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --warm: #fff3da; --soft: #eef5f0; --miss: #fff0ed; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(1040px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(30px, 5vw, 48px); line-height: 1.1; letter-spacing: 0; }
+    h2 { margin: 0 0 10px; font-size: 17px; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+    .metric { border: 1px solid var(--line); border-radius: 8px; padding: 13px; background: #fbfcfa; }
+    .metric.missing { background: var(--miss); }
+    .metric.done { background: var(--soft); }
+    .metric span { display: block; color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 2px; font-size: 24px; overflow-wrap: anywhere; }
+    .block { margin-top: 16px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: #fbfcfa; }
+    .prompt { background: var(--warm); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 18px; font-weight: 720; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 6px 0; overflow-wrap: anywhere; }
+    .links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .links a { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; font-weight: 720; }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 720px) { .grid, .links { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Redacted Pilot Gap</p>
+      <h1>실제 pilot 증거 남은 것</h1>
+      <p class="subtle">원문 답변과 마찰 메모 없이, 완료 판단에 필요한 증거 수만 보여줍니다.</p>
+      <div class="grid" aria-label="required evidence">
+        ${evidence.required_evidence
+          .map(
+            (item) => `<article class="metric ${item.complete ? "done" : "missing"}">
+          <span>${escapeHtml(item.label)}</span>
+          <strong>${escapeHtml(item.collected)} / ${escapeHtml(item.required)}</strong>
+          <span>남음 ${escapeHtml(item.remaining)}</span>
+        </article>`,
+          )
+          .join("")}
+      </div>
+      <section class="block prompt" aria-label="next safe prompt">${escapeHtml(evidence.next_safe_step.learner_prompt)}</section>
+      ${
+        evidence.next_safe_step.quick_replies.length
+          ? `<section class="block" aria-label="quick replies">
+        <h2>막히면 고를 수 있는 답변 후보</h2>
+        <ul>${evidence.next_safe_step.quick_replies
+          .map((reply) => `<li>${escapeHtml(reply.number)}. ${escapeHtml(reply.text)} <span class="subtle">(${escapeHtml(reply.note)})</span></li>`)
+          .join("")}</ul>
+      </section>`
+          : ""
+      }
+      <section class="block" aria-label="redaction rule">
+        <h2>공유 경계</h2>
+        <p>${escapeHtml(evidence.redaction.rule)}</p>
+      </section>
+      <section class="block" aria-label="local links">
+        <h2>이어갈 로컬 표면</h2>
+        <div class="links">
+          <a href="${escapeHtml(relative(dirname(htmlPath), turn.htmlPath))}">Codex 진행 카드</a>
+          <a href="${escapeHtml(evidence.local_surfaces.next_card.html ? relative(dirname(htmlPath), resolve(paths.root, evidence.local_surfaces.next_card.html)) : "pilot-next-card.html")}">다음 카드</a>
+          <a href="${escapeHtml(relative(dirname(htmlPath), resolve(paths.root, evidence.local_surfaces.handoff.html)))}">이어받기 handoff</a>
+          <a href="${escapeHtml(evidence.local_surfaces.cockpit.html ? relative(dirname(htmlPath), resolve(paths.root, evidence.local_surfaces.cockpit.html)) : "../../cockpit.html")}">Cockpit</a>
+        </div>
+      </section>
+    </section>
+    <footer>${escapeHtml(evidence.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    status: "pass",
+    action: "pilot-evidence-gap",
+    learnerRoot: paths.root,
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    savedAnswer: false,
+    redaction: evidence.redaction,
+    pilot: evidence.pilot,
+    requiredEvidence: evidence.required_evidence,
+    overall: evidence.overall,
+    nextSafeStep: evidence.next_safe_step,
+    localSurfaces: evidence.local_surfaces,
+    claimBoundary: evidence.claim_boundary,
+  };
+}
+
 function pilotDay(options) {
   const date = options.date || new Date();
   const paths = pilotPaths(options.learnerRoot);
@@ -3746,6 +3958,10 @@ function run() {
   }
   if (command === "pilot-turn") {
     output(pilotTurn(options), options.json);
+    return;
+  }
+  if (command === "pilot-evidence-gap") {
+    output(pilotEvidenceGap(options), options.json);
     return;
   }
   if (command === "pilot-next") {
