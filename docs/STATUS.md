@@ -107,6 +107,7 @@ What is complete:
 - AIOS-15 active pilot cockpit replies are implemented for #216. The cockpit now links the current pilot card, shows the learner-safe assistant prompt, and renders quick reply choices with copy buttons.
 - AIOS-16 honest pilot friction mechanics are implemented for #218. `pilot-reply` no longer saves placeholder friction notes, and saved-reply cards ask a short learner-facing friction follow-up when no note was captured.
 - AIOS-17 immersive pilot start is implemented for #220. The fresh Day 0 pilot card now starts with a learner-facing scene chooser and low-pressure quick replies instead of assuming a project/work premise.
+- AIOS-18 owner-pilot skill contract alignment is implemented for #222. The Codex-facing owner-pilot skill and canonical pilot prompt contract now describe the same `첫 장면 고르기` start path as the engine.
 
 What is not started:
 - Real user validation.

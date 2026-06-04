@@ -643,6 +643,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #216 | AIOS-15: Expose current pilot card and quick replies in learner cockpit | continue |
 | #218 | AIOS-16: Do not store fake friction notes for pilot replies | continue |
 | #220 | AIOS-17: Make the first pilot card an immersive scene chooser | continue |
+| #222 | AIOS-18: Align owner-pilot skill contract with immersive first-card start | continue |
 
 #179 planned evidence should show:
 
@@ -694,5 +695,9 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `pilot-next-card.html/json` and the personal cockpit active pilot state can expose opening scene choices while keeping actual answer persistence separate.
 - `scripts/phase15-owner-pilot-next-card-smoke.mjs` now renders the first pilot card in Playwright and verifies three scene choices, quick replies, copy buttons, and no internal command leakage.
 - `docs/phase-15-evidence/AIOS-17-immersive-pilot-start.md` records the immersive pilot start evidence boundary.
+- `skills/owner-pilot/SKILL.md` now tells Codex to begin a fresh Day 0 pilot from the generated `첫 장면 고르기` card and accept `1`, `2`, `3`, quick-reply ids, or a direct English sentence without exposing engine commands.
+- `docs/PILOT-PROMPTS.md` now matches the immersive first-card contract instead of documenting the old fixed "오늘 뭐 했어?" start.
+- `scripts/phase15-owner-pilot-skill-smoke.mjs` verifies the owner-pilot skill and prompt contract include the scene chooser and fail on stale fixed-start guidance.
+- `docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md` records the Codex-facing contract alignment boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
