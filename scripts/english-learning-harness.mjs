@@ -788,6 +788,8 @@ function writePracticeReplyCard({ paths, date, startCard, reply, practiceResult 
     mission: {
       id: practiceResult.mission.id,
       title: practiceResult.mission.title,
+      target_skill: practiceResult.mission.targetSkill,
+      scene_preset: practiceResult.mission.scenePreset,
       html: relative(paths.root, practiceResult.mission.htmlPath),
     },
     scene: {
@@ -887,6 +889,7 @@ function practiceReply(options) {
     learnerRoot: paths.root,
     date,
     scenePreset: card.mission?.scene_preset || options.scenePreset,
+    preserveCurrentMission: true,
     input: [reply.answer],
     quickReply: undefined,
   });
@@ -915,7 +918,9 @@ function practice(options) {
   const paths = ensureLearnerStore(options.learnerRoot);
   const turns = transcriptInputs(options);
   const hasExplicitInput = (options.input?.length ?? 0) > 0 || Boolean(options.transcript);
-  const diagnosis = !nextSpeakingBacklogItem(paths.root) && hasExplicitInput
+  const shouldDiagnoseBeforeMission =
+    !options.preserveCurrentMission && !nextSpeakingBacklogItem(paths.root) && hasExplicitInput;
+  const diagnosis = shouldDiagnoseBeforeMission
     ? diagnoseSpeakingSample(paths.root, turns, date)
     : null;
   const missionResult = writeGeneratedDailyMission(paths.root, date, {
@@ -961,6 +966,8 @@ function practice(options) {
     mission: {
       id: missionResult.state.mission_id,
       title: missionResult.state.learner_visible_scene.title,
+      targetSkill: missionResult.state.target_skill,
+      scenePreset: missionResult.state.scene_preset,
       htmlPath: missionResult.missionHtmlPath,
       url: missionResult.missionUrl,
     },

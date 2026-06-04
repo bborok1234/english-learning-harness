@@ -139,12 +139,34 @@ async function main() {
   assert(existsSync(routed.cockpit.htmlPath), "practice reply should refresh cockpit HTML");
   assert(routed.scene.title.includes("scene"), "practice reply should write generated scene");
   assert(routed.mission.title === "The Cafe Word Gap", "practice reply should preserve the start-card scene preset");
+  assert(routed.mission.id === start.mission.id, "practice reply should preserve the start-card mission id");
+  assert(
+    routed.mission.targetSkill === start.mission.target_skill,
+    "practice reply should preserve the start-card target skill",
+  );
+  assert(
+    routed.mission.scenePreset === start.mission.scene_preset,
+    "practice reply should preserve the start-card scene preset id",
+  );
   assertNoInternalLeak(JSON.stringify(routed.learnerFacing), "learner-facing practice reply summary");
 
   const replyCard = readJson(routed.replyCardPath);
   assert(replyCard.saved === true, "reply card should mark saved");
   assert(replyCard.reply.source === "quick_reply", "reply card should preserve quick reply source");
   assert(replyCard.reply.answer === quickReplyText, "reply card should preserve saved answer");
+  assert(replyCard.mission.id === start.mission.id, "reply card should preserve the start-card mission id");
+  assert(
+    replyCard.mission.target_skill === start.mission.target_skill,
+    "reply card should preserve the start-card target skill",
+  );
+  assert(
+    replyCard.mission.scene_preset === start.mission.scene_preset,
+    "reply card should preserve the start-card scene preset id",
+  );
+  assert(
+    replyCard.scene.id.endsWith(`-${start.mission.target_skill}`),
+    "reply card scene should stay attached to the start-card target skill",
+  );
   assert(replyCard.coaching.next_phrase, "reply card should include next phrase");
   assert(replyCard.cockpit.html === "cockpit.html", "reply card should link cockpit");
   assert(replyCard.claim_boundary.includes("does not prove learning outcomes"), "reply card should keep claim boundary");
@@ -163,7 +185,7 @@ async function main() {
   assertNoInternalLeak(rendered.text, "rendered practice reply card");
 
   setupLearner(freeformRoot);
-  generateStart(freeformRoot);
+  const freeformStart = generateStart(freeformRoot);
   const freeform = runJson([
     "scripts/english-learning-harness.mjs",
     "practice-reply",
@@ -177,6 +199,11 @@ async function main() {
   ]);
   assert(freeform.savedFrom === "freeform", "freeform practice reply should record freeform source");
   assert(freeform.savedAnswer.includes("cold coffee"), "freeform practice reply should save learner answer");
+  assert(freeform.mission.id === freeformStart.mission.id, "freeform practice reply should preserve start-card mission id");
+  assert(
+    freeform.mission.targetSkill === freeformStart.mission.target_skill,
+    "freeform practice reply should preserve start-card target skill",
+  );
 
   setupLearner(invalidRoot);
   generateStart(invalidRoot);
@@ -210,7 +237,7 @@ async function main() {
     JSON.stringify(
       {
         status: "pass",
-        issue: "AIOS-21",
+        issue: "AIOS-22",
         learnerRoot,
         replyCardHtmlPath: routed.replyCardHtmlPath,
         quickReplySaved: routed.savedAnswer,
@@ -231,7 +258,7 @@ try {
     JSON.stringify(
       {
         status: "fail",
-        issue: "AIOS-21",
+        issue: "AIOS-22",
         error: error.message,
       },
       null,
