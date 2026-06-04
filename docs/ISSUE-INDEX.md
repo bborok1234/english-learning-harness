@@ -660,6 +660,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #250 | AIOS-32: Link pilot turn packet from active learner cockpit | continue |
 | #252 | AIOS-33: Generate redacted real-pilot evidence gap | continue |
 | #254 | AIOS-34: Link pilot evidence gap from active learner cockpit | continue |
+| #256 | AIOS-35: Attach pilot friction note after saved daily answer | continue |
 
 #179 planned evidence should show:
 
@@ -767,5 +768,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - Active learner cockpit state/html now links `artifacts/pilot/pilot-evidence-gap.json/html` as a learner-safe journey-check surface when the local gap exists.
 - `scripts/personal-learner-cockpit-pilot-evidence-gap-link-smoke.mjs` verifies evidence-gap linkage, browser-rendered cockpit visibility, no extra answer save, preserved launch/turn/next/reply links, and no command/issue/PR/rubric/audit leakage.
 - `docs/phase-15-evidence/AIOS-34-cockpit-pilot-evidence-gap-link.md` records the active cockpit evidence-gap link boundary.
+- `pilot-friction` now attaches a short local friction note to an existing completed daily pilot record without creating a new answer, duplicating a session, or exposing the note in learner-facing confirmation surfaces.
+- `scripts/phase15-owner-pilot-friction-attach-smoke.mjs` verifies post-answer friction attach, unchanged session count/id, evidence-gap count refresh, cockpit friction-card linkage, browser-rendered confirmation, and no friction/internal-language leakage.
+- `docs/phase-15-evidence/AIOS-35-pilot-friction-attach.md` records the post-answer friction attach evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

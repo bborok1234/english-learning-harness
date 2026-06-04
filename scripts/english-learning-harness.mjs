@@ -197,6 +197,7 @@ function helpText() {
     "  node scripts/english-learning-harness.mjs pilot-turn [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-evidence-gap [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-next [--learner-root DIR] [--date ISO] [--json]",
+    "  node scripts/english-learning-harness.mjs pilot-friction [--day N] [--friction-note TEXT|--say TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-reply [--say TEXT|--quick-reply INDEX_OR_ID] [--friction-note TEXT] [--comfort-rating 0-5] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-capture [--phase baseline|day|final] [--card-id ID] [--say TEXT] [--comfort-rating 0-5] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
     "  node scripts/english-learning-harness.mjs pilot-day [--day 1-7] [--say TEXT ...] [--friction-note TEXT] [--learner-root DIR] [--date ISO] [--json]",
@@ -1875,6 +1876,163 @@ function pilotReply(options) {
     nextCardArtifact,
     replyCardArtifact,
     learnerFacing,
+    claimBoundary,
+  };
+}
+
+function pilotFrictionCardArtifact({ paths, date, day, evidenceGap, cockpit, claimBoundary }) {
+  const artifact = {
+    schema_version: 1,
+    generated_at: date.toISOString(),
+    surface: "learner-facing pilot friction confirmation",
+    saved_answer: false,
+    day,
+    friction_note_captured: true,
+    learner_message: "짧은 마찰 메모를 저장했습니다. 답변 원문은 바꾸지 않았고, 오늘의 연습 기록에만 연결했습니다.",
+    next_step: evidenceGap.nextSafeStep?.learner_prompt ?? "",
+    links: {
+      evidence_gap: {
+        html: evidenceGap.localSurfaces?.evidence_gap?.html ?? "artifacts/pilot/pilot-evidence-gap.html",
+        url: evidenceGap.url,
+      },
+      cockpit: {
+        html: cockpit?.htmlPath ? relativeToRoot(paths, cockpit.htmlPath) : "cockpit.html",
+        url: cockpit?.url ?? "",
+      },
+    },
+    claim_boundary: claimBoundary,
+  };
+  const jsonPath = resolve(paths.pilotDir, "pilot-friction-card.json");
+  const htmlPath = resolve(paths.pilotDir, "pilot-friction-card.html");
+  writeFileSync(jsonPath, `${JSON.stringify(artifact, null, 2)}\n`);
+  writeFileSync(
+    htmlPath,
+    `<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pilot Friction Saved</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #647067; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --accent: #2f7d55; --soft: #eef5f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(760px, calc(100% - 28px)); margin: 0 auto; padding: 34px 0; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+    .eyebrow { color: var(--accent); font-weight: 760; font-size: 13px; letter-spacing: 0; }
+    h1 { margin: 8px 0 10px; font-size: clamp(30px, 5vw, 44px); line-height: 1.12; letter-spacing: 0; }
+    p { margin: 0; }
+    .subtle { color: var(--muted); }
+    .confirm { margin-top: 18px; padding: 16px; border-radius: 8px; background: var(--soft); font-size: 19px; font-weight: 720; }
+    .links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+    .links a { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: inherit; text-decoration: none; font-weight: 720; }
+    footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 640px) { .links { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <p class="eyebrow">English Learning Harness · Pilot</p>
+      <h1>마찰 메모 저장됨</h1>
+      <p class="subtle">Day ${escapeHtml(day)} 기록에 짧은 마찰 메모를 연결했습니다.</p>
+      <p class="confirm">${escapeHtml(artifact.learner_message)}</p>
+      <div class="links">
+        <a href="${escapeHtml(relative(dirname(htmlPath), evidenceGap.htmlPath))}">남은 연습 증거 보기</a>
+        <a href="${escapeHtml(cockpit?.htmlPath ? relative(dirname(htmlPath), cockpit.htmlPath) : "../../cockpit.html")}">Cockpit 열기</a>
+      </div>
+    </section>
+    <footer>${escapeHtml(artifact.claim_boundary)}</footer>
+  </main>
+</body>
+</html>
+`,
+    "utf8",
+  );
+  return {
+    action: "pilot-friction-card",
+    jsonPath,
+    htmlPath,
+    url: pathToFileURL(htmlPath).href,
+    artifact,
+  };
+}
+
+function pilotFriction(options) {
+  const date = options.date || new Date();
+  const paths = pilotPaths(options.learnerRoot);
+  let state = readPilotState(paths, date);
+  const noteInputs = [...options.input].filter(Boolean);
+  if (options.transcript) {
+    noteInputs.push(
+      ...readFileSync(options.transcript, "utf8")
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean),
+    );
+  }
+  const note = (options.frictionNote || noteInputs[0] || "").trim();
+  if (!note) {
+    throw new Error("pilot-friction requires --friction-note TEXT or --say TEXT.");
+  }
+  const completedDays = (state.days ?? []).filter((day) => day.status === "complete");
+  if (!completedDays.length) {
+    throw new Error("pilot-friction requires at least one completed daily pilot record.");
+  }
+  const targetDayNumber = options.day ?? completedDays.at(-1).day;
+  const targetDay = completedDays.find((day) => day.day === targetDayNumber);
+  if (!targetDay) {
+    throw new Error(`pilot-friction could not find completed daily pilot day ${targetDayNumber}.`);
+  }
+  const previousFrictionCaptured = Boolean(targetDay.friction_note);
+  state = writePilotState(
+    paths,
+    {
+      ...state,
+      days: state.days.map((day) => (day.day === targetDayNumber ? { ...day, friction_note: note } : day)),
+      partial: {
+        ...state.partial,
+        days: (state.partial?.days ?? []).map((day) =>
+          day.day === targetDayNumber ? { ...day, friction_note: note } : day,
+        ),
+      },
+    },
+    date,
+  );
+  const updatedDay = state.days.find((day) => day.day === targetDayNumber);
+  const evidenceGap = pilotEvidenceGap({ ...options, learnerRoot: paths.root, date });
+  const claimBoundary =
+    "This attaches a local friction note to an existing pilot day. It does not create a new learner answer, prove learning outcomes, or complete the real pilot.";
+  const cockpitLink = {
+    htmlPath: resolve(paths.root, "cockpit.html"),
+    url: pathToFileURL(resolve(paths.root, "cockpit.html")).href,
+  };
+  const frictionCard = pilotFrictionCardArtifact({
+    paths,
+    date,
+    day: targetDayNumber,
+    evidenceGap,
+    cockpit: cockpitLink,
+    claimBoundary,
+  });
+  const cockpitSnapshot = pilotCockpitRefresh(paths, date);
+  return {
+    status: "pass",
+    action: "pilot-friction",
+    learnerRoot: paths.root,
+    savedAnswer: false,
+    day: targetDayNumber,
+    previousFrictionCaptured,
+    frictionNoteCaptured: Boolean(updatedDay?.friction_note),
+    dailySessionCount: state.days.filter((day) => day.status === "complete").length,
+    evidenceGap,
+    cockpit: cockpitSnapshot,
+    frictionCard,
+    learnerFacing: {
+      message: "마찰 메모를 저장했습니다. 답변 원문은 바꾸지 않았습니다.",
+      evidenceGapUrl: evidenceGap.url,
+      cockpitUrl: cockpitSnapshot.url,
+    },
     claimBoundary,
   };
 }
@@ -3966,6 +4124,10 @@ function run() {
   }
   if (command === "pilot-next") {
     output(pilotNext(options), options.json);
+    return;
+  }
+  if (command === "pilot-friction") {
+    output(pilotFriction(options), options.json);
     return;
   }
   if (command === "pilot-reply") {

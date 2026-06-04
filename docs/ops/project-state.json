@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-34 links the redacted pilot evidence gap from the active learner cockpit; active AIOS goal remains not complete",
-    "status": "AIOS-34 exposes the redacted real-pilot evidence gap from active cockpit state/html so the remaining #179 evidence can be checked from the product return surface. Real owner/self completion and learning outcome claims remain unresolved.",
+    "stage": "AIOS-35 attaches post-answer pilot friction notes; active AIOS goal remains not complete",
+    "status": "AIOS-35 lets Codex attach a short friction note after a daily pilot answer has already been saved, without duplicating sessions or exposing the note in learner-facing confirmation surfaces. Real owner/self completion and learning outcome claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, the active cockpit links that turn packet as a continuation surface, Codex can inspect a redacted evidence gap before making any completion claim, and the active cockpit now links that gap as a journey-check surface.",
+    "summary": "The learner-facing daily loop has mission integrity and deferred diagnosis. The real pilot launch card is discoverable from the active learner cockpit, learner-facing public/product surfaces have a shared claim guard, pilot answer persistence records local-only consent at first save, Codex can open a local run sheet before saving a real answer, Codex can resume from a redacted local handoff without transcript leakage, Codex can prepare the exact next learner-facing pilot turn without exposing operator policy, the active cockpit links that turn packet as a continuation surface, Codex can inspect a redacted evidence gap before making any completion claim, the active cockpit links that gap as a journey-check surface, and Codex can attach post-answer friction notes without creating another learner answer.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready real pilot launch card discoverable from cockpit, a local real-pilot run sheet, a redacted local real-pilot continuity handoff, a Codex operator pilot turn packet linked from the active learner cockpit, a redacted real-pilot evidence gap linked from the active learner cockpit, post-answer pilot friction attachment, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity and deferred future diagnosis, PR-body protected-issue guardrails, an engineering goal audit that checks GitHub issue tracker state, a learner-facing product claim guard across public/product surfaces, and first-save local-only pilot consent metadata. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-34 is active cockpit navigation evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-35 is post-answer friction evidence mechanics only. It does not save a new real learner answer, prove engagement, prove real-world speaking improvement, resolve blocked outcome claims, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -696,6 +696,12 @@
       "label": "docs/phase-15-evidence/AIOS-34-cockpit-pilot-evidence-gap-link.md",
       "path": "./phase-15-evidence/AIOS-34-cockpit-pilot-evidence-gap-link.md",
       "role": "AIOS-34 active learner cockpit pilot evidence gap link evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-35-pilot-friction-attach.md",
+      "path": "./phase-15-evidence/AIOS-35-pilot-friction-attach.md",
+      "role": "AIOS-35 post-answer pilot friction attach evidence",
       "kind": "source"
     }
   ],
@@ -2999,6 +3005,21 @@
             "docs/DATA-CONTRACTS.md",
             "docs/phase-15-evidence/AIOS-34-cockpit-pilot-evidence-gap-link.md"
           ]
+        },
+        {
+          "id": "AIOS-35-PILOT-FRICTION-ATTACH",
+          "title": "AIOS-35 post-answer pilot friction attach 통과",
+          "why": "실제 pilot에서는 영어 답변 뒤에 마찰 메모가 따로 온다. 이 메모를 붙일 수 없으면 #179 friction evidence가 빈칸으로 남기 쉽다.",
+          "done": "pilot-friction이 기존 completed daily record에 friction_note만 붙이고, 세션/답변을 중복하지 않으며, evidence gap/cockpit/friction confirmation card를 갱신한다.",
+          "verification": "phase15 owner pilot friction attach smoke validates unchanged session count/id, local state update, redacted surfaces, cockpit friction-card link, and browser-rendered confirmation.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/lib/english-learning-store.mjs",
+            "scripts/phase15-owner-pilot-friction-attach-smoke.mjs",
+            "skills/owner-pilot/SKILL.md",
+            "docs/DATA-CONTRACTS.md",
+            "docs/phase-15-evidence/AIOS-35-pilot-friction-attach.md"
+          ]
         }
       ]
     },
@@ -3802,6 +3823,11 @@
       "name": "AIOS-34 active cockpit pilot evidence gap link",
       "status": "pass",
       "detail": "node scripts/personal-learner-cockpit-pilot-evidence-gap-link-smoke.mjs verifies active cockpit state/html links the pilot evidence gap without saving another answer or leaking internal language."
+    },
+    {
+      "name": "AIOS-35 post-answer pilot friction attach",
+      "status": "pass",
+      "detail": "node scripts/phase15-owner-pilot-friction-attach-smoke.mjs verifies post-answer friction attach without new answer/session duplication and without friction text leakage in learner-facing surfaces."
     }
   ],
   "commands": [
@@ -4340,6 +4366,10 @@
     {
       "label": "Run AIOS-34 cockpit pilot evidence gap link smoke",
       "command": "node scripts/personal-learner-cockpit-pilot-evidence-gap-link-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-35 post-answer pilot friction attach smoke",
+      "command": "node scripts/phase15-owner-pilot-friction-attach-smoke.mjs"
     }
   ]
 }

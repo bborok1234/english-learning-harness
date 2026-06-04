@@ -3870,12 +3870,22 @@ function readActivePilotState(paths) {
   const nextCardState = nextCardArtifact ? JSON.parse(readFileSync(nextCardJsonPath, "utf8")) : null;
   const replyCardJsonPath = resolve(paths.root, "artifacts/pilot/pilot-reply-card.json");
   const replyCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-reply-card.html");
+  const frictionCardJsonPath = resolve(paths.root, "artifacts/pilot/pilot-friction-card.json");
+  const frictionCardHtmlPath = resolve(paths.root, "artifacts/pilot/pilot-friction-card.html");
   const latestReplyCard =
     existsSync(replyCardJsonPath) && existsSync(replyCardHtmlPath)
       ? {
           json: relative(paths.root, replyCardJsonPath),
           html: relative(paths.root, replyCardHtmlPath),
           url: `file://${replyCardHtmlPath}`,
+        }
+      : null;
+  const latestFrictionCard =
+    existsSync(frictionCardJsonPath) && existsSync(frictionCardHtmlPath)
+      ? {
+          json: relative(paths.root, frictionCardJsonPath),
+          html: relative(paths.root, frictionCardHtmlPath),
+          url: `file://${frictionCardHtmlPath}`,
         }
       : null;
   const cards = pilotCards();
@@ -3941,6 +3951,7 @@ function readActivePilotState(paths) {
       note: reply.note,
     })),
     latest_reply_card: latestReplyCard,
+    latest_friction_card: latestFrictionCard,
     state_file: relative(paths.root, pilotStatePath),
     claim_boundary:
       "Active pilot status shows local owner/self pilot progress only. It does not prove learning outcomes.",
@@ -4375,6 +4386,11 @@ function personalLearnerCockpitHtml(state) {
           ${
             state.active_pilot.latest_reply_card
               ? `<p class="subtle">방금 저장된 답변 카드: <a href="${escapeHtml(state.active_pilot.latest_reply_card.url)}">${escapeHtml(state.active_pilot.latest_reply_card.html)}</a></p>`
+              : ""
+          }
+          ${
+            state.active_pilot.latest_friction_card
+              ? `<p class="subtle">최근 마찰 메모 카드: <a href="${escapeHtml(state.active_pilot.latest_friction_card.url)}">${escapeHtml(state.active_pilot.latest_friction_card.html)}</a></p>`
               : ""
           }
           <p class="subtle">${escapeHtml(state.active_pilot.claim_boundary)}</p>

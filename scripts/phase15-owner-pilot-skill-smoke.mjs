@@ -33,6 +33,8 @@ function main() {
     "pilot-next",
     "pilot-reply",
     "Do not ask the learner to choose a phase, card id, or day number.",
+    "pilot-friction",
+    "It must not create another learner answer, duplicate a daily session, or expose the friction note text in learner-facing confirmation surfaces.",
     "local next-card artifact",
     "첫 장면 고르기",
     "scene_choices",
