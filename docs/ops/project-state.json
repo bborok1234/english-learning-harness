@@ -3,10 +3,10 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-21 daily practice reply routing added; active AIOS goal remains not complete",
-    "status": "AIOS-21 connects ordinary daily practice quick replies to persistence through practice-reply. Codex can now show a daily start card, accept a number or direct sentence, save through the practice flow, and show a saved-reply card, while #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-22 daily reply mission integrity guard added; active AIOS goal remains not complete",
+    "status": "AIOS-22 keeps daily practice reply persistence attached to the same start-card mission the learner answered. Codex can show a daily start card, accept a number or direct sentence, save through the practice flow, and preserve the mission id, target skill, scene preset, and scene attachment, while #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing daily loop now has both sides of the interaction: practice-next creates a concrete start card before the answer, and practice-reply saves the selected quick reply or direct sentence afterward. This reduces daily-session friction without pretending a real session occurred.",
+    "summary": "The learner-facing daily loop now has both sides of the interaction plus an integrity guard: practice-next creates a concrete start card before the answer, and practice-reply saves the selected quick reply or direct sentence afterward without silently retargeting the current mission.",
     "nextGoal": "Use practice-next/practice-reply and owner-pilot reply flow to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
@@ -15,7 +15,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, daily practice reply routing, and an engineering goal audit as local artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, daily practice reply routing with start-card mission integrity, and an engineering goal audit as local artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -23,7 +23,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-21 is daily reply routing mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
+    "claimBoundary": "AIOS-22 is daily reply routing mission-integrity mechanics evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -618,6 +618,12 @@
       "label": "docs/phase-15-evidence/AIOS-21-daily-practice-reply-routing.md",
       "path": "./phase-15-evidence/AIOS-21-daily-practice-reply-routing.md",
       "role": "AIOS-21 daily practice reply-routing evidence",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-22-preserve-practice-start-mission.md",
+      "path": "./phase-15-evidence/AIOS-22-preserve-practice-start-mission.md",
+      "role": "AIOS-22 daily practice reply mission-integrity evidence",
       "kind": "source"
     }
   ],
@@ -2741,6 +2747,18 @@
             "scripts/daily-practice-reply-routing-smoke.mjs",
             "docs/phase-15-evidence/AIOS-21-daily-practice-reply-routing.md"
           ]
+        },
+        {
+          "id": "AIOS-22-PRESERVE-PRACTICE-START-MISSION",
+          "title": "AIOS-22 daily reply mission integrity 통과",
+          "why": "저장 직전 새 diagnosis가 들어오면 사용자가 답한 start card와 저장된 evidence mission이 달라질 수 있었다.",
+          "done": "practice-reply가 현재 start-card 답변을 저장할 때 pre-mission diagnosis를 건너뛰어 mission id, target skill, scene preset, scene attachment를 보존한다.",
+          "verification": "daily-practice-reply-routing-smoke now fails if saved reply mission id, target skill, scene preset, or scene attachment diverges from the start card.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "scripts/daily-practice-reply-routing-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-22-preserve-practice-start-mission.md"
+          ]
         }
       ]
     },
@@ -3479,6 +3497,11 @@
       "name": "AIOS-21 daily practice reply routing",
       "status": "Pass",
       "detail": "daily-practice-reply-routing smoke validates practice-reply quick selection, freeform answer persistence, scene-preset preservation, saved-reply JSON/HTML, Playwright render, invalid selection guard, and no learner-facing command leakage."
+    },
+    {
+      "name": "AIOS-22 daily reply mission integrity",
+      "status": "Pass",
+      "detail": "daily-practice-reply-routing smoke now validates reply persistence preserves the start-card mission id, target skill, scene preset, and scene attachment for quick-reply and freeform paths."
     }
   ],
   "commands": [
@@ -3960,6 +3983,10 @@
     },
     {
       "label": "Run AIOS-21 daily practice reply routing smoke",
+      "command": "node scripts/daily-practice-reply-routing-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-22 daily reply mission integrity smoke",
       "command": "node scripts/daily-practice-reply-routing-smoke.mjs"
     }
   ]

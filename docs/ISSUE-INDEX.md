@@ -647,6 +647,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #224 | AIOS-19: Add goal completion audit for AI-native OS objective | continue |
 | #226 | AIOS-20: Add learner-ready daily practice start card | continue |
 | #228 | AIOS-21: Route daily practice quick replies into persistence | continue |
+| #230 | AIOS-22: Preserve daily start-card mission when saving practice replies | continue |
 
 #179 planned evidence should show:
 
@@ -713,5 +714,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `practice-reply --say` saves direct learner sentences through the same reply route.
 - `scripts/daily-practice-reply-routing-smoke.mjs` verifies quick-reply routing, freeform routing, invalid quick-reply rejection, saved-reply card rendering, cockpit/report links, and no internal command/issue/audit leakage.
 - `docs/phase-15-evidence/AIOS-21-daily-practice-reply-routing.md` records the daily reply routing evidence boundary.
+- `practice-reply` now preserves the start-card mission id, target skill, scene preset, and scene attachment when saving quick replies or direct learner sentences.
+- `scripts/daily-practice-reply-routing-smoke.mjs` now fails if reply persistence silently retargets the current answer to a different Speaking Skill OS mission.
+- `docs/phase-15-evidence/AIOS-22-preserve-practice-start-mission.md` records the daily reply mission-integrity fix and claim boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.
