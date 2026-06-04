@@ -405,11 +405,11 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-19 goal completion audit added; active AIOS goal remains not complete",
-    "status": "AIOS-19 adds a structured goal audit that maps the active AI-native OS stop conditions to repo evidence and blockers. The audit reports local mechanics verified but overall_status=not_complete while #179 real owner/self evidence and blocked learning claims remain unresolved.",
+    "stage": "AIOS-20 daily practice start card added; active AIOS goal remains not complete",
+    "status": "AIOS-20 adds a learner-ready daily practice start card before answer persistence. Ordinary daily practice now has a concrete scene, quick replies, copy buttons, and a Codex-ready prompt, while #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing product mechanics, Codex skill contracts, and engineering governance now have a dedicated goal audit surface. It protects the large AI-native OS objective from being marked complete based on narrow local smokes and points back to the real pilot evidence still needed.",
-    "nextGoal": "Use docs/ops/goal-audit.html plus the real AIOS-12 owner/self pilot (#179) to decide the next product split: continue, research, pivot, kill, or broaden multimodal journey work after actual learner evidence exists.",
+    "summary": "The learner-facing daily start surface is now closer to the owner-pilot card experience: Codex can generate a local practice-start card before asking the learner to answer, then persist only after the learner responds. This reduces first-prompt friction without pretending a real session occurred.",
+    "nextGoal": "Use the daily practice start card and owner-pilot card to collect real AIOS-12 owner/self evidence, then use goal-audit.html to decide continue, research, pivot, kill, or broaden multimodal journey work.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, and an engineering goal audit as local artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, a learner-ready daily practice start card, and an engineering goal audit as local artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-19 is governance evidence only. Local mechanics are verified by smokes, but the active AI-native OS goal remains incomplete until real owner/self pilot evidence and blocked learning claims are resolved."
+    "claimBoundary": "AIOS-20 is learner-facing start-surface evidence only. It does not save a real answer, prove engagement, prove real-world speaking improvement, or complete the active AI-native OS goal."
   },
   "ssot": [
     {
@@ -1009,6 +1009,12 @@
       "path": "./phase-15-evidence/AIOS-19-goal-completion-audit.md",
       "role": "AIOS-19 goal completion audit evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md",
+      "path": "./phase-15-evidence/AIOS-20-daily-practice-start-card.md",
+      "role": "AIOS-20 daily practice start-card evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -1407,6 +1413,13 @@
       "status": "Pass",
       "evidence": "#224, aios-goal-audit-smoke, docs/ops/goal-audit.json/html",
       "claim": "goal audit maps all eight active stop conditions to evidence, shows local mechanics verified, and blocks premature complete status while real owner/self pilot evidence and unsupported learning claims remain unresolved"
+    },
+    {
+      "id": "GATE-53",
+      "label": "Learner-ready daily practice start card",
+      "status": "Pass",
+      "evidence": "#226, daily-practice-start-card-smoke, skill-conversation-simulation-smoke",
+      "claim": "practice-next writes learner-facing JSON/HTML with a concrete daily scene, scene-matched quick replies, copy buttons, and cockpit linkage before answer persistence; real learner session evidence remains unclaimed"
     }
   ],
   "board": [
@@ -3091,6 +3104,19 @@
             "docs/ops/goal-audit.html",
             "docs/phase-15-evidence/AIOS-19-goal-completion-audit.md"
           ]
+        },
+        {
+          "id": "AIOS-20-DAILY-PRACTICE-START-CARD",
+          "title": "AIOS-20 daily practice start card 통과",
+          "why": "ordinary daily practice도 첫 질문 전에 사용자가 볼 수 있는 concrete scene/quick reply 표면이 필요했다.",
+          "done": "practice-next가 practice-start-card.json/html을 만들고, daily-session skill이 이 카드를 먼저 생성하도록 정렬됐다.",
+          "verification": "daily-practice-start-card-smoke validates JSON/HTML render, scene-matched quick replies, copy buttons, cockpit link, and no internal command leakage.",
+          "files": [
+            "scripts/english-learning-harness.mjs",
+            "skills/daily-session/SKILL.md",
+            "scripts/daily-practice-start-card-smoke.mjs",
+            "docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md"
+          ]
         }
       ]
     },
@@ -3819,6 +3845,11 @@
       "name": "AIOS-19 active goal completion audit",
       "status": "Pass",
       "detail": "aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing."
+    },
+    {
+      "name": "AIOS-20 learner-ready daily practice start card",
+      "status": "Pass",
+      "detail": "daily-practice-start-card smoke validates practice-next generates a learner-facing daily start card with current-scene quick replies, copy buttons, assistant prompt, cockpit link, Playwright render, and no internal command leakage before answer persistence."
     }
   ],
   "commands": [
@@ -4293,6 +4324,10 @@
     {
       "label": "Run AIOS-19 goal audit smoke",
       "command": "node scripts/aios-goal-audit-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-20 daily practice start card smoke",
+      "command": "node scripts/daily-practice-start-card-smoke.mjs"
     }
   ]
 }
@@ -4301,12 +4336,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing product mechanics, Codex skill contracts, and engineering governance now have a dedicated goal audit surface. It protects the large AI-native OS objective from being marked complete based on narrow local smokes and points back to the real pilot evidence still needed.</p>
+        <p class="summary">The learner-facing daily start surface is now closer to the owner-pilot card experience: Codex can generate a local practice-start card before asking the learner to answer, then persist only after the learner responds. This reduces first-prompt friction without pretending a real session occurred.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-19 goal completion audit added; active AIOS goal remains not complete<br>
-        AIOS-19 adds a structured goal audit that maps the active AI-native OS stop conditions to repo evidence and blockers. The audit reports local mechanics verified but overall_status=not_complete while #179 real owner/self evidence and blocked learning claims remain unresolved.
+        AIOS-20 daily practice start card added; active AIOS goal remains not complete<br>
+        AIOS-20 adds a learner-ready daily practice start card before answer persistence. Ordinary daily practice now has a concrete scene, quick replies, copy buttons, and a Codex-ready prompt, while #179 real owner/self evidence and blocked learning claims remain unresolved.
       </div>
     </header>
 
@@ -4419,16 +4454,6 @@
 
             <article class="work-card">
               <div class="work-meta">
-                <strong>AIOS-14-LEARNER-COCKPIT-NO-INTERNAL-COMMANDS</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-smoke.mjs, scripts/product-surface-smoke.mjs, docs/SURFACE-BOUNDARY.md, docs/phase-11-evidence/AIOS-14-learner-cockpit-command-free-surface.md, scripts/adaptive-mission-asset-priority-smoke.mjs</span>
-              </div>
-              <h3>AIOS-14 learner cockpit command-free surface 통과</h3>
-              <div class="card-row"><b>왜</b><p>학습자 cockpit이 node 명령어를 보여주면 Codex-native 학습 제품이 아니라 내부 도구 대시보드처럼 보인다.</p></div>
-              <div class="card-row"><b>완료</b><p>personal cockpit today mission, generated artifact empty state, latest mission/asset-deck summaries, and next actions now show Korean Codex-facing prompts or safe artifact links instead of internal shell commands.</p></div>
-              <div class="card-row"><b>검증</b><p>personal-learner-cockpit, adaptive-mission-asset-priority, and product-surface smokes reject node scripts, --learner-root, and start_command leakage in learner-facing state/html/rendered text.</p></div>
-            </article>
-            <article class="work-card">
-              <div class="work-meta">
                 <strong>AIOS-15-ACTIVE-PILOT-CURRENT-CARD-REPLIES</strong>
                 <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-active-pilot-smoke.mjs, docs/phase-15-evidence/AIOS-15-active-pilot-cockpit-card-replies.md</span>
               </div>
@@ -4476,6 +4501,16 @@
               <div class="card-row"><b>왜</b><p>큰 AI-native OS 목표는 작은 smoke 통과만으로 완료라고 말하면 안 된다. stop condition별 증거와 blocker를 한눈에 보는 감사 표면이 필요했다.</p></div>
               <div class="card-row"><b>완료</b><p>docs/ops/goal-audit.json/html이 8개 stop condition, local mechanics status, real pilot blocker, blocked learning claims를 보여준다.</p></div>
               <div class="card-row"><b>검증</b><p>aios-goal-audit-smoke validates requirement count=8, overall_status=not_complete, real pilot blocker, and no premature completion claim.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-20-DAILY-PRACTICE-START-CARD</strong>
+                <span>scripts/english-learning-harness.mjs, skills/daily-session/SKILL.md, scripts/daily-practice-start-card-smoke.mjs, docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md</span>
+              </div>
+              <h3>AIOS-20 daily practice start card 통과</h3>
+              <div class="card-row"><b>왜</b><p>ordinary daily practice도 첫 질문 전에 사용자가 볼 수 있는 concrete scene/quick reply 표면이 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>practice-next가 practice-start-card.json/html을 만들고, daily-session skill이 이 카드를 먼저 생성하도록 정렬됐다.</p></div>
+              <div class="card-row"><b>검증</b><p>daily-practice-start-card-smoke validates JSON/HTML render, scene-matched quick replies, copy buttons, cockpit link, and no internal command leakage.</p></div>
             </article>
         </div>
       </section>
@@ -4782,6 +4817,11 @@
               <td><strong>GATE-52</strong><span>AI-native OS goal completion audit</span></td>
               <td><strong>Pass</strong><span>#224, aios-goal-audit-smoke, docs/ops/goal-audit.json/html</span></td>
               <td>goal audit maps all eight active stop conditions to evidence, shows local mechanics verified, and blocks premature complete status while real owner/self pilot evidence and unsupported learning claims remain unresolved</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-53</strong><span>Learner-ready daily practice start card</span></td>
+              <td><strong>Pass</strong><span>#226, daily-practice-start-card-smoke, skill-conversation-simulation-smoke</span></td>
+              <td>practice-next writes learner-facing JSON/HTML with a concrete daily scene, scene-matched quick replies, copy buttons, and cockpit linkage before answer persistence; real learner session evidence remains unclaimed</td>
             </tr>
         </tbody>
       </table>
@@ -5180,6 +5220,10 @@
               <strong>docs/phase-15-evidence/AIOS-19-goal-completion-audit.md</strong>
               <span>AIOS-19 goal completion audit evidence</span>
             </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-20-daily-practice-start-card.md">
+              <strong>docs/phase-15-evidence/AIOS-20-daily-practice-start-card.md</strong>
+              <span>AIOS-20 daily practice start-card evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5187,10 +5231,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-12 varied five-day pilot missions</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-varied-day-missions smoke validates the first five fixture pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up before final-sample readiness.</span></td>
-            </tr>
             <tr>
               <td>AIOS-12 pilot mission audit metadata</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-journey-audit smoke validates final reports include per-day pilot action metadata, days_with_pilot_mission_metadata, and distinct_pilot_mission_skills.</span></td>
@@ -5218,6 +5258,10 @@
             <tr>
               <td>AIOS-19 active goal completion audit</td>
               <td><strong>Pass</strong><span>aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-20 learner-ready daily practice start card</td>
+              <td><strong>Pass</strong><span>daily-practice-start-card smoke validates practice-next generates a learner-facing daily start card with current-scene quick replies, copy buttons, assistant prompt, cockpit link, Playwright render, and no internal command leakage before answer persistence.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5263,7 +5307,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 126개 보기</summary>
+        <summary>완료 이력 127개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6526,10 +6570,20 @@
               <div class="card-row"><b>완료</b><p>learner report generated_artifacts와 personal cockpit journey/files가 latest storyboard artifact를 노출한다.</p></div>
               <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates report state/html and cockpit state/html link the storyboard path while preserving product-surface leak guards.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-14-LEARNER-COCKPIT-NO-INTERNAL-COMMANDS</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/personal-learner-cockpit-smoke.mjs, scripts/product-surface-smoke.mjs, docs/SURFACE-BOUNDARY.md, docs/phase-11-evidence/AIOS-14-learner-cockpit-command-free-surface.md, scripts/adaptive-mission-asset-priority-smoke.mjs</span>
+              </div>
+              <h3>AIOS-14 learner cockpit command-free surface 통과</h3>
+              <div class="card-row"><b>왜</b><p>학습자 cockpit이 node 명령어를 보여주면 Codex-native 학습 제품이 아니라 내부 도구 대시보드처럼 보인다.</p></div>
+              <div class="card-row"><b>완료</b><p>personal cockpit today mission, generated artifact empty state, latest mission/asset-deck summaries, and next actions now show Korean Codex-facing prompts or safe artifact links instead of internal shell commands.</p></div>
+              <div class="card-row"><b>검증</b><p>personal-learner-cockpit, adaptive-mission-asset-priority, and product-surface smokes reject node scripts, --learner-root, and start_command leakage in learner-facing state/html/rendered text.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 120개 보기</summary>
+        <summary>전체 검증 121개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -7014,12 +7068,16 @@
               <td>AIOS-19 active goal completion audit</td>
               <td><strong>Pass</strong><span>aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-20 learner-ready daily practice start card</td>
+              <td><strong>Pass</strong><span>daily-practice-start-card smoke validates practice-next generates a learner-facing daily start card with current-scene quick replies, copy buttons, assistant prompt, cockpit link, Playwright render, and no internal command leakage before answer persistence.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 118개 보기</summary>
+        <summary>전체 명령 119개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -7493,6 +7551,10 @@
             <div class="command">
               <span>Run AIOS-19 goal audit smoke</span>
               <code>node scripts/aios-goal-audit-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-20 daily practice start card smoke</span>
+              <code>node scripts/daily-practice-start-card-smoke.mjs</code>
             </div>
         </div>
       </details>

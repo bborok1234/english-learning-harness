@@ -109,6 +109,7 @@ What is complete:
 - AIOS-17 immersive pilot start is implemented for #220. The fresh Day 0 pilot card now starts with a learner-facing scene chooser and low-pressure quick replies instead of assuming a project/work premise.
 - AIOS-18 owner-pilot skill contract alignment is implemented for #222. The Codex-facing owner-pilot skill and canonical pilot prompt contract now describe the same `첫 장면 고르기` start path as the engine.
 - AIOS-19 goal completion audit is implemented for #224. `docs/ops/goal-audit.json/html` maps the active AI-native OS goal stop conditions to current evidence and keeps the overall goal `not_complete` while real owner/self pilot evidence is missing.
+- AIOS-20 daily practice start card is implemented for #226. Ordinary daily practice now has a learner-ready `practice-next` JSON/HTML card with a concrete scene, quick replies, and no answer persistence before the learner responds.
 
 What is not started:
 - Real user validation.

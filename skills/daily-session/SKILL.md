@@ -39,6 +39,14 @@ Use that engine yourself. Do not hand the command to the learner.
 
 ## Agent-Operated Persistence
 
+Before asking the first learner-facing daily prompt, prefer generating the local start card internally:
+
+```bash
+node scripts/english-learning-harness.mjs practice-next --json
+```
+
+Use the returned `assistantPrompt.text` as the default learner-facing prompt. It should expose a concrete daily scene, one-sentence answer rule, quick replies, and the current cockpit link without showing engine commands. If the learner chooses a quick reply by number, treat that selected English sentence as the learner answer and persist it through the `practice` engine path yourself.
+
 After collecting the learner's answer(s), call the local engine internally:
 
 ```bash
@@ -48,6 +56,7 @@ node scripts/english-learning-harness.mjs practice --say "<learner answer>" --js
 Use multiple `--say` values when the learner gave several turns. This command is for Codex/tool use, not for the learner to type. It should update:
 
 - generated daily mission artifact,
+- learner-ready daily practice start card,
 - persisted session evidence,
 - weekly mirror,
 - 7-day/30-day learner report,
