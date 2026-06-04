@@ -644,6 +644,7 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 | #218 | AIOS-16: Do not store fake friction notes for pilot replies | continue |
 | #220 | AIOS-17: Make the first pilot card an immersive scene chooser | continue |
 | #222 | AIOS-18: Align owner-pilot skill contract with immersive first-card start | continue |
+| #224 | AIOS-19: Add goal completion audit for AI-native OS objective | continue |
 
 #179 planned evidence should show:
 
@@ -699,5 +700,8 @@ M14 Adaptive Asset Journey is closed with #176 complete.
 - `docs/PILOT-PROMPTS.md` now matches the immersive first-card contract instead of documenting the old fixed "오늘 뭐 했어?" start.
 - `scripts/phase15-owner-pilot-skill-smoke.mjs` verifies the owner-pilot skill and prompt contract include the scene chooser and fail on stale fixed-start guidance.
 - `docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md` records the Codex-facing contract alignment boundary.
+- `scripts/aios-goal-audit.mjs` writes `docs/ops/goal-audit.json/html`, mapping the active AI-native OS stop conditions to current evidence and blockers.
+- `scripts/aios-goal-audit-smoke.mjs` verifies the audit covers all eight stop conditions and keeps `overall_status=not_complete` while real owner/self pilot evidence is missing.
+- `docs/phase-15-evidence/AIOS-19-goal-completion-audit.md` records the goal audit evidence boundary.
 - `scripts/sync-local-pilot-dashboard.mjs` writes an ignored, redacted local pilot status overlay and local engineering dashboard without committing transcripts, private notes, media, or learner paths.
 - `scripts/local-pilot-dashboard-sync-smoke.mjs` verifies the local overlay/dashboard sync with fixture data and redaction checks.

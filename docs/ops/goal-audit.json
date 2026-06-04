@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-04T01:23:42.935Z",
+  "surface": "engineering-governance",
+  "objective": "Build the AI-Native English Learning Operating System on Codex for Korean learners with Speaking Skill OS, narrative missions, multimodal/generated artifacts, learner cockpit, journeys, reports, and adaptive governance.",
+  "overall_status": "not_complete",
+  "local_mechanics_status": "verified",
+  "completion_blockers": [
+    {
+      "id": "BLOCK-REAL-PILOT-179",
+      "title": "실제 owner/self pilot transcript evidence is still missing",
+      "status": "open",
+      "evidence": "#179 remains open in ops state until real owner/self transcript evidence exists.",
+      "required_to_complete_goal": "At least one real Day 0 baseline, five daily sessions, final sample, friction notes, cockpit/report review, and a governance decision."
+    },
+    {
+      "id": "BLOCK-UNSUPPORTED-LEARNING-CLAIMS",
+      "title": "Learning outcome claims remain intentionally blocked",
+      "status": "open",
+      "evidence": [
+        "narrative immersion improves fluency",
+        "engagement proves learning",
+        "generated worlds increase retention",
+        "child mode is ready",
+        "realtime voice adventure is supported"
+      ],
+      "required_to_complete_goal": "Do not claim fluency, retention, realtime voice efficacy, or generated-media learning gains until real evidence supports the claim."
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-01-FIRST-RUN",
+      "title": "처음 온 사용자가 바로 학습을 시작할 수 있는가",
+      "stop_condition": "README/설치/첫 실행을 통해 바로 학습을 시작할 수 있다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Korean-first README leads with a paste-into-Codex installation prompt, agent-installed skills, and learner-facing natural-language starts.",
+      "evidence": {
+        "files": [
+          {
+            "path": "README.md",
+            "exists": true
+          },
+          {
+            "path": "setup",
+            "exists": true
+          },
+          {
+            "path": "skills/onboarding/SKILL.md",
+            "exists": true
+          },
+          {
+            "path": "scripts/phase7-agent-install-smoke.mjs",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "README starts from Codex conversation",
+            "pass": true
+          },
+          {
+            "label": "Agent install smoke expects owner pilot skill",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "This proves local/public onboarding mechanics, not real learner retention."
+    },
+    {
+      "id": "REQ-02-DAILY-COCKPIT",
+      "title": "매일 학습 cockpit이 제품 표면으로 작동하는가",
+      "stop_condition": "매일 학습 cockpit이 실제 product surface로 작동한다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Learner cockpit state/html exists separately from the engineering dashboard and is guarded by product-surface smoke.",
+      "evidence": {
+        "files": [
+          {
+            "path": "docs/product/learner-cockpit-state.json",
+            "exists": true
+          },
+          {
+            "path": "docs/product/learner-cockpit.html",
+            "exists": true
+          },
+          {
+            "path": "scripts/product-surface-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/personal-learner-cockpit-smoke.mjs",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Learner cockpit is separated from ops board",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "Fixture/product smoke verifies surface mechanics, not daily real-world use."
+    },
+    {
+      "id": "REQ-03-SPEAKING-SKILL-OS",
+      "title": "Speaking Skill OS가 약점/복습/미션/전이 증거를 연결하는가",
+      "stop_condition": "Speaking Skill OS가 개인 약점, 복습, 미션, 전이 증거를 연결한다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Speaking backlog, diagnosis, adaptive ordering, transfer-test evidence, and seven-day fixture coverage are present.",
+      "evidence": {
+        "files": [
+          {
+            "path": "scripts/phase8-speaking-skill-os-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/phase8-speaking-skill-os-queue-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/phase8-speaking-skill-os-seven-day-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "docs/RESEARCH-BASIS.md",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Speaking Skill OS smokes exist",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "This proves fixture learning-loop mechanics, not generalized speaking improvement."
+    },
+    {
+      "id": "REQ-04-NARRATIVE-MISSION",
+      "title": "Narrative mission이 말하기 행동을 요구하는가",
+      "stop_condition": "Narrative mission이 단순 롤플레잉이 아니라 말하기 행동을 요구한다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "M10 narrative contracts, validator, fallback gate, and transfer parity smokes guard against cosmetic roleplay.",
+      "evidence": {
+        "files": [
+          {
+            "path": "docs/M10-NARRATIVE-MISSION-PRD.md",
+            "exists": true
+          },
+          {
+            "path": "docs/M10-NARRATIVE-MISSION-TEST-SPEC.md",
+            "exists": true
+          },
+          {
+            "path": "scripts/phase10-narrative-mission-gate-smoke.mjs",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Narrative risk remains explicit",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "Narrative mechanics are local-gated; narrative immersion learning gains remain unclaimed."
+    },
+    {
+      "id": "REQ-05-MULTIMODAL-GENERATED-ARTIFACTS",
+      "title": "멀티모달/생성형 artifact가 학습 루프에 연결되는가",
+      "stop_condition": "멀티모달/생성형 artifact가 피상적 장식이 아니라 학습 루프에 연결된다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Text, transcript-backed voice, image information-gap, asset decks, generated scenes, and storyboards share evidence requirements and cockpit/report links.",
+      "evidence": {
+        "files": [
+          {
+            "path": "scripts/phase4-multimodal-gate-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/generated-daily-mission-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/generated-scene-artifact-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/adaptive-mission-asset-priority-smoke.mjs",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Realtime voice remains blocked as a claim",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "Transcript-first voice and local image-info-gap mechanics are supported; realtime voice efficacy is not claimed."
+    },
+    {
+      "id": "REQ-06-SEVEN-THIRTY-JOURNEY",
+      "title": "7일/30일 journey와 report가 생성되는가",
+      "stop_condition": "7일/30일 journey와 리포트가 생성된다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Personal cockpit and learner report surfaces include 7-day/30-day windows from local learner evidence.",
+      "evidence": {
+        "files": [
+          {
+            "path": "scripts/personal-learner-cockpit-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/phase15-owner-pilot-journey-audit-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "docs/product/learner-cockpit-state.json",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Cockpit smoke checks 30-day modalities",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "Generated windows summarize local evidence; real multi-day owner pilot evidence is still missing."
+    },
+    {
+      "id": "REQ-07-SURFACE-SEPARATION",
+      "title": "엔지니어링 dashboard와 제품 표면이 분리되는가",
+      "stop_condition": "엔지니어링 dashboard는 제품 표면과 분리된 채 진행/검증/의사결정을 추적한다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Engineering dashboard is generated from ops state, while the learner cockpit is a separate product surface.",
+      "evidence": {
+        "files": [
+          {
+            "path": "docs/ops/project-state.json",
+            "exists": true
+          },
+          {
+            "path": "docs/ops/engineering-dashboard.html",
+            "exists": true
+          },
+          {
+            "path": "docs/product/learner-cockpit.html",
+            "exists": true
+          },
+          {
+            "path": "scripts/ops-dashboard-smoke.mjs",
+            "exists": true
+          },
+          {
+            "path": "scripts/product-surface-smoke.mjs",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Ops smoke requires learner cockpit link but separate surface",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "This verifies repo-local generated surfaces, not user comprehension in a real study."
+    },
+    {
+      "id": "REQ-08-ADAPTIVE-GOVERNANCE",
+      "title": "필요하면 이슈를 만들고/죽이고/쪼개고/전환하는 governance가 작동하는가",
+      "stop_condition": "필요하면 이슈를 만들고, 죽이고, 쪼개고, 방향을 바꾸는 governance가 작동한다.",
+      "status": "verified_local_mechanics",
+      "evidence_summary": "Adaptive execution plan, issue index, ops dashboard, and this goal audit make issue decisions and claim boundaries explicit.",
+      "evidence": {
+        "files": [
+          {
+            "path": "docs/ADAPTIVE-EXECUTION-PLAN.md",
+            "exists": true
+          },
+          {
+            "path": "docs/ISSUE-INDEX.md",
+            "exists": true
+          },
+          {
+            "path": "docs/ops/project-state.json",
+            "exists": true
+          },
+          {
+            "path": "scripts/aios-goal-audit.mjs",
+            "exists": true
+          }
+        ],
+        "checks": [
+          {
+            "label": "Adaptive plan defines continue/split/pivot/kill/research",
+            "pass": true
+          }
+        ]
+      },
+      "gap": "",
+      "boundary": "This proves governance mechanics and traceability; it does not replace product evidence."
+    }
+  ],
+  "next_decision": "Continue the goal. Do not mark complete until real owner/self pilot evidence and blocked learning claims are resolved.",
+  "claim_boundary": "This audit maps current repo evidence to the active goal. It is not learner outcome evidence and must not be used to claim real-world speaking improvement."
+}

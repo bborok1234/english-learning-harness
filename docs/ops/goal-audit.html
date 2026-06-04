@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AIOS Goal Audit</title>
+  <style>
+    :root { color-scheme: light; --ink: #17211c; --muted: #627069; --line: #d9ded8; --bg: #f6f7f3; --panel: #fff; --green: #2f7d55; --amber: #9f6500; --red: #a83e3e; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; line-height: 1.55; }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 44px; }
+    header { display: grid; gap: 10px; margin-bottom: 22px; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 54px); line-height: 1.08; letter-spacing: 0; }
+    h2 { margin: 6px 0 8px; font-size: 20px; letter-spacing: 0; }
+    p { margin: 0; }
+    .status { display: inline-flex; width: fit-content; border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px; background: var(--panel); font-weight: 760; }
+    .not_complete { color: var(--amber); }
+    .complete { color: var(--green); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .card, .blocker { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+    .blocker { border-color: rgba(168, 62, 62, .35); background: #fff8f8; }
+    .meta { color: var(--muted); font-size: 13px; font-weight: 740; }
+    .stop { color: var(--muted); margin-bottom: 8px; }
+    ul { margin: 12px 0 0; padding-left: 20px; }
+    li { margin: 4px 0; overflow-wrap: anywhere; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--muted); margin: 10px 0 0; }
+    .boundary { margin-top: 12px; color: var(--muted); font-size: 13px; }
+    section { margin-top: 22px; }
+    @media (max-width: 780px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="status not_complete">Overall: not_complete</div>
+      <h1>AIOS Goal Audit</h1>
+      <p>Build the AI-Native English Learning Operating System on Codex for Korean learners with Speaking Skill OS, narrative missions, multimodal/generated artifacts, learner cockpit, journeys, reports, and adaptive governance.</p>
+      <p class="boundary">This audit maps current repo evidence to the active goal. It is not learner outcome evidence and must not be used to claim real-world speaking improvement.</p>
+    </header>
+    <section>
+      <h2>Completion Blockers</h2>
+      <div class="grid"><article class="blocker">
+      <div class="meta">BLOCK-REAL-PILOT-179 · open</div>
+      <h2>실제 owner/self pilot transcript evidence is still missing</h2>
+      <p>At least one real Day 0 baseline, five daily sessions, final sample, friction notes, cockpit/report review, and a governance decision.</p>
+      <pre>&quot;#179 remains open in ops state until real owner/self transcript evidence exists.&quot;</pre>
+    </article><article class="blocker">
+      <div class="meta">BLOCK-UNSUPPORTED-LEARNING-CLAIMS · open</div>
+      <h2>Learning outcome claims remain intentionally blocked</h2>
+      <p>Do not claim fluency, retention, realtime voice efficacy, or generated-media learning gains until real evidence supports the claim.</p>
+      <pre>[
+  &quot;narrative immersion improves fluency&quot;,
+  &quot;engagement proves learning&quot;,
+  &quot;generated worlds increase retention&quot;,
+  &quot;child mode is ready&quot;,
+  &quot;realtime voice adventure is supported&quot;
+]</pre>
+    </article></div>
+    </section>
+    <section>
+      <h2>Stop Condition Evidence</h2>
+      <div class="grid"><article class="card verified_local_mechanics">
+      <div class="meta">REQ-01-FIRST-RUN · verified_local_mechanics</div>
+      <h2>처음 온 사용자가 바로 학습을 시작할 수 있는가</h2>
+      <p class="stop">README/설치/첫 실행을 통해 바로 학습을 시작할 수 있다.</p>
+      <p>Korean-first README leads with a paste-into-Codex installation prompt, agent-installed skills, and learner-facing natural-language starts.</p>
+      <ul>
+        <li>OK · README.md</li><li>OK · setup</li><li>OK · skills/onboarding/SKILL.md</li><li>OK · scripts/phase7-agent-install-smoke.mjs</li>
+      </ul>
+      <p class="boundary">This proves local/public onboarding mechanics, not real learner retention.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-02-DAILY-COCKPIT · verified_local_mechanics</div>
+      <h2>매일 학습 cockpit이 제품 표면으로 작동하는가</h2>
+      <p class="stop">매일 학습 cockpit이 실제 product surface로 작동한다.</p>
+      <p>Learner cockpit state/html exists separately from the engineering dashboard and is guarded by product-surface smoke.</p>
+      <ul>
+        <li>OK · docs/product/learner-cockpit-state.json</li><li>OK · docs/product/learner-cockpit.html</li><li>OK · scripts/product-surface-smoke.mjs</li><li>OK · scripts/personal-learner-cockpit-smoke.mjs</li>
+      </ul>
+      <p class="boundary">Fixture/product smoke verifies surface mechanics, not daily real-world use.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-03-SPEAKING-SKILL-OS · verified_local_mechanics</div>
+      <h2>Speaking Skill OS가 약점/복습/미션/전이 증거를 연결하는가</h2>
+      <p class="stop">Speaking Skill OS가 개인 약점, 복습, 미션, 전이 증거를 연결한다.</p>
+      <p>Speaking backlog, diagnosis, adaptive ordering, transfer-test evidence, and seven-day fixture coverage are present.</p>
+      <ul>
+        <li>OK · scripts/phase8-speaking-skill-os-smoke.mjs</li><li>OK · scripts/phase8-speaking-skill-os-queue-smoke.mjs</li><li>OK · scripts/phase8-speaking-skill-os-seven-day-smoke.mjs</li><li>OK · docs/RESEARCH-BASIS.md</li>
+      </ul>
+      <p class="boundary">This proves fixture learning-loop mechanics, not generalized speaking improvement.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-04-NARRATIVE-MISSION · verified_local_mechanics</div>
+      <h2>Narrative mission이 말하기 행동을 요구하는가</h2>
+      <p class="stop">Narrative mission이 단순 롤플레잉이 아니라 말하기 행동을 요구한다.</p>
+      <p>M10 narrative contracts, validator, fallback gate, and transfer parity smokes guard against cosmetic roleplay.</p>
+      <ul>
+        <li>OK · docs/M10-NARRATIVE-MISSION-PRD.md</li><li>OK · docs/M10-NARRATIVE-MISSION-TEST-SPEC.md</li><li>OK · scripts/phase10-narrative-mission-gate-smoke.mjs</li>
+      </ul>
+      <p class="boundary">Narrative mechanics are local-gated; narrative immersion learning gains remain unclaimed.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-05-MULTIMODAL-GENERATED-ARTIFACTS · verified_local_mechanics</div>
+      <h2>멀티모달/생성형 artifact가 학습 루프에 연결되는가</h2>
+      <p class="stop">멀티모달/생성형 artifact가 피상적 장식이 아니라 학습 루프에 연결된다.</p>
+      <p>Text, transcript-backed voice, image information-gap, asset decks, generated scenes, and storyboards share evidence requirements and cockpit/report links.</p>
+      <ul>
+        <li>OK · scripts/phase4-multimodal-gate-smoke.mjs</li><li>OK · scripts/generated-daily-mission-smoke.mjs</li><li>OK · scripts/generated-scene-artifact-smoke.mjs</li><li>OK · scripts/adaptive-mission-asset-priority-smoke.mjs</li>
+      </ul>
+      <p class="boundary">Transcript-first voice and local image-info-gap mechanics are supported; realtime voice efficacy is not claimed.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-06-SEVEN-THIRTY-JOURNEY · verified_local_mechanics</div>
+      <h2>7일/30일 journey와 report가 생성되는가</h2>
+      <p class="stop">7일/30일 journey와 리포트가 생성된다.</p>
+      <p>Personal cockpit and learner report surfaces include 7-day/30-day windows from local learner evidence.</p>
+      <ul>
+        <li>OK · scripts/personal-learner-cockpit-smoke.mjs</li><li>OK · scripts/phase15-owner-pilot-journey-audit-smoke.mjs</li><li>OK · docs/product/learner-cockpit-state.json</li>
+      </ul>
+      <p class="boundary">Generated windows summarize local evidence; real multi-day owner pilot evidence is still missing.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-07-SURFACE-SEPARATION · verified_local_mechanics</div>
+      <h2>엔지니어링 dashboard와 제품 표면이 분리되는가</h2>
+      <p class="stop">엔지니어링 dashboard는 제품 표면과 분리된 채 진행/검증/의사결정을 추적한다.</p>
+      <p>Engineering dashboard is generated from ops state, while the learner cockpit is a separate product surface.</p>
+      <ul>
+        <li>OK · docs/ops/project-state.json</li><li>OK · docs/ops/engineering-dashboard.html</li><li>OK · docs/product/learner-cockpit.html</li><li>OK · scripts/ops-dashboard-smoke.mjs</li><li>OK · scripts/product-surface-smoke.mjs</li>
+      </ul>
+      <p class="boundary">This verifies repo-local generated surfaces, not user comprehension in a real study.</p>
+    </article><article class="card verified_local_mechanics">
+      <div class="meta">REQ-08-ADAPTIVE-GOVERNANCE · verified_local_mechanics</div>
+      <h2>필요하면 이슈를 만들고/죽이고/쪼개고/전환하는 governance가 작동하는가</h2>
+      <p class="stop">필요하면 이슈를 만들고, 죽이고, 쪼개고, 방향을 바꾸는 governance가 작동한다.</p>
+      <p>Adaptive execution plan, issue index, ops dashboard, and this goal audit make issue decisions and claim boundaries explicit.</p>
+      <ul>
+        <li>OK · docs/ADAPTIVE-EXECUTION-PLAN.md</li><li>OK · docs/ISSUE-INDEX.md</li><li>OK · docs/ops/project-state.json</li><li>OK · scripts/aios-goal-audit.mjs</li>
+      </ul>
+      <p class="boundary">This proves governance mechanics and traceability; it does not replace product evidence.</p>
+    </article></div>
+    </section>
+  </main>
+</body>
+</html>

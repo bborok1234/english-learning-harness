@@ -405,11 +405,11 @@
   "updatedAt": "2026-06-04",
   "project": {
     "name": "English Learning Harness",
-    "stage": "AIOS-18 owner-pilot skill contract aligned; real owner pilot Day 1 answer still required",
-    "status": "AIOS-18 aligns the Codex-facing owner-pilot skill and canonical pilot prompt contract with the AIOS-17 immersive first-card scene chooser. AIOS-12 (#179) remains open for real owner/self transcript evidence.",
+    "stage": "AIOS-19 goal completion audit added; active AIOS goal remains not complete",
+    "status": "AIOS-19 adds a structured goal audit that maps the active AI-native OS stop conditions to repo evidence and blockers. The audit reports local mechanics verified but overall_status=not_complete while #179 real owner/self evidence and blocked learning claims remain unresolved.",
     "northStar": "AI 파트너와 편안하게 영어로 대화하는 능력.",
-    "summary": "The learner-facing engine, README, skill instructions, and prompt contract now agree that a fresh Day 0 pilot starts with `첫 장면 고르기`, three opening scenes, and quick replies. This keeps the product surface aligned and reduces the chance that Codex reverts to a stale fixed project/work prompt during the real pilot.",
-    "nextGoal": "Run the actual AIOS-12 owner/self pilot once the learner provides real answers: Day 0 baseline, at least five daily sessions, final sample, friction notes, cockpit/report review, and a continue/split/pivot/kill/research decision.",
+    "summary": "The learner-facing product mechanics, Codex skill contracts, and engineering governance now have a dedicated goal audit surface. It protects the large AI-native OS objective from being marked complete based on narrow local smokes and points back to the real pilot evidence still needed.",
+    "nextGoal": "Use docs/ops/goal-audit.html plus the real AIOS-12 owner/self pilot (#179) to decide the next product split: continue, research, pivot, kill, or broaden multimodal journey work after actual learner evidence exists.",
     "blockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -417,7 +417,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, and matching Codex-facing owner-pilot skill instructions as local product artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
+    "allowedClaim": "The harness can generate learner-root mission, scene, asset deck, Remotion-style storyboard, report, cockpit, owner-pilot cards, honest saved-reply/friction follow-up surfaces, an immersive first pilot scene chooser, matching Codex-facing owner-pilot skill instructions, and an engineering goal audit as local artifacts. Real owner/self pilot completion and learning outcomes remain unclaimed.",
     "remainingBlockedClaims": [
       "narrative immersion improves fluency",
       "engagement proves learning",
@@ -425,7 +425,7 @@
       "child mode is ready",
       "realtime voice adventure is supported"
     ],
-    "claimBoundary": "AIOS-12 mechanics are fixture-verified only. AIOS-18 aligns the Codex-facing pilot contract only. Real owner/self pilot evidence, generalized learning outcomes, retention, realtime voice efficacy, and generated-media learning gains remain unclaimed."
+    "claimBoundary": "AIOS-19 is governance evidence only. Local mechanics are verified by smokes, but the active AI-native OS goal remains incomplete until real owner/self pilot evidence and blocked learning claims are resolved."
   },
   "ssot": [
     {
@@ -991,6 +991,24 @@
       "path": "./phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md",
       "role": "AIOS-18 owner-pilot skill contract evidence",
       "kind": "source"
+    },
+    {
+      "label": "docs/ops/goal-audit.json",
+      "path": "./ops/goal-audit.json",
+      "role": "structured active-goal completion audit",
+      "kind": "source"
+    },
+    {
+      "label": "docs/ops/goal-audit.html",
+      "path": "./ops/goal-audit.html",
+      "role": "human-readable active-goal completion audit",
+      "kind": "source"
+    },
+    {
+      "label": "docs/phase-15-evidence/AIOS-19-goal-completion-audit.md",
+      "path": "./phase-15-evidence/AIOS-19-goal-completion-audit.md",
+      "role": "AIOS-19 goal completion audit evidence",
+      "kind": "source"
     }
   ],
   "metrics": [
@@ -1382,6 +1400,13 @@
       "status": "Pass",
       "evidence": "#222, phase15-owner-pilot-skill-smoke, phase15-owner-pilot-next-card-smoke",
       "claim": "owner-pilot skill and canonical prompt contract describe the generated first-card scene chooser, allow number/quick-reply/direct-sentence answers, and reject stale fixed-first-card guidance; real pilot completion remains unclaimed"
+    },
+    {
+      "id": "GATE-52",
+      "label": "AI-native OS goal completion audit",
+      "status": "Pass",
+      "evidence": "#224, aios-goal-audit-smoke, docs/ops/goal-audit.json/html",
+      "claim": "goal audit maps all eight active stop conditions to evidence, shows local mechanics verified, and blocks premature complete status while real owner/self pilot evidence and unsupported learning claims remain unresolved"
     }
   ],
   "board": [
@@ -3052,6 +3077,20 @@
             "scripts/phase15-owner-pilot-skill-smoke.mjs",
             "docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md"
           ]
+        },
+        {
+          "id": "AIOS-19-GOAL-COMPLETION-AUDIT",
+          "title": "AIOS-19 goal completion audit 통과",
+          "why": "큰 AI-native OS 목표는 작은 smoke 통과만으로 완료라고 말하면 안 된다. stop condition별 증거와 blocker를 한눈에 보는 감사 표면이 필요했다.",
+          "done": "docs/ops/goal-audit.json/html이 8개 stop condition, local mechanics status, real pilot blocker, blocked learning claims를 보여준다.",
+          "verification": "aios-goal-audit-smoke validates requirement count=8, overall_status=not_complete, real pilot blocker, and no premature completion claim.",
+          "files": [
+            "scripts/aios-goal-audit.mjs",
+            "scripts/aios-goal-audit-smoke.mjs",
+            "docs/ops/goal-audit.json",
+            "docs/ops/goal-audit.html",
+            "docs/phase-15-evidence/AIOS-19-goal-completion-audit.md"
+          ]
         }
       ]
     },
@@ -3071,6 +3110,17 @@
             "artifacts/pilot/",
             "cockpit.html",
             "artifacts/reports/"
+          ]
+        },
+        {
+          "id": "ACTIVE-GOAL-AUDIT-NOT-COMPLETE",
+          "title": "Active AIOS goal은 아직 not_complete",
+          "why": "로컬 mechanics는 넓게 검증됐지만 실제 owner/self evidence와 learning claim 검증이 아직 없다.",
+          "done": "docs/ops/goal-audit.html을 기준으로 남은 blocker를 보고 다음 split/pivot/research를 결정한다.",
+          "verification": "goal audit reports overall_status=not_complete and BLOCK-REAL-PILOT-179 open.",
+          "files": [
+            "docs/ops/goal-audit.html",
+            "docs/ops/goal-audit.json"
           ]
         }
       ]
@@ -3764,6 +3814,11 @@
       "name": "AIOS-18 owner-pilot skill contract alignment",
       "status": "Pass",
       "detail": "phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards."
+    },
+    {
+      "name": "AIOS-19 active goal completion audit",
+      "status": "Pass",
+      "detail": "aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing."
     }
   ],
   "commands": [
@@ -4230,6 +4285,14 @@
     {
       "label": "Run AIOS-18 owner-pilot skill contract smoke",
       "command": "node scripts/phase15-owner-pilot-skill-smoke.mjs"
+    },
+    {
+      "label": "Run AIOS-19 goal audit",
+      "command": "node scripts/aios-goal-audit.mjs --json"
+    },
+    {
+      "label": "Run AIOS-19 goal audit smoke",
+      "command": "node scripts/aios-goal-audit-smoke.mjs"
     }
   ]
 }
@@ -4238,12 +4301,12 @@
     <header class="top">
       <div>
         <h1>English Learning Harness Engineering Board</h1>
-        <p class="summary">The learner-facing engine, README, skill instructions, and prompt contract now agree that a fresh Day 0 pilot starts with `첫 장면 고르기`, three opening scenes, and quick replies. This keeps the product surface aligned and reduces the chance that Codex reverts to a stale fixed project/work prompt during the real pilot.</p>
+        <p class="summary">The learner-facing product mechanics, Codex skill contracts, and engineering governance now have a dedicated goal audit surface. It protects the large AI-native OS objective from being marked complete based on narrow local smokes and points back to the real pilot evidence still needed.</p>
       </div>
       <div class="stamp">
         <strong>2026-06-04</strong>
-        AIOS-18 owner-pilot skill contract aligned; real owner pilot Day 1 answer still required<br>
-        AIOS-18 aligns the Codex-facing owner-pilot skill and canonical pilot prompt contract with the AIOS-17 immersive first-card scene chooser. AIOS-12 (#179) remains open for real owner/self transcript evidence.
+        AIOS-19 goal completion audit added; active AIOS goal remains not complete<br>
+        AIOS-19 adds a structured goal audit that maps the active AI-native OS stop conditions to repo evidence and blockers. The audit reports local mechanics verified but overall_status=not_complete while #179 real owner/self evidence and blocked learning claims remain unresolved.
       </div>
     </header>
 
@@ -4293,7 +4356,7 @@
       <section class="board-column compact tone-blue">
         <header class="column-head">
           <h2>Now / 결정할 것</h2>
-          <span>4</span>
+          <span>5</span>
         </header>
         <div class="column-cards">
 
@@ -4306,6 +4369,16 @@
               <div class="card-row"><b>왜</b><p>이제 Codex가 한 카드씩 저장하고 cockpit에 다음 pilot 카드를 보여줄 수 있다. 다음에는 실제 transcript와 friction을 수집해야 한다.</p></div>
               <div class="card-row"><b>완료</b><p>Day 0 baseline, 최소 5일 daily pilot, final sample, cockpit/report review, final decision이 실제 learner data로 남는다.</p></div>
               <div class="card-row"><b>검증</b><p>#179 remains open until real owner/self evidence exists; cockpit/capture/fixture smokes are not enough.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>ACTIVE-GOAL-AUDIT-NOT-COMPLETE</strong>
+                <span>docs/ops/goal-audit.html, docs/ops/goal-audit.json</span>
+              </div>
+              <h3>Active AIOS goal은 아직 not_complete</h3>
+              <div class="card-row"><b>왜</b><p>로컬 mechanics는 넓게 검증됐지만 실제 owner/self evidence와 learning claim 검증이 아직 없다.</p></div>
+              <div class="card-row"><b>완료</b><p>docs/ops/goal-audit.html을 기준으로 남은 blocker를 보고 다음 split/pivot/research를 결정한다.</p></div>
+              <div class="card-row"><b>검증</b><p>goal audit reports overall_status=not_complete and BLOCK-REAL-PILOT-179 open.</p></div>
             </article>
             <article class="work-card">
               <div class="work-meta">
@@ -4344,16 +4417,6 @@
         </header>
         <div class="column-cards">
 
-            <article class="work-card">
-              <div class="work-meta">
-                <strong>AIOS-13-STORYBOARD-REPORT-COCKPIT-LINKAGE</strong>
-                <span>scripts/lib/english-learning-store.mjs, scripts/generated-mission-storyboard-smoke.mjs, docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md</span>
-              </div>
-              <h3>AIOS-13 storyboard report/cockpit linkage 통과</h3>
-              <div class="card-row"><b>왜</b><p>storyboard가 생성되어도 learner report와 cockpit에서 보이지 않으면 daily journey 표면과 분리된다.</p></div>
-              <div class="card-row"><b>완료</b><p>learner report generated_artifacts와 personal cockpit journey/files가 latest storyboard artifact를 노출한다.</p></div>
-              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates report state/html and cockpit state/html link the storyboard path while preserving product-surface leak guards.</p></div>
-            </article>
             <article class="work-card">
               <div class="work-meta">
                 <strong>AIOS-14-LEARNER-COCKPIT-NO-INTERNAL-COMMANDS</strong>
@@ -4403,6 +4466,16 @@
               <div class="card-row"><b>왜</b><p>엔진은 첫 장면 선택으로 바뀌었지만 skill 문서가 예전 고정 첫 질문을 유지하면 Codex가 실제 pilot에서 낡은 흐름을 따를 수 있다.</p></div>
               <div class="card-row"><b>완료</b><p>owner-pilot skill과 PILOT-PROMPTS가 `첫 장면 고르기`, 세 opening scene, 1/2/3 또는 quick reply 선택 저장 흐름을 설명한다.</p></div>
               <div class="card-row"><b>검증</b><p>phase15 owner pilot skill smoke validates the scene-chooser contract and rejects stale fixed-start guidance; next-card smoke still verifies rendered scene choices.</p></div>
+            </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-19-GOAL-COMPLETION-AUDIT</strong>
+                <span>scripts/aios-goal-audit.mjs, scripts/aios-goal-audit-smoke.mjs, docs/ops/goal-audit.json, docs/ops/goal-audit.html, docs/phase-15-evidence/AIOS-19-goal-completion-audit.md</span>
+              </div>
+              <h3>AIOS-19 goal completion audit 통과</h3>
+              <div class="card-row"><b>왜</b><p>큰 AI-native OS 목표는 작은 smoke 통과만으로 완료라고 말하면 안 된다. stop condition별 증거와 blocker를 한눈에 보는 감사 표면이 필요했다.</p></div>
+              <div class="card-row"><b>완료</b><p>docs/ops/goal-audit.json/html이 8개 stop condition, local mechanics status, real pilot blocker, blocked learning claims를 보여준다.</p></div>
+              <div class="card-row"><b>검증</b><p>aios-goal-audit-smoke validates requirement count=8, overall_status=not_complete, real pilot blocker, and no premature completion claim.</p></div>
             </article>
         </div>
       </section>
@@ -4704,6 +4777,11 @@
               <td><strong>GATE-51</strong><span>Owner-pilot skill contract matches immersive start</span></td>
               <td><strong>Pass</strong><span>#222, phase15-owner-pilot-skill-smoke, phase15-owner-pilot-next-card-smoke</span></td>
               <td>owner-pilot skill and canonical prompt contract describe the generated first-card scene chooser, allow number/quick-reply/direct-sentence answers, and reject stale fixed-first-card guidance; real pilot completion remains unclaimed</td>
+            </tr>
+            <tr>
+              <td><strong>GATE-52</strong><span>AI-native OS goal completion audit</span></td>
+              <td><strong>Pass</strong><span>#224, aios-goal-audit-smoke, docs/ops/goal-audit.json/html</span></td>
+              <td>goal audit maps all eight active stop conditions to evidence, shows local mechanics verified, and blocks premature complete status while real owner/self pilot evidence and unsupported learning claims remain unresolved</td>
             </tr>
         </tbody>
       </table>
@@ -5090,6 +5168,18 @@
               <strong>docs/phase-15-evidence/AIOS-18-owner-pilot-skill-contract.md</strong>
               <span>AIOS-18 owner-pilot skill contract evidence</span>
             </a>
+            <a class="link-card source" href="../ops/goal-audit.json">
+              <strong>docs/ops/goal-audit.json</strong>
+              <span>structured active-goal completion audit</span>
+            </a>
+            <a class="link-card source" href="../ops/goal-audit.html">
+              <strong>docs/ops/goal-audit.html</strong>
+              <span>human-readable active-goal completion audit</span>
+            </a>
+            <a class="link-card source" href="../phase-15-evidence/AIOS-19-goal-completion-audit.md">
+              <strong>docs/phase-15-evidence/AIOS-19-goal-completion-audit.md</strong>
+              <span>AIOS-19 goal completion audit evidence</span>
+            </a>
         </div>
       </article>
       <aside class="panel">
@@ -5097,10 +5187,6 @@
         <table>
           <tbody>
 
-            <tr>
-              <td>AIOS-12 quick-reply selection saving</td>
-              <td><strong>Pass</strong><span>phase15-owner-pilot-reply-routing smoke validates pilot-reply resolves quick-1 and numeric quick-reply selections, persists the selected English answer, rejects invalid selections before saving, refreshes next-card artifacts, and writes the saved-reply card.</span></td>
-            </tr>
             <tr>
               <td>AIOS-12 varied five-day pilot missions</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-varied-day-missions smoke validates the first five fixture pilot days cover clarification, repair, image/scene description, soft disagreement, and follow-up before final-sample readiness.</span></td>
@@ -5128,6 +5214,10 @@
             <tr>
               <td>AIOS-18 owner-pilot skill contract alignment</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards.</span></td>
+            </tr>
+            <tr>
+              <td>AIOS-19 active goal completion audit</td>
+              <td><strong>Pass</strong><span>aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing.</span></td>
             </tr>
           </tbody>
         </table>
@@ -5173,7 +5263,7 @@
       <h2>Archive</h2>
       <p>기본 화면은 현재 판단에 필요한 정보만 보여준다. 오래된 완료 이력과 전체 명령 목록은 필요할 때만 펼쳐 본다.</p>
       <details class="archive-block">
-        <summary>완료 이력 125개 보기</summary>
+        <summary>완료 이력 126개 보기</summary>
         <div class="archive-body column-cards">
 
             <article class="work-card">
@@ -6426,10 +6516,20 @@
               <div class="card-row"><b>완료</b><p>storyboard command가 artifacts/storyboards/mission-storyboard-YYYY-MM-DD.json/html을 만들고, asset-deck, learner report, personal cockpit이 최신 storyboard artifact를 링크한다.</p></div>
               <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates command output, four evidence-guided frames, controls, required session evidence, asset deck linkage, learner report linkage, personal cockpit linkage, product leak guards, and unsupported-claim guards.</p></div>
             </article>
+            <article class="work-card">
+              <div class="work-meta">
+                <strong>AIOS-13-STORYBOARD-REPORT-COCKPIT-LINKAGE</strong>
+                <span>scripts/lib/english-learning-store.mjs, scripts/generated-mission-storyboard-smoke.mjs, docs/phase-11-evidence/AIOS-13-generated-mission-storyboard.md</span>
+              </div>
+              <h3>AIOS-13 storyboard report/cockpit linkage 통과</h3>
+              <div class="card-row"><b>왜</b><p>storyboard가 생성되어도 learner report와 cockpit에서 보이지 않으면 daily journey 표면과 분리된다.</p></div>
+              <div class="card-row"><b>완료</b><p>learner report generated_artifacts와 personal cockpit journey/files가 latest storyboard artifact를 노출한다.</p></div>
+              <div class="card-row"><b>검증</b><p>generated mission storyboard smoke validates report state/html and cockpit state/html link the storyboard path while preserving product-surface leak guards.</p></div>
+            </article>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 검증 119개 보기</summary>
+        <summary>전체 검증 120개 보기</summary>
         <div class="archive-body">
           <table>
             <tbody>
@@ -6910,12 +7010,16 @@
               <td>AIOS-18 owner-pilot skill contract alignment</td>
               <td><strong>Pass</strong><span>phase15-owner-pilot-skill smoke validates the owner-pilot skill and canonical prompt contract include `첫 장면 고르기`, three opening scene choices, number/quick-reply handling, and stale fixed-start guards.</span></td>
             </tr>
+            <tr>
+              <td>AIOS-19 active goal completion audit</td>
+              <td><strong>Pass</strong><span>aios-goal-audit-smoke validates the audit covers all eight explicit stop conditions, preserves file evidence, renders HTML, and keeps overall_status=not_complete while real owner/self pilot evidence is missing.</span></td>
+            </tr>
             </tbody>
           </table>
         </div>
       </details>
       <details class="archive-block">
-        <summary>전체 명령 116개 보기</summary>
+        <summary>전체 명령 118개 보기</summary>
         <div class="archive-body commands">
 
             <div class="command">
@@ -7381,6 +7485,14 @@
             <div class="command">
               <span>Run AIOS-18 owner-pilot skill contract smoke</span>
               <code>node scripts/phase15-owner-pilot-skill-smoke.mjs</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-19 goal audit</span>
+              <code>node scripts/aios-goal-audit.mjs --json</code>
+            </div>
+            <div class="command">
+              <span>Run AIOS-19 goal audit smoke</span>
+              <code>node scripts/aios-goal-audit-smoke.mjs</code>
             </div>
         </div>
       </details>
