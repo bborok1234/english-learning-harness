@@ -50,6 +50,11 @@ function main() {
     "pilot-turn",
     "--json",
   ]);
+  runJson([
+    "scripts/english-learning-harness.mjs",
+    "pilot-evidence-gap",
+    "--json",
+  ]);
 
   const cockpit = runJson([
     "scripts/english-learning-harness.mjs",
@@ -84,6 +89,15 @@ function main() {
   );
   assert(existsSync(resolve(learnerRoot, state.active_pilot.turn_packet_artifact.html)), "pilot turn-packet HTML missing");
   assert(
+    state.active_pilot.evidence_gap_artifact?.html === "artifacts/pilot/pilot-evidence-gap.html",
+    "cockpit should link pilot evidence-gap HTML",
+  );
+  assert(
+    state.active_pilot.evidence_gap_artifact?.json === "artifacts/pilot/pilot-evidence-gap.json",
+    "cockpit should link pilot evidence-gap JSON",
+  );
+  assert(existsSync(resolve(learnerRoot, state.active_pilot.evidence_gap_artifact.html)), "pilot evidence-gap HTML missing");
+  assert(
     state.active_pilot.current_card_artifact?.html === "artifacts/pilot/pilot-next-card.html",
     "cockpit should link current pilot next-card HTML",
   );
@@ -110,6 +124,8 @@ function main() {
   assert(html.includes("pilot-launch-card.html"), "cockpit HTML should link launch card file");
   assert(html.includes("Codex 진행 카드 열기"), "cockpit HTML should link pilot turn packet");
   assert(html.includes("pilot-turn-packet.html"), "cockpit HTML should link turn packet file");
+  assert(html.includes("남은 연습 증거 보기"), "cockpit HTML should link pilot evidence gap");
+  assert(html.includes("pilot-evidence-gap.html"), "cockpit HTML should link evidence gap file");
   assert(html.includes("현재 pilot 카드 열기"), "cockpit HTML should link current pilot card");
   assert(html.includes("Codex가 말할 진행 안내"), "cockpit HTML should expose assistant prompt details");
   assert(html.includes("Which place do you mean?"), "cockpit HTML should render quick reply text");
