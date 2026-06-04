@@ -905,6 +905,8 @@ function practiceReply(options) {
     savedAnswer: reply.answer,
     savedFrom: reply.source,
     learnerFacing: practiceResult.learnerFacing,
+    diagnosis: practiceResult.diagnosis,
+    futureDiagnosis: practiceResult.futureDiagnosis,
     mission: practiceResult.mission,
     scene: practiceResult.scene,
     report: practiceResult.report,
@@ -918,8 +920,9 @@ function practice(options) {
   const paths = ensureLearnerStore(options.learnerRoot);
   const turns = transcriptInputs(options);
   const hasExplicitInput = (options.input?.length ?? 0) > 0 || Boolean(options.transcript);
+  const backlogBeforeMission = nextSpeakingBacklogItem(paths.root);
   const shouldDiagnoseBeforeMission =
-    !options.preserveCurrentMission && !nextSpeakingBacklogItem(paths.root) && hasExplicitInput;
+    !options.preserveCurrentMission && !backlogBeforeMission && hasExplicitInput;
   const diagnosis = shouldDiagnoseBeforeMission
     ? diagnoseSpeakingSample(paths.root, turns, date)
     : null;
@@ -940,6 +943,9 @@ function practice(options) {
     : options.audioFile
       ? voice(sessionOptions)
       : today(sessionOptions);
+  const futureDiagnosis = options.preserveCurrentMission && !backlogBeforeMission && hasExplicitInput
+    ? diagnoseSpeakingSample(paths.root, turns, date)
+    : null;
   const weeklyResult = weekly({ ...options, learnerRoot: paths.root, date });
   const reportResult = report({ ...options, learnerRoot: paths.root, date });
   const cockpitResult = cockpit({ ...options, learnerRoot: paths.root, date });
@@ -958,9 +964,19 @@ function practice(options) {
     },
     diagnosis: diagnosis
       ? {
+          timing: "before_current_mission",
           skill: diagnosis.diagnosis.skill,
           backlogItemId: diagnosis.backlogItem.id,
           backlogItemLabel: diagnosis.backlogItem.label,
+        }
+      : null,
+    futureDiagnosis: futureDiagnosis
+      ? {
+          timing: "after_current_session",
+          purpose: "future_practice_planning",
+          skill: futureDiagnosis.diagnosis.skill,
+          backlogItemId: futureDiagnosis.backlogItem.id,
+          backlogItemLabel: futureDiagnosis.backlogItem.label,
         }
       : null,
     mission: {

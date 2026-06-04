@@ -112,6 +112,7 @@ What is complete:
 - AIOS-20 daily practice start card is implemented for #226. Ordinary daily practice now has a learner-ready `practice-next` JSON/HTML card with a concrete scene, quick replies, and no answer persistence before the learner responds.
 - AIOS-21 daily practice reply routing is implemented for #228. `practice-reply` resolves start-card quick replies or direct learner sentences, runs the practice persistence flow, and writes a learner-facing saved-reply card.
 - AIOS-22 daily reply mission integrity is implemented for #230. `practice-reply` now preserves the start-card mission id, target skill, scene preset, and scene attachment when saving a quick reply or direct sentence.
+- AIOS-23 deferred daily reply diagnosis is implemented for #232. Current start-card replies keep their mission evidence, while future Speaking Skill OS diagnosis can be created after session persistence.
 
 What is not started:
 - Real user validation.
@@ -332,6 +333,7 @@ Start from the verified/fallback Phase 0 constraints.
 - [x] AIOS-15: Expose current pilot card and quick replies in learner cockpit (#216). Active pilot cockpit now links the current `pilot-next-card.html/json`, shows the learner-safe assistant prompt, and renders copyable quick replies without internal command or issue language.
 - [x] AIOS-16: Keep pilot friction evidence honest (#218). Daily `pilot-reply` no longer stores fake placeholder friction notes; saved-reply cards ask a short follow-up when no friction note was captured, while explicit notes still count.
 - [x] AIOS-22: Preserve daily start-card mission when saving practice replies (#230). `daily-practice-reply-routing-smoke` now guards against saved reply mission/skill/scene-preset drift.
+- [x] AIOS-23: Defer daily reply diagnosis until after current mission persistence (#232). `practice-reply` can create future diagnosis/backlog evidence without retargeting the current saved answer.
 - [ ] AIOS-12: Run real owner/self AIOS pilot and journey audit (#179). Audit mechanics, Codex owner-pilot skill, learner-facing `pilot-next` card generation with ready-to-say `assistantPrompt` and numbered/copyable quick replies rendered in HTML, quick-reply selection saving through `pilot-reply`, varied five-day pilot missions, per-day learner coaching report metadata, card-level `pilot-capture`, automatic `pilot-reply` routing with next-card refresh, honest friction-note mechanics, learner-safe reply summary, saved-reply HTML card with browser render smoke, active pilot cockpit visibility with current next-card link, assistant prompt, quick replies, latest reply-card link, automatic cockpit refresh after each captured pilot answer, and redacted local pilot dashboard sync now exist; the actual real owner/self five-day run is still required before closing the issue.
 
 ## SSOT Structure
@@ -363,6 +365,7 @@ Start from the verified/fallback Phase 0 constraints.
 - `docs/phase-11-evidence/` — AI-native learning operating-system integration evidence notes.
 - `docs/phase-15-evidence/` — real owner/self AIOS pilot and journey-audit evidence notes.
 - `docs/phase-15-evidence/AIOS-22-preserve-practice-start-mission.md` — daily practice reply mission-integrity evidence note.
+- `docs/phase-15-evidence/AIOS-23-deferred-daily-reply-diagnosis.md` — daily practice reply future-diagnosis evidence note.
 - `docs/PILOT-PROMPTS.md` — learner-facing owner pilot prompt contract and rejected bad-prompt examples.
 - `docs/STATUS.md` — human-readable execution status and next-step summary.
 - `design/` — detailed design library and historical decision records.
